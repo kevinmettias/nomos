@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:961934c97a1371dbeee2fb70195cd247660f6ae513e1c676e20b654cb190417e",
-  "inputs_digest": "sha256:3bfcc02c359b4107af87771c7c81c207096cb0454d45c1bd4b987970c7f00040",
+  "content_digest": "sha256:32c2ab0ced09c4030dcaa0cf1b03b1fb5732a90d76f34c0549a4fd74b67dcd5e",
+  "inputs_digest": "sha256:8c61c0d9b39d744bbaa91ea87bc9e0c402126bf0b43e36b023e402c510c9f264",
   "sections": [
     [
       "Documents",
-      271
+      272
     ],
     [
       "Sections",
-      2456
+      2469
     ],
     [
       "Source blocks",
-      8962
+      9015
     ]
   ],
   "inputs": [
@@ -1219,6 +1219,11 @@
       "content": "documents",
       "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md@authored",
       "hash": "sha256:93292451f2a6cee3903cec80729f1f4a648933089166dd3a055febcb80d71eba"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md@authored",
+      "hash": "sha256:a2c5dec07ac5b31527e4d93edc50131728f6dd76b004505f86992ae7fa55356a"
     },
     {
       "content": "documents",
@@ -12144,6 +12149,71 @@
       "content": "headings",
       "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#27",
       "hash": "sha256:a9f74e17bb0dbb0c06dabfed2215e558def968b5acc0407398b8f6d0686ef4d1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#1",
+      "hash": "sha256:49832b371781ff81fe73cf0f7b0dea05f8798081a82eee53df036b3883a1fe19"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#2",
+      "hash": "sha256:c5864b730d0191b99d31900c195f1d6d46e34f7c4d4839e4f1c1deb4d5147dcc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#6",
+      "hash": "sha256:bce959eea0b814ee5aba1f17e4535357434639a82bac300220d62cf301b7da67"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#10",
+      "hash": "sha256:cb101ef654e08c77e736cdf7ecf611e2bda5b79ab26b075a8ab1991db1248b51"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#18",
+      "hash": "sha256:c37943b17304408c81824d2cd72a25e2bfc1b2c262257c1209ab3c7a1df3af4d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#24",
+      "hash": "sha256:a08b63880fc8f4c18b8190af21706aa788626b19d30f8e89e3bc024c20759107"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#28",
+      "hash": "sha256:8ca6cc592d8d504e4f91a071ae59698cf09e7407026bcb664592bb4fb835565a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#34",
+      "hash": "sha256:ad39a2cb585b0ba6f9eabdc9dc5285d537d0ddfb8d4fda3ca871d034df2c33bd"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#38",
+      "hash": "sha256:76dfc7709b5facd89d2cfd0825589f1dc4e2470eb35aa88fb4afa644e2ac488e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#42",
+      "hash": "sha256:31e71b6202e0a6c7795e2c89c8bbe8423e4fe347fa4b156a11c1059801674d32"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#44",
+      "hash": "sha256:2bbd31281254d66d4df2a50da76862fa65a6a2023cf016aa0b7df2b7134725e1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#48",
+      "hash": "sha256:5d45e9b1c184748625e7f2f21382c748998103b10d1fba127ad23c2af3662d97"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#52",
+      "hash": "sha256:e1fed225d080c1e2132b4b7861e370330b83a33b9ae4f68c5f441d8a0fb8fa3f"
     },
     {
       "content": "headings",
@@ -53164,6 +53234,271 @@
       "content": "blocks",
       "identity": "docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#28",
       "hash": "sha256:762a828b7a3c260a73282f117fa2021aeade05df94aa949887390bc4e495bd43"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#1",
+      "hash": "sha256:912aab2e8017d3b8aa1b56fbb10df132bd9803c0885b562d65dbcc222d455ede"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#3",
+      "hash": "sha256:8521a6cb386126f73ba4c923f10cc8041483d850bfe33df9b08e93c97f02cb6e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#4",
+      "hash": "sha256:de09a4c659fb038fb8353757d935dc243a2c045d2542f3b524f24ec5e6d57065"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#5",
+      "hash": "sha256:6253c051f6a4fb4559007f5c63edada6886e9a42064848ce64c3183e93f55340"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#6",
+      "hash": "sha256:571e4ec33e6a6bb2fd6ff4be538256a401de191f0f38b3a124507ef6fa3e0e6b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#7",
+      "hash": "sha256:70f84a2c653a0b0733c560f302e41d9e8a6525d68f52e7a6cd7e7bb017de1378"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#8",
+      "hash": "sha256:03b061367bf89503a9a50f663e8571b09258c1b934626b9d1a8b9067634f0dde"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#9",
+      "hash": "sha256:4ea05ea6cdfb2a4b8eb73f009bf56e460be5e0693601bd7749a1ecf8344b0694"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#10",
+      "hash": "sha256:f66dccbd07fd06d21718eb91b9b9536f1e675681091895b27aeff08dcf7e69d0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#11",
+      "hash": "sha256:d9c4e1e1e5a42da94d14dcdb442edc15102af9500c6724fd31656246915ca532"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#12",
+      "hash": "sha256:03cec5a7bf8df637eb44978083031208f0f466bb85923a13b366e49743020a4e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#13",
+      "hash": "sha256:c8f4c062429ea77f02883e3c5e93354b2d46714b6cbeeb10a146eab5382275d5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#14",
+      "hash": "sha256:353723756d195ae53bbf9bc14742023c14485b841a26e2f19793fdcbfdf4d720"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#15",
+      "hash": "sha256:085977a105448a637f78040ece35f3f7eb4322ee19c162e3fa54d5eb6b06d4d3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#16",
+      "hash": "sha256:6b750eeb9544b0cdd683a14bce746d53b3453f061917fefe97a3b3d0f2fb8729"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#17",
+      "hash": "sha256:e9570316d1c38fa665131199ae0f28193a34d83eebb0279e47eda92f2cfb7d73"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#18",
+      "hash": "sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#19",
+      "hash": "sha256:e09ac72f4b83e430fe1aef4bebfd70a5743a622b92ef7671840e14ce2552a3e1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#20",
+      "hash": "sha256:44d31ab1ae82ac96aa7e08dbbcd1dda3bfa0606e93be430957a6d7416aa02b56"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#21",
+      "hash": "sha256:30add186f4839fe22684be116ad6db050c8561455bbc55aafa889bc5150ba138"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#22",
+      "hash": "sha256:6450e1da06c625dffbb4b79afdeb9ada5a5798a698a465af4af244e149460be2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#23",
+      "hash": "sha256:af7704c3e7187debee94895e9ad40fad4b0897beb1b7e371cde53ff043c79db7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#24",
+      "hash": "sha256:98fbfab83bfc24def3378f6b09ecce9bde7753f7903c9c6fa7b448d49f397eaa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#25",
+      "hash": "sha256:43dd13321f2970aa8e506f14051860d478dba565ba356c660274080dbec60512"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#26",
+      "hash": "sha256:51c37faf0e8c47eae53053b3c69ff9367bef096abccbca59116c6327b4be334a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#27",
+      "hash": "sha256:39a07d268247edfa261616959cbaaedf05efa9f1511738740336acce1fcda8be"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#28",
+      "hash": "sha256:ac0d20a26c558dfe39b38c1a0792da594d9707004e26dbe29e6bdc75c2c8419a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#29",
+      "hash": "sha256:922af8ee4d1d2a65a8b0104306c69641d21484684521a3222138933ae311c3e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#30",
+      "hash": "sha256:5a355d85286f23acb71f6da0160d1855bb4f4b28afa4468dfba947f8f7796c45"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#31",
+      "hash": "sha256:49b74cf11d720c33e045cf96bd8e2eacba656d8d9575ca833c8e1cd3f0b93d37"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#32",
+      "hash": "sha256:b76c1b5c8506a203628f5b2b877e81dbcd9a38b617bb6b8b048627adf11e55bb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#33",
+      "hash": "sha256:202cf6c5f60dca00d781ad5f0845798eb1f3c7ea7ee0c9c8b5c28af50fb45e06"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#34",
+      "hash": "sha256:df777239a78a7c187924a6eac5b74d7a0840d84852ecff0ca0993db624eb2991"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#35",
+      "hash": "sha256:37c1aa029f1d62ba871e0e9a745bbc7e2b63c037caacabb7b4516f6be0be2ef8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#36",
+      "hash": "sha256:9748129c187205622e638e08b2d2a0845fafbd588b06cb1249f23d062bff34fd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#37",
+      "hash": "sha256:7628b854bce167a9fd8fea63d21913eb75cf967f6f2db7319fa067ce9cd947c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#38",
+      "hash": "sha256:8acdc111db70fa408c62197ac20aa8018442d6f5bf2288b729b8c9baa4650357"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#39",
+      "hash": "sha256:7a29a736fc1d478317f47d42d7c1b38ee9ea4d9646b65252519b6b0cd9877502"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#40",
+      "hash": "sha256:0255b23f6292a857b05683daf0b972a225acc352b846515b550a2c2360df5fef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#41",
+      "hash": "sha256:84cc377ff6a089001dba2b01a4684f2b65983bfaf8163cf879177eb7c1c43ab7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#42",
+      "hash": "sha256:1e6a2bf81419fae79fc8ae93be5f9ad77004f9465d98742416bb47be0c947ef2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#43",
+      "hash": "sha256:620c7179e9703276e53cb96c227f3f03a6d19b68e17a8d293b5c76c1d0f275b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#44",
+      "hash": "sha256:d21ed456c5cc9a6d455d10229bfcb25fe72e8745c24bab5b0f6d5c1f4e6fae85"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#45",
+      "hash": "sha256:1dfae3eb799b3c1e060f65380baf5555ed075ea799f054ddc64ad8fc9c4bd941"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#46",
+      "hash": "sha256:3fb59d8bee913067d77d845da90fb34d34da2e060e9591695b44227d47ce0ade"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#47",
+      "hash": "sha256:4e77c805ebaa6421e004e4d93c930a48d926790b9c762af672b675c33f4f3e5e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#48",
+      "hash": "sha256:48294865bb2004ff02741779de73858ed3b607d1068fb18a39018f11ca4e7a68"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#49",
+      "hash": "sha256:553cf131aab42cb93b1782dd918be6bd2b36e4300ebb8e82889038ef0265b710"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#50",
+      "hash": "sha256:9e421f43b08e8f73df613820e2186a82ed35d60262982ef12ce03e41b091b363"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#51",
+      "hash": "sha256:c38142971348257dde79301a0a8dd0b4ee9f4c335dbb42bd029c978c95d0576c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#52",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#53",
+      "hash": "sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3"
     },
     {
       "content": "blocks",

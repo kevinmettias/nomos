@@ -250,6 +250,7 @@ profile: domain-specification
 | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md@authored | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md | authored | 29 | 9 | sha256:c7d51d0052bf5bf9d6198fe75095c23e3079efba7af49973d3e12360dbae7606 |
 | docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md@authored | docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md | authored | 28 | 6 | sha256:178c45747a9bfc80be65983afb89cd9b8caa6f49345f3e8dd5a8c01080a90d4b |
 | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md@authored | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md | authored | 28 | 8 | sha256:93292451f2a6cee3903cec80729f1f4a648933089166dd3a055febcb80d71eba |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md@authored | docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md | authored | 53 | 13 | sha256:a2c5dec07ac5b31527e4d93edc50131728f6dd76b004505f86992ae7fa55356a |
 | docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md@authored | docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md | authored | 53 | 12 | sha256:a7aae0f562a885695f97bd2fe9beb2b97a2cf8c2d0a34315302531b7a3a3d667 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
@@ -2440,6 +2441,19 @@ profile: domain-specification
 | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#18 | authored | 2 | A lexical matcher was tried and does not work |
 | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#22 | authored | 2 | What this record does not do |
 | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md#27 | authored | 2 | Status |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#1 | authored | 1 | A rule's subsystem is the reading its judgment needs, and the rules level is already that partition |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#2 | authored | 2 | Question |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#6 | authored | 2 | Method |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#10 | authored | 2 | The census |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#18 | authored | 2 | The decision |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#24 | authored | 2 | How this classifies both judgment arms |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#28 | authored | 2 | Why there is no coarser tree above this level |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#34 | authored | 2 | Why the taxonomy is not readable by code, deliberately |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#38 | authored | 2 | What a reorganisation would cost, measured |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#42 | authored | 2 | What this record does not decide |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#44 | authored | 2 | The finding stays reported, and this is the reason it cites |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#48 | authored | 2 | What would change this |
+| docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#52 | authored | 2 | Status |
 | docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#1 | authored | 1 | A declared form is owed for the archetype forty-four of seventy-one rules share, and the detector stays Rust |
 | docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#5 | authored | 2 | Method |
@@ -76926,6 +76940,499 @@ measured the way `OD-RULES-031` measured one.
 Accepted. 5 answered, 42 unanswered inside the domain, 214 outside; 2 of the 5 pairs sit on
 rules xvpe declares nobody enforces; 14 rules cite the shared ancestor and Nomos answers one
 of them; and the lexical shortcut is recorded as tried and refused. No code moves here.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#1
+
+*revision: authored · kind: heading · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition · hash: sha256:912aab2e8017d3b8aa1b56fbb10df132bd9803c0885b562d65dbcc222d455ede*
+
+# A rule's subsystem is the reading its judgment needs, and the rules level is already that partition
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#2
+
+*revision: authored · kind: heading · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#3
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Question · hash: sha256:8521a6cb386126f73ba4c923f10cc8041483d850bfe33df9b08e93c97f02cb6e*
+
+`check-folder-organization` reports one finding over `crates/rules/nomos-rules/src/checks:0`:
+the level holds more facade-and-directory module pairs than its signal allows, and the remedy
+the message names is not a move of one misplaced file but a regroup of the whole registry into
+at most eight subsystems, each at most ten modules wide.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#4
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Question · hash: sha256:de09a4c659fb038fb8353757d935dc243a2c045d2542f3b524f24ec5e6d57065*
+
+Nothing in this repository says what those subsystems are. No record, no document and no
+declaration states whether the flat level is the answer for this crate, or which of its module
+roots a ceiling would land on. So a worker holding that finding cannot apply a taxonomy without
+first inventing one, and inventing one to move a counter is the gaming this campaign forbids by
+name.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#5
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Question · hash: sha256:6253c051f6a4fb4559007f5c63edada6886e9a42064848ce64c3183e93f55340*
+
+This record decides the taxonomy. It deliberately does not decide it by drawing a tree over
+today's file list. A partition read off a file tree answers for the files that happen to be
+there and for no rule anybody writes next, and this crate has already moved under exactly that
+question: the item that boarded this decision censused 38 source files and 17 loose modules on
+2026-09-16, and six days later the level holds 40 and 19, two modules having arrived at
+`7edd095f` when a compiler-backed capability's rules moved in from another crate. A taxonomy
+that a week of ordinary work invalidates is not a taxonomy. What is wanted is a membership
+rule: something that says where the *next* rule goes, without being re-decided each time one
+arrives.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#6
+
+*revision: authored · kind: heading · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Method · hash: sha256:571e4ec33e6a6bb2fd6ff4be538256a401de191f0f38b3a124507ef6fa3e0e6b*
+
+## Method
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#7
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Method · hash: sha256:70f84a2c653a0b0733c560f302e41d9e8a6525d68f52e7a6cd7e7bb017de1378*
+
+Every count below is taken from `crates/rules/nomos-rules` at the revision this record lands
+on, by a command a later reader can re-run from that directory.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#8
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Method · hash: sha256:03b061367bf89503a9a50f663e8571b09258c1b934626b9d1a8b9067634f0dde*
+
+- The level's width is `ls src/checks/*.rs | wc -l` and `ls -d src/checks/*/ | wc -l`. A
+  facade-and-directory pair is a subdirectory with a module file of the same name beside it,
+  which is what the check counts.
+- The composed population is the identifiers named in `DESCRIPTORS`: the
+  `Descriptor_For(crate::<ID>` arguments plus the `Descriptor_For_Declaration(&crate::checks::<ID>`
+  ones, which is the whole table since `OD-RULES-034`'s second arm landed.
+- A rule's module is resolved by finding the file that declares its identifier constant, under
+  `src/checks/`, and taking the top-level module that file belongs to. Every one of the
+  seventy-three resolved; none was attributed by hand.
+- Subject kinds and required families are read off the same slice of `src/rule_descriptor.rs`,
+  which states both on one line per linked rule. A declared rule states neither: `DeclaredTextRule`
+  derives both from what the declaration says about test material, so the three declared rows are
+  counted by reading their declarations rather than by grepping the table.
+- The level's own name in its own source is
+  `grep -rnoE '"crates/rules/nomos-rules/src/checks[^"]*"' src/`, and the self-exemptions among
+  them are `grep -rn '^const OWN_IMPLEMENTATION' src/checks/`.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#9
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Method · hash: sha256:4ea05ea6cdfb2a4b8eb73f009bf56e460be5e0693601bd7749a1ecf8344b0694*
+
+One measurement was attempted and is not reported: a topical grouping of the modules, to see
+whether an eight-way one falls out. It does not fall out, it is composed, and a grouping this
+record's author composed would be measured against nothing — which is the failure this record
+exists to refuse. What is reported instead is the two axes the crate already declares, and what
+each of them does to the level when it is made a directory tree.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#10
+
+*revision: authored · kind: heading · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The census · hash: sha256:f66dccbd07fd06d21718eb91b9b9536f1e675681091895b27aeff08dcf7e69d0*
+
+## The census
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#11
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The census · hash: sha256:d9c4e1e1e5a42da94d14dcdb442edc15102af9500c6724fd31656246915ca532*
+
+**The level is forty modules: twenty-one facade-and-directory pairs and nineteen loose module
+files, over twenty-one subdirectories.** That is the number the check counts pairs from.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#12
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The census · hash: sha256:03cec5a7bf8df637eb44978083031208f0f466bb85923a13b366e49743020a4e*
+
+**Seventy-three rules are composed, over thirty-two of those forty modules.** The distribution
+is long-tailed and its tail is the bulk of it: sixteen modules hold exactly one rule, six hold
+two, four hold three, three hold four, and one each holds five (`go_text`), six (`rust_text`)
+and ten (`naming`).
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#13
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The census · hash: sha256:c8f4c062429ea77f02883e3c5e93354b2d46714b6cbeeb10a146eab5382275d5*
+
+**Eight modules hold no composed rule, and they are two different things.** Four are shared
+plumbing — `code_prefix`, `declaration_scan`, `finding_shape` and `test_support` — each extracted
+after more than one rule had built the same thing by hand, and each named for what it provides
+rather than for what it judges. The other four — `facade`, `constant_scope`, `domain_type_alias`
+and `role_surface_pair` — export rules the table does not compose, the population `OD-RULES-034`
+measured and `Test_Every_Exported_Rule_Is_Composed_Or_Accounted_For` keeps honest in both
+directions.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#14
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The census · hash: sha256:353723756d195ae53bbf9bc14742023c14485b841a26e2f19793fdcbfdf4d720*
+
+**What a module is, read off the modules that hold more than one rule.** `security_text`'s three
+rules share `Is_Test_Or_Fixture_Source`, `Is_Own_Implementation_File`, one
+`OWN_IMPLEMENTATION_FILES` list and one `Finding_For_Line`. `rust_text`'s share one gate, one
+self-exemption and, for three of them, a whole interpreter. `naming`'s ten share a case
+vocabulary. In every case the module is the unit of *shared reading*: the detector, the scanner,
+the vocabulary and the exemption that more than one rule needs. It is not a topic. The
+corollary is what makes the level's width what it is — two modules at this level share no
+reading, because if they did they would already be one module.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#15
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The census · hash: sha256:085977a105448a637f78040ece35f3f7eb4322ee19c162e3fa54d5eb6b06d4d3*
+
+**The two axes the crate actually declares do not produce a subsystem tree.** `RuleDescriptor`
+carries `subject` and `requires`, and both are per-rule:
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#16
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The census · hash: sha256:6b750eeb9544b0cdd683a14bce746d53b3453f061917fefe97a3b3d0f2fb8729*
+
+- *Subject kind* has three values — thirty-nine `SourceFacts`, twenty-nine `SourceText` and two
+  `Workspace` among the linked rows, forty, thirty-one and two once the three declared rows are
+  counted. It does not partition the modules at all: `flakiness_text`, `placement`,
+  `script_discipline` and `structure` each hold rules of more than one kind by the linked rows
+  alone, and `rust_text` is a fifth once `EVERY_ALLOW_DECLARATION` is counted beside its
+  `SourceText` siblings. An axis that cuts a module in half cannot be the axis a directory tree
+  is built on.
+- *Required family* has sixteen members, of which ten are required by exactly one rule:
+  `WordsPolicy`, `ScriptingPolicy`, `ReviewFindings`, `RequirementTrace`, `Reachability`,
+  `NestedLocks`, `LintDiagnostics`, `GoalsPolicy`, `DependencyPolicy` and `CopyClones`. A
+  directory per family is sixteen directories, which is twice the ceiling the check names, and
+  ten of them would hold one rule each. It also fails to partition, for the same reason subject
+  kind does.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#17
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The census · hash: sha256:e9570316d1c38fa665131199ae0f28193a34d83eebb0279e47eda92f2cfb7d73*
+
+**The level names itself in its own source twenty-four times, across fifteen files.** Thirteen
+of those, held by ten `OWN_IMPLEMENTATION_*` constants in ten module files, are self-exemptions —
+the literal path that keeps a rule from reporting the source of its own detector, which
+necessarily spells out the construct the rule looks for. `rust_text` exempts a directory;
+`closure_bounds`, `concurrency_text` and `security_text` each exempt a module file and one file
+beneath it; `constant_scope`, `domain_type_alias`, `enum_shape`, `error_text`, `flakiness_text`
+and `scalar_range` each exempt their own file. The remaining eleven are in test modules, which
+assert against the same spellings.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#18
+
+*revision: authored · kind: heading · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The decision · hash: sha256:ec9846306900734785a003296dd279f1cc82b4d393b3aa01d4fcf3042e14fde0*
+
+## The decision
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#19
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The decision · hash: sha256:e09ac72f4b83e430fe1aef4bebfd70a5743a622b92ef7671840e14ce2552a3e1*
+
+**A rule belongs to the module that owns the reading its judgment needs, and that module is its
+subsystem. The level at `crates/rules/nomos-rules/src/checks` is flat, and flat is what this
+membership rule produces rather than what it tolerates.**
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#20
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The decision · hash: sha256:44d31ab1ae82ac96aa7e08dbbcd1dda3bfa0606e93be430957a6d7416aa02b56*
+
+The membership rule, stated so that it answers for a rule nobody has written yet:
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#21
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The decision · hash: sha256:30add186f4839fe22684be116ad6db050c8561455bbc55aafa889bc5150ba138*
+
+> Take the reading the rule's judgment performs — the construct it detects, the vocabulary it
+> resolves it against, and the source it must not report itself over. If a module at this level
+> already owns that reading, the rule joins that module. If none does, the rule is a new reading
+> and takes a module of its own, named for the reading and never for the topic.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#22
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The decision · hash: sha256:6450e1da06c625dffbb4b79afdeb9ada5a5798a698a465af4af244e149460be2*
+
+Three corollaries make it decidable rather than merely stated:
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#23
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The decision · hash: sha256:af7704c3e7187debee94895e9ad40fad4b0897beb1b7e371cde53ff043c79db7*
+
+1. **The test is the reading, not the subject and not the topic.** Two rules that are both
+   "about security" but detect different constructs are two modules. Two rules about unrelated
+   topics that drive the same scan over the same masked line are one module. `copy_clones` and
+   `nested_locks` arrived together from one provider at `7edd095f` and are two modules, because
+   they are two readings; `security_text` holds three rules and is one module, because they are
+   one.
+2. **A module with no rule is plumbing, not a subsystem.** The four that hold none are named for
+   what they supply. They sit at this level because more than one module needs them, and their
+   presence is not evidence the level needs grouping.
+3. **The width is measured, not chosen.** The number of modules is the number of distinct
+   readings this crate can perform. That is a property of the rule population, so it is not a
+   budget a layout decision can spend down: the only ways to reduce it are to delete a reading
+   or to merge two that were never distinct, and both of those are findings about the rules
+   rather than about the directory.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#24
+
+*revision: authored · kind: heading · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / How this classifies both judgment arms · hash: sha256:98fbfab83bfc24def3378f6b09ecce9bde7753f7903c9c6fa7b448d49f397eaa*
+
+## How this classifies both judgment arms
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#25
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / How this classifies both judgment arms · hash: sha256:43dd13321f2970aa8e506f14051860d478dba565ba356c660274080dbec60512*
+
+It does not distinguish them, and it structurally cannot. `OD-RULES-034` made the arm private
+with no accessor, gave `RuleJudgment` a hand-written `Debug` that withholds it, and settled that
+`Judges` answers identically for a linked `fn` pointer and a `&'static DeclaredTextRule`. A
+membership rule that asked which arm a rule holds would be re-opening a question that record
+closed, through a field nothing is permitted to read.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#26
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / How this classifies both judgment arms · hash: sha256:51c37faf0e8c47eae53053b3c69ff9367bef096abccbca59116c6327b4be334a*
+
+It does not need to. Both arms have a reading, and the reading is what the rule above is keyed
+on. A linked rule's detector is the private predicate in its module; a declared rule's is a
+`DeclaredDetector` member, which the declaration *names* and never contains, and whose closed
+vocabulary the interpreter owns.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#27
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / How this classifies both judgment arms · hash: sha256:39a07d268247edfa261616959cbaaedf05efa9f1511738740336acce1fcda8be*
+
+That the answer is the same for both is measured rather than argued. All three declared rules
+live in `src/checks/rust_text/declarations.rs`, the module whose linked functions they replaced;
+all three name `rust_text`'s own `OWN_IMPLEMENTATION_MODULE` as their self-exemption; and all
+three sit as rows in the one `DESCRIPTORS` table beside the linked ones. Three rules changed arm
+at `219c26f0` and not one of them changed module. A rule's subsystem is therefore invariant
+under the change of arm, which is the strongest form of "the taxonomy classifies both" available:
+it never had to ask.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#28
+
+*revision: authored · kind: heading · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Why there is no coarser tree above this level · hash: sha256:ac0d20a26c558dfe39b38c1a0792da594d9707004e26dbe29e6bdc75c2c8419a*
+
+## Why there is no coarser tree above this level
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#29
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Why there is no coarser tree above this level · hash: sha256:922af8ee4d1d2a65a8b0104306c69641d21484684521a3222138933ae311c3e7*
+
+Four axes were available and each was measured against the ceilings the check names.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#30
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Why there is no coarser tree above this level · hash: sha256:5a355d85286f23acb71f6da0160d1855bb4f4b28afa4468dfba947f8f7796c45*
+
+**Subject kind and required family are already declared per rule, in `DESCRIPTORS`.** A directory
+tree over either would be the same fact written in two places with nothing comparing them — the
+accretion `OD-GATE-020` measured going silently out of step twice and `OD-RULES-034` refused by
+name when it declined a second table of declared rules. Both also fail on the arithmetic: three
+buckets that cut five modules in half, or sixteen buckets against a ceiling of eight.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#31
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Why there is no coarser tree above this level · hash: sha256:49b74cf11d720c33e045cf96bd8e2eacba656d8d9575ca833c8e1cd3f0b93d37*
+
+**Language is not an axis this population has.** Most rules declare none, and the ones that do
+declare it per rule, through `SourceFile::Is_Written_In` or a declaration's `language` field.
+Grouping by it would put the majority of the level in one directory named for the absence of a
+property.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#32
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Why there is no coarser tree above this level · hash: sha256:b76c1b5c8506a203628f5b2b877e81dbcd9a38b617bb6b8b048627adf11e55bb*
+
+**Topic has no authority in this repository at all.** `nomos-architecture.json` is the one zone
+declaration and it is crate-granular: its `components` divide workspace *members*, and
+`nomos-rules` is one member in one component. A sub-crate topical vocabulary would be a second
+zone vocabulary at a granularity that declaration has no room for, invented here and read by
+nothing. `OD-RULES-029` settled that the layering declaration a rule judges against is the
+repository's own data; a topical tree inside the rules crate would be neither that declaration
+nor derived from it.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#33
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Why there is no coarser tree above this level · hash: sha256:202cf6c5f60dca00d781ad5f0845798eb1f3c7ea7ee0c9c8b5c28af50fb45e06*
+
+So a subsystem tree here is either a duplicate of a per-rule declaration or a vocabulary with no
+source. There is no third option, and that — rather than the inconvenience of moving files — is
+why the level is flat.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#34
+
+*revision: authored · kind: heading · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Why the taxonomy is not readable by code, deliberately · hash: sha256:df777239a78a7c187924a6eac5b74d7a0840d84852ecff0ca0993db624eb2991*
+
+## Why the taxonomy is not readable by code, deliberately
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#35
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Why the taxonomy is not readable by code, deliberately · hash: sha256:37c1aa029f1d62ba871e0e9a745bbc7e2b63c037caacabb7b4516f6be0be2ef8*
+
+Because it already is, through the one mechanism that cannot go out of step with itself.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#36
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Why the taxonomy is not readable by code, deliberately · hash: sha256:9748129c187205622e638e08b2d2a0845fafbd588b06cb1249f23d062bff34fd*
+
+The enumeration of subsystems is the `mod` statements in `crates/rules/nomos-rules/src/checks.rs`.
+A module not declared there does not compile, so the list cannot omit a member that exists; a
+module declared and unreachable is what this crate's own `no-orphan-modules` rule reports, so the
+list cannot carry a member that does not. The membership of a rule in a subsystem is the
+directory its identifier constant is declared in, which the compiler also resolves.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#37
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Why the taxonomy is not readable by code, deliberately · hash: sha256:7628b854bce167a9fd8fea63d21913eb75cf967f6f2db7319fa067ce9cd947c4*
+
+A `subsystem` field on `RuleDescriptor`, or a declaration file naming which module belongs to
+which group, would be a second place the same fact is written, and the second copy would be the
+one nothing checks. This record adds neither, and that is a decision rather than an omission.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#38
+
+*revision: authored · kind: heading · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / What a reorganisation would cost, measured · hash: sha256:8acdc111db70fa408c62197ac20aa8018442d6f5bf2288b729b8c9baa4650357*
+
+## What a reorganisation would cost, measured
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#39
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / What a reorganisation would cost, measured · hash: sha256:7a29a736fc1d478317f47d42d7c1b38ee9ea4d9646b65252519b6b0cd9877502*
+
+Stated because the cheap reading of this record is that flat was chosen to avoid work, and the
+cost is worth knowing in either direction.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#40
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / What a reorganisation would cost, measured · hash: sha256:0255b23f6292a857b05683daf0b972a225acc352b846515b550a2c2360df5fef*
+
+Twenty-four path literals across fifteen files name `src/checks/...` by spelling. Moving a module
+under a subsystem directory invalidates each of them, and the thirteen held by the ten
+self-exemption constants fail *silently* and in the dangerous direction: a rule whose exemption no
+longer matches its own source begins reporting the detector constants that spell out what it looks
+for. This crate has paid for that class of defect before, and it is invisible to every gate step,
+because a stale path literal compiles. The eleven in test modules fail loudly, which is the better
+half and is not the half that decides the cost.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#41
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / What a reorganisation would cost, measured · hash: sha256:84cc377ff6a089001dba2b01a4684f2b65983bfaf8163cf879177eb7c1c43ab7*
+
+Beyond the literals, `OD-RULES-015` and `OD-RULES-016` couple a file's name to the types it
+declares, so a move is also a rename question, and this repository's own file-size and
+one-public-type-per-file rules are judged over this crate. A regroup performed to move a counter
+would trade one reported finding for a set of unreported ones.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#42
+
+*revision: authored · kind: heading · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / What this record does not decide · hash: sha256:1e6a2bf81419fae79fc8ae93be5f9ad77004f9465d98742416bb47be0c947ef2*
+
+## What this record does not decide
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#43
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / What this record does not decide · hash: sha256:620c7179e9703276e53cb96c227f3f03a6d19b68e17a8d293b5c76c1d0f275b3*
+
+- **It does not decide for any other level.** `crates/substrate/nomos-analysis/src`,
+  `crates/spec/nomos-spec-store/src` and `crates/corrections/nomos-corrections/src` carry the same
+  declared shape in their own territories and are each their own claim. The argument above rests
+  on a property this crate has — that its modules are readings, and that two of them share none by
+  construction — and a level that does not establish that property for itself gets nothing from
+  this record. A holder of one of those may cite this record for its *method*; citing it for its
+  *conclusion* would be the generalization this record's own method forbids.
+- **It does not decide the detector vocabulary's membership.** `OD-RULES-034` left that to be read
+  off the rules when a declared rule needs one, and it stays there.
+- **It does not decide file layout inside a module.** How many files a module carries, what each
+  is named and when one splits are the filename and file-size rules' questions, judged per file.
+  This record is about which module a rule is in, not about which file inside it.
+- **It does not decide which rules run, in what order, or against what.** Selection is
+  `OD-HOST-004`'s and resolution is `OD-RULES-022`'s, and a directory layout that implied either
+  would be a second answer to a settled question.
+- **It does not decide the shape of `crates/rules/nomos-rules/src/lib.rs`'s facade.** That the
+  crate root re-exports every rule by name is a question about re-export form and about who
+  contends for one file; it is not a question about subsystems, and this record neither answers it
+  nor is evidence about it.
+- **It does not decide whether `check-folder-organization`'s signal is right.** That check belongs
+  to another tool and this record has no standing over its thresholds. It decides only what this
+  crate's answer to it is.
+- **It does not amend `OD-RULES-034`, `OD-RULES-027` or `OD-RULES-011`.** Each is read against the
+  population above and none is edited, because amending a record is the work of an item that holds
+  it.
+- **It does not decide what happens if this crate is split.** A subsystem question that arrived as
+  a crate-boundary question would be answered by `nomos-architecture.json`'s own vocabulary, which
+  is where crate-granular grouping already lives.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#44
+
+*revision: authored · kind: heading · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The finding stays reported, and this is the reason it cites · hash: sha256:d21ed456c5cc9a6d455d10229bfcb25fe72e8745c24bab5b0f6d5c1f4e6fae85*
+
+## The finding stays reported, and this is the reason it cites
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#45
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The finding stays reported, and this is the reason it cites · hash: sha256:1dfae3eb799b3c1e060f65380baf5555ed075ea799f054ddc64ad8fc9c4bd941*
+
+`check-folder-organization` at `crates/rules/nomos-rules/src/checks:0` is not cleared by this
+record and is not meant to be. It stays a reported finding whose answer is written down, which is
+a different state from an open question and from a silenced one.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#46
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The finding stays reported, and this is the reason it cites · hash: sha256:3fb59d8bee913067d77d845da90fb34d34da2e060e9591695b44227d47ce0ade*
+
+No entry is added to `suppressions.json` and no in-code allow marker is added. Both were available
+and both were refused: a suppression would record that somebody decided this was acceptable
+without recording what they decided, and the marker route the check offers is not open for this
+signal in any case. A record is the form in which an answer stays legible to the next holder.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#47
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / The finding stays reported, and this is the reason it cites · hash: sha256:4e77c805ebaa6421e004e4d93c930a48d926790b9c762af672b675c33f4f3e5e*
+
+This record performs no reorganisation and changes no source. There is no item deferred behind it,
+because there is no move owed.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#48
+
+*revision: authored · kind: heading · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / What would change this · hash: sha256:48294865bb2004ff02741779de73858ed3b607d1068fb18a39018f11ca4e7a68*
+
+## What would change this
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#49
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / What would change this · hash: sha256:553cf131aab42cb93b1782dd918be6bd2b36e4300ebb8e82889038ef0265b710*
+
+Not a count. The level's width is the number of readings, so it rising is the rules population
+growing and is not evidence about this decision.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#50
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / What would change this · hash: sha256:9e421f43b08e8f73df613820e2186a82ed35d60262982ef12ce03e41b091b363*
+
+Two observations would be:
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#51
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / What would change this · hash: sha256:c38142971348257dde79301a0a8dd0b4ee9f4c335dbb42bd029c978c95d0576c*
+
+- **Two modules whose detectors turn out to be the same reading under different names.** That is a
+  merge, owed on its own terms, and it makes the level narrower by removing a duplicate rather than
+  by grouping distinct things.
+- **A rule that cannot be placed because its reading is owned by two modules at once.** That would
+  mean the two were never distinct readings, and it is the same merge arriving from the other
+  direction. If it happened repeatedly, and the pairs it named had something in common beyond being
+  pairs, that commonality would be the first candidate for a real grouping axis this crate has —
+  which is what would have to exist before a tree over this level could be anything but composed.
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#52
+
+*revision: authored · kind: heading · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
+
+## Status
+
+### docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md#53
+
+*revision: authored · kind: prose · heading: A rule's subsystem is the reading its judgment needs, and the rules level is already that partition / Status · hash: sha256:7c37f8fc6a769283aef8112d8a250d53736247278c6c6f62dbae0572ad6038d3*
+
+Accepted.
 
 ### docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md#1
 
