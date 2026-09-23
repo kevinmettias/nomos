@@ -95373,6 +95373,103 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P141-THE-SELF-CHECK-GOT-SEVEN-TIMES-SLOWER-AND-TWO-FAMILIES-EACH-LOAD-THEIR-OWN-CRATE-GRAPH-AND-SYSROOT",
+      "title": "nomos check --root . went from a 33.7 s median to a 249.2 s median when two compiler families were composed, and each loads a crate graph and a sysroot sharing nothing",
+      "why": "Measured 2026-09-22 by the session that caused it, three runs each on one machine, with the binary built fresh from the tree being measured. Before c3625fad: 33.70, 31.83, 34.12 seconds, median 33.70. After: 365.37, 240.91, 249.22, median 249.22. That is 7.4 times slower in the verb this repository's own workers run to judge themselves. It is attributable rather than diffuse, which is what makes it worth an item. Measured per family over this repository's root: Discover_Crate 107.1 seconds returning 2 findings, and Discover_Nested_Locks 116.8 seconds returning 0, for 223.9 seconds. That is essentially the whole delta. Each family independently loads the resolved crate graph plus a discovered sysroot and nothing is shared between them, so the second pays the same price as the first for the same information. The demand gate works and is not the problem. P123-THE-COMPILER-CONTRACTS proved by test that a run selecting no rule requiring a compiler family never loads ra_ap_hir. The default invocation selects every rule, so the default pays, and the default is what a worker runs. Two traps in reading the numbers, both recorded because the next reader will meet them. First, the finding count went 54 to 461 across those runs and only 2 of the 407 belong to this change; 405 are lint-diagnostics, clippy's opinion of a peer's large in-flight edit that landed in the shared tree between the two measurements. Anyone comparing raw before and after will attribute the lot to the compiler families. Second, the first attribution attempt returned Ok(0) in about 15 seconds having examined nothing, because Is_Source_Under_Root compares lexically with Path::starts_with while Absolute_Root joins the root onto the working directory without normalising, so a root spelled with .. segments prefixes nothing and every file is filtered out. A fast clean answer and a fast empty one are indistinguishable; the figures above were retaken with a root normalised through Path::parent. One interaction the claimant should know about rather than rediscover. P134 records that cargo clippy is bounded at 600 seconds in nomos-lang-rust-clippy and that on a cold or contended target directory it is killed, surfacing as ProviderUnavailable and failing three check-orchestration tests that look unrelated to whatever the claimant changed. These are different subprocesses and it is not the same defect, but both are the self-check's cost presenting as a code failure, and a sevenfold slowdown in the surrounding run makes the contended case materially more likely to be the one people meet.",
+      "done_when": "The cost of a default nomos check --root . is either reduced or deliberately accepted, and which of those happened is recorded with the measurement that decided it rather than left to be inferred from the code. Accepting it is a legitimate outcome and must not be treated as a failure to fix: if the claimant measures the alternatives and finds the sharing unsafe or the complexity unjustified, that conclusion recorded with its numbers and with what would reopen it satisfies this item. What does not satisfy it is the cost remaining unexplained. Three things are refused outright, and naming them is most of the point. The demand gate's guarantee must survive: a run that selects no rule requiring a compiler family must still never load ra_ap_hir, and the test P123 landed for that must still pass and must still be able to fail. The two rules must not be silently removed from the default selection, de-registered, or made opt-in as a way of making the number smaller, because that answers a question about cost by deleting capability and the run would then be fast and blind. And no family may start sharing a crate graph or sysroot with another unless the claimant shows the shared value is still correct for each family separately, by a test that fails when one family is handed the other's, since a shared resolution silently wrong for one consumer is a worse defect than the slowness it cures. Whatever is chosen, the numbers in the why are re-measured at HEAD on the claimant's own machine rather than cited, three runs, with the root normalised and the binary built fresh from the tree measured, and reported with the per-family attribution so the remedy can be seen to address the cost that exists rather than the one recorded here. A finding that the regression does not reproduce is a real result and is reported with what was run. If the choice changes what a materialization costs any caller, or what a family may assume about what another has already resolved, that is a governing record rather than a comment, and this item does not reserve one: stop and board it. The predicate passes and cargo clippy --workspace --all-targets is clean.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-compiler",
+          "crates/orchestration/nomos-check-orchestration/src/facts/dependency_materialization/compiler_materialization.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-rust-compiler",
+          "-p",
+          "nomos-check-orchestration",
+          "--lib"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P142-THE-CITATION-REGISTER-PINS-A-COUNT-INSTEAD-OF-DERIVING-ITS-POPULATION-AND-HAS-NOW-MISSED-A-THIRD-SHIPPING",
+      "title": "The rule-contract citation register asserts CITATIONS.len() == 9 rather than deriving which rules cite a record, so a rule that ships with a citation and no row is invisible to it",
+      "why": "Measured 2026-09-22 at c3625fad. tests/contract/tests/rule_contract_citation.rs holds a hand-maintained CITATIONS table and Test_The_Citation_Table_Should_Cover_Every_Cited_Rule asserts its length is 9, with a message listing the nine rules by name and instructing that a rule added with a real record needs a row and this number raised with it. That guard cannot detect the thing it exists for. A rule that ships citing a record and receives no row leaves the length at 9, so the assertion passes and the citation is simply unchecked. Nothing compares the table against the rules. The file's own documentation says so in as many words -- it calls this the same failure Check_Completeness_Mirrors exists to prevent, a row silently missing with every assertion above passing by not looking at it, and records that it was written for one rule and stayed green through a second shipping. It has now stayed green through a third. P123-THE-COMPILER-CONTRACTS landed COPY_CLONES_CONTRACT_RECORD and NESTED_LOCKS_CONTRACT_RECORD, both citing OD-RULES-010 with a version twin, and both are absent from CITATIONS. The register reports 9 and the tests are green. So a guard that has twice written down its own failure mode has been defeated by it a third time, which is the argument for repairing the shape rather than the count. The population is derivable, which is the fact that decides this item is worth more than two rows. nomos-rules declares its citations as public constants in a consistent shape: a *_CONTRACT_RECORD naming the record and a *_CONTRACT_RECORD_VERSION beside it. Counted at this commit there are twelve such record constants in crates/rules/nomos-rules/src against nine rows in CITATIONS. The file's doc says there is no fact to resolve the list against, and that is true of the specification store; it is not true of the crate's own source, which is what the surface snapshots and several other contract tests already read. This is the debt of my own landing and is boarded rather than folded silently into it, because the count was already wrong before P123 by the same mechanism.",
+      "done_when": "A rule that ships citing a versioned record and receives no row in CITATIONS fails a test, rather than passing by not being looked at. The two rules P123 landed are covered, and covering them is not by itself sufficient: an item that adds two rows and raises a pinned number to eleven satisfies the letter of the old message and leaves the defect exactly where it was for the fourth shipping, which is what this item exists to refuse. The repair derives the population rather than restating it. The claimant enumerates the rules that cite a record from the crate's own source -- the *_CONTRACT_RECORD and *_CONTRACT_RECORD_VERSION constants are the shape that exists today -- and compares that set against CITATIONS in both directions, so a constant with no row fails and a row naming a constant that no longer exists fails too. If the claimant measures the source and finds the declaration shape too irregular to enumerate honestly, that is a real result: report it with the irregular cases named, and then the count may stand, but the test message must stop instructing a reader to raise a number that nothing verifies and must say plainly that a missing row is undetected. The derivation is proven by mutation rather than by argument, and this is the load-bearing proof because the old guard would have passed every such test: remove one row from CITATIONS and show the test fails naming the constant it lost, then restore it byte-identically and verify the restoration by hash. A guard that cannot be shown to fail has not been shown to work, which is this register's entire history. No rule's cited record or version is changed to make the comparison pass. If a citation disagrees with its record's front matter, that is a finding to report rather than to reconcile by editing either side, since the existing control in that file exists to catch exactly that disagreement. Nothing outside tests/contract is edited: if the claimant concludes a constant must be renamed in nomos-rules to be discoverable, stop and report instead, because this item does not reserve that crate. The predicate passes and cargo clippy --workspace --all-targets is clean.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/rule_contract_citation.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "rule_contract_citation"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "rule_contract_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos-render-p132\\tests\\contract)\n   Compiling nomos-ledger v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\substrate\\nomos-ledger)\n   Compiling dashmap v6.1.0\n   Compiling rowan v0.15.15\n   Compiling ra_ap_intern v0.0.293\n   Compiling ra_ap_syntax v0.0.293\n   Compiling ra_ap_tt v0.0.293\n   Compiling ra_ap_cfg v0.0.293\n   Compiling ra_ap_span v0.0.293\n   Compiling ra_ap_base_db v0.0.293\n   Compiling ra_ap_syntax-bridge v0.0.293\n   Compiling ra_ap_proc_macro_api v0.0.293\n   Compiling ra_ap_mbe v0.0.293\n   Compiling ra_ap_hir_expand v0.0.293\n   Compiling ra_ap_project_model v0.0.293\n   Compiling ra_ap_hir_def v0.0.293\n   Compiling ra_ap_hir_ty v0.0.293\n   Compiling ra_ap_hir v0.0.293\n   Compiling ra_ap_ide_db v0.0.293\n   Compiling ra_ap_load-cargo v0.0.293\n   Compiling nomos-lang-rust-compiler v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\languages\\nomos-lang-rust-compiler)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos-render-p132\\crates\\orchestration\\nomos-check-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 24.01s\n     Running tests\\rule_contract_citation.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\rule_contract_citation-c502137828c415d1.exe)\n",
+        "verified_at": 1790123540,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "4a4b2f7f902eb9c25546b7763cc004beddb2aae8"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
