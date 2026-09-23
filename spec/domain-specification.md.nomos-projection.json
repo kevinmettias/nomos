@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:aa850db0516a66910eaa8c9e94c1e2c9572397ba9a0fbd0ad42d9bbc9afd638d",
-  "inputs_digest": "sha256:1e2359c15dc57d70650bae4afbb9c2e0cf7b7aa2679ee7292116ca1cf211731d",
+  "content_digest": "sha256:961934c97a1371dbeee2fb70195cd247660f6ae513e1c676e20b654cb190417e",
+  "inputs_digest": "sha256:3bfcc02c359b4107af87771c7c81c207096cb0454d45c1bd4b987970c7f00040",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2454
+      2456
     ],
     [
       "Source blocks",
-      8948
+      8962
     ]
   ],
   "inputs": [
@@ -53,7 +53,7 @@
     {
       "content": "documents",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored",
-      "hash": "sha256:2f4765b15b59d34af0ba065197f3b43452bc2b8cfd2164b0b93c0abfc210a9bf"
+      "hash": "sha256:71c7c9a5e2ee7a9ea41dce1511ed1ac1da1c7b7ffacade2b55a71894f2f77378"
     },
     {
       "content": "documents",
@@ -258,7 +258,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md@authored",
-      "hash": "sha256:bc3389ecd8cb9e534d65dc4043906977ea5f0b31784cbe4e512b342c8d057de5"
+      "hash": "sha256:277615a2bd6e0b6ef8262f7f4524e226a18e3e00b9964756c08c70f8dfc023a3"
     },
     {
       "content": "documents",
@@ -1773,7 +1773,12 @@
     {
       "content": "headings",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#86",
-      "hash": "sha256:9f6dbdbad447dd911e64d804486ffc331bf8e9905d01ff0eb06dd161f7e01c12"
+      "hash": "sha256:2cd97a965739cbce5ddf6a35b95f52ae82165471e65d44fb3b0c791b3e4a2bc5"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#92",
+      "hash": "sha256:ad8ae0b37460e85c775ab65e54c284c8032f8994d85331dc0b8803c329329eb7"
     },
     {
       "content": "headings",
@@ -3293,7 +3298,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#32",
-      "hash": "sha256:6a166539bc31af69866bd9834caf23e0d186447f302dcfb71a0b725b6f1820db"
+      "hash": "sha256:fab2dc5f0e31c47adc2220283dccad7da55c009975cd8e69251bf92812703bc3"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#38",
+      "hash": "sha256:efd07d2619496068d94886716975e44d48f88477d34a777f22505c0405b71e27"
     },
     {
       "content": "headings",
@@ -15188,22 +15198,57 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#86",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:47978f727e1296cb3c31db37f2e86398c7197d27885a024e97bef1ea0b7a10a5"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#87",
-      "hash": "sha256:46b1e90810340bc991be682a32f1ca8c6f1d2994032dc1b1d9be520cad85d2bf"
+      "hash": "sha256:5ffee8d3ada3cf1245577f433a5c6bf093b197b9d7ae6e410318f8428dbff65f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#88",
-      "hash": "sha256:a926a67415d3eef78b6f1343b7bb04f78d132883e62ead255489397e21dd6c04"
+      "hash": "sha256:26b542790e0ca162e64c2597b9fc0911647c82d8f7b6d514ba3c16e228ec6bab"
     },
     {
       "content": "blocks",
       "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#89",
+      "hash": "sha256:3dc7563d3268b956e64c03a014cbf5dd00f555bc8c3711f88aa6835db26079b8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#90",
+      "hash": "sha256:3b3aa5fc771e77340d22c45b7a33f5c895984b0cfe7014a136b8626186912ec9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#91",
+      "hash": "sha256:fad1bc5f24bada6baaa2c14165a15f8818b260454f00982a20d799241a521a96"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#92",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#93",
+      "hash": "sha256:46b1e90810340bc991be682a32f1ca8c6f1d2994032dc1b1d9be520cad85d2bf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#94",
+      "hash": "sha256:a926a67415d3eef78b6f1343b7bb04f78d132883e62ead255489397e21dd6c04"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#95",
       "hash": "sha256:90531d18e834b997ad1801242f6ff2a76fbfe10350145b79201e4098bfb92c13"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#96",
+      "hash": "sha256:3e714e6495a3b5074a195c3c57da1b5bc22f5c373cce258a91a07dc403089030"
     },
     {
       "content": "blocks",
@@ -20683,7 +20728,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#8",
-      "hash": "sha256:4c3c5b85eabf0b7509877d5180a4b0c365c82bf7b8bb77844ca8ea494d11c696"
+      "hash": "sha256:f1b57c1f32a5ca940da23faf22d98f2761e576636fe8c17c05dac1e5949347d9"
     },
     {
       "content": "blocks",
@@ -20718,7 +20763,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#15",
-      "hash": "sha256:23bfb47b2e6af75fe19a7b9b66a5c771384cc8b5f9935ad25e7df2d47ad2be43"
+      "hash": "sha256:9a491a8f42444d663be91736da4299f291769a80c8648e748fc4a179f3267fec"
     },
     {
       "content": "blocks",
@@ -20803,17 +20848,52 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#32",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:8d591e5248a48ca0933932d87c7009b2baf9aefd67dbc2499eeb222fc487d489"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#33",
-      "hash": "sha256:1cb4df0e957639e3bef7e59ae32afbfd580b5aeea63951a47dcb16167d0d1baa"
+      "hash": "sha256:93cd00be0777524f78d40ad352fc14899204a137ec19c19acb9875f9afe3dcfe"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#34",
+      "hash": "sha256:b6166d9267b13f0662e58b93c6d9e575b786fba747991081f8fa58465ef9b8b2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#35",
+      "hash": "sha256:5220939ce547cfccb885c18d57f901329daf3f7b1ba9cdd264bffa73ecb8ecdd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#36",
+      "hash": "sha256:fd4c85ac7d20c7d7e593cdbedd6a093d510cb98251e25b11a376ae2b594b9748"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#37",
+      "hash": "sha256:0662764c2b443379823f08f7530e9825ab4ea5f88cd6b0a147818e74a81c3992"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#38",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#39",
+      "hash": "sha256:1cb4df0e957639e3bef7e59ae32afbfd580b5aeea63951a47dcb16167d0d1baa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#40",
       "hash": "sha256:a76d0eaf2f8c16fc9d571ba0b2e85ae61cc1a4f38a735a3e30cbc06d9ffae914"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#41",
+      "hash": "sha256:d3823d1eb5fd2b6da9e9a03a74d7449db94e815df49f15795999f4831973ff1d"
     },
     {
       "content": "blocks",

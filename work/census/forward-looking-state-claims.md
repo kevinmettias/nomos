@@ -159,12 +159,18 @@ stop being evidence of anything.
 
 ## Appendix: every module-doc hit under `crates/`
 
+Two rows carry an expiry annotation. This census is a run, dated above, and its buckets are
+that run's own counts — so a claim that has since become false is annotated in place rather
+than re-bucketed, which would rewrite the measurement and cascade through every total it
+feeds. A dead path citation is left as it was recorded: `OD-SPEC-017` settles that a moved
+file does not make a citation a defect. A verdict that has gone false is a different thing.
+
 | location | bucket | text |
 |---|---|---|
 | `crates/contracts/nomos-contracts/src/workflow_step.rs:15` | deferred | "engine, once one exists, would have to honor" — no workflow engine exists; `OD-WORKFLOW-003` |
 | `crates/host/nomos-api/src/lib.rs:154` | historical | the corrected text, quoting the claim it replaced |
-| `crates/languages/nomos-lang-rust-compiler/src/check.rs:12` | still true | not offered in `Declare_*_Capability`; verified against `composition.rs` |
-| `crates/languages/nomos-lang-rust-compiler/src/nested_lock_check.rs:11` | still true | same provider, same verification |
+| `crates/languages/nomos-lang-rust-compiler/src/check.rs:12` | still true at the run, **expired 2026-09-22** | not offered in `Declare_*_Capability`; verified against `composition.rs`. Composed at `7edd095f`, so the claim is false from that commit; the cited file no longer exists either |
+| `crates/languages/nomos-lang-rust-compiler/src/nested_lock_check.rs:11` | still true at the run, **expired 2026-09-22** | same provider, same verification; same composition at `7edd095f` and the same moved file |
 | `crates/languages/nomos-lang-rust-deny/src/lib.rs:22` | deferred | `advisories` is named as another provider's question |
 | `crates/orchestration/nomos-check-orchestration/src/package_conformance.rs:29` | still true | verified: only `lib.rs` re-exports `Check_Package_Conformance`; no host calls it |
 | `crates/orchestration/nomos-check-orchestration/src/package_conformance.rs:31` | still true | same verification |

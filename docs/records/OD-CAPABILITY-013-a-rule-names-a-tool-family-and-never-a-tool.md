@@ -3,7 +3,7 @@ id: OD-CAPABILITY-013
 type: decision
 title: A rule names a tool family and never a tool
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - capability
@@ -75,7 +75,7 @@ after this item was authored):
 | `nomos-lang-rust-clippy` | `nomos.cap.lint.diagnostics` | LINTER | external (`cargo clippy`) |
 | `nomos-lang-rust-deny` | `nomos.cap.dependency.policy` | PACKAGE_MANAGER | external (`cargo deny`) |
 | `nomos-lang-go-modules` | `nomos.cap.dependency.edges` | PACKAGE_MANAGER | in-process (reads `go.mod`/`go.work` text directly) |
-| `nomos-lang-rust-compiler` | `nomos.cap.rust.copy_clones` | SEMANTIC_MODEL | in-process (`rustc_interface`/`rustc_driver`) |
+| `nomos-lang-rust-compiler` | `nomos.cap.rust.copy_clones` | SEMANTIC_MODEL | in-process (`ra_ap_hir`) |
 
 The live case the item's own `why` predicted is exactly `nomos-lang-rust-cargo` against
 `nomos-lang-go-modules`: identical family (PACKAGE_MANAGER), identical capability
@@ -124,7 +124,7 @@ regression from what this workspace already has.
 **Delivery becomes an explicit second axis on a provider's own registration, with
 `IN_PROCESS` read by consequence rather than literal mechanism**: no external tool exists
 to be absent, wrong-versioned, or broken, whether because the analysis is a linked library
-(`syn`, `tree-sitter-go`, `rustc_interface`) or because it is a direct read of a manifest
+(`syn`, `tree-sitter-go`, `ra_ap_hir`) or because it is a direct read of a manifest
 format nothing external produces (`go.mod`/`go.work`). `EXTERNAL` names every subprocess-
 backed provider, unchanged from `toolspec`'s own definition.
 
@@ -243,6 +243,39 @@ workspace's own population cannot fit is a decision for whenever such a provider
 proposed, the same "wait for a need, not a wish" discipline this workspace already applies
 elsewhere.
 
+## Amendment: The Compiler-Backed Provider Links rust-analyzer, And Never Linked `rustc`
+
+Two statements in "What Was Measured" named `rustc_interface` and `rustc_driver` as the engine
+behind `nomos-lang-rust-compiler`: the mechanism table's row for `nomos.cap.rust.copy_clones`,
+and the `IN_PROCESS` paragraph's list of linked-library examples. Both are corrected above.
+
+**They were never true, which is why they are corrected in place rather than dated.** The
+crate's manifest has named `ra_ap_hir`, `ra_ap_ide_db`, `ra_ap_load-cargo`, `ra_ap_project_model`
+and `ra_ap_syntax` — rust-analyzer's own semantic engine, published as ordinary libraries that
+build on stable Rust — since the commit that created it, `484951cb`. It has never depended on
+either `rustc` crate: `git log -S` over that manifest across every branch returns no commit that
+added one. This record's line was written *after* that crate existed, at `7e306e49` the same day,
+so it described the authorizing item's framing — "a real compiler semantic API, not a syntax
+tree" — rather than the manifest it could have read.
+
+**The crate's own module documentation already said so**, and says why, which is the part worth
+keeping: `rustc`'s semantic APIs are reachable only through `rustc_private` and therefore only on
+a nightly toolchain, while this workspace is pinned to stable `1.88.0` (`rust-toolchain.toml`,
+`OD-GATE-012`). A provider needing nightly would force every contributor and the gate onto one.
+So the corrected text is not a detail: an embedded `rustc` was never available to this workspace
+at all, and naming it as the mechanism made a stable-toolchain constraint invisible.
+
+**Nothing in this workspace links `rustc_interface` or `rustc_driver`.** Searched rather than
+assumed, across every manifest and every source file under `crates/`: the only occurrence is the
+sentence in `nomos-lang-rust-compiler`'s own module doc explaining why they are not used. So the
+`IN_PROCESS` example list does not get a different crate named in their place — it names
+`ra_ap_hir`, which this workspace really does link.
+
+What still stands: the whole of the decision this record reaches. The twelve-name `FAMILY`
+vocabulary, `SEMANTIC_MODEL` as this provider's family, the `IN_PROCESS`/`EXTERNAL` distinction
+read by consequence rather than by literal mechanism, and the finding that a rule names a family
+and never a tool are all untouched. The engine was the wrong example of a correct category.
+
 ## Status
 
 Accepted. A closed, twelve-name FAMILY vocabulary is adopted, reused verbatim from
@@ -261,3 +294,9 @@ taxonomy, the cardinality and the carrier are untouched — and the deferral tha
 count is replaced by what became of the question instead: `P54-A-REPOSITORY-CANNOT-CHOOSE-
 ITS-TOOLS` is closed, `OD-HOST-009` decided it, and the mechanism is unbuilt rather than the
 question open.
+
+Amended to version 4 by `P143-TWO-RECORDS-AND-A-CENSUS-STILL-SAY-THE-COMPILER-PROVIDER-IS-UNCOMPOSED-AND-BACKED-BY-RUSTC`,
+which corrected two statements naming `rustc_interface` and `rustc_driver` as
+`nomos-lang-rust-compiler`'s engine. The crate links rust-analyzer's `ra_ap_*` libraries and has
+done since it was created; nothing in this workspace links either `rustc` crate. The error
+predates every composition change and is not a consequence of one. No part of the decision moves.

@@ -16,7 +16,7 @@ profile: domain-specification
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 80 | 16 | sha256:516e6bdb8000bb760e2fdfcfc587246e75d436f7bc10ac0d645921f0f3d2bae5 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
 | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md@authored | docs/records/ARC-HARNESS-001-an-autonomous-harness-is-owned-per-component-and-the-seam-falls-between-what-should-run-and-whether-it-can-run-now.md | authored | 31 | 8 | sha256:1931b6cbe939acaa26774b46b8533002d2ff588626d1e25834dd6b8f8dc5b802 |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 89 | 21 | sha256:2f4765b15b59d34af0ba065197f3b43452bc2b8cfd2164b0b93c0abfc210a9bf |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md@authored | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md | authored | 96 | 22 | sha256:71c7c9a5e2ee7a9ea41dce1511ed1ac1da1c7b7ffacade2b55a71894f2f77378 |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md@authored | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md | authored | 18 | 5 | sha256:795ab3ead8311de8e0f1a93828209d5c1654275417d109a92e491cab9e3b5b45 |
 | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md@authored | docs/records/ARC-SPECDB-002-a-canonical-substrate-is-decided-by-whether-the-schema-precedes-the-content.md | authored | 33 | 8 | sha256:6345396571caf05ec03eb1d4cf5f6f4b940f8f2f42dce4026dfabd0836faefa9 |
 | docs/records/D-129-the-store-is-the-identity-substrate.md@authored | docs/records/D-129-the-store-is-the-identity-substrate.md | authored | 28 | 7 | sha256:c1f3eeec14e44a3f55d1f71522686a9f695f79060ac32e84aacdd0ff245d7778 |
@@ -57,7 +57,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md@authored | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md | authored | 23 | 6 | sha256:49347b91e13b7f953160008054dc9e028aef8b1893f14bafbc8e4121ee8b623c |
 | docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md@authored | docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md | authored | 21 | 8 | sha256:97fc27d295d43e88affe791ed4c4facc80e3328cf91125949ee80de1e1bff5c7 |
 | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md@authored | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md | authored | 20 | 6 | sha256:88d25ef06103ea7b630b4cf9e09748244421ae9d293d1030f63bed54f2be8850 |
-| docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md@authored | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md | authored | 34 | 6 | sha256:bc3389ecd8cb9e534d65dc4043906977ea5f0b31784cbe4e512b342c8d057de5 |
+| docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md@authored | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md | authored | 41 | 7 | sha256:277615a2bd6e0b6ef8262f7f4524e226a18e3e00b9964756c08c70f8dfc023a3 |
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md@authored | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md | authored | 23 | 8 | sha256:33f282b8156d4f3dd172d5ee4c250a2cb2d4efb04987e2efcae89ba263371d43 |
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md | authored | 22 | 6 | sha256:c73b6568e987da09a2256a0e13c66b1d768911f443b0fa014c71ff319d11591f |
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md@authored | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md | authored | 27 | 7 | sha256:cae971023f2e38fc400fcb48c0f851cf958af99faf124d0caaba5d34226ee492 |
@@ -365,7 +365,8 @@ profile: domain-specification
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#65 | authored | 3 | What this amendment does not do |
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#72 | authored | 3 | Consistency with `OD-ROADMAP-005` |
 | docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#77 | authored | 2 | Amendment: The Six Hazards Are Named Nowhere, So The Count Is A Reading Of A Review |
-| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#86 | authored | 2 | Status |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#86 | authored | 2 | Amendment: Two Of The Four Unobserved Offers Are Composed, And The Register Is Where The Count Lives |
+| docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#92 | authored | 2 | Status |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1 | authored | 1 | The specification is a database with an enforced preservation ledger |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#2 | authored | 2 | Context |
 | docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#6 | authored | 2 | Decision |
@@ -669,7 +670,8 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#12 | authored | 2 | The Decision |
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#21 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#32 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#32 | authored | 2 | Amendment: The Compiler-Backed Provider Links rust-analyzer, And Never Linked `rustc` |
+| docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#38 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#1 | authored | 1 | An impl block's own generic parameters join OD-CAPABILITY-011's closed set of typed shape extensions |
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#4 | authored | 2 | What was checked, not assumed |
@@ -5695,11 +5697,67 @@ asserts a number it cannot decompose, and says so rather than leaving a reader t
 
 ### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#86
 
+*revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: Two Of The Four Unobserved Offers Are Composed, And The Register Is Where The Count Lives · hash: sha256:47978f727e1296cb3c31db37f2e86398c7197d27885a024e97bef1ea0b7a10a5*
+
+## Amendment: Two Of The Four Unobserved Offers Are Composed, And The Register Is Where The Count Lives
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#87
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: Two Of The Four Unobserved Offers Are Composed, And The Register Is Where The Count Lives · hash: sha256:5ffee8d3ada3cf1245577f433a5c6bf093b197b9d7ae6e410318f8428dbff65f*
+
+The per-item measurement above, taken at `53de19a4`, found four exported `Provider_Offer`
+functions declared and observed by nothing, and enumerated them: `nomos-lang-csharp`'s syntax
+offer, both of `nomos-lang-rust-compiler`'s, and `nomos-lang-rust`'s `nomos.cap.module.index`
+rollup. It also said the compiler-backed provider was the sharpest case because no crate under
+`crates/orchestration` or `crates/host` named it.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#88
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: Two Of The Four Unobserved Offers Are Composed, And The Register Is Where The Count Lives · hash: sha256:26b542790e0ca162e64c2597b9fc0911647c82d8f7b6d514ba3c16e228ec6bab*
+
+**Two of the four are now composed, and the clause about nobody naming the provider is false.**
+`P123-THE-COMPILER-CONTRACTS-LEAVE-THEIR-PROVIDER-AND-ITS-RULES-JOIN-THE-RUN-2` composed both
+compiler offers at `7edd095f`, and `nomos-check-orchestration` now names that crate in its own
+composition module and in a materialization arm of its own. What remains declared and unobserved
+is two: `nomos_lang_csharp::Provider_Offer` and `nomos_lang_rust::rollup::Provider_Offer`.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#89
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: Two Of The Four Unobserved Offers Are Composed, And The Register Is Where The Count Lives · hash: sha256:3dc7563d3268b956e64c03a014cbf5dd00f555bc8c3711f88aa6835db26079b8*
+
+**The measurement above is not edited, and the numbers in it are not wrong.** They were taken at
+`53de19a4` and were true there; work landing afterwards does not make a measurement false, which
+is the discipline this record's own version 4 amendment set and version 5 restated. What this
+amendment retires is the reading that the enumeration is current.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#90
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: Two Of The Four Unobserved Offers Are Composed, And The Register Is Where The Count Lives · hash: sha256:3b3aa5fc771e77340d22c45b7a33f5c895984b0cfe7014a136b8626186912ec9*
+
+**Where the count actually lives, so it need not be re-derived from prose again.**
+`tests/contract/tests/boundaries/composed_offers.rs` holds the declared-uncomposed register, and
+it is held mechanically against the composition root in both directions — every exported offer is
+composed or declared uncomposed, and every declared-uncomposed entry is still exported. Read at
+this amendment's commit it holds exactly the two named above, which is the same answer this
+amendment gives, arrived at independently. That register has no count constant beside it on
+purpose: the list is the count. A reader wanting the number should read the register rather than
+this record, and a future divergence between them is the register's answer and not this one's.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#91
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Amendment: Two Of The Four Unobserved Offers Are Composed, And The Register Is Where The Count Lives · hash: sha256:fad1bc5f24bada6baaa2c14165a15f8818b260454f00982a20d799241a521a96*
+
+What still stands: everything else in the version 4 measurement, including that the capability
+system is built, and that a provider backed by a real semantic engine existing without a consumer
+was a real gap at the time it was found. It was, and it was closed.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#92
+
 *revision: authored · kind: heading · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#87
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#93
 
 *revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:46b1e90810340bc991be682a32f1ca8c6f1d2994032dc1b1d9be520cad85d2bf*
 
@@ -5717,7 +5775,7 @@ this record's prior text erased that carve-out by compressing "installation" and
 "activation" into one XVPE-owned phrase. Package installation mechanism is unchanged as
 XVPE's; nothing else about either record's ownership table moves.
 
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#88
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#94
 
 *revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:a926a67415d3eef78b6f1343b7bb04f78d132883e62ead255489397e21dd6c04*
 
@@ -5733,7 +5791,7 @@ read one tier up. Read the amendment above before reading either list as a stand
 prohibition, and `OD-ROADMAP-004` for the seven metric and runtime families neither list
 sorted.
 
-### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#89
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#95
 
 *revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:90531d18e834b997ad1801242f6ff2a76fbfe10350145b79201e4098bfb92c13*
 
@@ -5743,6 +5801,17 @@ the six `nomos-analysis` hazards this record counts, found none, and recorded th
 and answered (`OD-ANALYSIS-008`, closed at version 3) while the other five exist only in an
 external review this repository does not hold. The "What Was Measured" sentence is unchanged; what
 the amendment retires is the reading that the five are a checkable backlog.
+
+### docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md#96
+
+*revision: authored · kind: prose · heading: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence / Status · hash: sha256:3e714e6495a3b5074a195c3c57da1b5bc22f5c373cce258a91a07dc403089030*
+
+Amended to version 6 by `P143-TWO-RECORDS-AND-A-CENSUS-STILL-SAY-THE-COMPILER-PROVIDER-IS-UNCOMPOSED-AND-BACKED-BY-RUSTC`,
+which recorded that two of the four offers the version 4 measurement found unobserved were
+composed at `7edd095f`, leaving two, and that the clause saying no crate under
+`crates/orchestration` or `crates/host` names the compiler-backed provider is no longer true. The
+dated measurement is unchanged; the declared-uncomposed register in
+`tests/contract/tests/boundaries/composed_offers.rs` is named as where the current count lives.
 
 ### docs/records/ARC-SPECDB-001-the-specification-is-a-database.md#1
 
@@ -16396,7 +16465,7 @@ after this item was authored):
 
 ### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#8
 
-*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / What Was Measured · hash: sha256:4c3c5b85eabf0b7509877d5180a4b0c365c82bf7b8bb77844ca8ea494d11c696*
+*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / What Was Measured · hash: sha256:f1b57c1f32a5ca940da23faf22d98f2761e576636fe8c17c05dac1e5949347d9*
 
 | Provider | Capability | Family | Delivery |
 |---|---|---|---|
@@ -16408,7 +16477,7 @@ after this item was authored):
 | `nomos-lang-rust-clippy` | `nomos.cap.lint.diagnostics` | LINTER | external (`cargo clippy`) |
 | `nomos-lang-rust-deny` | `nomos.cap.dependency.policy` | PACKAGE_MANAGER | external (`cargo deny`) |
 | `nomos-lang-go-modules` | `nomos.cap.dependency.edges` | PACKAGE_MANAGER | in-process (reads `go.mod`/`go.work` text directly) |
-| `nomos-lang-rust-compiler` | `nomos.cap.rust.copy_clones` | SEMANTIC_MODEL | in-process (`rustc_interface`/`rustc_driver`) |
+| `nomos-lang-rust-compiler` | `nomos.cap.rust.copy_clones` | SEMANTIC_MODEL | in-process (`ra_ap_hir`) |
 
 ### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#9
 
@@ -16480,12 +16549,12 @@ regression from what this workspace already has.
 
 ### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#15
 
-*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / The Decision · hash: sha256:23bfb47b2e6af75fe19a7b9b66a5c771384cc8b5f9935ad25e7df2d47ad2be43*
+*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / The Decision · hash: sha256:9a491a8f42444d663be91736da4299f291769a80c8648e748fc4a179f3267fec*
 
 **Delivery becomes an explicit second axis on a provider's own registration, with
 `IN_PROCESS` read by consequence rather than literal mechanism**: no external tool exists
 to be absent, wrong-versioned, or broken, whether because the analysis is a linked library
-(`syn`, `tree-sitter-go`, `rustc_interface`) or because it is a direct read of a manifest
+(`syn`, `tree-sitter-go`, `ra_ap_hir`) or because it is a direct read of a manifest
 format nothing external produces (`go.mod`/`go.work`). `EXTERNAL` names every subprocess-
 backed provider, unchanged from `toolspec`'s own definition.
 
@@ -16670,11 +16739,68 @@ elsewhere.
 
 ### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#32
 
+*revision: authored · kind: heading · heading: A rule names a tool family and never a tool / Amendment: The Compiler-Backed Provider Links rust-analyzer, And Never Linked `rustc` · hash: sha256:8d591e5248a48ca0933932d87c7009b2baf9aefd67dbc2499eeb222fc487d489*
+
+## Amendment: The Compiler-Backed Provider Links rust-analyzer, And Never Linked `rustc`
+
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#33
+
+*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / Amendment: The Compiler-Backed Provider Links rust-analyzer, And Never Linked `rustc` · hash: sha256:93cd00be0777524f78d40ad352fc14899204a137ec19c19acb9875f9afe3dcfe*
+
+Two statements in "What Was Measured" named `rustc_interface` and `rustc_driver` as the engine
+behind `nomos-lang-rust-compiler`: the mechanism table's row for `nomos.cap.rust.copy_clones`,
+and the `IN_PROCESS` paragraph's list of linked-library examples. Both are corrected above.
+
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#34
+
+*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / Amendment: The Compiler-Backed Provider Links rust-analyzer, And Never Linked `rustc` · hash: sha256:b6166d9267b13f0662e58b93c6d9e575b786fba747991081f8fa58465ef9b8b2*
+
+**They were never true, which is why they are corrected in place rather than dated.** The
+crate's manifest has named `ra_ap_hir`, `ra_ap_ide_db`, `ra_ap_load-cargo`, `ra_ap_project_model`
+and `ra_ap_syntax` — rust-analyzer's own semantic engine, published as ordinary libraries that
+build on stable Rust — since the commit that created it, `484951cb`. It has never depended on
+either `rustc` crate: `git log -S` over that manifest across every branch returns no commit that
+added one. This record's line was written *after* that crate existed, at `7e306e49` the same day,
+so it described the authorizing item's framing — "a real compiler semantic API, not a syntax
+tree" — rather than the manifest it could have read.
+
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#35
+
+*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / Amendment: The Compiler-Backed Provider Links rust-analyzer, And Never Linked `rustc` · hash: sha256:5220939ce547cfccb885c18d57f901329daf3f7b1ba9cdd264bffa73ecb8ecdd*
+
+**The crate's own module documentation already said so**, and says why, which is the part worth
+keeping: `rustc`'s semantic APIs are reachable only through `rustc_private` and therefore only on
+a nightly toolchain, while this workspace is pinned to stable `1.88.0` (`rust-toolchain.toml`,
+`OD-GATE-012`). A provider needing nightly would force every contributor and the gate onto one.
+So the corrected text is not a detail: an embedded `rustc` was never available to this workspace
+at all, and naming it as the mechanism made a stable-toolchain constraint invisible.
+
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#36
+
+*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / Amendment: The Compiler-Backed Provider Links rust-analyzer, And Never Linked `rustc` · hash: sha256:fd4c85ac7d20c7d7e593cdbedd6a093d510cb98251e25b11a376ae2b594b9748*
+
+**Nothing in this workspace links `rustc_interface` or `rustc_driver`.** Searched rather than
+assumed, across every manifest and every source file under `crates/`: the only occurrence is the
+sentence in `nomos-lang-rust-compiler`'s own module doc explaining why they are not used. So the
+`IN_PROCESS` example list does not get a different crate named in their place — it names
+`ra_ap_hir`, which this workspace really does link.
+
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#37
+
+*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / Amendment: The Compiler-Backed Provider Links rust-analyzer, And Never Linked `rustc` · hash: sha256:0662764c2b443379823f08f7530e9825ab4ea5f88cd6b0a147818e74a81c3992*
+
+What still stands: the whole of the decision this record reaches. The twelve-name `FAMILY`
+vocabulary, `SEMANTIC_MODEL` as this provider's family, the `IN_PROCESS`/`EXTERNAL` distinction
+read by consequence rather than by literal mechanism, and the finding that a rule names a family
+and never a tool are all untouched. The engine was the wrong example of a correct category.
+
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#38
+
 *revision: authored · kind: heading · heading: A rule names a tool family and never a tool / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#33
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#39
 
 *revision: authored · kind: prose · heading: A rule names a tool family and never a tool / Status · hash: sha256:1cb4df0e957639e3bef7e59ae32afbfd580b5aeea63951a47dcb16167d0d1baa*
 
@@ -16686,7 +16812,7 @@ rather than literal mechanism. Applied to today's real eight providers, naming
 `nomos-lang-rust-cargo` and `nomos-lang-go-modules` as the live instance of one family split
 wrongly across two `PackageKind`s by delivery alone. No code moves here.
 
-### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#34
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#40
 
 *revision: authored · kind: prose · heading: A rule names a tool family and never a tool / Status · hash: sha256:a76d0eaf2f8c16fc9d571ba0b2e85ae61cc1a4f38a735a3e30cbc06d9ffae914*
 
@@ -16698,6 +16824,16 @@ taxonomy, the cardinality and the carrier are untouched — and the deferral tha
 count is replaced by what became of the question instead: `P54-A-REPOSITORY-CANNOT-CHOOSE-
 ITS-TOOLS` is closed, `OD-HOST-009` decided it, and the mechanism is unbuilt rather than the
 question open.
+
+### docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#41
+
+*revision: authored · kind: prose · heading: A rule names a tool family and never a tool / Status · hash: sha256:d3823d1eb5fd2b6da9e9a03a74d7449db94e815df49f15795999f4831973ff1d*
+
+Amended to version 4 by `P143-TWO-RECORDS-AND-A-CENSUS-STILL-SAY-THE-COMPILER-PROVIDER-IS-UNCOMPOSED-AND-BACKED-BY-RUSTC`,
+which corrected two statements naming `rustc_interface` and `rustc_driver` as
+`nomos-lang-rust-compiler`'s engine. The crate links rust-analyzer's `ra_ap_*` libraries and has
+done since it was created; nothing in this workspace links either `rustc` crate. The error
+predates every composition change and is not a consequence of one. No part of the decision moves.
 
 ### docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md#1
 

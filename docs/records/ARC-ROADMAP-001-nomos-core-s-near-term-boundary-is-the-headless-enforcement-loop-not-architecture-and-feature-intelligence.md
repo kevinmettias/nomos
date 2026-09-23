@@ -3,7 +3,7 @@ id: ARC-ROADMAP-001
 type: architecture
 title: Nomos Core's near-term boundary is the headless enforcement loop, not architecture and feature intelligence
 status: accepted
-version: 5
+version: 6
 authority: canonical-normative-record
 tags:
   - roadmap
@@ -586,6 +586,38 @@ being independently rediscovered and recorded by measurement against the tree. E
 member a name, and a named member can be checked, retired or confirmed. Until then this record
 asserts a number it cannot decompose, and says so rather than leaving a reader to find out.
 
+## Amendment: Two Of The Four Unobserved Offers Are Composed, And The Register Is Where The Count Lives
+
+The per-item measurement above, taken at `53de19a4`, found four exported `Provider_Offer`
+functions declared and observed by nothing, and enumerated them: `nomos-lang-csharp`'s syntax
+offer, both of `nomos-lang-rust-compiler`'s, and `nomos-lang-rust`'s `nomos.cap.module.index`
+rollup. It also said the compiler-backed provider was the sharpest case because no crate under
+`crates/orchestration` or `crates/host` named it.
+
+**Two of the four are now composed, and the clause about nobody naming the provider is false.**
+`P123-THE-COMPILER-CONTRACTS-LEAVE-THEIR-PROVIDER-AND-ITS-RULES-JOIN-THE-RUN-2` composed both
+compiler offers at `7edd095f`, and `nomos-check-orchestration` now names that crate in its own
+composition module and in a materialization arm of its own. What remains declared and unobserved
+is two: `nomos_lang_csharp::Provider_Offer` and `nomos_lang_rust::rollup::Provider_Offer`.
+
+**The measurement above is not edited, and the numbers in it are not wrong.** They were taken at
+`53de19a4` and were true there; work landing afterwards does not make a measurement false, which
+is the discipline this record's own version 4 amendment set and version 5 restated. What this
+amendment retires is the reading that the enumeration is current.
+
+**Where the count actually lives, so it need not be re-derived from prose again.**
+`tests/contract/tests/boundaries/composed_offers.rs` holds the declared-uncomposed register, and
+it is held mechanically against the composition root in both directions — every exported offer is
+composed or declared uncomposed, and every declared-uncomposed entry is still exported. Read at
+this amendment's commit it holds exactly the two named above, which is the same answer this
+amendment gives, arrived at independently. That register has no count constant beside it on
+purpose: the list is the count. A reader wanting the number should read the register rather than
+this record, and a future divergence between them is the register's answer and not this one's.
+
+What still stands: everything else in the version 4 measurement, including that the capability
+system is built, and that a provider backed by a real semantic engine existing without a consumer
+was a real gap at the time it was found. It was, and it was closed.
+
 ## Status
 
 Accepted, drawn by `P13-CORE-ROADMAP-RECONCILIATION-3`. It schedules no item and orders
@@ -620,3 +652,10 @@ the six `nomos-analysis` hazards this record counts, found none, and recorded th
 and answered (`OD-ANALYSIS-008`, closed at version 3) while the other five exist only in an
 external review this repository does not hold. The "What Was Measured" sentence is unchanged; what
 the amendment retires is the reading that the five are a checkable backlog.
+
+Amended to version 6 by `P143-TWO-RECORDS-AND-A-CENSUS-STILL-SAY-THE-COMPILER-PROVIDER-IS-UNCOMPOSED-AND-BACKED-BY-RUSTC`,
+which recorded that two of the four offers the version 4 measurement found unobserved were
+composed at `7edd095f`, leaving two, and that the clause saying no crate under
+`crates/orchestration` or `crates/host` names the compiler-backed provider is no longer true. The
+dated measurement is unchanged; the declared-uncomposed register in
+`tests/contract/tests/boundaries/composed_offers.rs` is named as where the current count lives.
