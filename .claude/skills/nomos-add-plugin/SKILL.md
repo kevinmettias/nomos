@@ -97,6 +97,13 @@ A rule is a free function taking the sources it judges and, if it reads facts, a
 shape inside the same crate, not a new crate and not a new band. There is no `Rule` trait;
 match the signature of the rule nearest what yours does.
 
+**Which module inside that crate it joins is decided — read `OD-RULES-033` before you pick a
+file.** That record answers which module a new rule belongs to, and what to do when none of
+the existing ones fits. It is deliberately not summarised here: a summary of a checked file is
+an unchecked copy of it, which is what `OD-AGENT-001` decided and why this skill routes rather
+than restates. Note that the sentence above is about matching a *signature*; which file the
+function lands in is a separate question and proximity is not the answer to it.
+
 **Wiring it in is two lists, not one.** This is the step that most often lands half done,
 and the failure is silent in the crate you edited and loud in one you did not.
 
