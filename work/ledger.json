@@ -81325,14 +81325,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p113-taxonomy",
-        "acquired_at": 1790126203,
-        "lease_expires_at": 1790140603
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -81345,7 +81341,30 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-spec-store"
+        ],
+        "exit_code": 0,
+        "output_tail": "t: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.12s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: `nomos-rules` (lib test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.50s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-c7e7b2da705b9b43.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-e3445e0f608ceb6d.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-7066b36e13f412bb.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-fb1c20a2af433cc4.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-91dbb605c0c2c1f6.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-ed30fea2b99fbd8e.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-e8c56575d59b7830.exe)\n   Doc-tests nomos_rules\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: 1 warning emitted\n\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1790127210,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "b5e6d9968ea23f9ce91481d833fb9cadf71df987"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
