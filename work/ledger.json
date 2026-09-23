@@ -89110,21 +89110,18 @@
           "tests/contract/surface/nomos-cap-rust-nested-locks.txt",
           "tests/contract/surface/nomos-lang-rust-compiler.txt",
           "tests/contract/surface/nomos-rules.txt",
-          "tests/contract/surface/nomos-check-orchestration.txt"
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "tests/contract/tests/boundaries/composed_offers.rs"
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P123-CSHARP-SYNTAX-PROVIDER-AND-PACKAGE",
         "P123-NON-SYNTAX-MATERIALIZERS-PROVE-CURRENCY"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "fable-p123-compiler",
-        "acquired_at": 1790112809,
-        "lease_expires_at": 1790123609
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -89145,11 +89142,50 @@
         ],
         "timeout_seconds": 5400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-rust-copy-clones",
+          "-p",
+          "nomos-cap-rust-nested-locks",
+          "-p",
+          "nomos-lang-rust-compiler",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "d8d6e4f2fdea6c.exe)\n     Running tests\\capability_composition.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\capability_composition-122a301d4a42912d.exe)\n     Running tests\\incremental_equivalence.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\incremental_equivalence-78f797abfed29feb.exe)\n     Running tests\\run_seam.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\run_seam-b5c123e9159564b4.exe)\n     Running tests\\unchanged_run_economy.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\unchanged_run_economy-fcc6259fb73b9f74.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\nomos_integration_tests-0bd0fd2460573fad.exe)\n     Running tests\\analysis_slice\\main.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\analysis_slice-9e61da1b02d5f66a.exe)\n     Running tests\\calibration.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\calibration-f3b9556cd55cfe6a.exe)\n     Running tests\\determinism\\main.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\determinism-cd2aa4e385516183.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\nomos_lang_rust_compiler-445d33cf3d086655.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\nomos_rules-67eb3f52a9bbb2a6.exe)\n     Running tests\\integration_seams.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\integration_seams-ffa8747cd6220dd7.exe)\n   Doc-tests nomos_cap_rust_copy_clones\n   Doc-tests nomos_cap_rust_nested_locks\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_lang_rust_compiler\n   Doc-tests nomos_rules\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: 1 warning emitted\n\n",
+        "verified_at": 1790122916,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c3625fadcd3b5dd836438c60e1739a4aebd14e1c"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-p123-compiler",
+          "added": [
+            "tests/contract/tests/boundaries/composed_offers.rs"
+          ],
+          "widened_at": 1790120577
+        }
+      ]
     },
     {
       "id": "P123-THE-CONTRACTS-SURFACE-SNAPSHOT-IS-STALE-AND-REDDENS-THE-SUITE-FOR-EVERY-SESSION",
@@ -92991,16 +93027,21 @@
           "crates/orchestration/nomos-gate-orchestration/src/gate_environment",
           "crates/orchestration/nomos-gate-orchestration/src/lib.rs",
           "tests/contract/surface/nomos-model.txt",
-          "tests/contract/surface/nomos-gate-orchestration.txt"
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "crates/kernel/nomos-model/src/lib.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P128-OD-ROADMAP-006-THE-REMAINING-REVIEW-GAPS-ARE-REQUIRED-AND-FIVE-DEFERRALS-ARE-NAMED"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p128-baseline",
+        "acquired_at": 1790117551,
+        "lease_expires_at": 1790131951
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -93017,7 +93058,15 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "fable-p128-baseline",
+          "added": [
+            "crates/kernel/nomos-model/src/lib.rs"
+          ],
+          "widened_at": 1790118189
+        }
+      ]
     },
     {
       "id": "P128-THE-WORKFLOW-ENGINE-RUNS-A-LINE-AND-CANNOT-BRANCH-JOIN-OR-REPLAY",
