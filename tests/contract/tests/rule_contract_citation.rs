@@ -76,6 +76,21 @@ const CITATIONS: &[(&str, &str, u32)] = &[
         nomos_rules::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD,
         nomos_rules::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD_VERSION,
     ),
+    (
+        "nomos_rules::GUARANTEE_EXERCISER_CONTRACT_RECORD",
+        nomos_rules::GUARANTEE_EXERCISER_CONTRACT_RECORD,
+        nomos_rules::GUARANTEE_EXERCISER_CONTRACT_RECORD_VERSION,
+    ),
+    (
+        "nomos_rules::COPY_CLONES_CONTRACT_RECORD",
+        nomos_rules::COPY_CLONES_CONTRACT_RECORD,
+        nomos_rules::COPY_CLONES_CONTRACT_RECORD_VERSION,
+    ),
+    (
+        "nomos_rules::NESTED_LOCKS_CONTRACT_RECORD",
+        nomos_rules::NESTED_LOCKS_CONTRACT_RECORD,
+        nomos_rules::NESTED_LOCKS_CONTRACT_RECORD_VERSION,
+    ),
 ];
 
 /// Every cited version must match its record's own front matter, or the citation is a claim
@@ -103,32 +118,130 @@ fn Test_Every_Cited_Version_Should_Match_The_Records_Own_Front_Matter()
     }
 }
 
-/// The control the iteration needs. A citation table that has fallen behind the rules it
-/// covers cannot be told from a complete one by reading it, so the row count is stated here
-/// and has to be raised deliberately.
+/// The control the iteration needs, derived rather than counted.
 ///
-/// Not a mirror in `Check_Completeness_Mirrors`' sense -- there is no fact to resolve a Rust
-/// constant list against -- but the same failure that rule exists to prevent: a row silently
-/// missing, and every assertion above passing by not looking at it. This file was written
-/// for one rule and stayed green through a second shipping.
+/// A citation table that has fallen behind the rules it covers cannot be told from a
+/// complete one by reading it. The previous form of this control stated the row count and
+/// asked for it to be raised deliberately, which cannot detect the thing it exists for: a
+/// rule shipping with a citation and no row leaves the count untouched, so the assertion
+/// passes and the citation is simply unchecked. That is the failure
+/// `Check_Completeness_Mirrors` exists to prevent, and this file recorded twice that it had
+/// happened here -- written for the mirror rule alone, green through
+/// `Check_Dependency_Direction` shipping, then green again through `Check_Lint_Diagnostics`
+/// and its two siblings. It was green a third time through
+/// `Check_Guarantee_Declares_Its_Exerciser`, `Check_Copy_Clones` and `Check_Nested_Locks`:
+/// measured 2026-09-22, twelve `_CONTRACT_RECORD` constants against nine rows.
+///
+/// So the population is derived from the crate's own source instead. The file's earlier note
+/// that there is no fact to resolve a Rust constant list against is true of the
+/// specification store and not of `nomos-rules` itself, which declares each citation as a
+/// `pub const` ending in `_CONTRACT_RECORD` beside a `_VERSION` twin -- the same shape the
+/// surface snapshots already read. Both directions are checked, so a constant with no row
+/// fails and a row naming a constant that no longer exists fails too.
 #[test]
-fn Test_The_Citation_Table_Should_Cover_Every_Cited_Rule()
+fn Test_Every_Declared_Citation_Should_Have_A_Row()
 {
-    assert_eq!(
-        CITATIONS.len(),
-        9,
-        "nomos-rules ships many rules, nine of which cite a versioned record: \
-         Check_Completeness_Mirrors cites D-134, Check_Dependency_Direction and \
-         Check_Every_Member_Declares_A_Band both cite OD-RULES-003, \
-         Check_Unread_Reaches_A_Finding cites OD-RULES-008, Check_Lint_Diagnostics, \
-         Check_Dependency_Policy and Check_Review_Findings all three cite OD-RULES-010, \
-         Check_Cross_Language_Correspondence cites OD-CAPABILITY-010, \
-         Check_Write_Authority cites OD-RULES-023, and \
-         Check_Requirement_Trace_Staleness cites OD-TRACE-001. \
-         Check_Naming_Convention cites README.md prose and has no front matter \
-         to compare against. A rule added with a real record needs a row in CITATIONS and \
-         this number raised with it."
+    let root = Workspace::Workspace_Root();
+    let declared = Declared_Citation_Constants(&root);
+
+    assert!(
+        declared.len() >= CITATIONS.len(),
+        "only {} citation constants were found in nomos-rules' source against {} rows in \
+         CITATIONS. The scan reads `pub const` lines under crates/rules/nomos-rules/src, so \
+         finding fewer constants than rows means the scan is broken rather than the table",
+        declared.len(),
+        CITATIONS.len()
     );
+
+    let covered: std::collections::BTreeSet<String> = CITATIONS
+        .iter()
+        .map(|(constant, _, _)| {
+            return constant.trim_start_matches("nomos_rules::").to_owned();
+        })
+        .collect();
+
+    let missing: Vec<&String> = declared.difference(&covered).collect();
+    assert!(
+        missing.is_empty(),
+        "nomos-rules declares {missing:?} as contract-record citations and CITATIONS has no \
+         row for them, so nothing compares those citations against their records' front \
+         matter. A rule added with a real record needs a row here; that is what this test is \
+         for, and a count could not see it"
+    );
+
+    let stale: Vec<&String> = covered.difference(&declared).collect();
+    assert!(
+        stale.is_empty(),
+        "CITATIONS carries rows for {stale:?}, which nomos-rules no longer declares. A row \
+         outliving its constant is a citation nobody can reach"
+    );
+}
+
+/// Every `*_CONTRACT_RECORD` constant `nomos-rules` declares, read from its own source.
+///
+/// Deliberately a line scan rather than a parser, for the reason [`Record_Version`] gives:
+/// the question is which `pub const` names end a fixed way, and one line answers it.
+/// `_CONTRACT_RECORD_VERSION` is excluded by matching the name's end rather than its start,
+/// and the mirror rule's bare `CONTRACT_RECORD` is admitted by name because it predates the
+/// prefixed convention.
+fn Declared_Citation_Constants(root: &Path) -> std::collections::BTreeSet<String>
+{
+    let mut found = std::collections::BTreeSet::new();
+    Collect_Citation_Constants(&root.join("crates/rules/nomos-rules/src"), &mut found);
+
+    return found;
+}
+
+/// Walks `directory` for `.rs` files and adds every citation constant they declare.
+fn Collect_Citation_Constants(directory: &Path, found: &mut std::collections::BTreeSet<String>)
+{
+    let Ok(entries) = std::fs::read_dir(directory)
+    else
+    {
+        return;
+    };
+
+    for entry in entries.flatten()
+    {
+        let path = entry.path();
+
+        if path.is_dir()
+        {
+            Collect_Citation_Constants(&path, found);
+            continue;
+        }
+
+        if path.extension().is_some_and(|extension| return extension == "rs") == false
+        {
+            continue;
+        }
+
+        let Ok(text) = std::fs::read_to_string(&path)
+        else
+        {
+            continue;
+        };
+
+        for line in text.lines()
+        {
+            let Some(rest) = line.trim_start().strip_prefix("pub const ")
+            else
+            {
+                continue;
+            };
+
+            let Some(name) = rest.split(':').next().map(str::trim)
+            else
+            {
+                continue;
+            };
+
+            if name.ends_with("_CONTRACT_RECORD") || name == "CONTRACT_RECORD"
+            {
+                found.insert(name.to_owned());
+            }
+        }
+    }
 }
 
 /// The control this item's `done_when` asks for: the comparison has to actually fail when
