@@ -93084,9 +93084,9 @@
       ],
       "blocked": null,
       "claim": {
-        "holder": "fable-p128-baseline",
-        "acquired_at": 1790117551,
-        "lease_expires_at": 1790131951
+        "holder": "fable-p128-baseline-2",
+        "acquired_at": 1790132788,
+        "lease_expires_at": 1790143637
       },
       "verification": {
         "argv": [
@@ -93102,7 +93102,13 @@
       },
       "verified": null,
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "fable-p128-baseline",
+          "acquired_at": 1790117551,
+          "lease_expires_at": 1790131951
+        }
+      ],
       "declined": null,
       "widened": [
         {
@@ -95579,6 +95585,172 @@
         },
         "revision": "8b6a01442064d7d1a41cd28eacabbfc7169ec3dd"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P144-THE-SKILL-THAT-ROUTES-A-RULE-AUTHOR-SAYS-NOTHING-ABOUT-WHICH-MODULE-THE-RULE-JOINS",
+      "title": "The add-plugin skill routes the author of a new rule and does not tell them which module it joins, which a record now decides",
+      "why": "df83a944 published OD-RULES-033, which decides which module a rule belongs to. Its membership rule is stated for the next rule rather than as a partition of today's file list: take the reading the rule's judgment performs, join the module that already owns that reading, and if none does, take a module of its own named for the reading and never for the topic. The natural reader of that rule is whoever is about to write a rule, and the place this repository sends them is .claude/skills/nomos-add-plugin/SKILL.md, whose own description ends with the words use before scaffolding a new crate under crates/languages, crates/packages, or crates/rules, or before adding a second rule function to nomos-rules. Measured at HEAD: that file contains no occurrence of OD-RULES-033, none of subsystem, and none of the phrase which module. So the one document that catches a rule author by name says what a rule's function signature must be and what territory to reserve, and is silent on the question a record was just written to answer. The claimant of df83a944 measured this and named it rather than fixing it, correctly, because the skill is outside that item's territory. This is the routing half of the same defect class three sessions spent today removing, arriving before the prose goes stale rather than after: not a sentence that outlived its mechanism, but a mechanism whose reader is never told it exists.",
+      "done_when": "An author following the add-plugin skill to write a rule is routed to the record that decides which module it joins, at the point in the skill where they are choosing that, rather than at the end. The addition routes and does not restate: it names OD-RULES-033 and says in a line what question that record answers, and it does not reproduce the membership rule, its three corollaries or its census, because a summary of a checked file is an unchecked copy of it and this repository has already paid for one, which OD-AGENT-001 records. If the skill's existing structure makes the natural place a section that also covers new crates rather than new rules, say which was chosen and why, since a rule joining a module and a crate being scaffolded are different acts and the record governs only the first. Nothing else in the skill changes: not the function signature, not the composition steps, not the territory advice, and no other record is cited or de-cited. The claimant re-measures at HEAD before editing, because several sessions are committing and a peer may have added it already, in which case say so and name the commit rather than claiming the work. No record is amended: OD-RULES-033 decides this and a second statement of it in a skill is the copy that goes stale. The predicate passes, and it is run knowing that this harness reads committed skills, so a green run over an uncommitted edit proves nothing about what the skill will say.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".claude/skills/nomos-add-plugin/SKILL.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "_The_Band_Table ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s\n\n    Blocking waiting for file lock on package cache\n    Blocking waiting for file lock on package cache\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:56:5\n   |\n56 |        return loop\n   |  ______^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos-render-p132\\tests\\contract)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.62s\n     Running tests\\agent_harness.rs (F:/repos/nomos-render-p132-target\\debug\\deps\\agent_harness-75f97e745cd8e80a.exe)\n",
+        "verified_at": 1790135057,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "7ea68ea142a24f0c90828b066458ec0f3a443e36"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P145-THE-ONLY-WAY-TO-LEARN-WHO-IS-BLOCKING-YOU-IS-TO-ATTEMPT-A-CLAIM-YOU-EXPECT-TO-FAIL",
+      "title": "The board computes who holds the territory blocking an item and shows it only in a refusal, so a queued session must fail a claim to find out",
+      "why": "Measured by a session that spent a day queued behind territory, and re-measured here. When a claim is refused for overlap, the ledger produces a structured Refusal::HeldBy carrying the blocking item, its holder and its lease expiry, which crates/substrate/nomos-ledger/src/claim/refusal/message.rs line 14 renders as territory overlaps the item, held by the holder, until unix the expiry. That is exactly what a queued session needs. Neither listing verb surfaces it: work list prints a bare held in the state column with no holder and no expiry, and work show prints state held and nothing further. So the board already computes who is blocking you and will only tell you if you ask in the form of a claim you expect to fail. One session learned that another had re-taken a lapsed item precisely that way, from a refusal naming a holder it did not expect. The consequence is worse than inconvenience. Every session queued behind a holder writes an ad-hoc script over work/ledger.json to compute overlap and lease expiry by hand, which is a second implementation of the board's own exclusion semantics living in throwaway shell, and when it is wrong it is wrong silently. The session that reported this wrote that script five or six times in one day and got it wrong once, mis-parsing territory as a list when it is a record of paths and patterns, which reported five false blockers before it was noticed. Three sessions independently hit the read-then-act race today, and two of them were reduced to guessing whether a peer was still present or had stopped paying attention, because a peer politely waiting and a peer that has gone away produce an identical board. This item is deliberately not a notification mechanism: AGENTS.md already records that polling this tree is futile, a session having polled every minute for an hour while seven commits landed from three sessions without it ever going quiet, so anything built on polling cannot work and anything else needs a process that outlives an invocation. The social remedy for the lapse itself, a hold that states what discharges it, is sufficient and is not this.",
+      "done_when": "A session can learn who holds the territory blocking an item, and until when, without attempting a claim. Both listing verbs answer it for a held item: list says enough to act on, and show, which already prints an item whole and unabridged, says it in full. The answer comes from the same question the claim check asks rather than from a second computation, because a second implementation of exclusion that disagrees with the first is worse than the ad-hoc scripts this replaces; if the refusal's own value cannot be reached from the renderers, the claimant says why and what it extracted instead, and what now keeps the two from drifting. Note before designing that message.rs's Held_By is pub(super), so it is not callable from the orchestration crate as it stands, and that the structured Refusal::HeldBy rather than its rendered string is the thing worth reaching for. An item held by more than one claim is answered truthfully: whether it names one blocker or all of them is the claimant's to decide and to state, but naming one while implying it is the only one is refused, since a session that clears the named blocker and is refused again has been told something false. The lease expiry is rendered as something a reader can act on rather than as a raw unix epoch that every reader converts by hand; which form it takes is decided once and applied at every site, and the refusal's own spelling is either changed with it or deliberately left, with the reason given. A verb that is not blocked says nothing new, so a quiet board reads exactly as it does today. No exclusion semantics change: what is claimable, what is refused and every exit code stay as they are, and this only reports what the board already decided. A guard proves the reported holder is the one the claim check would name, by a test that fails when they disagree, because a blocker that is merely plausible is what the ad-hoc scripts already provided. Surface snapshots are re-blessed if the surface moves, with the diff read before blessing. The predicate passes.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-work-orchestration/src/run.rs",
+          "crates/orchestration/nomos-work-orchestration/src/work_command.rs",
+          "crates/substrate/nomos-ledger/src/claim/refusal.rs",
+          "crates/substrate/nomos-ledger/src/claim/refusal",
+          "tests/contract/surface/nomos-ledger.txt",
+          "tests/contract/surface/nomos-work-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": {
+        "Declined": {
+          "reason": "Neither the territory nor the predicate reaches the code this item changes, measured at 7ea68ea1 after claiming it. The defect and its authoring are sound and carry over unchanged; only the scope is wrong.\r\n\r\nWhere the change actually goes. The state words a listing prints are produced in nomos-cli, not in nomos-work-orchestration or the ledger: crates/host/nomos-cli/src/work/report.rs line 179, fn Refusal_Label, matches (RefusalLayer::Dispatch, ClaimRefusal::HeldBy { .. }) and returns the string held, discarding the holder, the item and the lease it was handed. crates/host/nomos-cli/src/work/listing.rs line 401 is its one caller, reached from State_Label at line 405, and that file imports Claim_Refusal and ClaimRefusal from nomos_ledger directly at line 3. So the item's own finding is sharper than its scope: the value is not merely computed and discarded somewhere far away, it is destructured with { .. } at the exact line that prints the word, in a crate the item does not reserve. nomos-work-orchestration/src/run.rs renders no listing at all; grepping it for held returns one doc comment.\r\n\r\nThe territory names crates/orchestration/nomos-work-orchestration/src/run.rs and work_command.rs, the ledger's refusal module and two surface snapshots, and none of the four nomos-cli files the work needs: src/work.rs where show renders, src/work/listing.rs, src/work/report.rs and the two test modules beside them.\r\n\r\nThe predicate is the half a widen cannot repair. It runs -p nomos-ledger -p nomos-work-orchestration -p nomos-contract-tests and never compiles nomos-cli, so the done_when's requirement that a guard prove the reported holder is the one the claim check would name, by a test that fails when they disagree, cannot be established by it: that guard belongs beside Refusal_Label and would not run. widen adds paths and has no spelling for a predicate, which is why this is a decline rather than an enlargement.\r\n\r\nOne thing the re-author records that this version could not have known: no ledger change may be needed at all. Refusal::HeldBy is a public variant with public fields and listing.rs already holds one, so reaching the value requires no new accessor and the pub(super) on message.rs's Held_By is beside the point. The ledger territory is kept in the successor only for the decision about how a lease expiry is spelled, which may touch the refusal's own wording.\r\n\r\nNothing here is a criticism of the authoring. The two clauses added beyond what was asked -- that an item held by more than one claim is answered truthfully, and that a plausible blocker is what the ad-hoc scripts already provided -- are the best part of the item and are carried over verbatim in substance."
+        }
+      },
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "fable-p145-blocker",
+          "reason": "Releasing to decline: measured after claiming that neither the territory nor the predicate reaches the code this item changes. The state words are produced in nomos-cli, at src/work/report.rs line 179, which the territory does not name and the predicate does not compile. Re-authored as the -2 successor with the four nomos-cli files and a predicate that builds that crate.",
+          "abandoned_at": 1790133583
+        }
+      ],
+      "displaced": [],
+      "declined": {
+        "holder": "fable-p145-blocker",
+        "declined_at": 1790133592
+      },
+      "widened": []
+    },
+    {
+      "id": "P145-THE-ONLY-WAY-TO-LEARN-WHO-IS-BLOCKING-YOU-IS-TO-ATTEMPT-A-CLAIM-YOU-EXPECT-TO-FAIL-2",
+      "title": "The board computes who holds the territory blocking an item and shows it only in a refusal, so a queued session must fail a claim to find out",
+      "why": "Re-authored from P145-THE-ONLY-WAY-TO-LEARN-WHO-IS-BLOCKING-YOU-IS-TO-ATTEMPT-A-CLAIM-YOU-EXPECT-TO-FAIL, whose decline reason carries the measurement; the defect is unchanged and only the scope is corrected.\n\nWhen a claim is refused for overlap the ledger produces a structured Refusal::HeldBy carrying the blocking item, its holder and its lease expiry. That is exactly what a queued session needs, and no listing verb surfaces it: work list prints a bare held in the state column and work show prints state held and nothing further. So the board computes who is blocking you and will only say so if you ask in the form of a claim you expect to fail. One session learned that another had re-taken a lapsed item precisely that way, from a refusal naming a holder it did not expect.\n\nMeasured at 7ea68ea1, the discard is one line. crates/host/nomos-cli/src/work/report.rs line 179, fn Refusal_Label, matches (RefusalLayer::Dispatch, ClaimRefusal::HeldBy { .. }) and returns held, throwing away all three fields at the moment it names the state. Its one caller is crates/host/nomos-cli/src/work/listing.rs line 401, reached from State_Label at 405, and that file already imports Claim_Refusal and ClaimRefusal from nomos_ledger at line 3. Refusal::HeldBy is a public variant with public fields, so the value needs no new accessor: that message.rs's Held_By renderer is pub(super) is beside the point, because the string is not the thing worth reaching for.\n\nThe consequence is worse than inconvenience. Every session queued behind a holder writes an ad-hoc script over work/ledger.json to compute overlap and lease expiry by hand, which is a second implementation of the board's own exclusion semantics living in throwaway shell, and when it is wrong it is wrong silently. The session that reported this wrote that script five or six times in one day and got it wrong once, mis-parsing territory as a list when it is a record of paths and patterns, which reported five false blockers before it was noticed. Three sessions independently hit the read-then-act race that day and two were reduced to guessing whether a peer was still present or had stopped paying attention, because a peer politely waiting and a peer that has gone away produce an identical board.\n\nDeliberately not a notification mechanism. AGENTS.md records that polling this tree is futile, a session having polled every minute for an hour while seven commits landed from three sessions without it ever going quiet, so anything built on polling cannot work and anything else needs a process that outlives an invocation. The social remedy for a lapse, a hold that states what discharges it, is sufficient and is not this.",
+      "done_when": "A session can learn who holds the territory blocking an item, and until when, without attempting a claim. Both listing verbs answer it for a held item: list says enough to act on, and show, which already prints an item whole and unabridged, says it in full.\n\nThe answer comes from the refusal the claim check already produces rather than from a second computation, because a second implementation of exclusion that disagrees with the first is worse than the ad-hoc scripts this replaces. Refusal::HeldBy's own fields are the thing to reach for; if the claimant finds they cannot be, it says why, what it extracted instead, and what now keeps the two from drifting.\n\nAn item held by more than one claim is answered truthfully. Whether it names one blocker or all of them is the claimant's to decide and to state, but naming one while implying it is the only one is refused, since a session that clears the named blocker and is refused again has been told something false. This is measured rather than hypothetical: a session cleared the one blocker a refusal named, reformed its plan around that, and met a second holder it had never seen.\n\nThe lease expiry is rendered as something a reader can act on rather than as a raw unix epoch every reader converts by hand; which form it takes is decided once and applied at every site, and the refusal's own spelling is either changed with it or deliberately left, with the reason given.\n\nA verb that is not blocked says nothing new, so a quiet board reads exactly as it does today. No exclusion semantics change: what is claimable, what is refused and every exit code stay as they are, and this only reports what the board already decided.\n\nA guard proves the reported holder is the one the claim check would name, by a test that fails when they disagree, because a blocker that is merely plausible is what the ad-hoc scripts already provided. That guard sits beside the code it judges, in nomos-cli, which is why this item's predicate compiles that crate and its predecessor's did not.\n\nSurface snapshots are re-blessed only if the surface moves, with the diff read before blessing; a change confined to pub(super) labellers moves nothing. The predicate passes.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/src/work/listing.rs",
+          "crates/host/nomos-cli/src/work/report.rs",
+          "crates/host/nomos-cli/src/work/report",
+          "crates/host/nomos-cli/src/work/tests",
+          "crates/substrate/nomos-ledger/src/claim/refusal.rs",
+          "crates/substrate/nomos-ledger/src/claim/refusal",
+          "tests/contract/surface/nomos-ledger.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,
