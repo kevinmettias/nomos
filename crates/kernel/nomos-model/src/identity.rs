@@ -22,6 +22,20 @@
 //! this is the same thing renamed, moved, split, recreated, or something nothing can resolve.
 //! A reader asking whether a finding persisted or recurred is asking for a transition, not for
 //! an identity, and `OD-GATE-030` names the run history that question additionally needs.
+//!
+//! # A finding has two identities, and asking the wrong one gets a confident wrong answer
+//!
+//! [`FindingOccurrenceId`] is scoped to one pinned result and takes the finding's locations,
+//! because two violations of one rule in one file differ by nothing else. [`OccurrenceLineageId`]
+//! is the identity that survives a revision instead, and pays for it by giving up exactly that
+//! discrimination: it takes the rule, the subject and the rule's own sentence, so two occurrences
+//! described alike are one lineage. Neither is the other under a different name, and each one's
+//! own doc states what it costs.
+//!
+//! [`OccurrenceTally`] is where a lineage meets [`IdentityTransitionKind`]: given how many of a
+//! record's states observed one lineage and which, it answers with `ExactContinuity`, `Recreated`
+//! or nothing at all. It lives here rather than in whichever service keeps the record, so that a
+//! second `Persistent`/`Reintroduced`/`Moved` vocabulary is never minted beside this one.
 
 // How an identity moves from one form to another, beneath the identity it is of.
 mod transition;
@@ -47,3 +61,11 @@ mod occurrence_collision;
 
 pub use finding_occurrence_id::FindingOccurrenceId;
 pub use occurrence_collision::{Occurrence_Collisions_In, OccurrenceCollision};
+
+// The identity of a recurring violation across revisions, and what a record of the states in
+// between establishes about one.
+mod occurrence_lineage_id;
+mod occurrence_tally;
+
+pub use occurrence_lineage_id::OccurrenceLineageId;
+pub use occurrence_tally::OccurrenceTally;

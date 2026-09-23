@@ -1,9 +1,12 @@
 //! Composing an already-walked tree into a real `nomos gate run`, apart from choosing a
 //! platform, walking a tree or rendering the answer.
 
+mod occurrence_history;
 mod provenance;
 mod reduction;
 
+#[cfg(test)]
+mod continuity_tests;
 #[cfg(test)]
 mod reason_recording_tests;
 #[cfg(test)]
@@ -18,6 +21,9 @@ use std::path::Path;
 
 use crate::policy::{GatePolicyFile, PolicyRefusal, Resolve_Gate_Policy, Resolved_Gate_Policy};
 use crate::{Evaluated_Phases, GateCommand, GateRunOutcome, GateRunProvenance, GateRunResult, Phased_Disposition};
+use occurrence_history::{
+    ObservedRun, OccurrenceHistory, Record_Occurrence_History, Recorded_Census, Resolve_Occurrence_History,
+};
 use reduction::{DispositionPolicies, Reduction, Reduced_Findings, Scoped_Findings};
 
 /// Judges `walked` exactly as `nomos check` would.
@@ -118,6 +124,15 @@ pub(crate) struct JudgeContext<'a, Launcher: ProgramLauncher, Fs: FileSystem, En
 /// not derive it from `command` or `variant` the way everything else it composes is derived.
 /// The composition root supplies one, typically [`crate::Fresh_Run_Id`] over a real clock
 /// reading.
+///
+/// # It writes, but only into a tree that asked it to
+///
+/// A tree holding `nomos-gate-history.json` under `command.root` gets that file advanced by
+/// what this run observed, through the same `FileSystem` port the policy file is read by. That
+/// record is what lets a baselined finding be told from one reintroduced (`OD-GATE-030`), and
+/// `gate_environment::occurrence_history`'s own doc carries what goes in it and the three
+/// conditions a run must meet before it may write one. A tree without the file is never given
+/// one and is unchanged in every respect, which is every caller that predates the record.
 #[must_use]
 pub fn Run_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     walked: Option<Vec<SourceFile>>,
@@ -137,9 +152,12 @@ pub fn Run_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
         instrument: provenance::Instrument_Digest(&variant),
         at: now,
     };
+    let read = Resolve_Occurrence_History(&command.root, filesystem);
     let context = JudgeContext { launcher, filesystem, environment, variant, root: &command.root, selected: &command.rules.include };
     let outcome = Scoped_Judgment(walked, command, context);
-    let policies = DispositionPolicies_Of(&effective, now);
+    let observed = ObservedRun { history: read.as_ref(), outcome: &outcome, command, baseline: &effective.baseline };
+    let history = Recorded_History(&observed, filesystem);
+    let policies = DispositionPolicies_Of(&effective, now, history.as_ref());
     let reduced = Reduced_Findings(&outcome, &command.rules, policies, effective.coverage);
     let disposition = Phased_Outcome(&effective, &reduced);
     let unusable_policy = declared.as_ref().err().map(|error| return error.As_No_Verdict()).or_else(|| return Refused_Policy(&resolved));
@@ -227,16 +245,49 @@ fn Scoped_Judgment<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
 }
 
 /// What `policy` resolved to for each still-blockable finding, read against `now` -- the
-/// evidence floor first, then the three per-finding overrides.
-fn DispositionPolicies_Of(policy: &GatePolicyFile, now: Timestamp) -> DispositionPolicies<'_>
+/// evidence floor first, then the three per-finding overrides, then what `history` established
+/// about the occurrences the baseline among them tolerates.
+fn DispositionPolicies_Of<'a>(policy: &'a GatePolicyFile, now: Timestamp, history: Option<&'a OccurrenceHistory>)
+    -> DispositionPolicies<'a>
 {
     return DispositionPolicies {
         evidence_floor: policy.evidence_floor,
         adoption: &policy.adoption,
         suppressions: &policy.suppressions,
         baseline: &policy.baseline,
+        history,
         now,
     };
+}
+
+/// The record this run judges its baselined findings against: the one it read, advanced by the
+/// state it just observed, and written back.
+///
+/// The advance happens *before* the reduction reads it, which is the one ordering under which
+/// the record's own report and the decision made from it can never disagree. A run that judged
+/// against the record as it found it and then advanced it would be deciding from one set of
+/// counters and publishing another, and a reader recomputing the verdict from the file would get
+/// a third answer.
+///
+/// It is sound because a census is an *observation* and not a verdict: what this run saw is
+/// already settled by the time `Scoped_Judgment` has returned, and no disposition the reduction
+/// goes on to apply changes whether a violation was there. `OccurrenceTally` is what keeps the
+/// ordering honest at the other end — a record whose only state is this run's own establishes
+/// nothing, so a first run reports undetermined rather than reporting itself as continuity.
+///
+/// Falls back to the record as read when this run may not census one; `Recorded_Census` owns
+/// every reason for that, and answering `None` leaves the file on disk untouched.
+fn Recorded_History<Fs: FileSystem>(run: &ObservedRun<'_>, filesystem: &Fs) -> Option<OccurrenceHistory>
+{
+    let Some(census) = Recorded_Census(run)
+    else
+    {
+        return run.history.cloned();
+    };
+
+    Record_Occurrence_History(&run.command.root, filesystem, &census);
+
+    return Some(census);
 }
 
 /// `reduced`'s disposition once `policy`'s phases have been evaluated over it.

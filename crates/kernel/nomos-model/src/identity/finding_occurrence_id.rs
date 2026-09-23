@@ -87,9 +87,18 @@ use serde::{Deserialize, Serialize};
 /// [`IdentityTransitionKind`](super::IdentityTransitionKind) names a **relation between
 /// identities across snapshots** — `ExactContinuity`, `ProbableMove`, `Recreated` and the rest.
 /// Asking this type whether an occurrence persisted or recurred is asking the wrong type;
-/// `OD-GATE-030` names the run history that question additionally needs, and names it as
-/// unbuilt. A second lifecycle vocabulary beside the one this module already declares would be
-/// exactly the duplicated authority this repository files records about.
+/// `OD-GATE-030` names the run history that question additionally needs. A second lifecycle
+/// vocabulary beside the one this module already declares would be exactly the duplicated
+/// authority this repository files records about.
+///
+/// The identity that *is* for that question is
+/// [`OccurrenceLineageId`](super::OccurrenceLineageId), which arrived beside this type rather
+/// than by widening it. The difference is one part and it is the whole of it: this type takes
+/// the locations and that one does not, so this one separates two violations of a rule in one
+/// file and expires when a line moves, and that one survives the line moving and cannot separate
+/// two occurrences that describe themselves alike. Widening this type to serve the other
+/// question would have had to drop the locations, which is the material this one exists for —
+/// the 103-of-253 loss above is what happens without it.
 ///
 /// It is also not a [`CompositeIdentity`](super::CompositeIdentity), which is built from
 /// language, provider-native identity, qualified name, signature and a structural fingerprint —

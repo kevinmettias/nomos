@@ -6,6 +6,8 @@ pub const fn nomos_model::Evidence::Is_Mechanical(&self) -> bool
 pub const fn nomos_model::FindingOccurrenceId::Digest(&self) -> Digest128
 pub const fn nomos_model::IdentityTransitionKind::Is_History_Preserving(self) -> bool
 pub const fn nomos_model::Intersection::Permits_Concurrency(&self) -> bool
+pub const fn nomos_model::OccurrenceLineageId::Digest(&self) -> Digest128
+pub const fn nomos_model::OccurrenceTally::Established_Continuity(&self) -> Option<IdentityTransitionKind>
 pub const fn nomos_model::SetResolution::Label(self) -> &'static str
 pub const fn nomos_model::StructuralFingerprint::Digest(&self) -> Digest128
 pub const fn nomos_model::StructuralFingerprint::From_Digest(digest: Digest128) -> Self
@@ -85,6 +87,7 @@ pub fn nomos_model::EntityId::fmt(&self, formatter: &mut core::fmt::Formatter<'_
 pub fn nomos_model::FindingOccurrenceId::Of(finding: &Finding) -> Self
 pub fn nomos_model::Intersection::Conflicting(&self) -> &[SubjectId]
 pub fn nomos_model::Normalize_Path(path: &str) -> String
+pub fn nomos_model::OccurrenceLineageId::Of(finding: &Finding) -> Self
 pub fn nomos_model::Occurrence_Collisions_In(findings: &[&Finding]) -> Vec<OccurrenceCollision>
 pub fn nomos_model::SetResolution::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
 pub fn nomos_model::SubjectSet::Empty(resolution: SetResolution) -> Self
@@ -126,6 +129,10 @@ pub struct field nomos_model::IdentityPolicy::distinguish_overloads: bool
 pub struct field nomos_model::OccurrenceCollision::first: Finding
 pub struct field nomos_model::OccurrenceCollision::occurrence: FindingOccurrenceId
 pub struct field nomos_model::OccurrenceCollision::second: Finding
+pub struct field nomos_model::OccurrenceTally::first_state: u32
+pub struct field nomos_model::OccurrenceTally::last_state: u32
+pub struct field nomos_model::OccurrenceTally::observed_states: u32
+pub struct field nomos_model::OccurrenceTally::recorded_states: u32
 pub struct field nomos_model::Resource::id: EntityId
 pub struct field nomos_model::Resource::kind: ResourceKind
 pub struct field nomos_model::Resource::locator: String
@@ -158,6 +165,8 @@ pub struct nomos_model::Evidence
 pub struct nomos_model::FindingOccurrenceId(Digest128)
 pub struct nomos_model::IdentityPolicy
 pub struct nomos_model::OccurrenceCollision
+pub struct nomos_model::OccurrenceLineageId(Digest128)
+pub struct nomos_model::OccurrenceTally
 pub struct nomos_model::Resource
 pub struct nomos_model::SnapshotEntity
 pub struct nomos_model::SourceProvenance

@@ -94,6 +94,9 @@ fn Test_A_Finding_No_Disposition_Names_Should_Carry_No_Reason()
             adoption: &adoption,
             suppressions: &suppressions,
             baseline: &baseline,
+            // No record: these tests are about a disposition being recorded, not about what a
+            // previous run observed.
+            history: None,
             now: Timestamp::From_Unix_Seconds(0),
         },
     );
@@ -135,6 +138,9 @@ fn Partitioned_At(seconds: i64) -> crate::GateFindings
             adoption: &adoption,
             suppressions: &suppressions,
             baseline: &baseline,
+            // No record: these tests are about a disposition being recorded, not about what a
+            // previous run observed.
+            history: None,
             now: Timestamp::From_Unix_Seconds(seconds),
         },
     );

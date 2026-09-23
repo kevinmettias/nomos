@@ -11,6 +11,7 @@ use nomos_contracts::{Finding, RuleId, SubjectId};
 use nomos_platform::Timestamp;
 use std::collections::BTreeMap;
 
+use super::occurrence_history::OccurrenceHistory;
 use crate::policy::{
     AdoptionPolicy, BaselineAllowance, BaselineDebt, BaselinePolicy, EvidenceFloor, RuleCalibration, Suppression, SuppressionPolicy,
 };
@@ -211,6 +212,13 @@ fn Unmatched_Of<Entry: DeclaredEntry>(selected: &[Finding], entries: &[Entry], n
 /// floor already took, which is what keeps a raised floor from reading as a waiver somebody
 /// wrote. Under [`EvidenceFloor::Unset`] the floor admits every class and this partition is the
 /// identity it was before the field existed.
+///
+/// `policies.history` is read last of all, over what the baseline already tolerated and over
+/// nothing else: a tolerance whose occurrence the record shows went away and came back does not
+/// survive, and the finding returns to `blocking_findings`. Under `None` -- no record, which is
+/// every tree that has not opted into one -- this is the identity it was before that field
+/// existed, and `Refused_By_History`'s own doc says why absence of evidence is not made to
+/// decide anything.
 pub(super) fn Partitioned_Findings(selected: &[Finding], policies: DispositionPolicies<'_>) -> GateFindings
 {
     let blockable: Vec<Finding> = selected.iter().filter(|finding| return finding.Can_Fail_A_Build()).cloned().collect();
@@ -223,18 +231,65 @@ pub(super) fn Partitioned_Findings(selected: &[Finding], policies: DispositionPo
     let (matched, blocking_findings): (Vec<Finding>, Vec<Finding>) =
         remaining.into_iter().partition(|finding| return policies.baseline.Tolerating(finding).is_some());
     let Tolerated { baselined_findings, baseline_exceeded_findings, baseline_populations } = Tolerated_Within_Allowance(matched, policies.baseline);
+    let tolerance = Surviving_Tolerance(baselined_findings, policies.history);
     let suppression_reasons = Recorded_Reasons(selected, policies);
 
     return GateFindings {
         suppression_reasons,
-        blocking_findings,
+        blocking_findings: [blocking_findings, tolerance.recreated].concat(),
         calibrated_findings,
         suppressed_findings,
-        baselined_findings,
+        baselined_findings: tolerance.baselined,
         baseline_exceeded_findings,
         below_evidence_floor_findings,
         baseline_populations,
     };
+}
+
+/// What a run's own record left of the tolerance each baselined finding's entry granted it.
+struct SurvivingTolerance
+{
+    /// The findings whose tolerance still holds: the record established continuity for them, or
+    /// established nothing at all.
+    baselined: Vec<Finding>,
+    /// The findings whose tolerance did not survive what the record established.
+    recreated: Vec<Finding>,
+}
+
+/// `baselined` split by whether the tolerance its entry granted survives what `history`
+/// established about each one's lineage.
+///
+/// Applied *after* [`Tolerated_Within_Allowance`] and never before it, which is what keeps
+/// `OD-GATE-030`'s counting bound exactly as it was: the population a scope observed is read
+/// over every finding its entry matched, so a tolerance lapsing here can never shrink the number
+/// an allowance is compared against. A scope already over its allowance is not reached at all --
+/// its findings are in `baseline_exceeded_findings` and that record forbids attributing any one
+/// of them to adoption.
+fn Surviving_Tolerance(baselined: Vec<Finding>, history: Option<&OccurrenceHistory>) -> SurvivingTolerance
+{
+    let (recreated, baselined): (Vec<Finding>, Vec<Finding>) =
+        baselined.into_iter().partition(|finding| return Refused_By_History(finding, history));
+
+    return SurvivingTolerance { baselined, recreated };
+}
+
+/// Whether what `history` established about `finding`'s lineage refuses to carry a tolerance
+/// across it.
+///
+/// `IdentityTransitionKind::Is_History_Preserving` is the decision and it is not restated here:
+/// that rule already says a tolerance must not survive a recreation, because carrying one across
+/// would silence a finding on code nobody has reviewed.
+///
+/// A transition the record did not establish is not put to that question. `OD-GATE-030` reports
+/// such a finding as undetermined and leaves *whether undetermined blocks* to a repository's own
+/// policy, which nothing here declares -- so a run with no evidence tolerates exactly what it
+/// tolerated before this module existed, and says so rather than deciding the open question by
+/// silence.
+fn Refused_By_History(finding: &Finding, history: Option<&OccurrenceHistory>) -> bool
+{
+    return history
+        .and_then(|history| return history.Continuity_Of(finding))
+        .is_some_and(|established| return !established.Is_History_Preserving());
 }
 
 /// What [`Tolerated_Within_Allowance`] split one run's baseline-matched findings into.
@@ -382,6 +437,14 @@ pub(super) struct DispositionPolicies<'a>
     pub(super) adoption: &'a AdoptionPolicy,
     pub(super) suppressions: &'a SuppressionPolicy,
     pub(super) baseline: &'a BaselinePolicy,
+    /// What this run's own record established about the occurrences its baseline tolerates, or
+    /// `None` when the run has no record to read -- which is every tree that has not opted in.
+    ///
+    /// Here rather than beside the four above because it is not a policy at all: nobody authored
+    /// it, and it decides only whether a tolerance somebody *did* author still reaches a given
+    /// occurrence. It rides in this value for the reason `now` does -- the function that reads
+    /// it is already at this workspace's own parameter-count limit.
+    pub(super) history: Option<&'a OccurrenceHistory>,
     pub(super) now: Timestamp,
 }
 
@@ -586,6 +649,9 @@ mod tests
             adoption: EMPTY_ADOPTION.get_or_init(AdoptionPolicy::default),
             suppressions: EMPTY_SUPPRESSIONS.get_or_init(SuppressionPolicy::default),
             baseline: EMPTY_BASELINE.get_or_init(BaselinePolicy::default),
+            // No record, which is every tree that has not opted into one: these tests are about
+            // the evidence floor and a history would decide nothing here.
+            history: None,
             now: Timestamp::From_Unix_Seconds(AT_THE_EPOCH),
         };
     }

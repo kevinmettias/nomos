@@ -148,6 +148,9 @@ fn No_Dispositions<'a>(adoption: &'a crate::AdoptionPolicy, suppressions: &'a cr
         adoption,
         suppressions,
         baseline,
+        // No record either: a history is not a policy, and these tests are about what a
+        // reduction does when nothing has been declared or observed.
+        history: None,
         now: nomos_platform::Timestamp::From_Unix_Seconds(0),
     };
 }
