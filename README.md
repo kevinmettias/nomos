@@ -346,7 +346,9 @@ command — so no profile can render it, and the corpus it would be rendered fro
 CI runner. It therefore stays hand-authored.
 
 What that gives up is freshness for the prose, and nothing here pretends otherwise. What
-it does not give up is the tables above: `tests/contract/tests/boundaries.rs` compares them
-against `nomos-rules`' own declared `ZONES` in both directions, so a crate that joins the
-workspace without joining this page fails the gate. See
+it does not give up is the tables above: `tests/contract/tests/boundaries/readme.rs`,
+reached through that target's own `main.rs`, compares them in both directions against the
+architecture this repository declares as data in `nomos-architecture.json`, so a crate that
+joins the workspace without joining this page fails the gate. What that declaration holds is
+its own to say and is deliberately not restated here. See
 `docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md`.

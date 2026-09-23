@@ -81325,10 +81325,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "fable-p113-taxonomy",
+        "acquired_at": 1790126203,
+        "lease_expires_at": 1790140603
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -92920,7 +92924,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P123-A-CRATE-DOC-AND-ITS-RECORD-DISAGREE-ABOUT-WHICH-OVERRIDE-LICENSED-THE-WORKFLOW-RUNTIME-2"
       ],
@@ -92938,7 +92942,30 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "exit_code": 0,
+        "output_tail": "_____^      -\n   | | ____________|\n57 | ||     {\n58 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n68 | ||         std::thread::sleep(super::POLL_INTERVAL);\n69 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:78:5\n   |\n78 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n79 | ||     {\n80 | ||         Ok(Some(status)) =>\n...  ||\n87 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n88 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: unused import: `Revisions_In`\n  --> tests\\contract\\tests\\boundaries\\lock_pinning.rs:84:65\n   |\n84 | use nomos_contract_tests::{Declared_Revisions, Repository_Root, Revisions_In, XVPE_PREFIX};\n   |                                                                 ^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-contract-tests` (test \"boundaries\") generated 1 warning (run `cargo fix --test \"boundaries\"` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.70s\n     Running tests\\boundaries\\main.rs (target\\debug\\deps\\boundaries-0ce4e8d9dd9d06ad.exe)\n",
+        "verified_at": 1790126282,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "2197bad9ac51aeb54d765919ca077a092335d0e5"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -95466,6 +95493,47 @@
         },
         "revision": "4a4b2f7f902eb9c25546b7763cc004beddb2aae8"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P143-TWO-RECORDS-AND-A-CENSUS-STILL-SAY-THE-COMPILER-PROVIDER-IS-UNCOMPOSED-AND-BACKED-BY-RUSTC",
+      "title": "Three documents describe the compiler-backed provider as unobserved and as linking rustc_interface, and both halves were false before this session and after it",
+      "why": "Measured 2026-09-22 at 4a4b2f7f, three documents, two independent errors. First, the engine. OD-CAPABILITY-013's mechanism table, line 78, records nomos-lang-rust-compiler's copy_clones offer as in-process via rustc_interface and rustc_driver, and its line 127 gives rustc_interface as one of this workspace's examples of an analysis that is a linked library. The crate depends on neither. Its manifest names ra_ap_hir, ra_ap_ide_db, ra_ap_load-cargo, ra_ap_project_model and ra_ap_syntax -- rust-analyzer as a library. That was already false before this session touched anything; it is not a consequence of P123 and would have stayed false without it. Second, the composition. ARC-ROADMAP-001 states that four exported offers are declared and unobserved and enumerates them: nomos-lang-csharp's syntax offer, both of nomos-lang-rust-compiler's, and nomos-lang-rust's module-index rollup. P123-THE-COMPILER-CONTRACTS composed both compiler offers at 7edd095f, so two of the four are now observed and the count is two. This one is this session's debt rather than an inherited error. There is a cross-check worth stating because it makes the corrected number verifiable rather than asserted: tests/contract/tests/boundaries/composed_offers.rs holds the declared-uncomposed register, and c3625fad narrowed it to exactly two entries, nomos_lang_csharp::Provider_Offer and nomos_lang_rust::rollup::Provider_Offer. The record's corrected enumeration should be those two and the register is the thing to check it against, since that register is mechanically held against the composition root and the record's prose is not. Third, the census. work/census/forward-looking-state-claims.md rows 166 and 167 cite crates/languages/nomos-lang-rust-compiler/src/check.rs:12 and crates/languages/nomos-lang-rust-compiler/src/nested_lock_check.rs:11, neither of which exists any more, and mark each claim still true on the grounds that the capability is not offered in a Declare_ function. Both are now offered. A dead path citation is ordinary and OD-SPEC-017 decided it is not a defect; a row asserting still true about a claim that has become false is a different thing, and it is the half that matters.",
+      "done_when": "No document states that this provider links rustc_interface or rustc_driver, and no document counts its offers among the unobserved. OD-CAPABILITY-013 names the engine the crate actually links, read from the manifest at the amending commit rather than copied from this item, and its line-127 example list stops offering rustc_interface as a thing this workspace links; if the claimant finds another crate that does link it, that is a real result and the example stays with that crate named instead. ARC-ROADMAP-001's count and enumeration match what is actually uncomposed, cross-checked against the declared-uncomposed register in tests/contract/tests/boundaries/composed_offers.rs rather than against this item's numbers, and if those two disagree the disagreement is reported rather than resolved by choosing the convenient one. The two census rows stop asserting still true about a claim that is false; whether they are restated, struck through with the date the claim expired, or removed is the claimant's call, but a row whose verdict column is now wrong may not be left because its path citation is merely dead. Both records carry their correction as an amendment in the form this repository uses, saying what moved and what still stands, rather than being silently edited: the engine error predates P123 and the composition error is P123's, and an amendment that blurs the two teaches the next reader the wrong thing about how each arose. No mechanism changes and no code is touched. Because two governing records are amended, both derived projections go stale and are re-rendered corpus-unset from a worktree whose registered records are exactly the ones the commit publishes, per .claude/skills/nomos-spec-change, with spec freshness reporting diagram-set and domain-specification at exit 0. spec/domain-specification.md is not edited by hand and is not listed as a path to correct; it carries copies of both false sentences and repairs itself on that render. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "work/census/forward-looking-state-claims.md",
+          "docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md",
+          "docs/records/ARC-ROADMAP-001-nomos-core-s-near-term-boundary-is-the-headless-enforcement-loop-not-architecture-and-feature-intelligence.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,
