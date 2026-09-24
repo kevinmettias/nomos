@@ -1,9 +1,12 @@
 use nomos_platform::{Command, ExitOutcome, ProgramLauncher};
 use xvpe_primitives::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use xvpe_subprocess_execution::{
-    ExitOutcome as XvpeExitOutcome, ProcessCommand, ProcessLauncherStrategy,
+    EnvironmentEdit, ExitOutcome as XvpeExitOutcome, ProcessCommand, ProcessLauncherStrategy,
     ProcessOutput as XvpeProcessOutput,
 };
+
+/// Why a command carrying environment edits is refused rather than run.
+const ENVIRONMENT_NOT_HONOURED: &str = "this launcher cannot honour environment edits, because a nomos Command carries no environment, so it refuses the command rather than run it without them; the edits name";
 
 /// Any of this workspace's launchers, seen as the launcher surface XVPE's own
 /// adapters take.
@@ -47,6 +50,16 @@ impl<Launcher: ProgramLauncher> ProcessLauncherStrategy for XvpeLauncher<'_, Lau
 {
     fn Run(&self, command: &ProcessCommand) -> Result<XvpeProcessOutput, String>
     {
+        // Refused, not dropped. A nomos Command has nowhere to put an environment edit, and
+        // running the command without one is not a smaller version of the same request: the
+        // DeepSeek backend's edits remove ANTHROPIC_API_KEY and point the CLI elsewhere, so the
+        // same dispatch run without them reaches the wrong provider on the caller's own key and
+        // reports success.
+        if !command.environment_edits.is_empty()
+        {
+            return Err(Unhonoured(&command.environment_edits));
+        }
+
         let translated = Command {
             argv: command.argv.clone(),
             working_directory: command.working_directory.clone(),
@@ -62,6 +75,25 @@ impl<Launcher: ProgramLauncher> ProcessLauncherStrategy for XvpeLauncher<'_, Lau
             stderr: output.stderr,
         });
     }
+}
+
+/// The refusal for a command whose environment edits this launcher cannot honour.
+///
+/// It names each variable and never a value: a value set here can be a credential, and a
+/// refusal is exactly the text that ends up in a log.
+fn Unhonoured(edits: &[EnvironmentEdit]) -> String
+{
+    let names: Vec<&str> = edits
+        .iter()
+        .map(|edit| {
+            return match edit
+            {
+                EnvironmentEdit::Set(name, _) | EnvironmentEdit::Remove(name) => name.as_str(),
+            };
+        })
+        .collect();
+
+    return format!("{ENVIRONMENT_NOT_HONOURED} {}", names.join(", "));
 }
 
 /// One outcome vocabulary in the other.
@@ -162,6 +194,34 @@ mod tests
         // a caller that never asks for it never notices it is gone.
         assert_eq!(seen.idle_timeout, command.idle_timeout, "{COMMAND_MUST_SURVIVE}");
         assert_eq!(output.stdout, SAID, "{COMMAND_MUST_SURVIVE}");
+    }
+
+    /// A variable an edit names, and a value that must never appear in a refusal.
+    const REMOVED_VARIABLE: &str = "ANTHROPIC_API_KEY";
+    const SET_VARIABLE: &str = "ANTHROPIC_AUTH_TOKEN";
+    const SECRET_VALUE: &str = "a credential nobody should read in a log";
+
+    /// A command whose edits cannot be honoured must not reach the process at all.
+    const EDITS_MUST_REFUSE: &str = "a command with environment edits was run without them";
+    /// A refusal names what it could not honour, and never a value.
+    const REFUSAL_MUST_NAME_NOT_REVEAL: &str = "the refusal names each variable and no value";
+
+    #[test]
+    fn Test_A_Command_With_Environment_Edits_Should_Be_Refused_Not_Run_Without_Them()
+    {
+        let inner = Recording::Reporting(ExitOutcome::Exited { code: 0 });
+        let command = ProcessCommand::New(vec!["claude".to_owned()], A_BOUND)
+            .Removing_Environment_Variable(REMOVED_VARIABLE.to_owned())
+            .With_Environment_Variable(SET_VARIABLE.to_owned(), SECRET_VALUE.to_owned());
+
+        let refusal = XvpeLauncher::Wrapping(&inner)
+            .Run(&command)
+            .expect_err(EDITS_MUST_REFUSE);
+
+        assert!(inner.seen.borrow().is_empty(), "{EDITS_MUST_REFUSE}");
+        assert!(refusal.contains(REMOVED_VARIABLE), "{REFUSAL_MUST_NAME_NOT_REVEAL}");
+        assert!(refusal.contains(SET_VARIABLE), "{REFUSAL_MUST_NAME_NOT_REVEAL}");
+        assert!(!refusal.contains(SECRET_VALUE), "{REFUSAL_MUST_NAME_NOT_REVEAL}");
     }
 
     #[test]

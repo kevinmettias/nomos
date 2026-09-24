@@ -95755,6 +95755,59 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P147-THE-XVPE-LAUNCHER-BRIDGE-DROPS-ENVIRONMENT-EDITS-AND-RUNS-THE-COMMAND-ANYWAY",
+      "title": "XvpeLauncher translates an XVPE ProcessCommand without its environment edits and runs the command anyway",
+      "why": "nomos-platform-xvpe's XvpeLauncher::Run builds a nomos Command from argv, working_directory, timeout and idle_timeout, and drops ProcessCommand::environment_edits, which exists at the pinned XVPE revision (xvpe-subprocess-execution process_command.rs). Nomos's Command carries no environment, so the edits cannot be honoured, and the command runs as though none were asked for. Three XVPE agent backends set them: generic-cli, anthropic-cli and deepseek. DeepSeek's profile removes ANTHROPIC_API_KEY and sets ANTHROPIC_BASE_URL, ANTHROPIC_AUTH_TOKEN and ANTHROPIC_MODEL, so the same dispatch routed through this bridge would run the Claude CLI against Anthropic on the caller's own key: the wrong provider, billed, and reported as success. Latent today, because the two backends Nomos composes (claude-code, ollama) set none, and measured 2026-09-24 by reading all three. Found by the ecosystem-substrate survey in f:/repos/xvpe/docs/plans/programs/ecosystem-substrate.",
+      "done_when": "XvpeLauncher::Run refuses a ProcessCommand whose environment_edits is non-empty, returning an error that names the edits it could not honour, and does not call the wrapped launcher. A command with no edits is translated and run exactly as today. A test proves both with a recording launcher: the refused command never reaches it, the plain one does with every translated field intact, and the refusal test fails when the check is removed. Forbidden: silently applying a subset of the edits; setting or removing variables in this process's own environment to emulate them, which would leak into every concurrent dispatch; widening nomos-platform's Command, which is the refactor of every implementor OD-ROADMAP-005 declined. cargo test -p nomos-platform-xvpe passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform-xvpe"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform-xvpe"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "nomos-platform-xvpe"
+        ],
+        "exit_code": 0,
+        "output_tail": "\nrunning 3 tests\ntest xvpe_launcher::tests::Test_Every_Outcome_Should_Map_To_Its_Own_Counterpart ... ok\ntest xvpe_launcher::tests::Test_The_Command_Should_Reach_The_Wrapped_Launcher_Unchanged ... ok\ntest xvpe_launcher::tests::Test_A_Command_With_Environment_Edits_Should_Be_Refused_Not_Run_Without_Them ... ok\n\ntest result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n   Compiling nomos-platform-xvpe v0.1.0 (F:\\repos\\nomos\\crates\\platform\\nomos-platform-xvpe)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.96s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_platform_xvpe-ea66813f25cb038f.exe)\n   Doc-tests nomos_platform_xvpe\n",
+        "verified_at": 1790288245,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "63f68473767a6a069bd3cf0ac665ea3335dd1fbc"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
