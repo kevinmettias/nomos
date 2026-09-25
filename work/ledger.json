@@ -95944,6 +95944,64 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P149-A-DECLARED-STANDARDS-CORPUS-IS-READABLE-WHERE-IT-IS-DECLARED",
+      "title": "A declared standards corpus is readable where it is declared, so the 1,133 code-standards documents and the 261 xvpe documents become one population",
+      "why": "ARC-CONFORMANCE-003 decided that a corpus is absorbed by reading its declarations rather than by copying its rules, and M1 is that record's first increment. No crate in this workspace and no crate in xvpe parses markdown front matter: xvpe-corpus-front is a corpus port over a unit's content (its modules are library_formats, corpus_units, unit_read and strategies) and xvpe-corpus-judgement is the corpus-to-repository direction over prose claims, with an empty dependency block. Neither reads a delimiter fence. So the 1,133 code-standards documents and the 261 xvpe documents are invisible to every rule this workspace ships, and P26-RULES-MORE-CODE-STANDARDS-3 finished because the well of rules judgeable with the current inputs ran dry. The goal is coverage without copying: the documents stay where they are declared and Nomos reads them there. This item is the reader and nothing downstream of it.",
+      "done_when": "A repository that declares a standards corpus has every document in it visible as a rule, with the declarations read from a file of the corpus's own rather than from standards.json, which another tool decodes with unknown fields disallowed. The population the reader reports equals the number of documents on disk, and the path is taken from the repository's declaration rather than compiled into the reader. A document is a rule because it declares kind: rule, never because a pattern recognised its shape; a document whose declaration is absent is not a rule and one whose declaration will not parse is a finding rather than a silent omission from the population. The severity and gate a document declares reach the verdict unchanged, so a document declaring gate: blocking produces a finding and one declaring gate: review produces an agent-required applicability rather than either being flattened. Measured against the real corpora: the 1,133 documents under code-standards/docs/standards and the 261 under xvpe/docs/arch/standards are read as one population, and the recorded census reproduces exactly (261 rules, severity MUST 161, MUST NOT 5, SHOULD 83, MAY 11, SHOULD NOT 1; gate review 224, blocking 31, unreachable 6). A repository that declares no corpus judges exactly as it does today.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-standards-corpus",
+          "crates/repository/nomos-repo-policy",
+          "crates/orchestration/nomos-check-orchestration",
+          "crates/orchestration/nomos-gate-orchestration/src/composition.rs",
+          "crates/rules/nomos-rules",
+          "Cargo.toml",
+          "Cargo.lock",
+          "README.md",
+          "nomos-architecture.json",
+          "tests/contract/surface/nomos-cap-standards-corpus.txt",
+          "tests/contract/surface/nomos-repo-policy.txt",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/tests/boundaries/bundled_contract_half.rs",
+          "tests/contract/tests/boundaries/composed_offers.rs",
+          "tests/contract/tests/completeness_universes/table.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-standards-corpus",
+          "-p",
+          "nomos-repo-policy",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 14400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

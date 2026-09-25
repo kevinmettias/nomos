@@ -3,16 +3,16 @@
   "profile_digest": "sha256:5346e7f6d49e44df8f15455e3a3af1bc0c38ac83d9bcd8eab51ad20ae2b99bef",
   "format": "mermaid",
   "output": "diagrams/relations.mmd",
-  "content_digest": "sha256:8bdcfb457b7a3ed43f2a0be25949ae5f02983d8678fead1f5001eca84db4766f",
-  "inputs_digest": "sha256:fff785862ad87b84310fd604b01ffa63d14305ec24a6048b7b321a5ac86ebae9",
+  "content_digest": "sha256:3ae0480bb0ec4fbb284761ecd666a1df4e2e1d2636d43a9003278c9797a9d599",
+  "inputs_digest": "sha256:f90bdd5ea52a892378cf7b820d9a9371f3169f4e959271670d806f9d81906204",
   "sections": [
     [
       "Relations",
-      2216
+      2236
     ],
     [
       "Decisions",
-      264
+      265
     ]
   ],
   "inputs": [
@@ -35,6 +35,11 @@
       "content": "relations",
       "identity": "ARC-CONFORMANCE-001 relates-to ARC-CONFORMANCE-002",
       "hash": "sha256:ba415976f97ce23803016b9b09b271f877f347fc0aa213b693ceb35eb371047b"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-001 relates-to ARC-CONFORMANCE-003",
+      "hash": "sha256:b4e1930af815317ad3fa5ce6e5ef582221a9e439fbc4a770b64cc2f8f0c11724"
     },
     {
       "content": "relations",
@@ -98,6 +103,11 @@
     },
     {
       "content": "relations",
+      "identity": "ARC-CONFORMANCE-002 relates-to ARC-CONFORMANCE-003",
+      "hash": "sha256:598ef3e47f001dd0f117483f79104d1e2df52ef2f651b669caf7d61565f415c6"
+    },
+    {
+      "content": "relations",
       "identity": "ARC-CONFORMANCE-002 relates-to ARC-ECOSYSTEM-001",
       "hash": "sha256:aaf4a9c357643237b019734af98c0a58bf8e956f2c31551db5b0eeb8d2babe67"
     },
@@ -120,6 +130,56 @@
       "content": "relations",
       "identity": "ARC-CONFORMANCE-002 relates-to OD-RULES-032",
       "hash": "sha256:8a4da7e33b22dfb7aaea49524c7f69f4839b8c21572dc29d4c637b5f2e7ba25c"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-003 relates-to ARC-CONFORMANCE-001",
+      "hash": "sha256:4ba67fdb8f5492411d8d1a4f08509b7fd8354dbae9dad181cecc2e5dd1f6d712"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-003 relates-to ARC-CONFORMANCE-002",
+      "hash": "sha256:d03d18893a14ce64a8c2a360aa04accf17e4345e9c487f279f18832cd22a37b6"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-003 relates-to ARC-ECOSYSTEM-001",
+      "hash": "sha256:6a156a5081a8a7353707ce62293d04afdabf03f52138b1050c1ebea4594ea5a8"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-003 relates-to ARC-ROADMAP-001",
+      "hash": "sha256:91db49f9bc83f4fd5929e0274032b10389aa7cb34a2bfffa2e90d00523b4a040"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-003 relates-to OD-CAPABILITY-012",
+      "hash": "sha256:4a7818bff461c56c450863e71b5324f476d3fd4ab655406fc10b2124fcfd73e5"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-003 relates-to OD-HOST-013",
+      "hash": "sha256:6756a85e8f40b8a7f0879244d6476a8ec5a2cc89c5d983a5949dfe190795ce8f"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-003 relates-to OD-PLATFORM-003",
+      "hash": "sha256:f80ced88c04da0bb62325aacf7f391feba29c0080f703d872014943e1d2cbe7f"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-003 relates-to OD-RULES-010",
+      "hash": "sha256:341dd3ee6b04c8684caaaef05dae4a11a98e9fd280b60d590be92e542b23114e"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-003 relates-to OD-RULES-011",
+      "hash": "sha256:b1e4f591c757d59caa9d893017f66ebfe20a0037f55175514227f92f1ac6f7ad"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-CONFORMANCE-003 relates-to OD-RULES-034",
+      "hash": "sha256:51854e0a82515c60adfe2a8aafb339332adff43f51384c68df5896e0ffb0dbcf"
     },
     {
       "content": "relations",
@@ -210,6 +270,11 @@
       "content": "relations",
       "identity": "ARC-ECOSYSTEM-001 relates-to ARC-CONFORMANCE-002",
       "hash": "sha256:4826ec4498ec69e6ab4b7b5fc99a4c2ff2b83a002272f8783387b3a12d0c3dce"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ECOSYSTEM-001 relates-to ARC-CONFORMANCE-003",
+      "hash": "sha256:80400e106a305aa8bf4469f7af943507f77cdc11a9831a86ef384f927e84c557"
     },
     {
       "content": "relations",
@@ -455,6 +520,11 @@
       "content": "relations",
       "identity": "ARC-HARNESS-001 relates-to OD-PLATFORM-001",
       "hash": "sha256:aa94e7c1fe05e7b81022ed71ccfe5e43eebdce429ecc79c2a62a95674bd1287c"
+    },
+    {
+      "content": "relations",
+      "identity": "ARC-ROADMAP-001 relates-to ARC-CONFORMANCE-003",
+      "hash": "sha256:8b8e5794729b92b5cb1d1173165ed9af4c2c707c14269394d7b5333c06d1be4a"
     },
     {
       "content": "relations",
@@ -2270,6 +2340,11 @@
       "content": "relations",
       "identity": "OD-CAPABILITY-012 relates-to ARC-CONFORMANCE-001",
       "hash": "sha256:540bb5eeb936291d649a5bf908b8cf4a3eebe33bd7ee8ce783e7d1eb6cda6fd9"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-CAPABILITY-012 relates-to ARC-CONFORMANCE-003",
+      "hash": "sha256:9d64fb70e838ba4138fc9dadd4718ee6f8d0efd17f637a28c55cb133486448c6"
     },
     {
       "content": "relations",
@@ -5353,6 +5428,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-HOST-013 relates-to ARC-CONFORMANCE-003",
+      "hash": "sha256:283c527edb0fb0c9b7fc482f5dd6c392fdc865c12edc821ded47e7b002079a44"
+    },
+    {
+      "content": "relations",
       "identity": "OD-HOST-013 relates-to OD-HOST-010",
       "hash": "sha256:007a59b569744b2b7d0c3bd4c64f0b2e498606bd213bb077752394efdb0842ee"
     },
@@ -8013,6 +8093,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-PLATFORM-003 relates-to ARC-CONFORMANCE-003",
+      "hash": "sha256:32116a12a993bc231aa0e6c7b4fcf845836ba969ca36ea1f7606730721fb6228"
+    },
+    {
+      "content": "relations",
       "identity": "OD-PLATFORM-003 relates-to OD-EXECUTOR-010",
       "hash": "sha256:df706861e96bcd8dc18e8df85fc8f9fcd2e4b41e7757896e744ea9da89cac56d"
     },
@@ -9343,6 +9428,11 @@
     },
     {
       "content": "relations",
+      "identity": "OD-RULES-010 relates-to ARC-CONFORMANCE-003",
+      "hash": "sha256:3d309bc7236245ff65c03c469098ab945b3187af413b9f2a4c8a356e25a31416"
+    },
+    {
+      "content": "relations",
       "identity": "OD-RULES-010 relates-to OD-CAPABILITY-013",
       "hash": "sha256:b06b3b3f3746702b7b9a141740b86b535b8f15d681afb26700a9f8a715d474ad"
     },
@@ -9400,6 +9490,11 @@
       "content": "relations",
       "identity": "OD-RULES-011 relates-to ARC-CONFORMANCE-002",
       "hash": "sha256:5979866453ce2d2d6823c69204a64166a94d433df31e7969af054b5d33a0b19e"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-011 relates-to ARC-CONFORMANCE-003",
+      "hash": "sha256:3dabb2c426f0578b1db21c6d4caff97c9d78c59c46c35b014212c242a05d5029"
     },
     {
       "content": "relations",
@@ -10050,6 +10145,11 @@
       "content": "relations",
       "identity": "OD-RULES-033 relates-to OD-RULES-034",
       "hash": "sha256:d2a9e0cb9fbdf36a5c07f52940ccb5dc41230a986c9039e23098eca01ab5a513"
+    },
+    {
+      "content": "relations",
+      "identity": "OD-RULES-034 relates-to ARC-CONFORMANCE-003",
+      "hash": "sha256:f377908caab30db489a1e78dae267367a5c81414aa70549345f53d7e3a76cc62"
     },
     {
       "content": "relations",
@@ -11100,6 +11200,11 @@
       "content": "nodes",
       "identity": "ARC-CONFORMANCE-002",
       "hash": "sha256:a6f2612ae195752ca2a4e4d2d2c18cd4f65e782087daffbda52792382ce1e0c4"
+    },
+    {
+      "content": "nodes",
+      "identity": "ARC-CONFORMANCE-003",
+      "hash": "sha256:16526827faaf4baa6c01e5db896ae7170d460c6ae9baeace23381aa2abdb0469"
     },
     {
       "content": "nodes",
