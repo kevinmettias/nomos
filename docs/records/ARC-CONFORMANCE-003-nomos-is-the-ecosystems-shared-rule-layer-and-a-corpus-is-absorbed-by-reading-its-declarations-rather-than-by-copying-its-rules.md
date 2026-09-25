@@ -192,8 +192,9 @@ through a direct compiler API.
 `OD-PLATFORM-003` retires `AGT-006`'s no-dependency clause for the xvpe crossing — *"XVPE is the
 engine. This workspace is an application over it"* — and `AGT-006` is assessed `Diverges`,
 governed by that record. The guard was **deleted, not widened**:
-`Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` and `PLATFORM_ADAPTER` are gone
-from `tests/contract/tests/boundaries/graph.rs`, because adding nine names to an allow-list
+`Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` does not resolve — it and
+`PLATFORM_ADAPTER` are gone from `tests/contract/tests/boundaries/graph.rs`, deleted rather than
+widened, because adding nine names to an allow-list
 "would have left a rule that still *read* as a boundary while enforcing nothing." So **no
 allowlist limits which xvpe crates may be adopted**; what binds is that every adoption comes in
 at the single revision declared once in `[workspace.dependencies]` and stays pinned in
@@ -343,7 +344,6 @@ registers a new crate by adding its path to `tiers` has changed a census nobody 
 gate will stay green while the crate's zone is undeclared. The governing registration is
 `nomos-architecture.json`'s `members` map and the `README.md` row beside it, which is why those
 two are in the item's territory and `standards.json` is not.
-
 
 ## What This Does Not Do
 

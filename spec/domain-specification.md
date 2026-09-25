@@ -12,7 +12,7 @@ profile: domain-specification
 | --- | --- | --- | --- | --- | --- |
 | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md@authored | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md | authored | 25 | 8 | sha256:a62eddf64a82e534bbdbd720c1057e1dcd3131c1264077c83d7029d15b52f8cf |
 | docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md@authored | docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md | authored | 25 | 6 | sha256:ccc429c5e9f4e7b008d8b8a5bb1ccca4cb0704cfbfa2b25aa891ebab3c538ebc |
-| docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md@authored | docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md | authored | 47 | 7 | sha256:41dec5f5345b2d504405e3514618aad845a65f33fd405180d4647cc593aa1f4a |
+| docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md@authored | docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md | authored | 47 | 7 | sha256:c5235f32be591ecb93b1f06405f358225a41a254ba91c4f396c1d42c6c768578 |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md@authored | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md | authored | 40 | 12 | sha256:963e9cdbf1905450ef8455935dc914a29fc45b35f5d958d5d94a4b0e002c1a20 |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 80 | 16 | sha256:516e6bdb8000bb760e2fdfcfc587246e75d436f7bc10ac0d645921f0f3d2bae5 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
@@ -3475,14 +3475,15 @@ through a direct compiler API.
 
 ### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#18
 
-*revision: authored · kind: prose · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / What Was Measured · hash: sha256:3a3ee55afe495d1e0315d8e3285648c1655beebfde99f1745b934b5c3c640830*
+*revision: authored · kind: prose · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / What Was Measured · hash: sha256:b6326bddebc31a98c85d9a30e381ece4f828c291b288cb24715cce22e798152a*
 
 **Nomos is an application over xvpe, and may adopt from it freely at the one pinned revision.**
 `OD-PLATFORM-003` retires `AGT-006`'s no-dependency clause for the xvpe crossing — *"XVPE is the
 engine. This workspace is an application over it"* — and `AGT-006` is assessed `Diverges`,
 governed by that record. The guard was **deleted, not widened**:
-`Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` and `PLATFORM_ADAPTER` are gone
-from `tests/contract/tests/boundaries/graph.rs`, because adding nine names to an allow-list
+`Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` does not resolve — it and
+`PLATFORM_ADAPTER` are gone from `tests/contract/tests/boundaries/graph.rs`, deleted rather than
+widened, because adding nine names to an allow-list
 "would have left a rule that still *read* as a boundary while enforcing nothing." So **no
 allowlist limits which xvpe crates may be adopted**; what binds is that every adoption comes in
 at the single revision declared once in `[workspace.dependencies]` and stays pinned in

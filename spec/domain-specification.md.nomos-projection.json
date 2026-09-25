@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:649461c0447ba363fa4d41172b0bbadfae27adfaed14a71048aa241bbe88882b",
-  "inputs_digest": "sha256:eceeba81d5ce91a44eae53948df7679b0bfc71e65f651bce98d25407d03c4985",
+  "content_digest": "sha256:85f397389af3b6e9a3eed7f3c8c5f9a8e5d7fd4cd585a965c4ee83b366f4e07b",
+  "inputs_digest": "sha256:2ea783322d9599bbf97426ebcd0797e8c0286337de3b4badab27d81f181bd045",
   "sections": [
     [
       "Documents",
@@ -33,7 +33,7 @@
     {
       "content": "documents",
       "identity": "docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md@authored",
-      "hash": "sha256:41dec5f5345b2d504405e3514618aad845a65f33fd405180d4647cc593aa1f4a"
+      "hash": "sha256:c5235f32be591ecb93b1f06405f358225a41a254ba91c4f396c1d42c6c768578"
     },
     {
       "content": "documents",
@@ -14103,7 +14103,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#18",
-      "hash": "sha256:3a3ee55afe495d1e0315d8e3285648c1655beebfde99f1745b934b5c3c640830"
+      "hash": "sha256:b6326bddebc31a98c85d9a30e381ece4f828c291b288cb24715cce22e798152a"
     },
     {
       "content": "blocks",
