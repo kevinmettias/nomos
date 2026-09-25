@@ -93086,7 +93086,7 @@
       "claim": {
         "holder": "fable-p128-baseline-2",
         "acquired_at": 1790132788,
-        "lease_expires_at": 1790143637
+        "lease_expires_at": 1790156647
       },
       "verification": {
         "argv": [
@@ -95441,7 +95441,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Re-authored as P146-THE-SEVENFOLD-SELF-CHECK-COST-IS-INSIDE-EVERY-PREDICATE-THAT-RUNS-A-REAL-GATE-AND-IT-HAS-ALREADY-SERIALIZED-THE-BOARD, which is this item with one fact its why could not carry. Declined rather than left standing because a why is immutable and the fact changes what the item is about: P141 presented the cost as a slow default invocation, and it is not only that. It is inside the predicate other sessions are waiting on. Measured after P141 was written. nomos-gate-orchestration's own tests perform a real gate run over this repository: crates/orchestration/nomos-gate-orchestration/src/gate_compare/real_population.rs declares Real_Findings as every finding a real run over this repository's own source produces, collects the whole of crates/ under the workspace root resolved from CARGO_MANIFEST_DIR, and calls Run_Gate with REAL_TREE_RUN. That run invokes the check, and the check now materializes both compiler families. So every predicate naming nomos-gate-orchestration pays the 223.9 seconds, not just a person typing nomos check. Nothing about the defect or the refusals changed and the successor keeps both. The item was unclaimed and an hour old, so the decline costs nobody work in progress."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -95461,7 +95465,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "fable-p141-reauthor",
+        "declined_at": 1790135764
+      },
       "widened": []
     },
     {
@@ -95757,6 +95764,80 @@
       "widened": []
     },
     {
+      "id": "P146-THE-SEVENFOLD-SELF-CHECK-COST-IS-INSIDE-EVERY-PREDICATE-THAT-RUNS-A-REAL-GATE-AND-IT-HAS-ALREADY-SERIALIZED-THE-BOARD",
+      "title": "A real gate run over this repository went from a 33.7 s to a 249.2 s median, and that cost is inside every predicate naming nomos-gate-orchestration",
+      "why": "Measured 2026-09-22 by the session that caused it, three runs each on one machine, with the binary built fresh from the tree being measured. Before c3625fad: 33.70, 31.83, 34.12 seconds, median 33.70. After: 365.37, 240.91, 249.22, median 249.22. That is 7.4 times slower. It is attributable rather than diffuse. Measured per family over this repository's root: Discover_Crate 107.1 seconds returning 2 findings, and Discover_Nested_Locks 116.8 seconds returning 0, for 223.9 seconds, essentially the whole delta. Each family independently loads the resolved crate graph plus a discovered sysroot and nothing is shared between them, so the second pays the same price as the first for the same information. The cost is not confined to someone typing nomos check, and this is what the first version of this item got wrong. nomos-gate-orchestration's tests perform a real gate run over this repository. crates/orchestration/nomos-gate-orchestration/src/gate_compare/real_population.rs declares Real_Findings as every finding a real run over this repository's own source produces; it collects the whole of crates/ under the workspace root resolved from CARGO_MANIFEST_DIR, asserts the source set is non-empty, and calls Run_Gate with REAL_TREE_RUN. The whole of crates/ rather than one crate's worth is deliberate and OD-GATE-025 records why. That run reaches the check, and the check now materializes both compiler families, so every predicate that names nomos-gate-orchestration pays the 223.9 seconds. It has already serialized this board once, which is the observation that makes this urgent rather than merely unfortunate. On the evening of 2026-09-22 eleven Ready items sat blocked behind one item whose predicate is cargo test -p nomos-model -p nomos-gate-orchestration. A peer session measured its test binary at 2432 CPU-seconds across 60 threads and still running; that figure is theirs rather than mine and is quoted as their measurement. Three sessions in sequence misdiagnosed that run as stalled, as lock-contended, and as a dead worker, because a predicate that used to finish quickly now does not. Two traps in reading the numbers, both recorded because the next reader will meet them. First, the finding count went 54 to 461 across the before and after runs and only 2 of the 407 belong to this change; 405 are lint-diagnostics, clippy's opinion of a peer's large in-flight edit that landed in the shared tree between the two measurements. Second, the first attribution attempt returned Ok(0) in about 15 seconds having examined nothing, because Is_Source_Under_Root compares lexically with Path::starts_with while Absolute_Root joins the root onto the working directory without normalising, so a root spelled with .. segments prefixes nothing and every file is filtered out. A fast clean answer and a fast empty one are indistinguishable; the figures above were retaken with a root normalised through Path::parent. One interaction the claimant should know rather than rediscover. P134 records that cargo clippy is bounded at 600 seconds in nomos-lang-rust-clippy and that on a cold or contended target directory it is killed, surfacing as ProviderUnavailable and failing three check-orchestration tests that look unrelated to whatever the claimant changed. Different subprocesses, not the same defect, but both are the self-check's cost presenting as a code failure, and a sevenfold slowdown inside every real-gate predicate makes the contended case materially more likely to be the one people meet.",
+      "done_when": "The cost of a real gate run over this repository is either reduced or deliberately accepted, and which of those happened is recorded with the measurement that decided it rather than left to be inferred from the code. Accepting it is a legitimate outcome and must not be treated as a failure to fix: if the claimant measures the alternatives and finds the sharing unsafe or the complexity unjustified, that conclusion recorded with its numbers and with what would reopen it satisfies this item. What does not satisfy it is the cost remaining unexplained. Whatever is decided is weighed against the right population, which is the correction this item exists for: the cost falls on every predicate naming nomos-gate-orchestration and not only on a person invoking the command line, so an argument that the default invocation is rarely run does not reach it. If the claimant measures and finds the real-gate tests do not in fact pay it, that is a real result and is reported with what was run. Three things are refused outright, and naming them is most of the point. The demand gate's guarantee must survive: a run that selects no rule requiring a compiler family must still never load ra_ap_hir, and the test P123 landed for that must still pass and must still be able to fail. The two rules must not be silently removed from the default selection, de-registered, or made opt-in as a way of making the number smaller, because that answers a question about cost by deleting capability and the run would then be fast and blind. And no family may start sharing a crate graph or sysroot with another unless the claimant shows the shared value is still correct for each family separately, by a test that fails when one family is handed the other's, since a shared resolution silently wrong for one consumer is a worse defect than the slowness it cures. The numbers in the why are re-measured at HEAD on the claimant's own machine rather than cited, three runs, with the root normalised and the binary built fresh from the tree measured, and reported with the per-family attribution. The 2432 CPU-second figure is another session's measurement and is not re-used as evidence without being retaken. If the choice changes what a materialization costs any caller, or what a family may assume about what another has already resolved, that is a governing record rather than a comment, and this item does not reserve one: stop and board it. The predicate passes and cargo clippy --workspace --all-targets is clean.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-rust-compiler",
+          "crates/orchestration/nomos-check-orchestration/src/facts/dependency_materialization/compiler_materialization.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-rust-compiler",
+          "-p",
+          "nomos-check-orchestration",
+          "--lib"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P146-A-PREDICATE-EXHAUSTS-MEMORY-AT-DEFAULT-PARALLELISM-AND-OVERRUNS-THE-BUDGET-IT-DECLARES",
+      "title": "Twenty-six gate-orchestration tests each build a compiler database, so the suite thrashes at default parallelism and outruns its own declared timeout",
+      "why": "Measured 2026-09-22 by a worker whose own item was elsewhere, on a green run. At c3625fad, 26 of the 228 nomos-gate-orchestration library tests judge the repository root, and each one builds a full ra_ap_hir database. Cargo runs library tests in parallel by default, so those databases are live at once: the test process reached 18.5 GB on a 31.8 GB machine with 0.6 GB free, thrashed, and took 104 minutes to get through 202 of the 228. Under RUST_TEST_THREADS=1 the working set cycles cleanly at about 2 GB per judgment and the suite completes. The consequence is not slowness. The lib target alone took 5420 seconds against the 5400-second timeout its own item declared, so work finish can refuse a predicate that is entirely green, and the item cannot be finished at all rather than merely taking a while. Every item whose predicate names -p nomos-gate-orchestration is exposed, which at the time of writing includes the composition-root item reserving that whole crate. Two related costs are already on the board and this is neither of them: P134 is a clippy subprocess killed at a 600-second bound surfacing as ProviderUnavailable, and P141 is the self-check's median moving from 33.7 to 249.2 seconds because two capability families each load their own crate graph. This one is test-level parallelism multiplied by a per-test compiler database, and its failure mode is memory exhaustion rather than a timeout inside a tool. The three interact: a slower self-check inside each judgment makes the window in which those databases are simultaneously live longer, so the same machine thrashes for longer.",
+      "done_when": "A green run of this suite finishes within the budget an item can reasonably declare, on a machine of the size measured here, and what makes that true is stated rather than tuned into place. Accepting the cost is a legitimate outcome if it is recorded with the numbers and with what would reopen it; what does not satisfy this item is the cost remaining unexplained. Three answers are refused outright. Raising the declared timeout alone is refused, because a budget large enough for a thrashing run is a budget that hides the next regression and the memory ceiling is a property of the machine rather than of the clock. Deleting or skipping the root-judging tests is refused, because they are the tests that judge this workspace against itself and removing them answers a cost question by deleting the capability, leaving the suite fast and blind. And pinning parallelism globally, in a way that silently serializes every unrelated test in the workspace, is refused unless the claimant measures what that costs the rest of the suite and says so; a remedy whose cost lands on tests that were never the problem needs its own justification. Within those, the claimant is free to decide where the fix belongs, on measurement rather than preference: bounding parallelism for the tests that build a database, sharing one database across the judgments that could share it, or whatever the measurement supports. If a database is shared, it is proven still correct for each consumer separately by a test that fails when one is handed another's, because a shared resolution silently wrong for one caller is worse than the exhaustion it cures. The claimant re-measures peak working set and wall time before and after on this machine and reports both, rather than asserting an improvement; a run that got faster by examining less is the failure this repository has met before, so the count of tests executed is reported beside the duration. If the measurement shows the problem does not reproduce, that is a real result and is reported with what was run. No test changes what it asserts and no judgment moves. The predicate passes, and it passes from a cold start, which is the condition under which the exhaustion was observed.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-gate-orchestration/src/tests",
+          "crates/orchestration/nomos-gate-orchestration/src/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-gate-orchestration",
+          "--lib"
+        ],
+        "timeout_seconds": 10800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
       "id": "P147-THE-XVPE-LAUNCHER-BRIDGE-DROPS-ENVIRONMENT-EDITS-AND-RUNS-THE-COMMAND-ANYWAY",
       "title": "XvpeLauncher translates an XVPE ProcessCommand without its environment edits and runs the command anyway",
       "why": "nomos-platform-xvpe's XvpeLauncher::Run builds a nomos Command from argv, working_directory, timeout and idle_timeout, and drops ProcessCommand::environment_edits, which exists at the pinned XVPE revision (xvpe-subprocess-execution process_command.rs). Nomos's Command carries no environment, so the edits cannot be honoured, and the command runs as though none were asked for. Three XVPE agent backends set them: generic-cli, anthropic-cli and deepseek. DeepSeek's profile removes ANTHROPIC_API_KEY and sets ANTHROPIC_BASE_URL, ANTHROPIC_AUTH_TOKEN and ANTHROPIC_MODEL, so the same dispatch routed through this bridge would run the Claude CLI against Anthropic on the caller's own key: the wrong provider, billed, and reported as success. Latent today, because the two backends Nomos composes (claude-code, ollama) set none, and measured 2026-09-24 by reading all three. Found by the ecosystem-substrate survey in f:/repos/xvpe/docs/plans/programs/ecosystem-substrate.",
@@ -95803,6 +95884,61 @@
           "exit_code": 0
         },
         "revision": "63f68473767a6a069bd3cf0ac665ea3335dd1fbc"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P148-A-VISITOR-TO-THE-GITHUB-REPOSITORY-CANNOT-TELL-WHAT-NOMOS-IS-FOR",
+      "title": "A visitor to the GitHub repository cannot tell what Nomos is for, because the page GitHub shows is the workspace authority written for agents",
+      "why": "The owner asked for the repository to be presentable to recruiters and other visitors, who should come away knowing the goals of the project. The root README.md is the workspace authority AGENTS.md routes to for what exists and what owns what; tests/contract asserts its tables against the real workspace, and it opens with zone declarations and record identifiers a visitor cannot use. Rewriting it for visitors would either weaken that authority or copy it. GitHub shows .github/README.md in preference to the root README.md, so a visitor page can live there without touching the authority, and the root README.md stays exactly what agents and contributors read.",
+      "done_when": "A visitor landing page exists at .github/README.md. In plain language it says what Nomos is for and what problem it addresses; what works today; what is near-term and what is deliberately deferred, citing ARC-ROADMAP-001; how the repository is developed (concurrent AI agents coordinated by the work ledger, decisions as records, documentation checked by contract tests), stating plainly that most commits are co-authored with Claude; and where the ecosystem siblings are, citing ARC-ECOSYSTEM-001. Every figure it quotes carries the month it was measured. It routes to README.md, AGENTS.md, docs/records and the gate workflow for anything authoritative, and a leading comment says why the page exists and that it restates none of the README tables. Every relative link and every repository path it cites resolves, which is what the predicate checks. Forbidden: editing README.md, copying the zone or crate tables, stating an undated count, or claiming a capability the board shows as not yet built (the C# provider is built but not yet composed into the check run, and the page must say so). The predicate deliberately reaches nothing in tests/contract: no test reads .github/README.md, and README.md is not changed.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          ".github/README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/doc-ref-check/doc-ref-check.exe",
+          "-repo",
+          ".",
+          "-docs",
+          ".github"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "C:/Users/kmett/.claude/tools/doc-ref-check/doc-ref-check.exe",
+          "-repo",
+          ".",
+          "-docs",
+          ".github"
+        ],
+        "exit_code": 0,
+        "output_tail": "\n0 unresolved reference(s)\n",
+        "verified_at": 1790362975,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "6a6b18f9c44369199c61f89693009dc093aed778"
       },
       "abandoned": [],
       "displaced": [],
