@@ -12,7 +12,7 @@ profile: domain-specification
 | --- | --- | --- | --- | --- | --- |
 | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md@authored | docs/records/ARC-CONFORMANCE-001-a-nomos-conformance-claim-composes-system-level-evidence-and-native-analysis-is-owed-only-where-no-provider-exposes-the-fact.md | authored | 25 | 8 | sha256:a62eddf64a82e534bbdbd720c1057e1dcd3131c1264077c83d7029d15b52f8cf |
 | docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md@authored | docs/records/ARC-CONFORMANCE-002-what-relationship-nomos-rule-set-has-to-a-sibling-products-declared-standards-corpus.md | authored | 25 | 6 | sha256:ccc429c5e9f4e7b008d8b8a5bb1ccca4cb0704cfbfa2b25aa891ebab3c538ebc |
-| docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md@authored | docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md | authored | 47 | 7 | sha256:c5235f32be591ecb93b1f06405f358225a41a254ba91c4f396c1d42c6c768578 |
+| docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md@authored | docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md | authored | 49 | 7 | sha256:57a5b4e84c4db3860797c74a3f68ea71ea11589b9a8cd82d2bd7a3bcd2cc3ba8 |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md@authored | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md | authored | 40 | 12 | sha256:963e9cdbf1905450ef8455935dc914a29fc45b35f5d958d5d94a4b0e002c1a20 |
 | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md@authored | docs/records/ARC-ECOSYSTEM-001-four-products-share-one-seam-and-ownership-is-decided-by-semantics.md | authored | 80 | 16 | sha256:516e6bdb8000bb760e2fdfcfc587246e75d436f7bc10ac0d645921f0f3d2bae5 |
 | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md@authored | docs/records/ARC-ECOSYSTEM-002-the-existing-kwb-prototype-is-evidence-not-a-port-target.md | authored | 22 | 9 | sha256:617fdf9751303c87338720a7a50927cab3bfa84d19c92ec42cc43a7876566a9e |
@@ -307,8 +307,8 @@ profile: domain-specification
 | docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#6 | authored | 2 | What Was Measured |
 | docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#20 | authored | 2 | The Decision |
 | docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#31 | authored | 2 | Goals, Sub-Goals and Milestones |
-| docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#40 | authored | 2 | What This Does Not Do |
-| docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#46 | authored | 2 | Status |
+| docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#42 | authored | 2 | What This Does Not Do |
+| docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#48 | authored | 2 | Status |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#1 | authored | 1 | External systems are the ecosystem's third crossing, and four invariants bound it before the first connector decides them by default |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#2 | authored | 2 | Question |
 | docs/records/ARC-CONNECTOR-001-external-systems-are-the-ecosystems-third-crossing-and-four-invariants-bound-it-before-the-first-connector-decides-them.md#7 | authored | 2 | The Third Crossing, And Its Layers |
@@ -3707,24 +3707,54 @@ description.
 
 ### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#39
 
-*revision: authored · kind: prose · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / Goals, Sub-Goals and Milestones · hash: sha256:37701da578c2fb7cf30f826a5fd4e20be2addba6e6f91c1c012029468a8c27de*
+*revision: authored · kind: prose · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / Goals, Sub-Goals and Milestones · hash: sha256:9977aac03e5177d870c2674032ab5d7146305b8de2faca9724c5787540bbe4ea*
 
-**And the zone, not the band, is what a new crate registers.** `standards.json`'s `tiers` array
-is the retired numeric-band registry: `nomos-architecture.json` carries no band at all, and
-**nothing asserts the `tiers` array against the workspace** — it lists five of the sixteen
-capability crates, and `nomos-cap-review-finding` is absent from it entirely. So a worker who
-registers a new crate by adding its path to `tiers` has changed a census nobody reads, and the
-gate will stay green while the crate's zone is undeclared. The governing registration is
-`nomos-architecture.json`'s `members` map and the `README.md` row beside it, which is why those
-two are in the item's territory and `standards.json` is not.
+**And the zone is what this workspace enforces, while `tiers` is what another tool reads.**
+`standards.json`'s `tiers` array is **not** a retired census. `code-standards` decodes it —
+`kernel/config/limits/architecture_manifest.go` builds `limits.Dependency_Tiers()` from it and
+projects it into an `architecture.Manifest`, with a test whose own comment calls the layer order
+"the assertion that matters most in the file" — and the `standards.json` that tool reads is
+**this repository's**. So `tiers` has a real reader. It just has no reader *here*: nothing in
+this workspace asserts `tiers` against the workspace, and it has drifted badly — it declares
+**48 crate paths over 29 tiers** where `nomos-architecture.json`'s `members` map declares **76
+members**, and **26 crate directories on disk appear in no tier at all**, eleven of them
+capability crates, `nomos-cap-review-finding` among them.
 
 ### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#40
+
+*revision: authored · kind: prose · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / Goals, Sub-Goals and Milestones · hash: sha256:75cce6506366a92a10e1fd06fc31e78e82e359e3e90b2a166cac7582d8f0fe64*
+
+That is this plan's own subject occurring inside its first item. A worker registering a new
+crate updates the declaration their own gate checks (`nomos-architecture.json`'s `members` map,
+the `README.md` row beside it) and never sees `tiers`, because nothing here reads it — and the
+omission is invisible in this repository and wrong in another repository's projection of this
+one. A grep scoped to this workspace finds no reader of a field that has one, and only reading
+the file from the other side finds it.
+
+### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#41
+
+*revision: authored · kind: prose · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / Goals, Sub-Goals and Milestones · hash: sha256:b7cba054e527ed62a6a6fe329db51089b8af58290cf64e8a1b7fcead290f3e6a*
+
+M1's item therefore does **not** reserve `standards.json`, and that is a decision rather than an
+omission: a row nothing in this workspace asserts is not a clause a `done_when` can carry
+honestly. A claimant would add it, no test would check it, and the item would finish green
+having made nothing true — which is the defect class this whole plan exists to remove. The drift
+is stated here as a finding with its own consequence, and it belongs to `G3` — a declared
+architecture compared against the reality it claims to enumerate — rather than to the reader M1
+builds. `nomos-architecture.json`'s `members` map and the `README.md` row beside it are
+different, and both are enforced: `bands.rs` reads the declaration through the one provider that
+parses it and never a second way, `graph.rs` asserts every member declares a component and that
+dependencies run strictly downward, and `readme.rs` asserts the README lists every member. A
+crate absent from the declaration fails the first two; a row absent from the README fails the
+third. That is why those two are in the item's territory and `standards.json` is not.
+
+### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#42
 
 *revision: authored · kind: heading · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
 
 ## What This Does Not Do
 
-### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#41
+### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#43
 
 *revision: authored · kind: prose · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / What This Does Not Do · hash: sha256:9f27e574d95a9d75baaac522ee1316a6d6905c1739e91da7e2e2e444b64442c2*
 
@@ -3732,7 +3762,7 @@ two are in the item's territory and `standards.json` is not.
 each task is its own ledger item with its own territory, `done_when` and predicate, and no code
 moves here. A goal above is a property to reach, never a thing to claim.
 
-### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#42
+### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#44
 
 *revision: authored · kind: prose · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / What This Does Not Do · hash: sha256:08040cc772272b279e4352ec9adc95f4d4727419e82d9140ed16b325b5d467e5*
 
@@ -3742,7 +3772,7 @@ are judged against the **declaration** — `Is_Permitted`, `Is_Excepted`, `Compo
 `Doors_Into` — not against an observed graph. A milestone that found it needed an observed fact
 would owe a new record first, not a widened territory.
 
-### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#43
+### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#45
 
 *revision: authored · kind: prose · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / What This Does Not Do · hash: sha256:6095482fad452edd5c2a732e4003f5844b0113195ac929954d9edadf8b6e5492*
 
@@ -3751,7 +3781,7 @@ not today, and on two named grounds. It also does not decide which linter speaks
 that is a port's own argument, made in the crate doc, as `P128-GO-HAS-A-PARSER-AND-A-MANIFEST-
 READER-AND-NO-TOOL-SPEAKS-FOR-IT` already requires.
 
-### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#44
+### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#46
 
 *revision: authored · kind: prose · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / What This Does Not Do · hash: sha256:93fd195ac03e4a192c2ba70e83cdfc892321662a1f927647f6d3b4c1ecbf20c1*
 
@@ -3761,7 +3791,7 @@ must be *representable* and routed (`Applicability::AgentRequired`) rather than 
 empty-population report are its prerequisites and neither is this record's to build. (The
 unsuffixed `P99` identifier is the declined first attempt, not a live item.)
 
-### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#45
+### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#47
 
 *revision: authored · kind: prose · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / What This Does Not Do · hash: sha256:eaf039d7377cdb953e763cfe9a0937c7b6ecfb97cb57f30c5eac5be3a415ff02*
 
@@ -3769,13 +3799,13 @@ unsuffixed `P99` identifier is the declined first attempt, not a live item.)
 what happens when two are declared, is the per-repository policy's own business and stays
 declared rather than compiled.
 
-### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#46
+### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#48
 
 *revision: authored · kind: heading · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#47
+### docs/records/ARC-CONFORMANCE-003-nomos-is-the-ecosystems-shared-rule-layer-and-a-corpus-is-absorbed-by-reading-its-declarations-rather-than-by-copying-its-rules.md#49
 
 *revision: authored · kind: prose · heading: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules / Status · hash: sha256:b2fb6b6a0a5ce77732f76a7a4585dba58d119093e1be475a377bea62f57398c3*
 

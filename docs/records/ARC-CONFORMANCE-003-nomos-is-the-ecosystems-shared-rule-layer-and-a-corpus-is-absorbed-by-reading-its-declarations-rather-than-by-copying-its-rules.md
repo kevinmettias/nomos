@@ -336,14 +336,36 @@ here because it is a measurement and not a forecast — it was grepped from the 
 the last new capability contract actually touched (`e12a4c32`), not derived from the milestone's
 description.
 
-**And the zone, not the band, is what a new crate registers.** `standards.json`'s `tiers` array
-is the retired numeric-band registry: `nomos-architecture.json` carries no band at all, and
-**nothing asserts the `tiers` array against the workspace** — it lists five of the sixteen
-capability crates, and `nomos-cap-review-finding` is absent from it entirely. So a worker who
-registers a new crate by adding its path to `tiers` has changed a census nobody reads, and the
-gate will stay green while the crate's zone is undeclared. The governing registration is
-`nomos-architecture.json`'s `members` map and the `README.md` row beside it, which is why those
-two are in the item's territory and `standards.json` is not.
+**And the zone is what this workspace enforces, while `tiers` is what another tool reads.**
+`standards.json`'s `tiers` array is **not** a retired census. `code-standards` decodes it —
+`kernel/config/limits/architecture_manifest.go` builds `limits.Dependency_Tiers()` from it and
+projects it into an `architecture.Manifest`, with a test whose own comment calls the layer order
+"the assertion that matters most in the file" — and the `standards.json` that tool reads is
+**this repository's**. So `tiers` has a real reader. It just has no reader *here*: nothing in
+this workspace asserts `tiers` against the workspace, and it has drifted badly — it declares
+**48 crate paths over 29 tiers** where `nomos-architecture.json`'s `members` map declares **76
+members**, and **26 crate directories on disk appear in no tier at all**, eleven of them
+capability crates, `nomos-cap-review-finding` among them.
+
+That is this plan's own subject occurring inside its first item. A worker registering a new
+crate updates the declaration their own gate checks (`nomos-architecture.json`'s `members` map,
+the `README.md` row beside it) and never sees `tiers`, because nothing here reads it — and the
+omission is invisible in this repository and wrong in another repository's projection of this
+one. A grep scoped to this workspace finds no reader of a field that has one, and only reading
+the file from the other side finds it.
+
+M1's item therefore does **not** reserve `standards.json`, and that is a decision rather than an
+omission: a row nothing in this workspace asserts is not a clause a `done_when` can carry
+honestly. A claimant would add it, no test would check it, and the item would finish green
+having made nothing true — which is the defect class this whole plan exists to remove. The drift
+is stated here as a finding with its own consequence, and it belongs to `G3` — a declared
+architecture compared against the reality it claims to enumerate — rather than to the reader M1
+builds. `nomos-architecture.json`'s `members` map and the `README.md` row beside it are
+different, and both are enforced: `bands.rs` reads the declaration through the one provider that
+parses it and never a second way, `graph.rs` asserts every member declares a component and that
+dependencies run strictly downward, and `readme.rs` asserts the README lists every member. A
+crate absent from the declaration fails the first two; a row absent from the README fails the
+third. That is why those two are in the item's territory and `standards.json` is not.
 
 ## What This Does Not Do
 
