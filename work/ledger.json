@@ -100765,6 +100765,83 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P185-THE-GUARD-JUDGES-ONE-POLICY-SO-A-USER-WITH-POLICIES-ABOUT-TWO-PARTIES-IS-GUARDED-AGAINST-ONLY-ONE",
+      "title": "The guard judges one policy, so a user with policies about two parties is guarded against only one",
+      "why": "OD-POLICY-002 decision 1 names a policy with --policy and decision 6's hooks pass exactly one, while git reads a single core.hooksPath. A user who keeps policies about two unrelated parties cannot be guarded against both. Repeating --policy is accepted and silently judges only the last file named, and merging the two into one file would let one party's own repositories stand the other party's rules aside, because a policy has one party and one set of own repositories.",
+      "done_when": "Every guard verb takes --policy more than once. Each named policy is read and judged on its own, with its own identities, rules, exceptions and own repositories, so a policy that stands aside for its party's own repository silences no other policy. Any named policy that is missing or unreadable is exit 5 before anything is judged. A transition refuses (exit 1) when any policy refuses, printing each policy's refusals under its own party. scan exits 1 when any policy refuses, else 6 when any policy judged nothing, else 0. install writes every --policy, in the order given, into each judged hook's one nomos guard line. NOMOS_PARTY_POLICY still names one policy and is read only when no --policy is given. OD-POLICY-002 is amended to version 2 to say so in decisions 1, 4 and 6, and both projections are re-rendered from a tree whose registered records are exactly this commit's. Tests use invented parties only and prove: a repeated --policy is kept in order rather than overwritten; a second policy's refusal refuses when the first is clean and when the first stands aside for its own repository; one unreadable policy among several refuses with 5; install's scripts carry every policy; and, through real git, hooks installed with two policies refuse each party's material. Forbidden: naming any real party anywhere in this workspace; merging policies into one; a list syntax inside one --policy value; changing what a single policy does.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/guard.rs",
+          "crates/host/nomos-cli/src/guard",
+          "crates/host/nomos-cli/tests/guard_hooks.rs",
+          "crates/orchestration/nomos-transition-guard",
+          "tests/contract/surface/nomos-transition-guard.txt",
+          "README.md",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-transition-guard",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-transition-guard",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "exe)\n     Running tests\\completeness_universes\\main.rs (target\\debug\\deps\\completeness_universes-9c1dc1163ae101e8.exe)\n     Running tests\\corpus_gates.rs (target\\debug\\deps\\corpus_gates-0f1264c8cf8d0159.exe)\n     Running tests\\crossing_cold.rs (target\\debug\\deps\\crossing_cold-5a51cb20466a5760.exe)\n     Running tests\\determinism_declarations.rs (target\\debug\\deps\\determinism_declarations-cbc9a6646e13e3f8.exe)\n     Running tests\\determinism_vocabulary.rs (target\\debug\\deps\\determinism_vocabulary-4086d21f37b1662d.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-683ef583006bce86.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-8ccb2ef491987e2b.exe)\n     Running tests\\requirement_trace\\main.rs (target\\debug\\deps\\requirement_trace-7c25c20c30060758.exe)\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-618043e8fcb6beea.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-0b9fa296ca97cceb.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-4ba8c0eec442fbd9.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-b7bff9149e6b1af3.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-99b5d083e16a92d6.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-3020e436fb3bc056.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-778bf79b0084b626.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-d46f8d0939eabbf3.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-371c6f729d35afee.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_transition_guard-051b8293439f3fca.exe)\n     Running tests\\through_git.rs (target\\debug\\deps\\through_git-54ffab516ce0dcac.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n   Doc-tests nomos_transition_guard\n",
+        "verified_at": 1790884037,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "f2fe3dd547d222a1ba79f409f0041e30d7ade447"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

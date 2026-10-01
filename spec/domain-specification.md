@@ -211,7 +211,7 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 35 | 11 | sha256:b3ab7e036dc1ddb881cefaa3f9187a2d3c886e0e0102d94a48b4dba487ae17f7 |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md | authored | 40 | 8 | sha256:54dd8e341f63882f74fca31d11cc939e8bfec1033fe8ba3e6fcbf6a156689166 |
 | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md@authored | docs/records/OD-POLICY-001-policy-resolves-across-ten-layers-each-field-by-its-shape-and-the-effective-policy-names-what-decided-it.md | authored | 85 | 18 | sha256:8c26f01f755e8470ba2fee07feabf9a4882f65e3955c3f375b6b753267577c7e |
-| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md@authored | docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md | authored | 45 | 15 | sha256:0cf6be6fa5500ea2da90cb38426ef2386c5a87d7110dd449ac7bbd7bde229aa5 |
+| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md@authored | docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md | authored | 51 | 16 | sha256:4edfd0842f06e251a35c265bd1d987fffb66e842d27b1703fcd79174fd75709c |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md@authored | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md | authored | 28 | 7 | sha256:f98efe7a4dd950df779912722f9deb19ecdc75a81e52d9635900c2f424a8623a |
 | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md@authored | docs/records/OD-PROJECT-002-a-required-projection-is-a-re-render-obligation-so-the-required-set-is-declared-and-not-inferred.md | authored | 45 | 10 | sha256:9af1a60d2bc3755845a1d9c3eeae503b2a8f6ec315cfc906d633c7dc2d5f0483 |
 | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md@authored | docs/records/OD-PROJECT-003-any-committed-projection-carries-the-re-render-tax-not-only-a-required-one.md | authored | 20 | 7 | sha256:2b44f619674ec26184ee77a2ec05bab8c654b3ab6410d990ecdcbaa93cb4f0fd |
@@ -2142,13 +2142,14 @@ profile: domain-specification
 | docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#16 | authored | 3 | 2. What a policy says, in a vocabulary with no pattern language |
 | docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#23 | authored | 3 | 3. The guard judges transitions, not trees |
 | docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#28 | authored | 3 | 4. An absent policy refuses; it is never read as clean |
-| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#30 | authored | 3 | 5. Nothing the policy says is written anywhere a repository can carry it |
-| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#32 | authored | 3 | 6. Installation is a file set the user points git at |
-| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#34 | authored | 3 | 7. Where it lives |
-| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#37 | authored | 3 | 8. The capability item that builds it, and its territory |
-| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#40 | authored | 2 | What This Does Not Do |
-| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#42 | authored | 2 | What Would Decide It Differently |
-| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#44 | authored | 2 | Status |
+| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#31 | authored | 3 | 5. Nothing the policy says is written anywhere a repository can carry it |
+| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#33 | authored | 3 | 6. Installation is a file set the user points git at |
+| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#35 | authored | 3 | 7. Where it lives |
+| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#38 | authored | 3 | 8. The capability item that builds it, and its territory |
+| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#41 | authored | 2 | What This Does Not Do |
+| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#43 | authored | 2 | What Would Decide It Differently |
+| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#45 | authored | 2 | Amendment, Version 2 |
+| docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#50 | authored | 2 | Status |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1 | authored | 1 | The repository's README is not the suite's overview, and stays hand-authored |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#2 | authored | 2 | Question |
 | docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#6 | authored | 2 | Two Documents, One Name |
@@ -66853,11 +66854,15 @@ compiling the party into the tool, which is the part this record forbids.
 
 ### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#14
 
-*revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 1. The party's knowledge lives in a policy file the user keeps outside every repository · hash: sha256:76b43ed0128d4d717dd06a6349681a02214e86835fe84000c711677d25e73ddd*
+*revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 1. The party's knowledge lives in a policy file the user keeps outside every repository · hash: sha256:887d812d04160c39c9ae0fddcd427a2bb0e277006555d2615850d39601dfb50a*
 
 The policy is a JSON file on the user's machine. It is the first source `OD-POLICY-001`'s
-`User` layer has. A command names it with `--policy <file>`. With no flag, the command reads
-the one variable the `Environment` port offers, `NOMOS_PARTY_POLICY`.
+`User` layer has. A command names it with `--policy <file>`. A user who keeps policies about
+more than one party gives `--policy` once for each: every policy is its own file, read and
+judged on its own, with its own identities, rules, exceptions and own repositories, so one
+policy standing aside for its party's repository silences no other. With no flag, the command
+reads the one variable the `Environment` port offers, `NOMOS_PARTY_POLICY`, which names one
+policy.
 
 ### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#15
 
@@ -66984,11 +66989,20 @@ nothing and exits `6`, which `OD-ANALYSIS-012` keeps apart from a clean `0`. A f
 
 ### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#30
 
+*revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 4. An absent policy refuses; it is never read as clean · hash: sha256:fd85206652d7688ee0c2cd8ce885cd4bb24749503968e2dbdf9c876c9d2facec*
+
+With several policies named, every one is read before any is judged, so one that is missing or
+unreadable refuses the transition with `5` wherever it is named. A refusal from any policy
+refuses. The answer is the most serious one any policy gives: `5`, then `1`, then `6` (only
+`scan` gives it), then `0`.
+
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#31
+
 *revision: authored · kind: heading · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 5. Nothing the policy says is written anywhere a repository can carry it · hash: sha256:d0ec76a14a017bec0a0896d68270a7f6132ada5f00348208df6890268ade84f7*
 
 ### 5. Nothing the policy says is written anywhere a repository can carry it
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#31
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#32
 
 *revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 5. Nothing the policy says is written anywhere a repository can carry it · hash: sha256:38d392a2468cd98da70ec064e947df906bfc70a5e08a994a835f38e62d2649d3*
 
@@ -66997,31 +67011,32 @@ baseline, ledger entry or cache. Identity findings cannot be excepted: the fix f
 under the party's identity is to commit under another, not to wave it through. Exceptions live
 only in the policy, so no repository file can excuse anything.
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#32
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#33
 
 *revision: authored · kind: heading · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 6. Installation is a file set the user points git at · hash: sha256:6aecfeba6c4e0a20095aff21226c5f0c617607ce8193dc6587cd1e30fffc2324*
 
 ### 6. Installation is a file set the user points git at
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#33
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#34
 
-*revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 6. Installation is a file set the user points git at · hash: sha256:85ab1e3b1bf5f175412fd65ae6d96c223137ab0abf259796042d37f6a135f6e6*
+*revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 6. Installation is a file set the user points git at · hash: sha256:46259ec11596994b0b5047ad19118168385225252cb51d9ea58fc51e8410d427*
 
-`nomos guard install --into <directory> --policy <file>` writes one hook script per git hook
-name. The three judged hooks call `nomos guard <hook> --policy <file>` and then hand over to the
-repository's own hook of the same name. Every other hook only hands over, because
+`nomos guard install --into <directory> --policy <file> [--policy <file> ...]` writes one hook
+script per git hook name. The three judged hooks call `nomos guard <hook>` once, naming every
+policy in the order given, and then hand over to the repository's own hook of the same name.
+One call per hook keeps one answer for git, and `pre-push`'s standard input is read once. Every other hook only hands over, because
 `core.hooksPath` replaces `.git/hooks` entirely, and without that hand-over a repository's own
 hooks (Git LFS among them) would stop running. Setting `core.hooksPath` is left to the user,
 and the command prints the line to run. Nothing in this workspace edits a user's git
 configuration.
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#34
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#35
 
 *revision: authored · kind: heading · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 7. Where it lives · hash: sha256:b0a786c742be17c768c2001ebc9b68410976f3b0c25c255e9611a4665dac6a13*
 
 ### 7. Where it lives
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#35
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#36
 
 *revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 7. Where it lives · hash: sha256:6b4fd7e4316e262d95cb2d6f3758bced01b2a1393d27d66d13179970fb72e479*
 
@@ -67030,7 +67045,7 @@ in the `Application Service` zone. The zone sits above `Substrate`, whose `Progr
 guard is handed. The command group is in `nomos-cli`, which composes the standard launcher and
 environment.
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#36
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#37
 
 *revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 7. Where it lives · hash: sha256:fd4d59a77b321cdf62f5753e9325dd25313e53a140a96db521dff353e0826eaf*
 
@@ -67040,20 +67055,20 @@ and this is the first caller. The guard is also the transition mechanism `OD-PAC
 named. That record's own `Local` path refusal is not built here, but it would run from the
 same hooks.
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#37
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#38
 
 *revision: authored · kind: heading · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 8. The capability item that builds it, and its territory · hash: sha256:f0c569168e885320dc7ac21d66f7fe0202c04e888fcc042d40cb7fce36e03a34*
 
 ### 8. The capability item that builds it, and its territory
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#38
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#39
 
 *revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 8. The capability item that builds it, and its territory · hash: sha256:6c874956da552372f71a1221573c2370283e0a1af9ab8fcb04e77e4980e1a19c*
 
 `P183-A-REPOSITORY-IS-GUARDED-AGAINST-A-NAMED-PARTYS-MATERIAL-BY-A-POLICY-IT-NEVER-HOLDS` builds
 decisions 1 to 7. Its territory is:
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#39
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#40
 
 *revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / The Decision / 8. The capability item that builds it, and its territory · hash: sha256:33c69bf998553e201096fd89f663b6f82b8892bb41b1d9a31d910c6f2bc65634*
 
@@ -67065,13 +67080,13 @@ decisions 1 to 7. Its territory is:
 - `README.md`;
 - the crate's surface snapshot under `tests/contract/surface/`.
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#40
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#41
 
 *revision: authored · kind: heading · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / What This Does Not Do · hash: sha256:f902c2c10fd4fe873ca93e4a80e573837a867f4bce1b88b91213f7e94aafadbf*
 
 ## What This Does Not Do
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#41
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#42
 
 *revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / What This Does Not Do · hash: sha256:d95f3b219d384534e47bd36370e758ebb1b7a99b967d875e08184c2ec506d6d0*
 
@@ -67088,13 +67103,13 @@ decisions 1 to 7. Its territory is:
 - **No repository opt-out.** A repository cannot opt itself out. The party's own repositories
   are excluded by the policy, not by anything a repository declares.
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#42
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#43
 
 *revision: authored · kind: heading · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / What Would Decide It Differently · hash: sha256:00696d6f37a0669b4b30ebb81060f073ffad126de84bab886775a0db80810429*
 
 ## What Would Decide It Differently
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#43
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#44
 
 *revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / What Would Decide It Differently · hash: sha256:b6f7a8f8f86ffe9923b0febe7380fc09e78e8f003207d02055aa5f0de7cd5431*
 
@@ -67107,17 +67122,60 @@ decisions 1 to 7. Its territory is:
   real policy. That would reopen decision 2. The vocabulary here covers every rule the
   standalone guard carried.
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#44
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#45
+
+*revision: authored · kind: heading · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / Amendment, Version 2 · hash: sha256:5cb944a4a1301e8ad3517f1765a04a3f16c2d31cb5ec1b14acf903dbfedfe51e*
+
+## Amendment, Version 2
+
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#46
+
+*revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / Amendment, Version 2 · hash: sha256:87fadd62e84cb8635be392ac136c8496e711efd3367a3da9a6b549405ae95726*
+
+A user may keep policies about more than one party, and version 1 held them to one.
+
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#47
+
+*revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / Amendment, Version 2 · hash: sha256:f9004bb55474e284e16d32ae71c76557a4fde18fd8f3e7590225e71aab6cf769*
+
+**What was wrong.** Decision 1 named *a* policy, and decision 6's hooks passed exactly one,
+while git reads a single `core.hooksPath`, so a second party's policy could not be installed
+beside the first. Repeating `--policy` was accepted and kept only the last file named: a user
+who tried it was guarded against one party while believing they were guarded against two.
+Merging the two into one file is not an answer. A policy has one party and one set of own
+repositories, so the first party's own repositories would stand the second party's rules aside.
+
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#48
+
+*revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / Amendment, Version 2 · hash: sha256:9bf1eac44aac74d44519fcdd28c2e7409704288dd75c831f7d7bc27d39fe77ad*
+
+**What replaces it.** `--policy` is given once per party, and decisions 1, 4 and 6 above say
+how several are read, judged, answered and installed. Each policy reads its transition from git
+itself, so a second policy costs a second read of the same diff or log. Only a user who declared
+a second party pays it. `NOMOS_PARTY_POLICY` still names one policy: the hooks pass every policy
+by flag, and a list syntax inside one value would be a second way to say what repeating the flag
+already says. `P185-THE-GUARD-JUDGES-ONE-POLICY-SO-A-USER-WITH-POLICIES-ABOUT-TWO-PARTIES-IS-GUARDED-AGAINST-ONLY-ONE`
+builds it.
+
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#49
+
+*revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / Amendment, Version 2 · hash: sha256:6ddcabf1b23ed9e7b218b1b5b2e2c2f8cc3943d5276b9aa6b4a1fc0409f114ae*
+
+**What did not move.** What a policy says, how it matches, which moments are judged, what is
+written where, and where it lives (decisions 2, 3, 5 and 7) stand as written. A command naming
+one policy behaves exactly as it did at version 1.
+
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#50
 
 *revision: authored · kind: heading · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#45
+### docs/records/OD-POLICY-002-a-repository-is-held-to-carry-nothing-a-named-party-could-claim-by-a-policy-that-never-enters-any-repository.md#51
 
-*revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / Status · hash: sha256:37ee7fe93779dc7fe482c6fb0283de268a002f1da50703431684a495588aed1b*
+*revision: authored · kind: prose · heading: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository / Status · hash: sha256:7604eed0c4f9c129d5ad34745a4b3109ba0b2ee535eec05402ada95e9ad435c1*
 
-Accepted. Version 1.
+Accepted, amended at version 2.
 
 ### docs/records/OD-PROJECT-001-the-repository-readme-is-not-the-suites-overview.md#1
 

@@ -147,15 +147,27 @@ fn Test_A_Message_Should_Skip_Git_Comments_And_Everything_Below_The_Scissors()
 #[test]
 fn Test_Every_Hook_Script_Should_Hand_Over_And_Only_The_Judged_Ones_Should_Judge()
 {
-    let scripts = Hook_Scripts("C:/bin/nomos.exe", "C:/Users/o'neil/party.json");
+    let scripts = Hook_Scripts("C:/bin/nomos.exe", &["C:/Users/o'neil/party.json".to_owned()]);
     let named = |name: &str| return scripts.iter().find(|script| return script.name == name).map(|script| return script.text.clone()).unwrap_or_default();
     for script in &scripts
     {
         assert!(script.text.contains(&format!("/hooks/{}\"", script.name)), "{} hands over to the repository's own hook", script.name);
     }
-    assert!(named("pre-merge-commit").contains("guard pre-commit --policy 'C:/Users/o'\\''neil/party.json'"), "a quote in a path is escaped");
+    assert!(named("pre-merge-commit").contains("guard pre-commit --policy 'C:/Users/o'\\''neil/party.json' \"$@\""), "a quote in a path is escaped");
     assert!(named("pre-push").contains("input=$(cat"), "pre-push keeps its standard input for both readers");
     assert!(!named("post-checkout").contains("--policy"), "a handed-over hook judges nothing");
+}
+
+#[test]
+fn Test_Every_Judged_Hook_Should_Name_Every_Policy_In_The_Order_Given()
+{
+    let scripts = Hook_Scripts("C:/bin/nomos.exe", &["C:/p/first.json".to_owned(), "C:/p/second.json".to_owned()]);
+    for name in ["pre-commit", "pre-merge-commit", "commit-msg", "pre-push"]
+    {
+        let text = scripts.iter().find(|script| return script.name == name).map(|script| return script.text.clone()).unwrap_or_default();
+        assert!(text.contains("--policy 'C:/p/first.json' --policy 'C:/p/second.json' \"$@\""), "{name} names both policies in order:\n{text}");
+        assert_eq!(text.matches("nomos.exe' guard ").count(), 1, "{name} runs one judging line, so git sees one answer");
+    }
 }
 
 /// A launcher that answers the two questions standing aside asks, and nothing else.

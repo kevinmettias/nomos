@@ -34,7 +34,7 @@ pub fn nomos_transition_guard::GitReader::Staged_Diff(&self) -> Result<String, G
 pub fn nomos_transition_guard::GitReader::Top_Level(&self) -> Result<String, GuardError>
 pub fn nomos_transition_guard::GitReader::Tracked_Files(&self) -> Result<Vec<String>, GuardError>
 pub fn nomos_transition_guard::GuardError::fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result
-pub fn nomos_transition_guard::Hook_Scripts(nomos: &str, policy: &str) -> Vec<HookScript>
+pub fn nomos_transition_guard::Hook_Scripts(nomos: &str, policies: &[String]) -> Vec<HookScript>
 pub fn nomos_transition_guard::Judge::Identity(&self, place: &Place, email: &str) -> Option<Refusal>
 pub fn nomos_transition_guard::Judge::Is_Own_Repository(&self, remote_urls: &[String], root: &str) -> bool
 pub fn nomos_transition_guard::Judge::New(policy: &'policy PartyPolicy) -> Self

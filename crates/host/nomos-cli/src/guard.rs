@@ -9,8 +9,9 @@
 //!
 //! `pre-commit`, `commit-msg <file>` and `pre-push <remote> [url]` are what git runs as hooks,
 //! with git's own arguments; `scan` audits a repository that is not guarded yet; `install`
-//! writes the hook scripts. Every verb but `install` reads the policy named by `--policy`, or
-//! by `NOMOS_PARTY_POLICY` when no flag is given.
+//! writes the hook scripts. Every verb but `install` reads the policies named by `--policy`,
+//! given once per party, or the one named by `NOMOS_PARTY_POLICY` when no flag is given. Each
+//! policy is judged on its own, and a refusal from any of them refuses.
 //!
 //! # What this group never does
 //!

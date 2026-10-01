@@ -3,7 +3,7 @@ id: OD-POLICY-002
 type: decision
 title: A repository is held to carry nothing a named party could claim, by a policy that never enters any repository
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - policy
@@ -77,8 +77,12 @@ compiling the party into the tool, which is the part this record forbids.
 ### 1. The party's knowledge lives in a policy file the user keeps outside every repository
 
 The policy is a JSON file on the user's machine. It is the first source `OD-POLICY-001`'s
-`User` layer has. A command names it with `--policy <file>`. With no flag, the command reads
-the one variable the `Environment` port offers, `NOMOS_PARTY_POLICY`.
+`User` layer has. A command names it with `--policy <file>`. A user who keeps policies about
+more than one party gives `--policy` once for each: every policy is its own file, read and
+judged on its own, with its own identities, rules, exceptions and own repositories, so one
+policy standing aside for its party's repository silences no other. With no flag, the command
+reads the one variable the `Environment` port offers, `NOMOS_PARTY_POLICY`, which names one
+policy.
 
 Nothing in this workspace names a party, ships a party's vocabulary, or reads a policy from a
 repository. Tests and documentation use invented parties at `example.invalid`. A policy file
@@ -143,6 +147,11 @@ its policy disappears is the worst way for it to fail. `scan` with no policy at 
 nothing and exits `6`, which `OD-ANALYSIS-012` keeps apart from a clean `0`. A finding exits
 `1`, and usage errors exit `2`. These are the codes `check` already gives the same meanings.
 
+With several policies named, every one is read before any is judged, so one that is missing or
+unreadable refuses the transition with `5` wherever it is named. A refusal from any policy
+refuses. The answer is the most serious one any policy gives: `5`, then `1`, then `6` (only
+`scan` gives it), then `0`.
+
 ### 5. Nothing the policy says is written anywhere a repository can carry it
 
 A refusal is printed to standard error and nowhere else. The guard writes no report, SARIF,
@@ -152,9 +161,10 @@ only in the policy, so no repository file can excuse anything.
 
 ### 6. Installation is a file set the user points git at
 
-`nomos guard install --into <directory> --policy <file>` writes one hook script per git hook
-name. The three judged hooks call `nomos guard <hook> --policy <file>` and then hand over to the
-repository's own hook of the same name. Every other hook only hands over, because
+`nomos guard install --into <directory> --policy <file> [--policy <file> ...]` writes one hook
+script per git hook name. The three judged hooks call `nomos guard <hook>` once, naming every
+policy in the order given, and then hand over to the repository's own hook of the same name.
+One call per hook keeps one answer for git, and `pre-push`'s standard input is read once. Every other hook only hands over, because
 `core.hooksPath` replaces `.git/hooks` entirely, and without that hand-over a repository's own
 hooks (Git LFS among them) would stop running. Setting `core.hooksPath` is left to the user,
 and the command prints the line to run. Nothing in this workspace edits a user's git
@@ -212,6 +222,29 @@ decisions 1 to 7. Its territory is:
   real policy. That would reopen decision 2. The vocabulary here covers every rule the
   standalone guard carried.
 
+## Amendment, Version 2
+
+A user may keep policies about more than one party, and version 1 held them to one.
+
+**What was wrong.** Decision 1 named *a* policy, and decision 6's hooks passed exactly one,
+while git reads a single `core.hooksPath`, so a second party's policy could not be installed
+beside the first. Repeating `--policy` was accepted and kept only the last file named: a user
+who tried it was guarded against one party while believing they were guarded against two.
+Merging the two into one file is not an answer. A policy has one party and one set of own
+repositories, so the first party's own repositories would stand the second party's rules aside.
+
+**What replaces it.** `--policy` is given once per party, and decisions 1, 4 and 6 above say
+how several are read, judged, answered and installed. Each policy reads its transition from git
+itself, so a second policy costs a second read of the same diff or log. Only a user who declared
+a second party pays it. `NOMOS_PARTY_POLICY` still names one policy: the hooks pass every policy
+by flag, and a list syntax inside one value would be a second way to say what repeating the flag
+already says. `P185-THE-GUARD-JUDGES-ONE-POLICY-SO-A-USER-WITH-POLICIES-ABOUT-TWO-PARTIES-IS-GUARDED-AGAINST-ONLY-ONE`
+builds it.
+
+**What did not move.** What a policy says, how it matches, which moments are judged, what is
+written where, and where it lives (decisions 2, 3, 5 and 7) stand as written. A command naming
+one policy behaves exactly as it did at version 1.
+
 ## Status
 
-Accepted. Version 1.
+Accepted, amended at version 2.

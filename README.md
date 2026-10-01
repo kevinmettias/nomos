@@ -325,11 +325,12 @@ has to take the freshness proof `ARC-SPECDB-002` charges a born-structured objec
 `nomos guard` holds a repository to carry nothing a named party could claim -- the party's
 e-mail on a commit, or a phrase or ticket key its policy lists, in an added line, path or
 message. The policy is a JSON file the user keeps **outside every repository** and names with
-`--policy` or `NOMOS_PARTY_POLICY`; nothing in this workspace names a real party. `nomos guard
-install --into <dir> --policy <file>` writes the hook scripts and prints the one `git config`
-line that points git at them; `nomos guard scan` audits a repository first. What the policy can
-say, when each hook judges, and why an absent policy refuses rather than passes are
-`OD-POLICY-002`'s, and `nomos guard` with no verb prints the usage.
+`--policy` or `NOMOS_PARTY_POLICY`; nothing in this workspace names a real party. A user with
+policies about more than one party repeats `--policy`, and each is judged on its own.
+`nomos guard install --into <dir> --policy <file>...` writes the hook scripts and prints the
+one `git config` line that points git at them; `nomos guard scan` audits a repository first.
+What the policy can say, when each hook judges, and why an absent policy refuses rather than
+passes are `OD-POLICY-002`'s, and `nomos guard` with no verb prints the usage.
 
 ## Conventions
 

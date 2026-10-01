@@ -40,14 +40,16 @@ const HANDED_OVER: [&str; 13] = [
 
 const HEADER: &str = "#!/bin/sh\n# Written by `nomos guard install` (OD-POLICY-002). Re-run install rather than editing.\n";
 
-/// Every script, for a `nomos` binary at `nomos` judging against the policy at `policy`.
+/// Every script, for a `nomos` binary at `nomos` judging against every policy in `policies`, in
+/// the order given. A judged hook runs one `nomos guard` line naming them all, so git sees one
+/// answer and its standard input is read once.
 #[must_use]
-pub fn Hook_Scripts(nomos: &str, policy: &str) -> Vec<HookScript>
+pub fn Hook_Scripts(nomos: &str, policies: &[String]) -> Vec<HookScript>
 {
     let nomos = Single_Quoted(nomos);
-    let policy = Single_Quoted(policy);
+    let policies: String = policies.iter().map(|policy| return format!(" --policy {}", Single_Quoted(policy))).collect();
     let judged = JUDGED.iter().map(|(name, verb, reads_input)| {
-        let judge_line = format!("{nomos} guard {verb} --policy {policy} \"$@\"");
+        let judge_line = format!("{nomos} guard {verb}{policies} \"$@\"");
         let text = if *reads_input
         {
             format!(

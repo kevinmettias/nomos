@@ -5,7 +5,8 @@ use std::path::{Path, PathBuf};
 
 use nomos_composer_std::{FILE_SYSTEM, FileSystem, LAUNCHER};
 use nomos_transition_guard::{
-    GitReader, Hook_Scripts, Judge, Judge_Commit_Being_Made, Judge_Message, Judge_Push, Party_Policy_From_Json, PartyPolicy, Refusal, Scan, Verdict,
+    GitReader, GuardError, Hook_Scripts, Judge, Judge_Commit_Being_Made, Judge_Message, Judge_Push, Party_Policy_From_Json, PartyPolicy, Refusal, Scan,
+    Verdict,
 };
 
 use super::{ExitCode, GuardCommand, Verb};
@@ -29,59 +30,92 @@ pub struct GuardContext
     pub push_input: String,
 }
 
+/// The answers several policies can give, most serious first: a guard that could not judge
+/// outranks a refusal, a refusal outranks a scan that judged nothing, and that outranks clean.
+const MOST_SERIOUS_FIRST: [ExitCode; 4] = [ExitCode::Unusable, ExitCode::Refused, ExitCode::NothingJudged, ExitCode::Clean];
+
 /// Runs one `nomos guard` command.
+///
+/// Every named policy is read before anything is judged, so one that cannot be used refuses
+/// the transition on its own (`OD-POLICY-002` decision 4). Each is then judged on its own --
+/// its own identities, rules, exceptions and own repositories -- so a policy that stands aside
+/// for its party's repository silences no other, and the answer is the most serious one given.
 pub fn Run(command: &GuardCommand, context: &GuardContext, stdout: &mut dyn Write, stderr: &mut dyn Write) -> ExitCode
 {
-    let policy_path = command.policy.clone().or_else(|| return context.policy_from_environment.clone());
+    let policy_paths = if command.policies.is_empty() { context.policy_from_environment.iter().cloned().collect() } else { command.policies.clone() };
     if let Verb::Install { into } = &command.verb
     {
-        return Install(into, policy_path.as_deref(), context.executable.as_deref(), Streams { stdout, stderr });
+        return Install(into, &policy_paths, context.executable.as_deref(), Streams { stdout, stderr });
     }
-    let Some(policy_path) = policy_path
-    else
+    if policy_paths.is_empty()
     {
         let _ = writeln!(stderr, "nomos guard: no policy is named; give --policy <file> or set {POLICY_VARIABLE}");
         return if matches!(command.verb, Verb::Scan { .. }) { ExitCode::NothingJudged } else { ExitCode::Unusable };
-    };
-    let policy = match Policy_At(&policy_path)
+    }
+    let mut policies = Vec::new();
+    for policy_path in &policy_paths
     {
-        Ok(policy) => policy,
-        Err(reason) =>
+        match Policy_At(policy_path)
         {
-            let _ = writeln!(stderr, "nomos guard: refusing, because the policy at {} {reason}", policy_path.display());
-            return ExitCode::Unusable;
-        },
-    };
-    let judge = Judge::New(&policy);
+            Ok(policy) => policies.push(policy),
+            Err(reason) =>
+            {
+                let _ = writeln!(stderr, "nomos guard: refusing, because the policy at {} {reason}", policy_path.display());
+                return ExitCode::Unusable;
+            },
+        }
+    }
     let root = match &command.verb
     {
         Verb::Scan { root } => root.clone(),
         _ => context.working_directory.clone(),
     };
     let git = GitReader::New(&LAUNCHER, &root);
-    let verdict = match &command.verb
+    let message = match &command.verb
     {
-        Verb::PreCommit => Judge_Commit_Being_Made(&judge, &git),
         Verb::CommitMessage { file } => match FILE_SYSTEM.Read_To_String(file)
         {
-            Ok(message) => Judge_Message(&judge, &git, &message),
+            Ok(message) => message,
             Err(error) =>
             {
                 let _ = writeln!(stderr, "nomos guard: refusing, because the commit message could not be read: {error:?}");
                 return ExitCode::Unusable;
             },
         },
-        Verb::PrePush { remote } => Judge_Push(&judge, &git, remote, &context.push_input),
-        Verb::Scan { .. } => return Audit(&judge, &git, &root, Streams { stdout, stderr }),
-        Verb::Install { .. } => return ExitCode::Usage,
+        _ => String::new(),
     };
 
+    let mut answers = Vec::new();
+    for (index, policy) in policies.iter().enumerate()
+    {
+        let judge = Judge::New(policy);
+        let answer = match &command.verb
+        {
+            Verb::PreCommit => Answer(&judge, Judge_Commit_Being_Made(&judge, &git), stderr),
+            Verb::CommitMessage { .. } => Answer(&judge, Judge_Message(&judge, &git, &message), stderr),
+            Verb::PrePush { remote } => Answer(&judge, Judge_Push(&judge, &git, remote, &context.push_input), stderr),
+            Verb::Scan { .. } =>
+            {
+                let which = if policies.len() > 1 { format!("policy {} of {}: ", index.saturating_add(1), policies.len()) } else { String::new() };
+                Audit(&judge, &git, &Audited { root: &root, which: &which }, Streams { stdout: &mut *stdout, stderr: &mut *stderr })
+            },
+            Verb::Install { .. } => return ExitCode::Usage,
+        };
+        answers.push(answer);
+    }
+
+    return MOST_SERIOUS_FIRST.into_iter().find(|code| return answers.contains(code)).unwrap_or(ExitCode::Clean);
+}
+
+/// What one policy's verdict on a transition tells the shell, with its refusals printed.
+fn Answer(judge: &Judge<'_>, verdict: Result<Verdict, GuardError>, stderr: &mut dyn Write) -> ExitCode
+{
     return match verdict
     {
         Ok(Verdict::Clean | Verdict::OwnRepository) => ExitCode::Clean,
         Ok(Verdict::Refused(refusals)) =>
         {
-            Report(&judge, &refusals, stderr);
+            Report(judge, &refusals, stderr);
             ExitCode::Refused
         },
         Err(error) =>
@@ -106,48 +140,64 @@ struct Streams<'output>
     stderr: &'output mut dyn Write,
 }
 
-fn Audit<Launcher: nomos_composer_std::ProgramLauncher>(judge: &Judge<'_>, git: &GitReader<'_, Launcher>, root: &Path, streams: Streams<'_>) -> ExitCode
+/// Where one policy's audit runs, and which policy it is.
+struct Audited<'scan>
+{
+    /// The repository audited.
+    root: &'scan Path,
+    /// `policy 1 of 2: ` when several policies are judged, and empty for one, so the line on
+    /// standard output tells them apart without naming a party.
+    which: &'scan str,
+}
+
+fn Audit<Launcher: nomos_composer_std::ProgramLauncher>(judge: &Judge<'_>, git: &GitReader<'_, Launcher>, audited: &Audited<'_>, streams: Streams<'_>) -> ExitCode
 {
     let Streams { stdout, stderr } = streams;
+    let Audited { root, which } = *audited;
     let outcome = match Scan(judge, git, &FILE_SYSTEM, root)
     {
         Ok(outcome) => outcome,
         Err(error) =>
         {
-            let _ = writeln!(stderr, "nomos guard: {error}");
+            let _ = writeln!(stderr, "nomos guard: {which}{error}");
             return ExitCode::Unusable;
         },
     };
     if outcome.judged == 0
     {
-        let _ = writeln!(stderr, "nomos guard: nothing judged at {} -- no tracked text file was read, or it is {}'s own repository", root.display(), judge.Party());
+        let _ = writeln!(
+            stderr,
+            "nomos guard: {which}nothing judged at {} -- no tracked text file was read, or it is {}'s own repository",
+            root.display(),
+            judge.Party()
+        );
         return ExitCode::NothingJudged;
     }
     if outcome.refusals.is_empty()
     {
-        let _ = writeln!(stdout, "nomos guard: {} file(s) judged, nothing refused", outcome.judged);
+        let _ = writeln!(stdout, "nomos guard: {which}{} file(s) judged, nothing refused", outcome.judged);
         return ExitCode::Clean;
     }
     Report(judge, &outcome.refusals, stderr);
     return ExitCode::Refused;
 }
 
-fn Install(into: &Path, policy: Option<&Path>, executable: Option<&Path>, streams: Streams<'_>) -> ExitCode
+fn Install(into: &Path, policies: &[PathBuf], executable: Option<&Path>, streams: Streams<'_>) -> ExitCode
 {
     let Streams { stdout, stderr } = streams;
-    let Some(policy) = policy
-    else
+    if policies.is_empty()
     {
         let _ = writeln!(stderr, "nomos guard install: name the policy the hooks will read, with --policy <file> or {POLICY_VARIABLE}");
         return ExitCode::Usage;
-    };
+    }
     let Some(nomos) = executable
     else
     {
         let _ = writeln!(stderr, "nomos guard install: this binary cannot name its own path, so the hooks would have nothing to run");
         return ExitCode::Unusable;
     };
-    let scripts = Hook_Scripts(&Slashed(nomos), &Slashed(policy));
+    let policies: Vec<String> = policies.iter().map(|policy| return Slashed(policy)).collect();
+    let scripts = Hook_Scripts(&Slashed(nomos), &policies);
     for script in &scripts
     {
         let path = into.join(script.name);
