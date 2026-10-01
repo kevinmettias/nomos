@@ -1,0 +1,16 @@
+{
+  "id": "traceability-matrix",
+  "title": "Traceability",
+  "format": "markdown",
+  "output": "spec/traceability.md",
+  "sections": [
+    {
+      "title": "Relations",
+      "content": "relations"
+    },
+    {
+      "title": "Lineage",
+      "content": "lineage"
+    }
+  ]
+}

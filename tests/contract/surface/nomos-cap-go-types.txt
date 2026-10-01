@@ -1,0 +1,21 @@
+pub const fn nomos_cap_go_types::Ceiling() -> Guarantee
+pub const nomos_cap_go_types::CAPABILITY: &str
+pub const nomos_cap_go_types::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_go_types::SCHEMA: &str
+pub fn nomos_cap_go_types::Capability() -> CapabilityId
+pub fn nomos_cap_go_types::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_go_types::Encode_Payload(payload: &DiscardedValuesPayload) -> Vec<u8>
+pub fn nomos_cap_go_types::Parse_Payload(bytes: &[u8]) -> Result<DiscardedValuesPayload, PayloadRefusal>
+pub fn nomos_cap_go_types::PayloadRefusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_cap_go_types::Payload_Schema() -> SchemaId
+pub impl nomos_cap_go_types::PayloadRefusal implements core::fmt::Display
+pub impl nomos_cap_go_types::PayloadRefusal implements std::error::Error
+pub struct field nomos_cap_go_types::DiscardedValue::column: u32
+pub struct field nomos_cap_go_types::DiscardedValue::is_error: bool
+pub struct field nomos_cap_go_types::DiscardedValue::line: u32
+pub struct field nomos_cap_go_types::DiscardedValue::type_name: String
+pub struct field nomos_cap_go_types::DiscardedValuesPayload::values: Vec<DiscardedValue>
+pub struct field nomos_cap_go_types::PayloadRefusal::reason: String
+pub struct nomos_cap_go_types::DiscardedValue
+pub struct nomos_cap_go_types::DiscardedValuesPayload
+pub struct nomos_cap_go_types::PayloadRefusal

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "package_id": "nomos.tool.go",
+  "package_kind": "ToolProvider",
+  "package_version": { "major": 1, "minor": 0, "patch": 0 },
+  "protocol_range": {
+    "minimum": { "major": 1, "minor": 0 },
+    "maximum": { "major": 1, "minor": 0 }
+  },
+  "providers": [
+    {
+      "provider_id": "nomos.lang.go.modules",
+      "tool_version": { "major": 0, "minor": 1, "patch": 0 },
+      "family": "PACKAGE_MANAGER"
+    },
+    {
+      "provider_id": "nomos.lang.go.vet",
+      "tool_version": { "major": 0, "minor": 1, "patch": 0 },
+      "family": "LINTER"
+    },
+    {
+      "provider_id": "nomos.lang.go.types",
+      "tool_version": { "major": 0, "minor": 1, "patch": 0 },
+      "family": "SEMANTIC_MODEL"
+    }
+  ]
+}

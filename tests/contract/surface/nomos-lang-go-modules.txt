@@ -1,0 +1,26 @@
+pub const fn nomos_lang_go_modules::Declared_Guarantee() -> Guarantee
+pub const nomos_lang_go_modules::DependencyFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_go_modules::DependencyFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_go_modules::DependencyFactProduction::TRACE: TraceEquivalence
+pub const nomos_lang_go_modules::PROVIDER: &str
+pub fn nomos_lang_go_modules::Discover_Workspace(root: &Path) -> Result<Vec<DiscoveredModule>, ModuleError>
+pub fn nomos_lang_go_modules::Materialize_Workspace(root: &Path, context: FactContext) -> Result<Vec<ModuleFact>, ModuleError>
+pub fn nomos_lang_go_modules::ModuleError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_go_modules::Provider_Offer() -> ProviderOffer
+pub impl nomos_lang_go_modules::DependencyFactProduction implements Strategy
+pub impl nomos_lang_go_modules::ModuleError implements core::fmt::Display
+pub struct field nomos_lang_go_modules::DiscoveredModule::manifest_relative_root: String
+pub struct field nomos_lang_go_modules::DiscoveredModule::payload: DependencyPayload
+pub struct field nomos_lang_go_modules::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_go_modules::FactContext::generation: GenerationId
+pub struct field nomos_lang_go_modules::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_go_modules::FactContext::variant: BuildVariantId
+pub struct field nomos_lang_go_modules::ModuleError::reason: String
+pub struct field nomos_lang_go_modules::ModuleFact::fact: MaterializedFact
+pub struct field nomos_lang_go_modules::ModuleFact::path: String
+pub struct field nomos_lang_go_modules::ModuleFact::subject: SubjectId
+pub struct nomos_lang_go_modules::DependencyFactProduction
+pub struct nomos_lang_go_modules::DiscoveredModule
+pub struct nomos_lang_go_modules::FactContext
+pub struct nomos_lang_go_modules::ModuleError
+pub struct nomos_lang_go_modules::ModuleFact

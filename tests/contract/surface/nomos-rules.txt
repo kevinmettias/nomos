@@ -1,0 +1,310 @@
+pub const fn nomos_rules::FunctionArityPolicy::Allow_One_Receiver_For_Qualified_Functions(mut self) -> Self
+pub const fn nomos_rules::FunctionArityPolicy::For_Language(mut self, language: &'static str) -> Self
+pub const fn nomos_rules::FunctionArityPolicy::New(rule: &'static str, max_value_parameters: u32) -> Self
+pub const fn nomos_rules::FunctionArityPolicy::With_Gate(mut self, gate: GateCategory) -> Self
+pub const fn nomos_rules::RuleDescriptor::Citing(self, record: &'static str, version: u32) -> Self
+pub const fn nomos_rules::RuleDescriptor::Is_Citing_A_Versioned_Record(&self) -> bool
+pub const nomos_rules::ABBREVIATIONS: &str
+pub const nomos_rules::AN_EXCLUDED_FILE_SAYS_WHY: &str
+pub const nomos_rules::ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED: &str
+pub const nomos_rules::A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE: &str
+pub const nomos_rules::A_DISABLED_TEST_STATES_WHY: &str
+pub const nomos_rules::A_DISCARDED_ERROR_IS_EXPLAINED: &str
+pub const nomos_rules::A_KNOWN_RANGE_PICKS_ITS_TYPE: &str
+pub const nomos_rules::A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY: &str
+pub const nomos_rules::A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE: &str
+pub const nomos_rules::A_SCRIPT_DECLARES_ITS_PURPOSE: &str
+pub const nomos_rules::A_SECRET_DOES_NOT_TRAVEL_IN_A_URL: &str
+pub const nomos_rules::A_SKIPPED_TEST_STATES_WHY: &str
+pub const nomos_rules::BOOLEAN_PREDICATES: &str
+pub const nomos_rules::BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS: &str
+pub const nomos_rules::CERTIFICATE_VERIFICATION_IS_NOT_DISABLED: &str
+pub const nomos_rules::CLOSURE_BOUNDS_ARE_MINIMAL: &str
+pub const nomos_rules::COMPLETENESS_MIRROR: &str
+pub const nomos_rules::CONSTANTS_ARE_THE_EXCEPTION_TO_FUNCTION_SCOPE_USE: &str
+pub const nomos_rules::CONSTANTS_SPLIT_BY_EXPORT: &str
+pub const nomos_rules::CONTRACT_RECORD: &str
+pub const nomos_rules::CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::COPY_CLONES: &str
+pub const nomos_rules::COPY_CLONES_CONTRACT_RECORD: &str
+pub const nomos_rules::COPY_CLONES_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::CROSS_LANGUAGE_CONTRACT_RECORD: &str
+pub const nomos_rules::CROSS_LANGUAGE_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::CROSS_LANGUAGE_CORRESPONDENCE: &str
+pub const nomos_rules::CSHARP_LANGUAGE: &str
+pub const nomos_rules::CYCLOMATIC_COMPLEXITY: &str
+pub const nomos_rules::CYCLOMATIC_COMPLEXITY_CONTRACT_RECORD: &str
+pub const nomos_rules::CYCLOMATIC_COMPLEXITY_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::DECLARED_ROLE_MATCHES_SURFACE: &str
+pub const nomos_rules::DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS: &str
+pub const nomos_rules::DEPENDENCY_COMPLETENESS: &str
+pub const nomos_rules::DEPENDENCY_CONTRACT_RECORD: &str
+pub const nomos_rules::DEPENDENCY_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::DEPENDENCY_DIRECTION: &str
+pub const nomos_rules::DEPENDENCY_POLICY: &str
+pub const nomos_rules::DEPENDENCY_POLICY_CONTRACT_RECORD: &str
+pub const nomos_rules::DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::DEPRECATION: &str
+pub const nomos_rules::DESCRIPTORS: &[RuleDescriptor]
+pub const nomos_rules::DOMAIN_VALUES_ARE_DISTINCT_TYPES: &str
+pub const nomos_rules::EAGER_VS_LAZY_CONTEXT: &str
+pub const nomos_rules::EVERY_ALLOW_CARRIES_A_JUSTIFICATION: &str
+pub const nomos_rules::EXECUTED_SCRIPTS_SET_NOUNSET: &str
+pub const nomos_rules::EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE: &str
+pub const nomos_rules::FACADE_ALIASES_NAME_THE_CONTRACT: &str
+pub const nomos_rules::FACADE_CHOOSES_FLATTENING_OR_NAMESPACE: &str
+pub const nomos_rules::FACADE_CONSUMERS_USE_THE_FACADE_PATH: &str
+pub const nomos_rules::FILE_NAME_MATCHES_DECLARED_TYPE: &str
+pub const nomos_rules::FILE_SIZE_JUSTIFICATION_TRIGGER: &str
+pub const nomos_rules::FILE_SIZE_REVIEW_TRIGGER: &str
+pub const nomos_rules::FIVE_HUNDRED_LINE_REVIEW_TRIGGER: &str
+pub const nomos_rules::GOALS_AND_PARTS_LINE_UP: &str
+pub const nomos_rules::GO_LANGUAGE: &str
+pub const nomos_rules::GO_PARAMETER_COUNT: &str
+pub const nomos_rules::GO_VARIABLES_USE_LOWER_SNAKE_CASE: &str
+pub const nomos_rules::GUARANTEE_DECLARES_ITS_EXERCISER: &str
+pub const nomos_rules::GUARANTEE_EXERCISER_CONTRACT_RECORD: &str
+pub const nomos_rules::GUARANTEE_EXERCISER_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::INLINE_ALWAYS_JUSTIFICATION: &str
+pub const nomos_rules::LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE: &str
+pub const nomos_rules::LINT_CONTRACT_RECORD: &str
+pub const nomos_rules::LINT_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::LINT_DIAGNOSTICS: &str
+pub const nomos_rules::LOWERCASE_FIRST_LETTER: &str
+pub const nomos_rules::MODULE_AND_FIELD_NAMES_STAY_LOWER_SNAKE: &str
+pub const nomos_rules::NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS: &str
+pub const nomos_rules::NAMING_CLARITY: &str
+pub const nomos_rules::NAMING_CONVENTION: &str
+pub const nomos_rules::NESTED_LOCKS: &str
+pub const nomos_rules::NESTED_LOCKS_CONTRACT_RECORD: &str
+pub const nomos_rules::NESTED_LOCKS_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::NESTING_DEPTH: &str
+pub const nomos_rules::NONNEGATIVE_STORAGE_IS_UNSIGNED: &str
+pub const nomos_rules::NO_DECORATIVE_SECTION_DIVIDERS: &str
+pub const nomos_rules::NO_MOD_RS_FILES: &str
+pub const nomos_rules::NO_ORPHAN_MODULES: &str
+pub const nomos_rules::NO_SINGLE_LINE_FUNCTION_BODIES: &str
+pub const nomos_rules::NO_TRAILING_PUNCTUATION: &str
+pub const nomos_rules::NO_TRAILING_WHITESPACE: &str
+pub const nomos_rules::NO_WILDCARD_IMPORTS: &str
+pub const nomos_rules::ONE_PUBLIC_TYPE_PER_FILE: &str
+pub const nomos_rules::ONE_THOUSAND_LINE_HARD_TRIGGER: &str
+pub const nomos_rules::PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED: &str
+pub const nomos_rules::PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN: &str
+pub const nomos_rules::PARAMETER_COUNT: &str
+pub const nomos_rules::PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS: &str
+pub const nomos_rules::PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str
+pub const nomos_rules::RELAXED_NOT_USED_WHEN_ORDERING_MATTERS: &str
+pub const nomos_rules::REQUIREMENT_TRACE_STALENESS: &str
+pub const nomos_rules::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD: &str
+pub const nomos_rules::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::REVIEW_CONTRACT_RECORD: &str
+pub const nomos_rules::REVIEW_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::REVIEW_FINDING: &str
+pub const nomos_rules::RUST_LANGUAGE: &str
+pub const nomos_rules::SCRIPTS_USE_A_PORTABLE_SHEBANG: &str
+pub const nomos_rules::SEQCST_JUSTIFIED_EXPLICITLY: &str
+pub const nomos_rules::SHARED_INTERIOR_MUTABILITY_SAYS_WHY: &str
+pub const nomos_rules::SINGLE_LETTER_NAMES: &str
+pub const nomos_rules::SLEEP_BASED_SYNCHRONIZATION: &str
+pub const nomos_rules::STANDARDS_CORPUS: &str
+pub const nomos_rules::STANDARDS_CORPUS_CONTRACT_RECORD: &str
+pub const nomos_rules::STANDARDS_CORPUS_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::STATIC_BOUNDS_ARE_JUSTIFIED: &str
+pub const nomos_rules::SUPPRESSION_DIRECTIVES_CARRY_A_REASON: &str
+pub const nomos_rules::TEST_NAME_DESCRIBES_BEHAVIOR: &str
+pub const nomos_rules::TODO_FORMAT: &str
+pub const nomos_rules::TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE: &str
+pub const nomos_rules::UNCOMPILED_CONDITIONAL_BRANCH: &str
+pub const nomos_rules::UNCOMPILED_CONDITIONAL_BRANCH_CONTRACT_RECORD: &str
+pub const nomos_rules::UNCOMPILED_CONDITIONAL_BRANCH_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::UNDECLARED_POLICY_KEY: &str
+pub const nomos_rules::UNDECLARED_POLICY_KEY_CONTRACT_RECORD: &str
+pub const nomos_rules::UNDECLARED_POLICY_KEY_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER: &str
+pub const nomos_rules::UNREAD_REACHES_FINDING: &str
+pub const nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD: &str
+pub const nomos_rules::UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::UNSAFE_JUSTIFICATION: &str
+pub const nomos_rules::UNWRAP_EXPECT_DISCIPLINE: &str
+pub const nomos_rules::WORKSPACE_MARKERS_CARRY_A_REASON: &str
+pub const nomos_rules::WRITE_AUTHORITY: &str
+pub const nomos_rules::WRITE_AUTHORITY_CONTRACT_RECORD: &str
+pub const nomos_rules::WRITE_AUTHORITY_CONTRACT_RECORD_VERSION: u32
+pub const nomos_rules::ZERO_FLAKE_POLICY: &str
+pub enum nomos_rules::FunctionAritySource
+pub enum nomos_rules::Reading
+pub enum nomos_rules::ReceiverAllowance
+pub enum nomos_rules::RequiredFact
+pub enum nomos_rules::RuleRegistryError
+pub enum nomos_rules::SubjectKind
+pub enum nomos_rules::UniverseKind
+pub enum variant nomos_rules::FunctionAritySource::All
+pub enum variant nomos_rules::FunctionAritySource::Language(&'static str)
+pub enum variant nomos_rules::Reading::Observed(Vec<DeclaredUniverse>)
+pub enum variant nomos_rules::Reading::Unobserved { because: String, }
+pub enum variant nomos_rules::ReceiverAllowance::None
+pub enum variant nomos_rules::ReceiverAllowance::OneForQualifiedFunctions
+pub enum variant nomos_rules::RequiredFact::ArchitectureDeclaration
+pub enum variant nomos_rules::RequiredFact::Complexity
+pub enum variant nomos_rules::RequiredFact::CopyClones
+pub enum variant nomos_rules::RequiredFact::CsharpConditional
+pub enum variant nomos_rules::RequiredFact::DependencyEdges
+pub enum variant nomos_rules::RequiredFact::DependencyPolicy
+pub enum variant nomos_rules::RequiredFact::GoDiscardedValues
+pub enum variant nomos_rules::RequiredFact::GoalsPolicy
+pub enum variant nomos_rules::RequiredFact::LimitsPolicy
+pub enum variant nomos_rules::RequiredFact::LintDiagnostics
+pub enum variant nomos_rules::RequiredFact::NamingPolicy
+pub enum variant nomos_rules::RequiredFact::NestedLocks
+pub enum variant nomos_rules::RequiredFact::Reachability
+pub enum variant nomos_rules::RequiredFact::RequirementTrace
+pub enum variant nomos_rules::RequiredFact::ReviewFindings
+pub enum variant nomos_rules::RequiredFact::ScriptingPolicy
+pub enum variant nomos_rules::RequiredFact::StandardsCorpusPolicy
+pub enum variant nomos_rules::RequiredFact::SyntaxItems
+pub enum variant nomos_rules::RequiredFact::TestMaterialPolicy
+pub enum variant nomos_rules::RequiredFact::WordsPolicy
+pub enum variant nomos_rules::RuleRegistryError::AlreadyOffered(RuleId)
+pub enum variant nomos_rules::SubjectKind::SourceFacts
+pub enum variant nomos_rules::SubjectKind::SourceText
+pub enum variant nomos_rules::SubjectKind::Workspace
+pub enum variant nomos_rules::UniverseKind::Constant
+pub enum variant nomos_rules::UniverseKind::Enumeration
+pub fn nomos_rules::Check_A_Consumer_Imports_Through_The_Facade(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Credential_Is_Not_Hardcoded_In_Source(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Disabled_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Discarded_Error_Is_Explained(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Facade_Publishes_A_Child_One_Way(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Known_Range_Picks_Its_Type(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Package_Is_Named_After_Its_Directory(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Renamed_Facade_Re_Export_Names_The_Contract(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Script_Declares_Its_Purpose(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Secret_Does_Not_Travel_In_A_Url(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Skipped_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_A_Test_Does_Not_Retry_Until_Green(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Abbreviations(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_An_Excluded_File_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Atomic_Ordering_Choices_Are_Justified(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Boolean_Predicates( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Certificate_Verification_Is_Not_Disabled(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Closure_Bounds_Are_Minimal(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Completeness_Mirrors( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Constants_Are_The_Exception_To_Function_Scope_Use(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Copy_Clones(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Cross_Language_Correspondence(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Cyclomatic_Complexity(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Declared_Role_Matches_Surface(subjects: &[RoleSurfacePair]) -> Vec<Finding>
+pub fn nomos_rules::Check_Declared_Tooling_Language_For_Scripts(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Dependency_Direction(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Dependency_Policy(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Deprecation_Carries_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Domain_Values_Are_Distinct_Types(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Eager_Vs_Lazy_Context(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Error_Message_Has_No_Trailing_Punctuation(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Error_Message_Starts_Lowercase(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Every_Allow_Carries_A_Justification(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Every_Member_Declares_A_Band(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Executed_Scripts_Set_Nounset(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Exported_Go_Functions_Use_Upper_Snake_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_File_Name_Matches_Declared_Type( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_File_Size_Justification_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Function_Arity_Policy( sources: &[SourceFile], facts: &mut dyn FactReader, policy: FunctionArityPolicy, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Go_Constants_Split_By_Export(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Go_File_Size_Hard_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Go_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Go_Parameter_Count( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Go_Type_Names_Use_Camel_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Go_Variables_Use_Lower_Snake_Case(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Goals_And_Parts_Line_Up(facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Guarantee_Declares_Its_Exerciser(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Inline_Always_Justification(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Lifetimes_Follow_The_Descriptive_Naming_Rule(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Lint_Diagnostics(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Module_And_Field_Names_Stay_Lower_Snake( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Named_Fields_Over_Positional_Variant_Payloads(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Naming_Clarity(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Naming_Convention( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Nested_Locks(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Nesting_Depth(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_No_Decorative_Section_Dividers(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_No_Mod_Rs_Files(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_No_Orphan_Modules(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_No_Single_Line_Function_Bodies(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_No_Trailing_Whitespace(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_No_Wildcard_Imports(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Nonnegative_Storage_Is_Unsigned(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_One_Public_Type_Per_File( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Panics_Are_Justified_Documented_And_Validated(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Parameter_Count( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Parameters_Borrow_Unless_Ownership_Is_Taken(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Prefer_Macro_Rules_Over_Procedural_Macros(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Project_Owned_Function_Names_Use_Upper_Snake_Case( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Relaxed_Not_Used_When_Ordering_Matters(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Requirement_Trace_Staleness(facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Review_Findings(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Scripts_Use_A_Portable_Shebang(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Seqcst_Justified_Explicitly(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Single_Letter_Names( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Sleep_Is_Not_Synchronization(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Standards_Corpus(facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Static_Bounds_Are_Justified(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Suppression_Directives_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Test_Names_Describe_Behavior( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Todo_Format(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Uncompiled_Conditional_Branch(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Undeclared_Policy_Key(facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter( sources: &[SourceFile], facts: &mut dyn FactReader, ) -> Vec<Finding>
+pub fn nomos_rules::Check_Unread_Reaches_A_Finding(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Unwrap_Expect_Discipline(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Check_Workspace_Markers_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
+pub fn nomos_rules::Check_Write_Authority(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::RequiredFact::Capability(self) -> CapabilityId
+pub fn nomos_rules::RuleDescriptor::Rule(&self) -> RuleId
+pub fn nomos_rules::RuleRegistry::New() -> Self
+pub fn nomos_rules::RuleRegistry::Offer(&mut self, offer: RuleOffer) -> Result<(), RuleRegistryError>
+pub fn nomos_rules::RuleRegistry::Offered(&self, rule: &RuleId) -> Option<&RuleOffer>
+pub fn nomos_rules::RuleRegistry::Offers(&self) -> impl Iterator<Item = &RuleOffer>
+pub fn nomos_rules::SourceFile::Is_Written_In(&self, language: &str) -> bool
+pub fn nomos_rules::SourceFile::New(path: impl Into<String>, subject: SubjectId, text: impl Into<String>) -> Self
+pub fn nomos_rules::Universes_In(path: &str, payload: &SyntaxPayload) -> Vec<DeclaredUniverse>
+pub struct field nomos_rules::DeclaredUniverse::claimed_mirror: Option<String>
+pub struct field nomos_rules::DeclaredUniverse::kind: UniverseKind
+pub struct field nomos_rules::DeclaredUniverse::name: String
+pub struct field nomos_rules::DeclaredUniverse::path: String
+pub struct field nomos_rules::FunctionArityPolicy::gate: GateCategory
+pub struct field nomos_rules::FunctionArityPolicy::max_value_parameters: u32
+pub struct field nomos_rules::FunctionArityPolicy::receiver_allowance: ReceiverAllowance
+pub struct field nomos_rules::FunctionArityPolicy::rule: &'static str
+pub struct field nomos_rules::FunctionArityPolicy::source: FunctionAritySource
+pub struct field nomos_rules::RoleSurfacePair::actual_surface: String
+pub struct field nomos_rules::RoleSurfacePair::crate_name: String
+pub struct field nomos_rules::RoleSurfacePair::crate_root: String
+pub struct field nomos_rules::RoleSurfacePair::declared_role: String
+pub struct field nomos_rules::RuleDescriptor::check: RuleJudgment
+pub struct field nomos_rules::RuleDescriptor::contract_record: &'static str
+pub struct field nomos_rules::RuleDescriptor::contract_record_version: u32
+pub struct field nomos_rules::RuleDescriptor::id: &'static str
+pub struct field nomos_rules::RuleDescriptor::requires: &'static [RequiredFact]
+pub struct field nomos_rules::RuleDescriptor::subject: SubjectKind
+pub struct field nomos_rules::RuleOffer::contract_record: String
+pub struct field nomos_rules::RuleOffer::contract_record_version: u32
+pub struct field nomos_rules::RuleOffer::rule: RuleId
+pub struct field nomos_rules::SourceFile::answered_by: Option<ProviderId>
+pub struct field nomos_rules::SourceFile::language: Option<Language>
+pub struct field nomos_rules::SourceFile::path: String
+pub struct field nomos_rules::SourceFile::preferred_syntax_provider: Option<ProviderId>
+pub struct field nomos_rules::SourceFile::subject: SubjectId
+pub struct field nomos_rules::SourceFile::text: String
+pub struct nomos_rules::DeclaredUniverse
+pub struct nomos_rules::FunctionArityPolicy
+pub struct nomos_rules::RoleSurfacePair
+pub struct nomos_rules::RuleDescriptor
+pub struct nomos_rules::RuleOffer
+pub struct nomos_rules::RuleRegistry
+pub struct nomos_rules::SourceFile

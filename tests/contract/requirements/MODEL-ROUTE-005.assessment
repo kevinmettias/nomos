@@ -1,0 +1,20 @@
+# The assessment of MODEL-ROUTE-005 against this build. The requirement identifier is
+# this file's stem and appears nowhere inside it, because a second place to spell the
+# identity is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a
+# record registration, and CHK-003.assessment states for this registry.
+#
+# MODEL-ROUTE-005: "Configuration resolution shall use one normative scope-precedence
+# order for every client, daemon, worker, backend, and executor: Invocation override;
+# exact logical-operation profile; ... backend default. ... Every ResolvedModelExecution
+# shall preserve each candidate, match reason, scope rank, selected value, inherited
+# value, rejected override, authority, and rejection reason."
+#
+# First sentence: the eleven-tier order is real, as ExecutionScope. Second sentence: not
+# met. ResolvedModelExecution, the record the sentence names, does not exist anywhere in
+# this workspace -- deliberately: MODEL-ROUTE-029's own ModelInputAssemblyIdentity type
+# already established that record stays unbuilt until every requirement naming one of its
+# fields is accounted for, and this crate's own lib.rs doc comment names that deferral
+# directly rather than typing a partial wrapper.
+verdict: Partial
+site: crates/packages/nomos-model-package/src/execution_scope.rs#ExecutionScope
+gap: crates/packages/nomos-model-package/src/lib.rs#ResolvedModelExecution

@@ -1,0 +1,193 @@
+pub const fn nomos_corrections::CandidateLabel::Label(self) -> &'static str
+pub const fn nomos_corrections::CommittedPlan::After(&self) -> SnapshotId
+pub const fn nomos_corrections::CommittedPlan::Base(&self) -> SnapshotId
+pub const fn nomos_corrections::CommittedPlan::Mutation_Class() -> MutationClass
+pub const fn nomos_corrections::CommittedPlan::Rollback_Boundary() -> RollbackBoundary
+pub const fn nomos_corrections::Compatibility::Is_Compatible(&self) -> bool
+pub const fn nomos_corrections::ConvergenceTrail::New() -> Self
+pub const fn nomos_corrections::CorrectionCandidate::Change(&self) -> &ChangeSet
+pub const fn nomos_corrections::CorrectionCandidate::Class(&self) -> CorrectionClass
+pub const fn nomos_corrections::CorrectionCandidate::Id(&self) -> CorrectionId
+pub const fn nomos_corrections::CorrectionChoice::Selected(&self) -> CorrectionId
+pub const fn nomos_corrections::CorrectionClass::Label(self) -> &'static str
+pub const fn nomos_corrections::CorrectionId::Digest(&self) -> Digest128
+pub const fn nomos_corrections::CorrectionId::From_Digest(digest: Digest128) -> Self
+pub const fn nomos_corrections::DerivedProvenance::Guarantee(&self) -> Guarantee
+pub const fn nomos_corrections::DerivedProvenance::Provider(&self) -> &ProviderId
+pub const fn nomos_corrections::Overlap::Class(&self) -> OverlapClass
+pub const fn nomos_corrections::Overlap::Resolution(&self) -> ReadWriteResolution
+pub const fn nomos_corrections::OverlapClass::Label(self) -> &'static str
+pub const fn nomos_corrections::Preview::Mutation_Class() -> MutationClass
+pub const fn nomos_corrections::RankingCriterion::Label(self) -> &'static str
+pub const fn nomos_corrections::ReadWriteResolution::Label(self) -> &'static str
+pub const fn nomos_corrections::ReadWriteSet::Resolution(&self) -> ReadWriteResolution
+pub const fn nomos_corrections::ReviewReason::Label(self) -> &'static str
+pub const fn nomos_corrections::RollbackBoundary::Label(self) -> &'static str
+pub const fn nomos_corrections::StagedPlan::Base(&self) -> SnapshotId
+pub const fn nomos_corrections::StagedPlan::Mutation_Class() -> MutationClass
+pub const fn nomos_corrections::StateSignature::Digest(&self) -> Digest128
+pub const fn nomos_corrections::UnresolvedAccessError::Candidate(&self) -> CorrectionId
+pub const fn nomos_corrections::UnresolvedAccessError::Completeness(&self) -> Assurance
+pub const fn nomos_corrections::UnresolvedAccessError::Plan(&self) -> usize
+pub const fn nomos_corrections::UnresolvedAccessError::Resolution(&self) -> ReadWriteResolution
+pub const fn nomos_corrections::ValidatedPlan::Mutation_Class() -> MutationClass
+pub const nomos_corrections::CommittedPlan::ROLLBACK_MUTATION_CLASS: MutationClass
+pub const nomos_corrections::CorrectionStaging::SCOPE: ReproducibilityScope
+pub const nomos_corrections::CorrectionStaging::STRENGTH: DeterminismStrength
+pub const nomos_corrections::CorrectionStaging::TRACE: TraceEquivalence
+pub enum nomos_corrections::CandidateLabel
+pub enum nomos_corrections::Compatibility
+pub enum nomos_corrections::CorrectionClass
+pub enum nomos_corrections::CorrectionDecision
+pub enum nomos_corrections::CorrectionError
+pub enum nomos_corrections::OverlapClass
+pub enum nomos_corrections::RankingCriterion
+pub enum nomos_corrections::ReadWriteResolution
+pub enum nomos_corrections::ReviewReason
+pub enum nomos_corrections::RollbackBoundary
+pub enum variant nomos_corrections::CandidateLabel::AgentProposed
+pub enum variant nomos_corrections::CandidateLabel::Architectural
+pub enum variant nomos_corrections::CandidateLabel::BehaviorPreserving
+pub enum variant nomos_corrections::CandidateLabel::Interactive
+pub enum variant nomos_corrections::CandidateLabel::MechanicallySafe
+pub enum variant nomos_corrections::CandidateLabel::PolicyCompliant
+pub enum variant nomos_corrections::CandidateLabel::Speculative
+pub enum variant nomos_corrections::Compatibility::Compatible
+pub enum variant nomos_corrections::Compatibility::Conflicting { overlaps: Vec<Overlap>, }
+pub enum variant nomos_corrections::CorrectionClass::Agent
+pub enum variant nomos_corrections::CorrectionClass::Interactive
+pub enum variant nomos_corrections::CorrectionClass::Mechanical
+pub enum variant nomos_corrections::CorrectionClass::Proposed
+pub enum variant nomos_corrections::CorrectionDecision::Automatic(CorrectionChoice)
+pub enum variant nomos_corrections::CorrectionDecision::ReviewedProposal { candidates: Vec<CorrectionId>, reason: ReviewReason, }
+pub enum variant nomos_corrections::CorrectionError::Conflicting { paths: Vec<String>, }
+pub enum variant nomos_corrections::CorrectionError::Moved { expected: SnapshotId, found: SnapshotId, }
+pub enum variant nomos_corrections::CorrectionError::StaleCandidate { path: String, expected: Option<Digest128>, found: Option<Digest128>, }
+pub enum variant nomos_corrections::CorrectionError::Vacuous
+pub enum variant nomos_corrections::CorrectionError::Workspace(WorkspaceError)
+pub enum variant nomos_corrections::OverlapClass::ReadWrite
+pub enum variant nomos_corrections::OverlapClass::WriteWrite
+pub enum variant nomos_corrections::RankingCriterion::ApiStability
+pub enum variant nomos_corrections::RankingCriterion::ArchitectureFit
+pub enum variant nomos_corrections::RankingCriterion::BehaviorPreservation
+pub enum variant nomos_corrections::RankingCriterion::Confidence
+pub enum variant nomos_corrections::RankingCriterion::EditScope
+pub enum variant nomos_corrections::RankingCriterion::NormativeCorrectness
+pub enum variant nomos_corrections::RankingCriterion::Reversibility
+pub enum variant nomos_corrections::RankingCriterion::SecondaryFindings
+pub enum variant nomos_corrections::RankingCriterion::UserPreference
+pub enum variant nomos_corrections::RankingCriterion::VerificationCost
+pub enum variant nomos_corrections::ReadWriteResolution::Artifact
+pub enum variant nomos_corrections::ReadWriteResolution::Configuration
+pub enum variant nomos_corrections::ReadWriteResolution::Dependency
+pub enum variant nomos_corrections::ReadWriteResolution::GeneratedSource
+pub enum variant nomos_corrections::ReadWriteResolution::ProviderState
+pub enum variant nomos_corrections::ReadWriteResolution::Semantic
+pub enum variant nomos_corrections::ReadWriteResolution::Symbol
+pub enum variant nomos_corrections::ReviewReason::ChangesPublicBehaviorOrArchitecture
+pub enum variant nomos_corrections::ReviewReason::NoDominantCandidate
+pub enum variant nomos_corrections::RollbackBoundary::Compensating
+pub enum variant nomos_corrections::RollbackBoundary::Exact
+pub enum variant nomos_corrections::RollbackBoundary::Irreversible
+pub enum variant nomos_corrections::RollbackBoundary::ProviderDependent
+pub enum variant nomos_corrections::RollbackBoundary::RepositoryRecoverable
+pub fn nomos_corrections::CandidateLabel::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::ChangeSet::Edits(&self) -> &[Edit]
+pub fn nomos_corrections::ChangeSet::Empty() -> Self
+pub fn nomos_corrections::ChangeSet::Is_Empty(&self) -> bool
+pub fn nomos_corrections::ChangeSet::Touched(&self) -> BTreeSet<&str>
+pub fn nomos_corrections::ChangeSet::With(mut self, edit: Edit) -> Self
+pub fn nomos_corrections::CommittedPlan::Evidence(&self) -> &Evidence
+pub fn nomos_corrections::CommittedPlan::Rollback(self, live: &mut Workspace) -> Result<SnapshotId, CorrectionError>
+pub fn nomos_corrections::Compatibility::Of(first: &CorrectionPlan, second: &CorrectionPlan) -> Result<Self, UnresolvedAccessError>
+pub fn nomos_corrections::ConvergenceTrail::Observe(&mut self, signature: StateSignature) -> Option<usize>
+pub fn nomos_corrections::ConvergenceTrail::Rounds(&self) -> usize
+pub fn nomos_corrections::CorrectionCandidate::Description(&self) -> &str
+pub fn nomos_corrections::CorrectionCandidate::Labels(&self) -> &[CandidateLabel]
+pub fn nomos_corrections::CorrectionCandidate::New( description: impl Into<String>, change: ChangeSet, class: CorrectionClass, labels: Vec<CandidateLabel>, ) -> Self
+pub fn nomos_corrections::CorrectionCandidate::Read_Write(&self) -> &[ReadWriteSet]
+pub fn nomos_corrections::CorrectionCandidate::Reads(&self) -> &[ReadWriteSet]
+pub fn nomos_corrections::CorrectionCandidate::With_Read(mut self, set: ReadWriteSet) -> Self
+pub fn nomos_corrections::CorrectionCandidate::With_Read_Write(mut self, set: ReadWriteSet) -> Self
+pub fn nomos_corrections::CorrectionChoice::New(selected: CorrectionId, record: ChoiceRecord) -> Self
+pub fn nomos_corrections::CorrectionChoice::Objective_Weights(&self) -> &[(RankingCriterion, u32)]
+pub fn nomos_corrections::CorrectionChoice::Predicted_Side_Effects(&self) -> &[String]
+pub fn nomos_corrections::CorrectionChoice::Rejected_Alternatives(&self) -> &[CorrectionId]
+pub fn nomos_corrections::CorrectionChoice::Unresolved_Tradeoffs(&self) -> &[String]
+pub fn nomos_corrections::CorrectionChoice::Verification_Obligations(&self) -> &[String]
+pub fn nomos_corrections::CorrectionClass::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::CorrectionError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::CorrectionError::from(error: WorkspaceError) -> Self
+pub fn nomos_corrections::CorrectionId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::CorrectionPlan::Candidates(&self) -> &[CorrectionCandidate]
+pub fn nomos_corrections::CorrectionPlan::New(candidates: Vec<CorrectionCandidate>) -> Result<Self, CorrectionError>
+pub fn nomos_corrections::CorrectionPlan::Preview(&self) -> Preview
+pub fn nomos_corrections::CorrectionPlan::Stage(&self, base: &Workspace) -> Result<StagedPlan, CorrectionError>
+pub fn nomos_corrections::DerivedProvenance::Confidence(&self) -> &str
+pub fn nomos_corrections::DerivedProvenance::Invalidation_Basis(&self) -> &str
+pub fn nomos_corrections::DerivedProvenance::New(provider: ProviderId, guarantee: Guarantee, confidence: impl Into<String>, invalidation_basis: impl Into<String>) -> Self
+pub fn nomos_corrections::Edit::After(&self) -> Option<&str>
+pub fn nomos_corrections::Edit::Before(&self) -> Option<&str>
+pub fn nomos_corrections::Edit::Forward(&self) -> Change
+pub fn nomos_corrections::Edit::New(path: impl Into<String>, before: Option<String>, after: Option<String>) -> Self
+pub fn nomos_corrections::Edit::Path(&self) -> &str
+pub fn nomos_corrections::Edit::Reverse(&self) -> Change
+pub fn nomos_corrections::Overlap::New(resolution: ReadWriteResolution, subject: impl Into<String>, class: OverlapClass) -> Self
+pub fn nomos_corrections::Overlap::Subject(&self) -> &str
+pub fn nomos_corrections::OverlapClass::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::Preview::Rendered(&self) -> &[u8]
+pub fn nomos_corrections::RankingCriterion::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::ReadWriteResolution::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::ReadWriteSet::Declared(resolution: ReadWriteResolution, entries: Vec<String>) -> Self
+pub fn nomos_corrections::ReadWriteSet::Derived(resolution: ReadWriteResolution, entries: Vec<String>, provenance: DerivedProvenance) -> Self
+pub fn nomos_corrections::ReadWriteSet::Derived_Provenance(&self) -> Option<&DerivedProvenance>
+pub fn nomos_corrections::ReadWriteSet::Entries(&self) -> &[String]
+pub fn nomos_corrections::ReviewReason::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::RollbackBoundary::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::StagedPlan::Validate(&self, live: &Workspace) -> Result<ValidatedPlan, CorrectionError>
+pub fn nomos_corrections::StateSignature::Of(observations: &[String]) -> Self
+pub fn nomos_corrections::StateSignature::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::UnresolvedAccessError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_corrections::ValidatedPlan::Commit(self, live: &mut Workspace, evidence: Evidence) -> Result<CommittedPlan, CorrectionError>
+pub fn nomos_corrections::WavePartition::Of(plans: &[CorrectionPlan]) -> Result<Self, UnresolvedAccessError>
+pub fn nomos_corrections::WavePartition::Wave_Of(&self, position: usize) -> Option<usize>
+pub fn nomos_corrections::WavePartition::Waves(&self) -> &[Vec<usize>]
+pub impl nomos_corrections::CandidateLabel implements core::fmt::Display
+pub impl nomos_corrections::CorrectionClass implements core::fmt::Display
+pub impl nomos_corrections::CorrectionError implements From<WorkspaceError>
+pub impl nomos_corrections::CorrectionError implements core::fmt::Display
+pub impl nomos_corrections::CorrectionError implements std::error::Error
+pub impl nomos_corrections::CorrectionId implements core::fmt::Display
+pub impl nomos_corrections::CorrectionStaging implements Strategy
+pub impl nomos_corrections::OverlapClass implements core::fmt::Display
+pub impl nomos_corrections::RankingCriterion implements core::fmt::Display
+pub impl nomos_corrections::ReadWriteResolution implements core::fmt::Display
+pub impl nomos_corrections::ReviewReason implements core::fmt::Display
+pub impl nomos_corrections::RollbackBoundary implements core::fmt::Display
+pub impl nomos_corrections::StateSignature implements core::fmt::Display
+pub impl nomos_corrections::UnresolvedAccessError implements core::fmt::Display
+pub impl nomos_corrections::UnresolvedAccessError implements std::error::Error
+pub struct field nomos_corrections::ChoiceRecord::objective_weights: Vec<(RankingCriterion, u32)>
+pub struct field nomos_corrections::ChoiceRecord::predicted_side_effects: Vec<String>
+pub struct field nomos_corrections::ChoiceRecord::rejected_alternatives: Vec<CorrectionId>
+pub struct field nomos_corrections::ChoiceRecord::unresolved_tradeoffs: Vec<String>
+pub struct field nomos_corrections::ChoiceRecord::verification_obligations: Vec<String>
+pub struct nomos_corrections::ChangeSet
+pub struct nomos_corrections::ChoiceRecord
+pub struct nomos_corrections::CommittedPlan
+pub struct nomos_corrections::ConvergenceTrail
+pub struct nomos_corrections::CorrectionCandidate
+pub struct nomos_corrections::CorrectionChoice
+pub struct nomos_corrections::CorrectionId(Digest128)
+pub struct nomos_corrections::CorrectionPlan
+pub struct nomos_corrections::CorrectionStaging
+pub struct nomos_corrections::DerivedProvenance
+pub struct nomos_corrections::Edit
+pub struct nomos_corrections::Overlap
+pub struct nomos_corrections::Preview
+pub struct nomos_corrections::ReadWriteSet
+pub struct nomos_corrections::StagedPlan
+pub struct nomos_corrections::StateSignature
+pub struct nomos_corrections::UnresolvedAccessError
+pub struct nomos_corrections::ValidatedPlan
+pub struct nomos_corrections::WavePartition

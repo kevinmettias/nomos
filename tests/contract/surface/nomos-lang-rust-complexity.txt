@@ -1,0 +1,28 @@
+pub const fn nomos_lang_rust_complexity::Declared_Guarantee() -> Guarantee
+pub const nomos_lang_rust_complexity::ComplexityFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_rust_complexity::ComplexityFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_rust_complexity::ComplexityFactProduction::TRACE: TraceEquivalence
+pub const nomos_lang_rust_complexity::PROVIDER: &str
+pub enum nomos_lang_rust_complexity::ComplexityReading
+pub enum nomos_lang_rust_complexity::Materialization
+pub enum variant nomos_lang_rust_complexity::ComplexityReading::Parsed(Vec<FunctionComplexity>)
+pub enum variant nomos_lang_rust_complexity::ComplexityReading::Unparseable(ParseFailure)
+pub enum variant nomos_lang_rust_complexity::Materialization::Materialized(Box<MaterializedFact>)
+pub enum variant nomos_lang_rust_complexity::Materialization::Unparseable(ParseFailure)
+pub fn nomos_lang_rust_complexity::Materialize_Complexity_Fact(subject: SubjectId, source: &str, context: FactContext) -> Materialization
+pub fn nomos_lang_rust_complexity::ParseFailure::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_rust_complexity::Provider_Offer() -> ProviderOffer
+pub fn nomos_lang_rust_complexity::Read_Complexity(source: &str) -> ComplexityReading
+pub impl nomos_lang_rust_complexity::ComplexityFactProduction implements Strategy
+pub impl nomos_lang_rust_complexity::ParseFailure implements core::fmt::Display
+pub impl nomos_lang_rust_complexity::ParseFailure implements std::error::Error
+pub struct field nomos_lang_rust_complexity::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_rust_complexity::FactContext::generation: GenerationId
+pub struct field nomos_lang_rust_complexity::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_rust_complexity::FactContext::variant: BuildVariantId
+pub struct field nomos_lang_rust_complexity::ParseFailure::column: usize
+pub struct field nomos_lang_rust_complexity::ParseFailure::line: usize
+pub struct field nomos_lang_rust_complexity::ParseFailure::message: String
+pub struct nomos_lang_rust_complexity::ComplexityFactProduction
+pub struct nomos_lang_rust_complexity::FactContext
+pub struct nomos_lang_rust_complexity::ParseFailure

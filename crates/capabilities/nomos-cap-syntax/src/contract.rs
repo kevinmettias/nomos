@@ -1,0 +1,92 @@
+//! The agreement itself.
+
+use nomos_capability::CapabilityContract;
+use nomos_contracts::{
+    Assurance, CapabilityId, ContractVersion, FactVariant, Guarantee, IncrementalGranularity,
+    SchemaId,
+};
+
+/// The capability both Rust providers answer.
+///
+/// Named for what a caller gets — the items a file declares — rather than for how it is
+/// obtained. `nomos.cap.syn.parse` would make the contract a description of one
+/// implementation, and the second provider of the same capability could not honestly offer
+/// it. That the second provider exists is what moved this constant here.
+pub const CAPABILITY: &str = "nomos.cap.syntax.items";
+
+/// The payload schema every answer to this capability is stamped with.
+///
+/// Versioned separately from the contract because the shape of the bytes and the meaning of
+/// the question change for different reasons.
+///
+/// A schema is the shape of an answer and not a claim about its accuracy — that is what a
+/// guarantee is for. Two providers of one capability writing different shapes would force
+/// every consumer to know which one answered.
+/// Versioned separately from the contract, and this is the version where that mattered.
+/// v2 makes each item's documentation and declared shape an observation rather than a
+/// string, so that a provider which cannot see one says so instead of writing the same
+/// bytes as a provider that looked and found nothing. The *question* did not change, so
+/// [`CONTRACT_VERSION`] did not either — see `OD-SYNTAX-002`.
+pub const SCHEMA: &str = "nomos.syntax.items.v2";
+
+/// The contract version. Not a crate version: a caller reads against the contract.
+pub const CONTRACT_VERSION: ContractVersion = ContractVersion::New(1, 0);
+
+/// The strongest anything may claim for this capability.
+///
+/// [`FactVariant::Syntactic`] is the ceiling because the capability is about what a file
+/// says on its face. A compiler-backed provider that resolves names is answering a
+/// different question and belongs behind a different contract; letting it offer this one at
+/// [`FactVariant::SemanticallyResolved`] would mean two providers of one capability
+/// disagreeing about what the capability means.
+///
+/// Completeness and granularity are deliberately *not* pinned to what any current provider
+/// achieves. [`Assurance::Sound`] and [`IncrementalGranularity::Region`] leave room for a
+/// provider that expands macros or reparses incrementally. A ceiling set to today's best
+/// implementation has to be raised every time somebody improves something, and a ceiling
+/// that moves is not a ceiling.
+///
+/// This is the clearest case for the crate. The ceiling binds every provider, and while it
+/// lived in one of them, that one could raise or lower what its peer is permitted to claim.
+#[must_use]
+pub const fn Ceiling() -> Guarantee
+{
+    return Guarantee::New(
+        FactVariant::Syntactic,
+        Assurance::Sound,
+        Assurance::Sound,
+        IncrementalGranularity::Region,
+    );
+}
+
+#[must_use]
+pub fn Capability() -> CapabilityId
+{
+    return CapabilityId::New(CAPABILITY);
+}
+
+#[must_use]
+pub fn Payload_Schema() -> SchemaId
+{
+    return SchemaId::New(SCHEMA);
+}
+
+/// The contract, to be declared once by whichever composition root builds a registry.
+///
+/// Declared by a root and not by a provider, which is the other half of the move. A
+/// provider that declares the contract it offers against is asserting the terms of an
+/// agreement it is a party to, and `Registry::Declare` would then refuse whichever provider
+/// happened to be registered second.
+#[must_use]
+pub fn Capability_Contract() -> CapabilityContract
+{
+    return CapabilityContract {
+        id: Capability(),
+        version: CONTRACT_VERSION,
+        summary: "The items a source file declares, as written, with the visibility each \
+                  one declares and a count of the places the parse tree ends in unexpanded \
+                  tokens."
+            .to_owned(),
+        ceiling: Ceiling(),
+    };
+}

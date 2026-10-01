@@ -1,0 +1,55 @@
+[package]
+name = "nomos-integration-tests"
+version = "0.1.0"
+description = "The vertical slice: real facts over a real corpus, through every seam at once."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-cap-syntax = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-workspace = { workspace = true }
+nomos-analysis = { workspace = true }
+nomos-check-orchestration = { workspace = true }
+nomos-lang-rust = { workspace = true }
+nomos-lang-rust-scan = { workspace = true }
+
+[dev-dependencies]
+nomos-composer-providers = { workspace = true }
+# P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON: `nomos_check_orchestration::
+# Run`'s own public signature takes `sources: &[nomos_rules::SourceFile]` and is not
+# re-exported from that crate, so `tests/calibration.rs` needs this crate directly to
+# build the sources it hands to a real `Run` call, the same reason every subprocess
+# provider crate below is already a dev-dependency of this harness.
+nomos-rules = { workspace = true }
+nomos-lang-go = { workspace = true }
+nomos-lang-rust-cargo = { workspace = true }
+nomos-lang-rust-clippy = { workspace = true }
+nomos-lang-rust-deny = { workspace = true }
+nomos-lang-rust-compiler = { workspace = true }
+nomos-lang-rust-complexity = { workspace = true }
+nomos-lang-csharp-compiler = { workspace = true }
+nomos-cap-csharp-semantics = { workspace = true }
+nomos-lang-go-modules = { workspace = true }
+nomos-lang-go-lint = { workspace = true }
+nomos-lang-go-types = { workspace = true }
+nomos-platform = { workspace = true }
+nomos-connector-coderabbit = { workspace = true }
+nomos-corrections = { workspace = true }
+nomos-platform-std = { workspace = true }
+nomos-repo-policy = { workspace = true }
+nomos-cap-requirement-trace = { workspace = true }
+# The two spec domains this harness holds to their declarations. The spec system sits
+# beside the kernel rather than above it, and this crate is the one place both sides are
+# linked at once — which is what a harness is for.
+nomos-spec-model = { workspace = true }
+nomos-spec-store = { workspace = true }
+nomos-spec-bundle = { workspace = true }
+nomos-spec-project = { workspace = true }
+
+[lints]
+workspace = true

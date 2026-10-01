@@ -1,0 +1,48 @@
+# The assessment of AGT-006 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-006: "Neither system shall depend on the other at runtime for its core function;
+# integration shall occur through neutral versioned contracts and MCP tools."
+#
+# 'Neither system shall depend on the other' NO LONGER HOLDS for the XVPE crossing, and
+# this requirement is retired for it by the owner's decision on 2026-09-10. Nomos is built
+# on top of XVPE: XVPE is the engine, and this workspace is an application over it. The
+# agent dispatch this workspace had built -- an isolated working directory, an allow-list
+# granting nothing, a spend ceiling, a wall bound, a schema-validated answer -- moved down
+# into XVPE, because a general capability sitting up here was unreachable by everything
+# down there. Nine crates now name `xvpe-` transitively, by design.
+#
+# `Test_Only_The_Platform_Adapter_May_Name_The_Sibling_Workspace` enforced the old premise
+# and is deleted rather than widened. Adding those nine crates to its allow-list would have
+# left a rule that still read as a boundary while enforcing nothing, which is worse than no
+# rule.
+#
+# The KWB crossing is untouched and still holds: `Test_No_Crate_May_Name_The_Sibling_
+# Knowledge_Workbench` still fails the build if any crate reaches a `kwb-` prefix, with an
+# empty `KNOWLEDGE_ADAPTER` since no such adapter exists. Nothing about the XVPE decision
+# says this workspace may name `kwb-`.
+#
+# 'Integration through neutral versioned contracts' is real and well-grounded: `nomos-contracts`
+# is band 0, versioned, and its own crate root states directly why no dependency may be added
+# to it -- "Every type here is copied into a KnowledgeWorkbench or XVPE implementation that
+# has never seen this repository; a dependency added here makes the protocol Nomos-shaped and
+# forces a peer to vendor a Rust crate in order to speak it." It already carries
+# `KnowledgeReferenceId` (D-137), a type built specifically for citing an external knowledge
+# system's claim without depending on it.
+#
+# 'MCP tools' was a clean, total gap at this assessment's first pass: `nomos-api`'s own
+# module doc stated outright it "does not read argv, listen on a socket, or speak MCP's
+# JSON-RPC framing," and no MCP transport or tool surface existed anywhere in the workspace.
+# `P40-MCP-SURFACE-4` closed it: `nomos-mcp` is a real, runnable MCP server over stdio,
+# exposing `nomos-api-transport`'s own three Gate verbs as MCP tools (`tools/list`,
+# `tools/call`), proven against a real spawned subprocess talking to it over its own stdin
+# and stdout, not merely against a direct dispatch call.
+verdict: Diverges
+record: OD-PLATFORM-003
+site: crates/contracts/nomos-contracts/Cargo.toml#Every type here is copied into a KnowledgeWorkbench
+site: crates/contracts/nomos-contracts/src/digest128.rs#KnowledgeReferenceId
+site: tests/contract/tests/boundaries/graph.rs#Test_No_Crate_May_Name_The_Sibling_Knowledge_Workbench
+site: crates/host/nomos-mcp/src/lib.rs#An MCP server over stdio
+site: crates/host/nomos-mcp/tests/stdio.rs#Test_A_Real_Subprocess_Should_Answer_A_Real_Conversation_Over_Its_Own_Stdio

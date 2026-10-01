@@ -1,0 +1,25 @@
+[package]
+name = "nomos-tool-package"
+version = "0.1.0"
+description = "The ToolProvider manifest format: wraps nomos-package's generic core rather than depending on a sibling package crate, admits every language provider that recognizes no language (OD-PACKAGE-018: cargo, clippy, deny, the compiler and complexity for Rust, go-modules, go vet and the go/types helper, MSBuild) by their own provider identities, and classifies each registration under OD-CAPABILITY-013's closed twelve-name FAMILY vocabulary."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-package = { workspace = true }
+nomos-lang-csharp-compiler = { workspace = true }
+nomos-lang-go-lint = { workspace = true }
+nomos-lang-go-types = { workspace = true }
+nomos-lang-go-modules = { workspace = true }
+nomos-lang-rust-cargo = { workspace = true }
+nomos-lang-rust-clippy = { workspace = true }
+nomos-lang-rust-compiler = { workspace = true }
+nomos-lang-rust-complexity = { workspace = true }
+nomos-lang-rust-deny = { workspace = true }
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

@@ -1,0 +1,122 @@
+pub const nomos_check_orchestration::PACKAGE_CONFORMANCE: &str
+pub enum nomos_check_orchestration::CheckOutcome
+pub enum nomos_check_orchestration::Claim
+pub enum nomos_check_orchestration::RuleResolutionError
+pub enum nomos_check_orchestration::SupportingFacts
+pub enum variant nomos_check_orchestration::CheckOutcome::Contradictory(RegistryError)
+pub enum variant nomos_check_orchestration::CheckOutcome::Judged { findings: Vec<Finding>, examined: Examined, claim: Claim, supporting_facts: SupportingFactTrail, }
+pub enum variant nomos_check_orchestration::CheckOutcome::NoFacts { files: usize, }
+pub enum variant nomos_check_orchestration::CheckOutcome::NoSource
+pub enum variant nomos_check_orchestration::CheckOutcome::Unreadable
+pub enum variant nomos_check_orchestration::Claim::Complete
+pub enum variant nomos_check_orchestration::Claim::Incomplete
+pub enum variant nomos_check_orchestration::RuleResolutionError::Disagreed { unimplemented: Vec<RuleId>, undeclared: Vec<RuleId>, contradicted: Vec<RuleId>, }
+pub enum variant nomos_check_orchestration::RuleResolutionError::NothingDeclared
+pub enum variant nomos_check_orchestration::SupportingFacts::NotFactBacked
+pub enum variant nomos_check_orchestration::SupportingFacts::RaisedByMaterialization
+pub enum variant nomos_check_orchestration::SupportingFacts::Read(Vec<FactRead>)
+pub enum variant nomos_check_orchestration::SupportingFacts::Unrecorded
+pub fn nomos_check_orchestration::Check_Package_Conformance(packages: &[DeclaredPackage<'_>], registry: &Registry) -> Vec<Finding>
+pub fn nomos_check_orchestration::Claim::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_check_orchestration::Claim_Of(findings: &[Finding]) -> Claim
+pub fn nomos_check_orchestration::Composed_Rules() -> Vec<RuleId>
+pub fn nomos_check_orchestration::Declared_Rules() -> Vec<RulePackage>
+pub fn nomos_check_orchestration::Recognized_Language(providers: &[SyntaxProvider], path: &str) -> Option<Language>
+pub fn nomos_check_orchestration::Recognized_Syntax_Provider<'a>(providers: &'a [SyntaxProvider], path: &str) -> Option<&'a SyntaxProvider>
+pub fn nomos_check_orchestration::Registered(offer: RegistryOffers) -> Result<Registry, RegistryError>
+pub fn nomos_check_orchestration::Resolve_Rules(declared: &[RulePackage], registered: &[RuleId]) -> Result<RuleResolution, RuleResolutionError>
+pub fn nomos_check_orchestration::Resolved_Configuration(registry: &Registry) -> ConfigurationId
+pub fn nomos_check_orchestration::RuleReassessmentCache::New() -> Self
+pub fn nomos_check_orchestration::Run<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( sources: &[SourceFile], context: RunContext<'_, Launcher, Fs, Env>, selected: &[RuleId], ) -> CheckOutcome
+pub fn nomos_check_orchestration::Run_Reassessing<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( sources: &[SourceFile], context: RunContext<'_, Launcher, Fs, Env>, selected: &[RuleId], reassessment: &mut RuleReassessmentCache, ) -> CheckOutcome
+pub fn nomos_check_orchestration::SupportingFactTrail::Facts_For(&self, rule: &str) -> SupportingFacts
+pub fn nomos_check_orchestration::SupportingFactTrail::New() -> Self
+pub impl nomos_check_orchestration::Claim implements core::fmt::Display
+pub struct field nomos_check_orchestration::CheckCommand::root: PathBuf
+pub struct field nomos_check_orchestration::ComposedProviders::architecture: WorkspacePolicyProvider<Fs>
+pub struct field nomos_check_orchestration::ComposedProviders::complexity: SubjectFactProvider
+pub struct field nomos_check_orchestration::ComposedProviders::copy_clones: ProjectFactProvider<Env>
+pub struct field nomos_check_orchestration::ComposedProviders::csharp_conditional: WalkFactsProvider<Launcher, Fs, Env>
+pub struct field nomos_check_orchestration::ComposedProviders::dependencies: SubjectFactsProvider<Launcher, Env>
+pub struct field nomos_check_orchestration::ComposedProviders::dependency_policy: WorkspaceFactProvider<Launcher, Env>
+pub struct field nomos_check_orchestration::ComposedProviders::go_discarded_values: WalkFactsProvider<Launcher, Fs, Env>
+pub struct field nomos_check_orchestration::ComposedProviders::goals_policy: WorkspacePolicyProvider<Fs>
+pub struct field nomos_check_orchestration::ComposedProviders::limits_policy: WorkspacePolicyProvider<Fs>
+pub struct field nomos_check_orchestration::ComposedProviders::lint: SubjectFactsProvider<Launcher, Env>
+pub struct field nomos_check_orchestration::ComposedProviders::naming_policy: WorkspacePolicyProvider<Fs>
+pub struct field nomos_check_orchestration::ComposedProviders::nested_locks: ProjectFactProvider<Env>
+pub struct field nomos_check_orchestration::ComposedProviders::offer: RegistryOffers
+pub struct field nomos_check_orchestration::ComposedProviders::reachability: SubjectFactProvider
+pub struct field nomos_check_orchestration::ComposedProviders::requirement_trace: WorkspacePolicyProvider<Fs>
+pub struct field nomos_check_orchestration::ComposedProviders::scripting_policy: WorkspacePolicyProvider<Fs>
+pub struct field nomos_check_orchestration::ComposedProviders::standards_corpus_policy: WorkspacePolicyProvider<Fs>
+pub struct field nomos_check_orchestration::ComposedProviders::syntax: Vec<SyntaxProvider>
+pub struct field nomos_check_orchestration::ComposedProviders::test_material_policy: WorkspacePolicyProvider<Fs>
+pub struct field nomos_check_orchestration::ComposedProviders::walked_lint: Vec<WalkFactsProvider<Launcher, Fs, Env>>
+pub struct field nomos_check_orchestration::ComposedProviders::words_policy: WorkspacePolicyProvider<Fs>
+pub struct field nomos_check_orchestration::DeclaredPackage::manifest_path: &'a str
+pub struct field nomos_check_orchestration::DeclaredPackage::providers: &'a [ProviderRegistration]
+pub struct field nomos_check_orchestration::Examined::facts: usize
+pub struct field nomos_check_orchestration::Examined::files: usize
+pub struct field nomos_check_orchestration::FactRead::capability: CapabilityId
+pub struct field nomos_check_orchestration::FactRead::evidence: Option<EvidenceClass>
+pub struct field nomos_check_orchestration::FactRead::guarantee: Option<Guarantee>
+pub struct field nomos_check_orchestration::FactRead::outcome: ReadOutcome
+pub struct field nomos_check_orchestration::FactRead::provider: ProviderId
+pub struct field nomos_check_orchestration::FactRead::provider_version: ContractVersion
+pub struct field nomos_check_orchestration::FactRead::reads: usize
+pub struct field nomos_check_orchestration::RuleResolution::mechanical: Vec<RuleId>
+pub struct field nomos_check_orchestration::RuleResolution::model_judged: Vec<RuleId>
+pub struct field nomos_check_orchestration::RunContext::environment: &'a Env
+pub struct field nomos_check_orchestration::RunContext::filesystem: &'a Fs
+pub struct field nomos_check_orchestration::RunContext::launcher: &'a Launcher
+pub struct field nomos_check_orchestration::RunContext::providers: &'a ComposedProviders<Launcher, Fs, Env>
+pub struct field nomos_check_orchestration::RunContext::root: &'a Path
+pub struct field nomos_check_orchestration::RunContext::store: &'a mut MemoryFactStore
+pub struct field nomos_check_orchestration::RunContext::variant: BuildVariant
+pub struct field nomos_check_orchestration::RunContext::workspace: &'a mut Option<Workspace>
+pub struct field nomos_check_orchestration::SubjectFact::fact: MaterializedFact
+pub struct field nomos_check_orchestration::SubjectFact::path: String
+pub struct field nomos_check_orchestration::SubjectFact::subject: SubjectId
+pub struct field nomos_check_orchestration::SyntaxProvider::guarantee: Guarantee
+pub struct field nomos_check_orchestration::SyntaxProvider::language: Language
+pub struct field nomos_check_orchestration::SyntaxProvider::provider: ProviderId
+pub struct field nomos_check_orchestration::SyntaxProvider::recognizes: fn(&str) -> bool, pub materialize: fn(SubjectId
+pub struct field nomos_check_orchestration::Unanswered::applicability: Applicability
+pub struct field nomos_check_orchestration::Unanswered::gate: GateCategory
+pub struct field nomos_check_orchestration::Unanswered::path: String
+pub struct field nomos_check_orchestration::Unanswered::reason: String
+pub struct field nomos_check_orchestration::Unanswered::subject_name: String
+pub struct field nomos_check_orchestration::WalkFacts::facts: Vec<SubjectFact>
+pub struct field nomos_check_orchestration::WalkFacts::unanswered: Vec<Unanswered>
+pub struct field nomos_check_orchestration::WalkReading::context: &'reading Context
+pub struct field nomos_check_orchestration::WalkReading::environment: &'reading Env
+pub struct field nomos_check_orchestration::WalkReading::filesystem: &'reading Fs
+pub struct field nomos_check_orchestration::WalkReading::launcher: &'reading Launcher
+pub struct field nomos_check_orchestration::WalkReading::root: &'reading Path
+pub struct field nomos_check_orchestration::WalkReading::sources: &'reading [WalkedSource<'reading>]
+pub struct field nomos_check_orchestration::WalkedSource::path: &'source str
+pub struct field nomos_check_orchestration::WalkedSource::subject: SubjectId
+pub struct field nomos_check_orchestration::WalkedSource::text: &'source str
+pub struct nomos_check_orchestration::CheckCommand
+pub struct nomos_check_orchestration::ComposedProviders<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
+pub struct nomos_check_orchestration::DeclaredPackage<'a>
+pub struct nomos_check_orchestration::Examined
+pub struct nomos_check_orchestration::FactRead
+pub struct nomos_check_orchestration::RuleReassessmentCache
+pub struct nomos_check_orchestration::RuleResolution
+pub struct nomos_check_orchestration::RunContext<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
+pub struct nomos_check_orchestration::SubjectFact
+pub struct nomos_check_orchestration::SupportingFactTrail
+pub struct nomos_check_orchestration::SyntaxProvider
+pub struct nomos_check_orchestration::Unanswered
+pub struct nomos_check_orchestration::WalkFacts
+pub struct nomos_check_orchestration::WalkReading<'reading, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
+pub struct nomos_check_orchestration::WalkedSource<'source>
+pub type nomos_check_orchestration::ProjectFactProvider<Env>
+pub type nomos_check_orchestration::RegistryOffers
+pub type nomos_check_orchestration::SubjectFactProvider
+pub type nomos_check_orchestration::SubjectFactsProvider<Launcher, Env>
+pub type nomos_check_orchestration::WalkFactsProvider<Launcher, Fs, Env>
+pub type nomos_check_orchestration::WorkspaceFactProvider<Launcher, Env>
+pub type nomos_check_orchestration::WorkspacePolicyProvider<Fs>

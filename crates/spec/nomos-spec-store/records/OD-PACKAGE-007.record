@@ -1,0 +1,3 @@
+# The registration for OD-PACKAGE-007. Writing the record file does not make a record
+# governing; this file does.
+path: docs/records/OD-PACKAGE-007-the-language-agnostic-manifest-core-is-its-own-crate-so-a-second-language-does-not-depend-on-rust.md

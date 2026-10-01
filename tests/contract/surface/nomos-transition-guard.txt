@@ -1,0 +1,84 @@
+pub const nomos_transition_guard::IDENTITY_RULE: &str
+pub const nomos_transition_guard::MESSAGE_PLACE: &str
+pub const nomos_transition_guard::SHOWN_TEXT_LENGTH: usize
+pub enum nomos_transition_guard::Boundary
+pub enum nomos_transition_guard::GuardError
+pub enum nomos_transition_guard::LetterCase
+pub enum nomos_transition_guard::Pattern
+pub enum nomos_transition_guard::Place
+pub enum nomos_transition_guard::PolicyError
+pub enum nomos_transition_guard::Verdict
+pub enum variant nomos_transition_guard::Boundary::Anywhere
+pub enum variant nomos_transition_guard::Boundary::Word
+pub enum variant nomos_transition_guard::Boundary::WordStart
+pub enum variant nomos_transition_guard::GuardError::Git(String)
+pub enum variant nomos_transition_guard::LetterCase::Exact
+pub enum variant nomos_transition_guard::LetterCase::Ignored
+pub enum variant nomos_transition_guard::Pattern::Phrases { phrases: Vec<Vec<String>>, boundary: Boundary, letter_case: LetterCase, }
+pub enum variant nomos_transition_guard::Pattern::Tickets { keys: Vec<String>, }
+pub enum variant nomos_transition_guard::Place::Identity { commit: Option<String>, role: &'static str, }
+pub enum variant nomos_transition_guard::Place::Line { commit: Option<String>, path: String, line: usize, }
+pub enum variant nomos_transition_guard::Place::Message { commit: Option<String>, }
+pub enum variant nomos_transition_guard::Place::Path { commit: Option<String>, path: String, }
+pub enum variant nomos_transition_guard::PolicyError::Invalid(String)
+pub enum variant nomos_transition_guard::PolicyError::Malformed(String)
+pub enum variant nomos_transition_guard::Verdict::Clean
+pub enum variant nomos_transition_guard::Verdict::OwnRepository
+pub enum variant nomos_transition_guard::Verdict::Refused(Vec<Refusal>)
+pub fn nomos_transition_guard::GitReader::Email_Of(&self, variable: &str) -> Result<String, GuardError>
+pub fn nomos_transition_guard::GitReader::Has_Commit(&self, id: &str) -> bool
+pub fn nomos_transition_guard::GitReader::Log_Of(&self, tips: &[String], excluded: &[String], remote: &str) -> Result<String, GuardError>
+pub fn nomos_transition_guard::GitReader::New(launcher: &'launcher Launcher, root: &Path) -> Self
+pub fn nomos_transition_guard::GitReader::Remote_Urls(&self) -> Result<Vec<String>, GuardError>
+pub fn nomos_transition_guard::GitReader::Staged_Diff(&self) -> Result<String, GuardError>
+pub fn nomos_transition_guard::GitReader::Top_Level(&self) -> Result<String, GuardError>
+pub fn nomos_transition_guard::GitReader::Tracked_Files(&self) -> Result<Vec<String>, GuardError>
+pub fn nomos_transition_guard::GuardError::fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result
+pub fn nomos_transition_guard::Hook_Scripts(nomos: &str, policy: &str) -> Vec<HookScript>
+pub fn nomos_transition_guard::Judge::Identity(&self, place: &Place, email: &str) -> Option<Refusal>
+pub fn nomos_transition_guard::Judge::Is_Own_Repository(&self, remote_urls: &[String], root: &str) -> bool
+pub fn nomos_transition_guard::Judge::New(policy: &'policy PartyPolicy) -> Self
+pub fn nomos_transition_guard::Judge::Party(&self) -> &str
+pub fn nomos_transition_guard::Judge::Text(&self, place: &Place, text: &str) -> Vec<Refusal>
+pub fn nomos_transition_guard::Judge::Unexcepted(&self, refusals: Vec<Refusal>) -> Vec<Refusal>
+pub fn nomos_transition_guard::Judge_Commit_Being_Made<Launcher: ProgramLauncher>(judge: &Judge<'_>, git: &GitReader<'_, Launcher>) -> Result<Verdict, GuardError>
+pub fn nomos_transition_guard::Judge_Message<Launcher: ProgramLauncher>(judge: &Judge<'_>, git: &GitReader<'_, Launcher>, message: &str) -> Result<Verdict, GuardError>
+pub fn nomos_transition_guard::Judge_Push<Launcher: ProgramLauncher>(judge: &Judge<'_>, git: &GitReader<'_, Launcher>, remote: &str, pushed: &str) -> Result<Verdict, GuardError>
+pub fn nomos_transition_guard::Party_Policy_From_Json(text: &str) -> Result<PartyPolicy, PolicyError>
+pub fn nomos_transition_guard::Place::Exception_Path(&self) -> Option<&str>
+pub fn nomos_transition_guard::Place::fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result
+pub fn nomos_transition_guard::PolicyError::fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result
+pub fn nomos_transition_guard::Scan<Launcher: ProgramLauncher, Files: FileSystem>( judge: &Judge<'_>, git: &GitReader<'_, Launcher>, files: &Files, root: &Path, ) -> Result<ScanOutcome, GuardError>
+pub impl nomos_transition_guard::GuardError implements std::fmt::Display
+pub impl nomos_transition_guard::Place implements std::fmt::Display
+pub impl nomos_transition_guard::PolicyError implements std::fmt::Display
+pub struct field nomos_transition_guard::Exception::path: String
+pub struct field nomos_transition_guard::Exception::reason: String
+pub struct field nomos_transition_guard::Exception::rule: String
+pub struct field nomos_transition_guard::HookScript::name: &'static str
+pub struct field nomos_transition_guard::HookScript::text: String
+pub struct field nomos_transition_guard::OwnRepositories::paths: Vec<String>
+pub struct field nomos_transition_guard::OwnRepositories::remotes: Vec<String>
+pub struct field nomos_transition_guard::PartyPolicy::exceptions: Vec<Exception>
+pub struct field nomos_transition_guard::PartyPolicy::identity_domains: Vec<String>
+pub struct field nomos_transition_guard::PartyPolicy::own_repositories: OwnRepositories
+pub struct field nomos_transition_guard::PartyPolicy::party: String
+pub struct field nomos_transition_guard::PartyPolicy::rules: Vec<PartyRule>
+pub struct field nomos_transition_guard::PartyRule::id: String
+pub struct field nomos_transition_guard::PartyRule::pattern: Pattern
+pub struct field nomos_transition_guard::PartyRule::why: String
+pub struct field nomos_transition_guard::Refusal::place: Place
+pub struct field nomos_transition_guard::Refusal::rule: String
+pub struct field nomos_transition_guard::Refusal::text: String
+pub struct field nomos_transition_guard::Refusal::why: String
+pub struct field nomos_transition_guard::ScanOutcome::judged: usize
+pub struct field nomos_transition_guard::ScanOutcome::refusals: Vec<Refusal>
+pub struct nomos_transition_guard::Exception
+pub struct nomos_transition_guard::GitReader<'launcher, Launcher: ProgramLauncher>
+pub struct nomos_transition_guard::HookScript
+pub struct nomos_transition_guard::Judge<'policy>
+pub struct nomos_transition_guard::OwnRepositories
+pub struct nomos_transition_guard::PartyPolicy
+pub struct nomos_transition_guard::PartyRule
+pub struct nomos_transition_guard::Refusal
+pub struct nomos_transition_guard::ScanOutcome

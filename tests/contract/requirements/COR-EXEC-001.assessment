@@ -1,0 +1,21 @@
+# The assessment of COR-EXEC-001 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# COR-EXEC-001: "Every correction operation shall declare or derive artifact, symbol,
+# configuration, generated-source, dependency, provider-state, and semantic read/write
+# sets at the strongest available resolution. Derived sets shall identify the provider,
+# guarantee, confidence, and invalidation basis."
+#
+# ReadWriteSet/ReadWriteResolution/DerivedProvenance are real and tested: all seven named
+# resolution tiers, and all four named derived-provenance fields (reusing
+# nomos_contracts::ProviderId/Guarantee for the first two). CorrectionCandidate, the type
+# a correction operation actually is in this crate, now carries them: New seeds one
+# ReadWriteSet::Declared at Artifact resolution from the change it is given -- the
+# strongest tier a bare ChangeSet justifies -- and With_Read_Write lets a caller with
+# something stronger to say add a declared or derived set beside it, never in place of
+# it, since a stronger claim about part of a change is not a claim about the rest of it.
+verdict: Met
+site: crates/corrections/nomos-corrections/src/read_write_resolution/read_write_set.rs#ReadWriteSet
+site: crates/corrections/nomos-corrections/src/correction_id/correction_candidate.rs#Read_Write

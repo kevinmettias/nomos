@@ -1,0 +1,564 @@
+---
+name: nomos-spec-change
+description: Change specification content safely - read the store, stage an edit, read the preview, commit it, then prove nothing was lost and no projection went stale. Use when editing a governing record or any specification document, when adding a store table, or when a projection or freshness check has gone red.
+---
+
+# Changing specification content
+
+`AGENTS.md` is the contract; this is the procedure. The store is the authority, and
+`docs/records/ARC-SPECDB-001-the-specification-is-a-database.md` is why.
+
+The reason this is a procedure rather than a command is the failure it guards against. The
+previous revision of this specification destroyed 282 table rows, all 6 code blocks and 132
+sections of narrative, and the mechanism that would have caught it was present and never
+ran. Every step below exists because something was lost while a green run said otherwise.
+
+## 1. Read what is actually there
+
+Two reads, and they answer different questions.
+
+- `nomos spec record --id <node-id>` prints the bytes the store was given.
+- `nomos spec markdown --id <node-id>` renders the record back out of the store's own rows.
+
+Read the second one before editing. It is the round trip: if it does not agree with the
+first, the store did not hold everything the file said, and your edit will be authored on
+top of a loss rather than the cause of one.
+
+Content goes to stdout and everything about it to stderr, so a redirect captures exactly
+what the store holds and nothing else.
+
+## 2. Stage, preview, then commit
+
+`nomos spec commit` refuses an edit it has not previewed, and prints the preview it did.
+That refusal is the feature; do not work around it.
+
+```
+nomos spec preview --id <node-id> --from <file> [--rename <path>]
+nomos spec commit  --id <node-id> --from <file> [--rename <path>]
+```
+
+Read the preview rather than scanning it. It separates the things that look alike:
+
+- **blocks** changed, added, removed — the count that would have caught the 282 rows;
+- **identity** changes — a heading or an id moving is not the same edit as its prose moving;
+- **relations** added and removed, which are edges in the graph this system exists to keep
+  honest, so a wrong one is worse than a missing one;
+- **statements** — normative movement, meaning a requirement changed force;
+- **wording moved** and **changes nothing**, which are the two answers that should make you
+  stop and check you edited the file you meant to.
+
+An edit refused is exit 9, and a source that is absent is exit 6. Absence is reported as an
+absence, never as a shorter answer — `nomos spec sources` says what a store actually holds,
+and a corpus that is not on this machine is the usual explanation for a record that is
+suddenly not found.
+
+## 3. Prove nothing was lost
+
+The preservation rules are not a command. They are the run in the validation crate, driven
+by `crates/spec/nomos-spec-validate/tests/preservation_holds.rs`, and the numbers that
+matter come from the real corpus.
+
+Two ways that run lies if you let it:
+
+**A rule that judged nothing reports the same as a rule that judged everything.** The run
+tracks which rules were vacuous for exactly this reason. A summary is not evidence unless
+you have looked at whether the subjects were there.
+
+**The corpus lives outside this repository and CI has none of it.** A preservation test
+that cannot find its corpus returns early and prints `ok`. So a green pull request is not
+evidence that a corpus-backed claim was checked; it is evidence that nothing contradicted
+it on a machine that could not look.
+
+Set the corpus variable and re-run locally before believing a preservation result.
+
+## 4. Prove no projection went stale
+
+`nomos spec render --profile <id> --into <directory>` writes a body and a sidecar stamping
+what produced it and from what. `nomos spec freshness --into <directory>` compares the two
+back and keeps two failures apart that share exit code 8: the store moved under an
+unchanged body (**stale**), and somebody typed into the body (**edited**).
+
+A body with no sidecar beside it is a failure rather than a skip. Deleting the sidecar is
+otherwise how an edit stops being caught, and a check that teaches that trick is worse than
+no check.
+
+Never hand-edit a rendered body. If the text is wrong, the store is wrong.
+
+### Render from the record set your commit will publish
+
+Not from your working tree. `OD-GATE-005` is why, and it is the step whose absence left the
+gate red for eleven commits.
+
+The store is assembled from `crates/spec/nomos-spec-store/records/` **on disk**, so a binary
+built in the shared tree holds whatever every live session has lying in it. Measured on
+2026-08-10: 50 records in the working tree against 49 at `HEAD`, the difference being one
+peer's unlanded file. Render there and you commit their unpublished work into an artifact CI
+rebuilds without it, and the gate fails on *your* commit.
+
+The rule is exact in both directions:
+
+> The tree you render in holds exactly the registered records your commit will publish — no
+> more, and no fewer.
+
+"Everything is committed" fails it twice over. It is satisfied by a tree carrying a peer's
+uncommitted record, and it is *not* satisfied by the tree you are in when you add a record of
+your own, which must be on disk or the projection is stale the instant you commit.
+
+Construct that tree rather than waiting for one:
+
+```
+PARENT=$(git rev-parse HEAD)              # captured once, and reused by the commit below
+git worktree add --detach <scratch>/render "$PARENT"
+cp docs/records/<your-record>.md          <scratch>/render/docs/records/
+cp crates/spec/nomos-spec-store/records/<ID>.record <scratch>/render/crates/spec/nomos-spec-store/records/
+cd <scratch>/render
+CARGO_TARGET_DIR=<scratch>/render-target cargo build -q --bin nomos
+<scratch>/render-target/debug/nomos spec render    --profile diagram-set           --into .
+<scratch>/render-target/debug/nomos spec render    --profile domain-specification  --into .
+<scratch>/render-target/debug/nomos spec freshness --into . --require diagram-set --require domain-specification   # must exit 0
+```
+
+**Both required profiles, every time.** The gate requires `diagram-set` and
+`domain-specification`, so rendering one and not the other leaves a stale output and the gate
+fails on your commit for the half you skipped. `freshness` with both `--require` flags is what
+tells you before you push; run it with the same pair the gate uses, which
+`.github/workflows/gate.yml` holds.
+
+Then copy **all four** halves back — each body and the sidecar beside it:
+`diagrams/relations.mmd`, `diagrams/relations.mmd.nomos-projection.json`,
+`spec/domain-specification.md` and `spec/domain-specification.md.nomos-projection.json` — and
+commit them with the record that moved them. Build in the worktree: a binary built in the
+shared tree has the wrong records compiled into it, which is the whole point.
+
+### Copying back is a race, and the commit form decides who wins it
+
+Those four halves are the files every session writes and nobody owns, so a peer can render
+over them while you are publishing. It happened three times within one hour on 2026-09-21:
+a worker's halves were swept into a peer's commit, repaired at `1524e139`; a peer's sidecars
+landed over a worker's copies, repaired in `57d3f646`; and `744e567f` staged a peer's bytes
+for all four, repaired at `5496360b`. Two windows, and they need different answers.
+
+**Between the copy and the `git add`**, a peer's render lands on your files and you stage
+their bytes. So stage, then compare each staged blob against the render worktree's own file
+by object hash — never by reading the shared working tree, which holds whatever the peer just
+wrote and so compares their file against itself:
+
+```
+git add diagrams/relations.mmd diagrams/relations.mmd.nomos-projection.json \
+        spec/domain-specification.md spec/domain-specification.md.nomos-projection.json
+git rev-parse :spec/domain-specification.md                      # the blob you staged
+git hash-object <scratch>/render/spec/domain-specification.md    # the bytes you rendered
+```
+
+Equal for all four halves, or somebody wrote over you: re-copy from the worktree and stage
+again. Never repair the file by hand.
+
+That closes the window that was open **before** it ran, and says nothing about the one it opens
+itself. A peer can write over the file, or re-stage it, in the second after the comparison
+passes — measured on 2026-09-21, when a peer re-staged HEAD's copy of
+`spec/domain-specification.md` over a worker's, in the shared index and the working tree both,
+in exactly that gap.
+
+**Between the `git add` and the commit**, use a **bare** `git commit -F <message>`. A trailing
+pathspec re-reads the working tree at commit time and ignores the index, so it commits the
+peer's bytes under your message — measured in a scratch repository by staging a file,
+overwriting it, and committing both ways. Explicit paths belong on `git add` and never on
+`git commit`; a pathspec there is not a stricter reading of the rule but its opposite.
+
+Bare costs the other half, which is why the pathspec form gets reached for: it commits the
+whole index, a peer's staged files included. So assert the staged list, and only then commit:
+
+```
+git diff --cached --name-only    # exactly the paths you meant, and nothing else
+```
+
+**After the commit**, `git show HEAD:<path> | diff - <path>` is worth running for what it is:
+a check that the working tree equals `HEAD`, which under a live peer is a different question
+from whether your commit is right. Measured both ways — silent on a pathspec commit that
+carried a peer's bytes, because `HEAD` and the tree then hold the same peer's file, and loud
+on a correct bare commit the moment a peer re-renders after it. It catches a stale render. It
+does not catch a stolen one.
+
+Two things follow that surprise people:
+
+- **`spec freshness` in your working tree is not the verdict.** It reports stale over a
+  correct file whenever a peer holds an unlanded record, so exit 8 there is not evidence you
+  rendered wrongly. Before reporting staleness to anybody, read
+  `git status --short docs/records/ crates/spec/nomos-spec-store/records/` — any line there
+  and the reading is not evidence, in either direction. Both directories, because a record is
+  its document plus its registration; and read the output rather than the exit code, which is
+  0 either way. A count cannot stand in for it: a modified file counts the same as its
+  committed version. Measured 2026-09-21 at `c248a20d` — both committed projections read
+  current from a detached worktree at that revision and exit 8 from the same worktree once one
+  peer's unlanded record was on disk at build time, nothing else having changed. A session
+  reported a false alarm to two others that day on the strength of a shared-tree reading.
+  The clean worktree and CI are the trees where the question is well posed.
+  Do not plan on waiting for the shared tree to go quiet: polled every minute for an hour on
+  2026-08-10, while seven commits landed from three sessions, it never once did.
+- **`work finish` does not run this check**, deliberately, for the same reason. Adding a
+  governing record is one of the few changes whose obligation the ledger cannot enforce for
+  you.
+- **If your item's own predicate is a projection check, run `finish` from the worktree**, with
+  `NOMOS_WORK_DIR` pointing at the real `work/` so the transition lands on the shared board.
+  The worktree is byte-for-byte what CI checks out; the shared tree would answer about a record
+  set nobody will publish. Do not wait for the shared tree instead — a session that lapses
+  leaves its unlanded records stranded there, and no one else can clear them.
+
+### That form is for a quiet tree, and one reading says whether you have one
+
+Stage, assert, bare commit is the form for a tree nobody else is publishing into. Take this
+reading when you are ready to publish, before you stage anything:
+
+```
+git rev-parse HEAD                 # against the $PARENT you rendered from
+git diff --cached --name-only      # anything here was staged by somebody else
+```
+
+- **HEAD has moved.** Your render answers about a record set that is no longer the one your
+  commit would publish, so re-render: `git -C <scratch>/render checkout --detach <new parent>`,
+  rebuild, render both profiles. No commit form fixes this one.
+- **The staged list is not empty.** A peer has the shared index open, a bare commit would carry
+  their files, and unstaging writes an index they are in the middle of using. Take the next
+  subsection.
+- **Neither.** Quiet, and that form is the whole procedure: its windows are the seconds
+  between your own commands, and nobody is writing the index inside them. Measured here at
+  `120c99f5` — twenty-two modified files in the tree and an empty staged list, so a dirty
+  working tree is not contention; an index somebody else has staged into is.
+
+Making every commit pay for the next subsection would be its own defect: four more commands, a
+second index to get wrong, and on a quiet tree it protects against nothing.
+
+### Under contention, build the commit without touching the index or the tree
+
+Both remaining windows are the shared index and the shared working tree, so use neither. Read
+the captured parent into a private index, set each rendered blob into it by hash, write the
+commit object, and move the branch with a compare-and-swap:
+
+```
+export GIT_INDEX_FILE=<scratch>/commit-index      # a private index; the shared one is never opened
+rm -f "$GIT_INDEX_FILE"
+git read-tree "$PARENT"                           # the revision you rendered from, captured once
+for half in diagrams/relations.mmd diagrams/relations.mmd.nomos-projection.json \
+            spec/domain-specification.md spec/domain-specification.md.nomos-projection.json; do
+  git update-index --add --cacheinfo "100644,$(git hash-object -w "<scratch>/render/$half"),$half"
+done
+git update-index --add --cacheinfo "100644,$(git hash-object -w work/ledger.json),work/ledger.json"
+TREE=$(git write-tree)
+unset GIT_INDEX_FILE
+NEW=$(git commit-tree "$TREE" -p "$PARENT" -F <message file>)
+git update-ref refs/heads/dev "$NEW" "$PARENT"    # exit 0, or the branch did not move at all
+```
+
+`--add` because a half the parent's tree does not carry is refused without it, and 100644
+because that is the mode all four halves have. The ledger blob is taken from the working tree in
+the same breath: `OD-LEDGER-018` settles that a ledger commit publishes the whole board and that
+what it carries is not yours to prevent. Measured under a peer who had landed a commit, staged
+their own file, and overwritten the specification in the shared tree — the commit carried the
+four halves and the ledger, carried nothing of theirs, kept their record amendment, and left
+their staging where it was.
+
+Four things about it, each measured in a throwaway repository before it was written here:
+
+**The parent is captured once and used twice**, for the `read-tree` and for the expected value
+of the swap. Reading HEAD a second time for the parent is the silent failure, and the swap does
+not catch it: a tree built at one revision with a parent taken at a later one publishes a revert
+of everything between, at exit 0, because the expected value *is* current. Measured — a peer's
+record amendment disappeared from a commit whose own diff showed one deletion and no conflict.
+That is what `8569f101` repaired.
+
+**A rejected swap means re-render, not retry.** It is loud: `cannot lock ref ... is at <x> but
+expected <y>`, exit 128, branch unmoved. It means HEAD moved while you were publishing, which is
+the first bullet above — capture the parent again, re-point the worktree, render again. Pointing
+the same blobs at the new value is the double read with extra steps.
+
+**The shared index and working tree are exactly as you left them**, which is the point while the
+commit is being built and a hazard the second it lands: the index still holds the pre-commit
+entries, so what sits in it now is a staged revert of what you just published. Check what you
+published first, which reads neither the index nor the tree:
+
+```
+git rev-parse HEAD:spec/domain-specification.md                  # the blob the commit holds
+git hash-object <scratch>/render/spec/domain-specification.md    # the bytes you rendered
+```
+
+Then copy the four halves into the working tree, so the next session stages your bytes rather
+than the ones you superseded. That copy races like every other, and the commit does not depend
+on it. **It covers the four halves and not your commit** — every other path you published is
+left stale in the shared checkout, which is the last subsection before the rebuild rule. Then
+clear the leftover, which is the subsection below and is not optional.
+
+**The form adds and replaces entries and cannot express a deletion.** `read-tree` followed by
+`update-index --add` never removes one, so a file you deleted on the render worktree's disk is
+carried into the commit unchanged, and every check around it reads that disk, where the deletion
+is correctly done. The subsection after next is the safeguard, and it is not optional either.
+
+Every edit to a record body changes the store, so **render after the last word is written**, not
+before. A record you touch again is a diagram you render again.
+
+### The form cannot delete, and only a check reading the published tree catches it
+
+A file that exists in `$PARENT` and that you removed from the render worktree's disk is published
+unchanged, so the commit carries an orphan: a file nothing declares, that `rustc` never parses,
+that no lint reads, and that no compiler can report as unused because it never compiled it.
+
+**It reached a real commit.** `2f128fa7` published the review-finding contract into a new
+capability crate and was believed to have moved four files out of `nomos-connector-coderabbit`.
+All four survived in the commit while their `mod` declarations did not, so they sat at `HEAD` as
+four `Blocking` `no-orphan-modules` findings, which two sessions each misattributed to somebody's
+uncommitted work before `e3263d11` repaired them.
+
+**Nothing around it notices, and that is structural rather than an oversight.** Every check this
+section prescribes reads the render worktree's disk, where the deletion is correctly done — the
+render, `freshness`, and the body-deletion comparison are all right. The blob comparison above is
+a check of *content* for the paths the commit *names*, so it cannot see a path the commit should
+not have carried at all. A green run is not evidence that the commit holds what the worktree does.
+
+**It fails in two independent places, and repairing one leaves the other.** Both measured in a
+throwaway repository:
+
+- **The form cannot express the deletion.** A parent holding `doomed.txt` and `keep.txt`, with
+  `doomed.txt` removed from the worktree's disk and one untracked file added, published through
+  the form above: the tree held `added.txt`, `keep.txt` and `doomed.txt`.
+- **The path list cannot carry it either.** A land script iterating
+  `git diff --cached --name-only` in the source worktree never sees an unstaged deletion, because
+  that command returns empty for one, so a removal branch keyed off that list never runs. Measured
+  by a session whose script already had `--force-remove` and lost all four files regardless.
+
+`git update-index --force-remove <path>` does publish the deletion once it is reached, and on a
+path the parent does not carry it is a no-op at exit 0 rather than an error, so naming a path you
+are unsure of costs nothing. **It is the instruction and it is not the safeguard**, because it
+acts only on paths you thought to name, and this defect is made of the path you did not.
+
+**The safeguard is told no paths at all.** Build the tree the render worktree's disk represents
+and compare it against the tree the commit published. Do it after `commit-tree` and before
+`update-ref`, where the object exists and the branch has not moved:
+
+```
+export GIT_INDEX_FILE=<scratch>/verify-index   # a third private index; the shared one stays shut
+rm -f "$GIT_INDEX_FILE"
+git --work-tree=<scratch>/render read-tree "$PARENT"
+git --work-tree=<scratch>/render add -A        # exactly what that disk holds, from no list
+git update-index --add --cacheinfo "100644,$(git hash-object -w work/ledger.json),work/ledger.json"
+EXPECTED=$(git write-tree)
+unset GIT_INDEX_FILE
+test "$EXPECTED" = "$(git rev-parse "$NEW^{tree}")" || git diff --name-status "$NEW" "$EXPECTED"
+```
+
+The ledger line is not optional and is the one path exempted from "no list": the commit
+deliberately takes that blob from the shared tree rather than the worktree's, per `OD-LEDGER-018`
+above, and without the line the check fires on `work/ledger.json` after every *correct* landing
+whenever a peer has claimed since you rendered. Measured both ways — with the line, the
+comparison agreed on a correct landing and named exactly `D doomed.txt` on the broken one; without
+it, it reported `M work/ledger.json` on a landing that was right. A check that cries wolf on every
+good commit is one the next reader stops running.
+
+`git diff --name-status` names the divergence in the form you need to repair it: add the missing
+`--force-remove`, or re-copy a half, then rebuild the tree and swap. This is a check of the commit,
+so it is finished before the branch moves and says nothing about the index afterwards, which is
+the subsection below.
+
+### The leftover is a staged revert of your own commit, and you clear your own entries only
+
+Measured in a throwaway repository: one tracked file modified, one untracked file added, both
+published through the form above. `git diff --cached` then reported `M` on the first and `D` on
+the second, and `git status --short` showed the added file as staged-deleted and untracked at the
+same time, which is the tell. A peer then ran a bare `git commit` with an unrelated message and
+published both deletions — the added file gone from `HEAD`, the modified file back to its parent
+content — under a message naming neither, its own diff showing two deletions it did not make.
+That is this form leaving an index loaded and the quiet-tree form two subsections up prescribing
+a bare commit, which commits the whole index. It reached a real record on 2026-09-22: `OD-HOST-019`
+and its registration were both untracked before the commit that published them, so both then read
+as staged deletions, and a peer's worker cleared them before anything committed over them.
+
+**The two entries are not one risk, and the deletion is the dangerous one.** A staged modification
+reverts content that is still in the working tree and still at `HEAD`, so publishing it costs a
+revert somebody can read back out of history. A staged deletion of a file that was untracked
+before your commit removes the only tracked copy of something just published: the shared index
+never held an entry for it, and absent reads as deleted. Every record you add is that case — the
+document and its registration were both untracked a minute ago.
+
+**Not with `git add`, and not with `git reset`.** That is what the instruction against re-staging
+was protecting, and the reason has not stopped being true. `git add <path>` stages the *shared
+working tree* at that instant, which is a peer's bytes if they rendered over you — measured, it
+staged a peer's file where `HEAD` held the blob the commit had published. A bare `git reset`
+clears every other session's staged work — measured, an empty staged list where a peer had two
+paths in flight.
+
+`git restore --staged <paths>` is neither. It writes the named entries only, from `HEAD`, and
+leaves every other entry and the entire working tree alone — measured, a peer's two staged paths
+survived it and their next bare commit carried exactly those and nothing of the publisher's. It
+takes the index lock to write, so a peer's concurrent git is refused with exit 128 and a lock
+message rather than interleaved with it.
+
+Name the paths your commit published, and read each one before you name it. The index, `HEAD` and
+the `$PARENT` you captured say which case a path is in; nothing about the path alone does:
+
+```
+for p in <the paths this commit published>; do
+  printf '%s  index=%s  head=%s  parent=%s\n' "$p" \
+    "$(git rev-parse --verify -q ":$p"        || echo absent)" \
+    "$(git rev-parse --verify -q "HEAD:$p")"                   \
+    "$(git rev-parse --verify -q "$PARENT:$p" || echo absent)"
+done
+git restore --staged <the paths that reading authorizes, and no others>
+```
+
+- **Absent from the index and absent from the parent** — the staged deletion. There is no entry
+  there to destroy, so restoring `HEAD`'s takes nothing from anybody.
+- **Index equals `$PARENT`** — the staged revert: the entry this form declined to touch, with
+  nobody having staged over it since.
+- **Index equals `HEAD`** — already right, and there is nothing to do.
+- **Anything else** — not yours. A peer staged their own bytes under a path you published, and a
+  bare commit of theirs is then their commit rather than a revert you left. Leave it and say so.
+
+This authorizes nothing about a staged path your commit did not publish. A peer's live work and
+somebody's abandoned leftover are the same thing to look at — a foreign staged path — and only
+the index, the working tree and `HEAD` read together separate them. You can read that triple for
+the paths you just published, because you know what your commit put at `HEAD`; you cannot read it
+for theirs. That is why the quiet-tree reading sends you to this form rather than telling you to
+unstage them: that bullet is about their entries before you commit, and this subsection is about
+yours after.
+
+### The copy-back is scoped to the four halves, and your commit is not
+
+The instruction two subsections up says to copy the four projection halves into the working tree.
+That is right, and it is written about the halves. A commit publishes whatever it publishes, and
+**nothing writes the shared checkout for any other path**, so the moment the branch moves, every
+session's working tree is `HEAD` minus your commit.
+
+Measured on `2f128fa7`, which published 34 paths of which four were projection-shaped. The other
+30 were never copied back, and the shared checkout stood at `HEAD`-minus-that-commit through
+**nine peer commits over several hours** before anybody noticed — the other sessions were
+committing from their own worktrees and never staged the affected paths.
+
+**Clear the leftover first, or you cannot see this at all.** Proved in a throwaway repository,
+publishing one modification, one addition and one deletion through the form above. Immediately
+after the swap, `git status --short` put all three in the *first* column — `M mod.txt`,
+`D added.txt`, `A doomed.txt` — because the index still holds the parent's entries. Those are the
+leftover, and they mask the tree completely. Only after `git restore --staged` of the published
+paths does the second column speak, and then the same commit appears again in three disguises:
+
+```
+ M mod.txt      # a published modification, reverted on disk
+ D added.txt    # a published addition, absent from disk
+?? doomed.txt   # a published deletion, still present on disk and now untracked
+```
+
+**Why it is not cosmetic.** A peer who runs `git add` on any of those stages the pre-commit bytes
+and publishes a revert of your work under their own message. Meanwhile every `nomos check --root .`,
+every contract-suite run and every `cargo build` in the shared tree is measuring a tree that exists
+at no commit, so a session diagnosing a red check there is diagnosing a state nothing produced —
+which happened: two sessions independently blamed somebody's uncommitted work for four orphan
+files that were in fact published by `2f128fa7`.
+
+**Read before you write.** A checkout over a path a peer is editing destroys their work, so
+establish the delta is your own first. The same triple the leftover subsection uses answers it,
+with the captured `$PARENT` as the third leg:
+
+```
+for p in <the paths this commit published>; do
+  printf '%s  disk=%s  head=%s  parent=%s\n' "$p" \
+    "$( [ -e "$p" ] && git hash-object "$p" || echo absent )" \
+    "$(git rev-parse --verify -q "HEAD:$p"   || echo absent)" \
+    "$(git rev-parse --verify -q "$PARENT:$p" || echo absent)"
+done
+```
+
+- **disk equals `HEAD`** — already reconciled; do nothing.
+- **disk equals `$PARENT`** — purely un-applied, and yours to restore.
+- **disk equals neither** — still just your change missing, with peers' later commits layered over
+  the pre-commit content. Read the diff before restoring; it should be your commit reversed.
+- **anything you cannot attribute to your own commit** — not yours. Leave it and say so.
+
+**Then reconcile, and note the case a checkout cannot reach:**
+
+```
+git checkout HEAD -- <the published paths HEAD still holds>
+rm -f <each published path HEAD no longer holds>
+```
+
+`git checkout HEAD -- <a path your commit deleted>` fails with exit 1 and
+`error: pathspec '<path>' did not match any file(s) known to git`, because `HEAD` has no such path.
+It comes back as `??` and only an explicit `rm` clears it. Measured; `rm` before the leftover is
+cleared is not enough either, because the index entry survives and the path then reads `AD`.
+
+**`work/ledger.json` is excluded from all of this.** It is live coordination state and its disk
+copy is legitimately *newer* than `HEAD` whenever a peer has claimed since you rendered, so
+restoring it to `HEAD` destroys live claims. Measured on 2026-09-22: a peer claimed an item between
+two `git status` calls ninety seconds apart, so the window is not theoretical.
+
+**Three moments, three subsections, and they are not interchangeable.** The form cannot express a
+deletion, which is about what the *commit* carries and is settled before the branch moves. The
+leftover is about what the *index* holds afterwards. This is about what the *working tree* never
+received. A landing can be correct on the first two and wrong on this one, which is exactly what
+`2f128fa7` was.
+
+### Rebuild the binary after the last record edit, not merely once in the worktree
+
+Record content is **compiled into the binary**. Building it in the worktree is necessary and
+not sufficient: the common failure is a binary that was right when it was built and wrong
+afterwards — build, edit the record again, re-render. The second render emits the superseded
+text, and **every check around it passes**. `freshness` compares the body against the sidecar
+the same stale binary just wrote, so the two agree; the store and the file on disk do not.
+
+Measured twice within an hour on 2026-09-06. One session rendered a projection carrying a
+record citation it had already replaced. The other, running a binary copied to a scratchpad
+at session start, re-rendered and produced **85 insertions against 2180 deletions**, having
+silently dropped the projection entries for `OD-GATE-023`, `OD-HOST-011`, `OD-HOST-012`,
+`OD-AGENT-004` and the amended `OD-RULES-025`, at exit 0.
+
+- **`cargo` does track `docs/records` as a build input**, so a plain rebuild is sufficient —
+  you do not need to touch a source file or clean anything. What is not sufficient is reusing
+  a binary built or copied before the edit.
+- **Read the render diff. That is the check that catches this**, and nothing else does. The
+  counts each render prints — relations, decisions, documents, sections — should move the way
+  your edit moved them: adding one record adds one decision. A `git diff --stat` whose
+  deletions dwarf its insertions is this bug, every time.
+- **When the diff is too large to attribute, render the base.** Revert your own record edit in
+  the worktree, rebuild, re-render, and diff that against the committed projection. What that
+  shows is staleness already at `HEAD`; what it does not show is yours. Measured 2026-09-21 at
+  `c248a20d`: the base render reproduced both committed bodies exactly, and one record added
+  moved them by 752 insertions and no deletions, so the whole diff was that record's. A peer's
+  session used the same two legs to separate 567 insertions of somebody else's staleness from
+  its own amendment, in about two minutes.
+
+**Record-fed and source-fed are not the same input, and one session filed a whole item on the
+confusion.** A projection's input digest is fed by the *record set*, not by repository source.
+Measured directly: a source-only change leaves `freshness` at exit 0, and only a record change
+stales it. So a mismatch that appears after you edited source is not evidence that source
+feeds the digest — it is evidence your binary is stale. That misreading has already been
+filed once as a defect in this skill's own render rule and declined; do not re-derive it from
+the symptom.
+
+### The diagram is nobody's territory, and you may re-render it
+
+`diagrams/relations.mmd` is reserved by no item and re-rendering it is not a territory
+violation. It is a derived output: two authors cannot disagree about its contents, only about
+which record set it was taken over, and the later render subsumes the earlier one. Reserving
+it in every record writer's territory was refused because it would serialize the whole board
+on a file nobody can conflict over — `OD-GATE-005`, decisions 1 and 2.
+
+So do not reserve it, and do not leave it stale because you did not.
+
+## 5. If you are adding a store table, budget the bundle
+
+A new table is a bundle change, because the bundle is the authority committed to git and a
+table that does not travel in it is content a rebuilt store cannot hold. The table list in
+the store has a test comparing it against the schema both ways, so that half is loud. The
+other half is in `crates/spec/nomos-spec-bundle` and none of it is reachable from the crate
+you changed: the column coverage list, an exporter, an importer, both driver lists, and a
+round-trip fixture that must insert at least one row per table.
+
+Expect the crate you edited to stay green through all of it.
+
+## 6. A record of this repository is not governing until it is registered
+
+Writing the document under `docs/records/` does not make it govern anything. The
+registration file under `crates/spec/nomos-spec-store/records/` does, and the two are
+compared against each other both ways — so a record that stops being registered fails a
+test rather than quietly leaving the store.
+
+Reserve both in your item's territory before you start.
+
+Reserve those two and no more. The diagram your record moves is deliberately not a third —
+see step 4 — and adding it would refill a register `OD-LEDGER-011` spent two items emptying.

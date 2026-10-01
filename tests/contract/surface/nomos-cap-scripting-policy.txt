@@ -1,0 +1,14 @@
+pub const fn nomos_cap_scripting_policy::Ceiling() -> Guarantee
+pub const nomos_cap_scripting_policy::CAPABILITY: &str
+pub const nomos_cap_scripting_policy::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_scripting_policy::SCHEMA: &str
+pub fn nomos_cap_scripting_policy::Capability() -> CapabilityId
+pub fn nomos_cap_scripting_policy::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_scripting_policy::Encode_Payload(payload: &ScriptingPolicyPayload) -> Vec<u8>
+pub fn nomos_cap_scripting_policy::Parse_Payload(bytes: &[u8]) -> Result<ScriptingPolicyPayload, Refusal>
+pub fn nomos_cap_scripting_policy::Payload_Schema() -> SchemaId
+pub struct field nomos_cap_scripting_policy::Refusal::reason: String
+pub struct field nomos_cap_scripting_policy::ScriptingPolicyPayload::forbidden_extensions: Vec<String>
+pub struct field nomos_cap_scripting_policy::ScriptingPolicyPayload::tooling_language: Option<String>
+pub struct nomos_cap_scripting_policy::Refusal
+pub struct nomos_cap_scripting_policy::ScriptingPolicyPayload

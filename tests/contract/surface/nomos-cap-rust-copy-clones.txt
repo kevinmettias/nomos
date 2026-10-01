@@ -1,0 +1,17 @@
+pub const fn nomos_cap_rust_copy_clones::Ceiling() -> Guarantee
+pub const nomos_cap_rust_copy_clones::CAPABILITY: &str
+pub const nomos_cap_rust_copy_clones::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_rust_copy_clones::SCHEMA: &str
+pub fn nomos_cap_rust_copy_clones::Capability() -> CapabilityId
+pub fn nomos_cap_rust_copy_clones::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_rust_copy_clones::Encode_Payload(payload: &CloneOnCopyPayload) -> Vec<u8>
+pub fn nomos_cap_rust_copy_clones::Parse_Payload(bytes: &[u8]) -> Result<CloneOnCopyPayload, Refusal>
+pub fn nomos_cap_rust_copy_clones::Payload_Schema() -> SchemaId
+pub fn nomos_cap_rust_copy_clones::Refusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub impl nomos_cap_rust_copy_clones::Refusal implements core::fmt::Display
+pub struct field nomos_cap_rust_copy_clones::CloneOnCopyPayload::findings: Vec<ClonedCopyType>
+pub struct field nomos_cap_rust_copy_clones::ClonedCopyType::location: String
+pub struct field nomos_cap_rust_copy_clones::Refusal::reason: String
+pub struct nomos_cap_rust_copy_clones::CloneOnCopyPayload
+pub struct nomos_cap_rust_copy_clones::ClonedCopyType
+pub struct nomos_cap_rust_copy_clones::Refusal

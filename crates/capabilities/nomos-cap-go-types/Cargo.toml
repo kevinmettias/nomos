@@ -1,0 +1,17 @@
+[package]
+name = "nomos-cap-go-types"
+version = "0.1.0"
+description = "The nomos.cap.go.discarded_values contract: every value a Go file assigns to the blank identifier, with its type as the Go type checker resolved it and whether that type is error, owned by neither its provider nor the rule that reads it."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# No provider and no rule, the position every nomos-cap-* crate holds: nomos-lang-go-types offers
+# against this contract and nomos-rules reads it, and neither names the other.
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-capability = { workspace = true }
+
+[lints]
+workspace = true

@@ -1,0 +1,45 @@
+# The assessment of AGT-002 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-002: "Agents shall return structured plans, changes, claims, tests, requested
+# verification, assumptions, and unresolved questions." Seven named return-shape elements.
+#
+# `WorkResult` (`nomos-agent-contracts`, since P13-AGT-001-002-TASK-ENVELOPE-WORK-RESULT)
+# is a real, tested type bundling six fields that cover all seven named elements: `plan`
+# and `changes` are one artifact because a `CorrectionPlan`'s own candidates each carry
+# their `ChangeSet`; `claims` is `Vec<Finding>`; `tests` and `requested_verification` reuse
+# `VerificationPredicate`; `assumptions` and `unresolved_questions` are the two genuinely
+# new pieces its own doc comment says no existing type covered. Its own tests construct
+# both a full response and a judgment-only one (`plan: None`, per `OD-CONTRACTS-003`) that
+# proposes no change.
+#
+# `OD-EXECUTOR-008` closed the gap this assessment used to name: a real agent run now
+# returns a real `WorkResult`. `nomos-agent-executor-claude-code` passes a narrow,
+# adversarially-verified JSON schema (`assumptions`, `unresolved_questions`, both string
+# arrays, `additionalProperties: false`) via `--json-schema` on every invocation, and reads
+# the response's own schema-validated `structured_output` into those two fields -- never
+# the free-text `result` field, and a response missing or failing to validate against the
+# schema is refused rather than coerced. `plan`, `claims`, `tests` and
+# `requested_verification` still come back empty on every real invocation, not because
+# nothing tries, but because `OD-EXECUTOR-008` measured that this bare-prompt executor
+# (isolated empty directory, no tool granted, one turn) has no honest, real grounding for
+# any of the four: it has seen no real file and computed no real digest by the time it
+# answers, so a schema could only make their *shape* conform, not their content honest.
+#
+# What is not yet true: only two of this requirement's seven named elements are ever
+# populated by the one real `AgentExecutor` in this workspace. The type bundles all seven
+# and a real run genuinely exercises it, but "Agents shall return ... plans, changes,
+# claims, tests, requested verification" is not yet true of any real run's actual content --
+# it stays true only of `assumptions` and `unresolved_questions`. Closing the rest needs a
+# real executor with real tool access or a real file read to ground them honestly, which
+# `OD-EXECUTOR-008` names as a future increment's question, not this one's.
+verdict: Partial
+site: crates/agent/nomos-agent-contracts/src/work_result.rs#WorkResult
+site: crates/corrections/nomos-corrections/src/correction_plan.rs#CorrectionPlan
+site: crates/corrections/nomos-corrections/src/change_set.rs#ChangeSet
+site: crates/contracts/nomos-contracts/src/reporting/finding.rs#Finding
+site: crates/substrate/nomos-scope-verification/src/verification_predicate.rs#VerificationPredicate
+site: crates/agent/nomos-agent-executor-claude-code/src/response.rs#Work_Result
+gap: crates/agent/nomos-agent-executor-claude-code/src/lib.rs#stay structurally absent rather

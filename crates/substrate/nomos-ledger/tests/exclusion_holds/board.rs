@@ -1,0 +1,488 @@
+//! The board every test in this suite is written against.
+//!
+//! One place to say what an item, a territory, a holder and a clock are, so that a test
+//! reads as the claim it makes rather than as the fixture it needs. A suite whose fixtures
+//! are restated per file drifts into several boards that agree only by coincidence.
+
+use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
+
+mod scratch;
+
+pub(crate) use nomos_ledger::{
+    Finishing,
+    Abandonment, AddRefusal, Blocker, Claim, ClaimRefusal, Declination, ExclusionLedger, FileLedger, Finish_Item,
+    FinishRefusal, GateOutcome, ItemId, ItemKind, ItemOrigin, ItemState, LedgerDocument, LedgerError, LedgerItem,
+    ReleaseOutcome, Reservation, SCHEMA_VERSION, Territory as ItemTerritory, Validate_Document, VerificationPredicate,
+    VerificationRecord,
+};
+pub(crate) use nomos_model::SetResolution;
+pub(crate) use nomos_platform::{Clock, FileSystem, FileSystemError, Timestamp};
+pub(crate) use nomos_platform_std::{FileLock, StdFileSystem, StdProgramLauncher};
+pub(crate) use scratch::{Scratch, Temporary_Directory};
+pub(crate) use std::path::{Path, PathBuf};
+pub(crate) use std::sync::atomic::{AtomicBool, Ordering};
+pub(crate) use std::sync::{Condvar, Mutex};
+pub(crate) use std::thread::ThreadId;
+pub(crate) use std::time::Duration;
+
+/// A clock the tests hold still, so lease expiry is reached by arithmetic rather than by
+/// sleeping. A suite that sleeps to reach a deadline is a suite that is slow and
+/// intermittently wrong.
+pub(crate) struct FixedClock(pub(crate) i64);
+
+/// Fixed instants, so both the values and their timing reproduce.
+impl Strategy for FixedClock
+{
+    const STRENGTH: DeterminismStrength = DeterminismStrength::StateTemporal;
+    const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+    const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+}
+
+impl Clock for FixedClock
+{
+    fn Now(&self) -> Timestamp
+    {
+        return Timestamp::From_Unix_Seconds(self.0);
+    }
+}
+
+/// Offered by reference as well, so the two shared statics can be lent to many ledgers while
+/// a test that needs its own moment hands one over by value.
+impl Clock for &FixedClock
+{
+    fn Now(&self) -> Timestamp
+    {
+        return Timestamp::From_Unix_Seconds(self.0);
+    }
+}
+
+pub(crate) const NOW: i64 = 1_000_000;
+
+pub(crate) fn Timestamp_From_Seconds(seconds: i64) -> Timestamp
+{
+    return Timestamp::From_Unix_Seconds(seconds);
+}
+
+pub(crate) fn Territory_Of_Files(files: &[&str]) -> ItemTerritory
+{
+    return ItemTerritory::Of_Files(files.iter().copied());
+}
+
+pub(crate) fn Item_Reserving_Files(id: &str, files: &[&str]) -> LedgerItem
+{
+    return LedgerItem {
+        id: ItemId::New(id),
+        title: format!("work item {id}"),
+        why: "it needs doing".to_owned(),
+        done_when: "the tests pass".to_owned(),
+        kind: ItemKind::Correction,
+        origin: ItemOrigin::Proposed,
+        territory: Territory_Of_Files(files),
+        state: ItemState::Ready,
+        depends_on: Vec::new(),
+        blocked: None,
+        claim: None,
+        verification: None,
+        verified: None,
+        abandoned: Vec::new(),
+        displaced: Vec::new(),
+        widened: Vec::new(),
+        declined: None,
+    };
+}
+
+pub(crate) fn Held_By(mut item: LedgerItem, holder: &str, expires: i64) -> LedgerItem
+{
+    item.state = ItemState::Claimed;
+    item.claim = Some(Claim {
+        holder: holder.to_owned(),
+        acquired_at: Timestamp_From_Seconds(NOW),
+        lease_expires_at: Timestamp_From_Seconds(expires),
+    });
+    return item;
+}
+
+/// `SCHEMA_VERSION` rather than a literal `1`.
+///
+/// `Save` stamps what it writes with the version this build understands, so a fixture holding a
+/// literal would stop equalling its own reload the moment the constant moves — and
+/// `Test_The_Ledger_Should_Round_Trip_Losslessly` would then fail for a reason that has nothing
+/// to do with round-tripping.
+pub(crate) fn Document_Holding_Items(items: Vec<LedgerItem>) -> LedgerDocument
+{
+    return LedgerDocument {
+        schema_version: SCHEMA_VERSION,
+        items,
+    };
+}
+
+/// The clock every test that does not move time shares.
+///
+/// A `'static` clock is what lets [`Board_At`] hand back a ledger: the ledger borrows its
+/// clock, so a local one could not outlive the call that built it. A test that needs time
+/// to move builds its own later clock and a second ledger over the same directory.
+pub(crate) static AT_NOW: FixedClock = FixedClock(NOW);
+
+/// The one-hour lease every test here takes, in the seconds [`At`] and [`LEASE_ENDS_AT`] count.
+pub(crate) const LEASE_SECONDS: i64 = 3_600;
+
+/// The same lease as the duration `Claim` and `Renew` take.
+pub(crate) const LEASE: Duration = Duration::from_secs(LEASE_SECONDS as u64);
+
+/// When a claim taken at [`NOW`] for the standard lease runs out.
+pub(crate) const LEASE_ENDS_AT: i64 = NOW + LEASE_SECONDS;
+
+/// A holder's name, as the ledger stores it.
+///
+/// Its own type rather than a bare `&str` because the two names a claim carries — the item
+/// and the holder — are both strings, and the compiler accepts either order at a call site
+/// written `Take(ledger, item, holder)`. Nothing at that call site says which name is which;
+/// this does.
+pub(crate) struct Claimant<'a>(pub(crate) &'a str);
+
+/// One agent claims one item for the standard lease, and it is expected to succeed.
+///
+/// A refusal here is the fixture failing rather than the assertion under test, so it panics
+/// with the refusal's own words instead of returning it.
+pub(crate) fn Claim_For_Holder<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: Claimant<'_>)
+{
+    ledger
+        .Claim(&ItemId::New(item), holder.0, LEASE)
+        .unwrap_or_else(|refusal| panic!("the fixture claim was refused: {}", refusal.Describe()));
+}
+
+/// An item whose territory carries a pattern, which nothing on the command line can build
+/// any more — `OD-LEDGER-013` withdrew `--territory-pattern` — and which these two tests
+/// still construct by hand, because the state stays reachable by editing the document.
+pub(crate) fn Item_With_Pattern(id: &str, files: &[&str], pattern: &str) -> LedgerItem
+{
+    let mut item = Item_Reserving_Files(id, files);
+    item.territory = item.territory.With_Pattern(pattern);
+
+    return item;
+}
+
+/// An item that is `Done` and carries the evidence that made it done.
+///
+/// A `Done` item without a verification record is not a valid ledger, so the two are built
+/// together or not at all.
+pub(crate) fn Item_Finished_With_Evidence(id: &str, files: &[&str]) -> LedgerItem
+{
+    let mut item = Item_Reserving_Files(id, files);
+    item.state = ItemState::Done;
+    item.verified = Some(VerificationRecord {
+        argv: vec!["cargo".to_owned(), "test".to_owned()],
+        exit_code: 0,
+        output_tail: "ok".to_owned(),
+        verified_at: Timestamp_From_Seconds(NOW),
+        gate: None,
+        revision: None,
+    });
+
+    return item;
+}
+
+/// An item that will never be done — declined, with the reason it carries.
+pub(crate) fn Item_Declined_With_Reason(id: &str, files: &[&str], reason: &str) -> LedgerItem
+{
+    let mut item = Item_Reserving_Files(id, files);
+    item.state = ItemState::Declined {
+        reason: reason.to_owned(),
+    };
+
+    return item;
+}
+
+/// A holder releases its own claim as finished, carrying the evidence that made it so.
+///
+/// The record is the fixture rather than the subject — what these tests assert is what the
+/// store does with it — so building it here keeps eleven lines of literal out of the test.
+pub(crate) fn Release_As_Finished<Ledger: ExclusionLedger>(ledger: &mut Ledger, item: &str, holder: Claimant<'_>)
+{
+    ledger
+        .Release(
+            &ItemId::New(item),
+            holder.0,
+            ReleaseOutcome::Finished(VerificationRecord {
+                argv: vec!["cargo".to_owned(), "test".to_owned()],
+                exit_code: 0,
+                output_tail: "ok".to_owned(),
+                verified_at: Timestamp_From_Seconds(NOW),
+                gate: None,
+                revision: None,
+            }),
+        )
+        .expect("a release carrying evidence must be accepted");
+}
+
+/// Every abandonment the item kept, as who stopped and what they said, oldest first.
+pub(crate) fn Abandonments_Of_Item(item: &LedgerItem) -> Vec<(&str, &str)>
+{
+    return item
+        .abandoned
+        .iter()
+        .map(|entry| return (entry.holder.as_str(), entry.reason.as_str()))
+        .collect();
+}
+
+/// A holder gives up its own claim, with the words it gave for stopping.
+pub(crate) fn Abandon_Claim_With_Reason<Ledger: ExclusionLedger>(
+    ledger: &mut Ledger,
+    item: &str,
+    holder: Claimant<'_>,
+    reason: &str,
+)
+{
+    ledger
+        .Release(
+            &ItemId::New(item),
+            holder.0,
+            ReleaseOutcome::Abandoned {
+                reason: reason.to_owned(),
+            },
+        )
+        .expect("a holder may give up its own claim");
+}
+
+/// A claim that is expected to be refused, with the refusal handed back as the value the
+/// test is about.
+pub(crate) fn Refusal_From_Claim<Ledger: ExclusionLedger>(
+    ledger: &mut Ledger,
+    item: &str,
+    holder: Claimant<'_>,
+) -> ClaimRefusal
+{
+    return ledger
+        .Claim(&ItemId::New(item), holder.0, LEASE)
+        .expect_err("this claim is contended and must be refused");
+}
+
+/// Runs an item's own verification predicate through the ledger, in a named repository.
+pub(crate) fn Finish_In(
+    ledger: &mut FileLedger<StdFileSystem, &FixedClock, FileLock>,
+    directory: &Path,
+    item: &str,
+    holder: Claimant<'_>,
+) -> Result<VerificationRecord, FinishRefusal>
+{
+    return Finish_Item(
+        ledger,
+        &StdProgramLauncher,
+        &Finishing {
+            item: &ItemId::New(item),
+            holder: holder.0,
+        },
+        Some(directory),
+    );
+}
+
+/// The one item a single-item board carries, read back through the file.
+///
+/// Nearly every test below reaches the same pair of lines to get at the one value it asserts
+/// on. Naming the pair keeps the load out of the assertion's way, and going through the file
+/// rather than through the in-memory value is the point of asserting at all: what the next
+/// session sees is what was written, not what this one still holds.
+pub(crate) fn Only_Item<Clock: nomos_platform::Clock>(
+    ledger: &FileLedger<StdFileSystem, Clock, FileLock>,
+) -> LedgerItem
+{
+    return ledger
+        .Load()
+        .expect("the ledger is readable")
+        .items
+        .into_iter()
+        .next()
+        .expect("the item survives");
+}
+
+/// One named item on a board carrying several, read back through the file.
+///
+/// The multi-item boards assert about one of their items and use the others as the context
+/// that makes the assertion mean something, so reaching the subject by name rather than by
+/// position keeps the test honest when the board is reordered.
+pub(crate) fn Item_Named_In_File<Clock: nomos_platform::Clock>(
+    id: &str,
+    ledger: &FileLedger<StdFileSystem, Clock, FileLock>,
+) -> LedgerItem
+{
+    return ledger
+        .Load()
+        .expect("the ledger is readable")
+        .items
+        .into_iter()
+        .find(|item| return item.id == ItemId::New(id))
+        .unwrap_or_else(|| panic!("{id} survives"));
+}
+
+/// Who an item's own claim names, or nothing when it carries none.
+///
+/// The tests compare holders, and `claim.as_ref().map(|claim| claim.holder.clone())` is four
+/// tokens of plumbing in front of one word. This says the word.
+pub(crate) fn Holder_Of_Item(item: &LedgerItem) -> Option<&str>
+{
+    return item.claim.as_ref().map(|claim| return claim.holder.as_str());
+}
+
+/// Who holds an item now and every holder a takeover displaced, as one value.
+///
+/// The takeover tests all turn on the *pair*: a takeover that installs the new holder while
+/// dropping the old one passes an assertion on either field alone, and is exactly the outcome
+/// `OD-LEDGER-012` exists to prevent. Comparing the pair is what makes that one failure.
+#[derive(Debug, PartialEq, Eq)]
+pub(crate) struct Standing<'a>
+{
+    pub(crate) held_by: Option<&'a str>,
+    pub(crate) displaced: Vec<&'a str>,
+    /// Who has widened this item's territory, oldest first.
+    ///
+    /// Here so that every assertion in this suite says a verb wrote no widening, rather than
+    /// only the tests that thought to ask. `OD-LEDGER-039` added a second thing a mutating
+    /// verb can write to an item, and a summary of the observable claim state that omitted it
+    /// would let a verb start recording one with every existing test still green.
+    pub(crate) widened: Vec<&'a str>,
+}
+
+pub(crate) fn Standing_Of(item: &LedgerItem) -> Standing<'_>
+{
+    return Standing {
+        held_by: Holder_Of_Item(item),
+        displaced: item
+            .displaced
+            .iter()
+            .map(|claim| return claim.holder.as_str())
+            .collect(),
+        widened: item
+            .widened
+            .iter()
+            .map(|widening| return widening.holder.as_str())
+            .collect(),
+    };
+}
+
+/// Two hours after [`NOW`], by which time the one-hour lease these tests take has lapsed.
+pub(crate) const AT_LATER_SECONDS: i64 = NOW + 7_200;
+
+pub(crate) static AT_LATER: FixedClock = FixedClock(AT_LATER_SECONDS);
+
+/// The same board read again once its lease has lapsed.
+pub(crate) fn After_The_Lapse(
+    directory: &Path,
+) -> FileLedger<StdFileSystem, &'static FixedClock, FileLock>
+{
+    return Ledger_At(directory, &AT_LATER);
+}
+
+/// One agent takes a lapsed item over for the standard lease, with the verdict handed back.
+///
+/// Unlike [`Take`] this returns rather than panics, because both outcomes are subjects here:
+/// half these tests are about the takeover succeeding and half about it being refused.
+pub(crate) fn Take_Over_In<Clock: nomos_platform::Clock>(
+    ledger: &mut FileLedger<StdFileSystem, Clock, FileLock>,
+    item: &str,
+    holder: Claimant<'_>,
+) -> Result<Reservation, ClaimRefusal>
+{
+    return ledger.Take_Over(&ItemId::New(item), holder.0, LEASE);
+}
+
+/// The same board read again by a ledger standing at a named moment.
+///
+/// A ledger that owns its clock is what makes a moment one argument. Borrowing one forces
+/// every test that moves time to bind the clock first and keep it alive by hand, which is two
+/// lines of scaffolding in front of the one number the test is actually varying.
+pub(crate) fn Ledger_When(directory: &Path, seconds: i64) -> FileLedger<StdFileSystem, FixedClock, FileLock>
+{
+    return Ledger_At(directory, FixedClock(seconds));
+}
+
+/// A fresh board: the temporary tree it lives in, and the ledger over it.
+///
+/// Named fields rather than a pair, so a call site that destructures one says which half it
+/// keeps — the tree has to outlive the ledger, which reads and writes a file inside it.
+pub(crate) struct Board
+{
+    /// Clears the tree when it goes out of scope.
+    pub(crate) directory: Scratch,
+    /// The ledger over that tree's `ledger.json`.
+    pub(crate) ledger: FileLedger<StdFileSystem, &'static FixedClock, FileLock>,
+}
+
+/// A ledger on a fresh temporary directory, already holding the board it starts from.
+pub(crate) fn Board_At(name: &str, items: Vec<LedgerItem>) -> Board
+{
+    let directory = Temporary_Directory(name);
+    let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
+    ledger.Save(&Document_Holding_Items(items)).expect("a fresh ledger is valid");
+
+    return Board { directory, ledger };
+}
+
+/// A board written straight to disk, bypassing `Save`'s own validation gate.
+///
+/// `Validate_Document` now refuses a territory carrying a pattern — `P13-VALIDATE-PATTERN-REFUSAL`
+/// closing the completeness gap `OD-LEDGER-013` named — so `Save` refuses to write a document
+/// [`Patterned`] appears in, the same way it already refuses one with any other violation.
+/// That is the correct behaviour for the store's own write path, but the two tests this
+/// serves are not about that path: they pin the fail-closed *comparison* semantics
+/// `OD-LEDGER-013` kept, over a document that record already says "stays reachable by
+/// hand-editing". This is that hand edit, done for real: the file lands on disk in the shape
+/// a person's editor would have left it, with no store operation ever given the chance to
+/// reject it on the way in.
+pub(crate) fn Board_Written_By_Hand(name: &str, items: Vec<LedgerItem>) -> Board
+{
+    let directory = Temporary_Directory(name);
+    let text = serde_json::to_string_pretty(&Document_Holding_Items(items)).expect("a document serializes");
+    std::fs::write(directory.As_Path().join("ledger.json"), text).expect("test needs to write the ledger");
+    let ledger = Ledger_At(directory.As_Path(), &AT_NOW);
+
+    return Board { directory, ledger };
+}
+
+pub(crate) fn Ledger_At<Clock: nomos_platform::Clock>(
+    directory: &Path,
+    clock: Clock,
+) -> FileLedger<StdFileSystem, Clock, FileLock>
+{
+    let ledger_path = directory.join("ledger.json");
+    let lock_path = directory.join("ledger.lock");
+
+    return FileLedger::At(
+        ledger_path,
+        StdFileSystem,
+        clock,
+        FileLock::At(lock_path),
+    );
+}
+
+
+// ---------------------------------------------------------------------------
+// Acceptance 1 — two active claims on overlapping territory are refused.
+// ---------------------------------------------------------------------------
+
+/// The reason these tests assert on.
+///
+/// Prose rather than a marker, and asserted as text rather than as presence. A field that
+/// exists and holds an empty string satisfies `is_some()`, which is exactly the assertion
+/// that would have let the old behaviour through.
+pub(crate) const REASON: &str =
+    "the fixture never reproduced the shape that broke it, so the control proved nothing";
+
+/// A command that exits with the given code, on either platform family.
+pub(crate) fn Exits_With(code: i32) -> Vec<String>
+{
+    return if cfg!(windows)
+    {
+        vec!["cmd".to_owned(), "/C".to_owned(), format!("exit {code}")]
+    }
+    else
+    {
+        vec!["sh".to_owned(), "-c".to_owned(), format!("exit {code}")]
+    };
+}
+
+pub(crate) fn Item_Verified_By_String_Arguments(id: &str, files: &[&str], argv: Vec<String>) -> LedgerItem
+{
+    let mut item = Item_Reserving_Files(id, files);
+    item.verification = Some(VerificationPredicate::From_String_Arguments(argv));
+    return item;
+}

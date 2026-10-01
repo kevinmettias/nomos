@@ -1,0 +1,2 @@
+pub fn nomos_composer_providers::Standard_Offers(registry: &mut Registry) -> Result<(), RegistryError>
+pub fn nomos_composer_providers::Standard_Providers<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>() -> ComposedProviders<Launcher, Fs, Env>

@@ -1,0 +1,322 @@
+// A section as a profile declares it, beneath the profile that declares it.
+mod profile_section;
+
+pub use profile_section::ProfileSection;
+
+use crate::Format;
+use crate::ProjectError;
+use crate::project_error::OutputPath;
+use crate::project_error::ProfileName;
+use serde::{Deserialize, Serialize};
+
+/// Whether a field says nothing once its surrounding space is discounted.
+fn Is_Blank(text: &str) -> bool
+{
+    return text.trim().is_empty();
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(deny_unknown_fields)]
+pub struct Profile
+{
+    pub id: String,
+    pub title: String,
+    pub format: Format,
+    pub output: String,
+    pub sections: Vec<ProfileSection>,
+}
+
+impl Profile
+{
+    pub fn Parse(text: &str) -> Result<Self, ProjectError>
+    {
+        let profile: Self = serde_json::from_str(text)
+            .map_err(|error| return ProjectError::Malformed(error.to_string()))?;
+        profile.Validate()?;
+
+        return Ok(profile);
+    }
+
+    pub fn Validate(&self) -> Result<(), ProjectError>
+    {
+        self.Named()?;
+        self.Sections_Are_Citable()?;
+
+        return Path_Is_Relative(ProfileName(&self.id), OutputPath(&self.output));
+    }
+
+    /// Every section is present and titled.
+    ///
+    /// A profile with no section at all renders a title and nothing under it, and a section
+    /// with no title renders a heading that nothing can cite. Both are documents that look
+    /// like a build succeeded.
+    fn Sections_Are_Citable(&self) -> Result<(), ProjectError>
+    {
+        if self.sections.is_empty()
+        {
+            return Err(ProjectError::Malformed(format!(
+                "{} declares no section, so it would render a title and nothing under it",
+                self.id
+            )));
+        }
+
+        for section in &self.sections
+        {
+            if section.title.trim().is_empty()
+            {
+                return Err(ProjectError::Malformed(format!(
+                    "{}: a section without a title is a heading nothing can cite",
+                    self.id
+                )));
+            }
+        }
+
+        return Ok(());
+    }
+
+    #[must_use]
+    pub fn Digest(&self) -> String
+    {
+        use nomos_spec_model::ContentHash;
+
+        let canonical = serde_json::to_string(self).unwrap_or_default();
+
+        return ContentHash::Of(&canonical).As_String_Slice().to_owned();
+    }
+
+    /// Whether this profile projects one subject rather than the whole store.
+    ///
+    /// Derived from the profile rather than declared beside it. A `subject: true` field
+    /// would be a second place to be wrong: a profile could claim a subject and never use
+    /// it, or use one and forget to say so, and the placeholder is the thing that actually
+    /// decides what the run needs.
+    #[must_use]
+    pub fn Is_Per_Subject(&self) -> bool
+    {
+        return self.output.contains(SUBJECT)
+            || self.sections.iter().any(|section| {
+                return section
+                    .filter
+                    .Named()
+                    .iter()
+                    .any(|(_, value)| return value.contains(SUBJECT));
+            });
+    }
+
+    /// This profile, resolved against the subject a run was given or was not given.
+    ///
+    /// The two refusals are the point. Silently ignoring a subject a whole-store profile
+    /// cannot use would write the same file once per subject and call it a per-subject
+    /// build; silently rendering a subject profile without one would write a directory
+    /// named `{subject}`. Both read as success.
+    pub fn For(&self, subject: Option<&str>) -> Result<Self, ProjectError>
+    {
+        return match (self.Is_Per_Subject(), subject)
+        {
+            (true, Some(subject)) => Ok(self.Resolved_For(subject)),
+            (false, None) => Ok(self.clone()),
+            (true, None) => Err(ProjectError::SubjectMissing {
+                profile: self.id.clone(),
+            }),
+            (false, Some(subject)) => Err(ProjectError::SubjectUnexpected {
+                profile: self.id.clone(),
+                subject: subject.to_owned(),
+            }),
+        };
+    }
+
+    /// This profile with `{subject}` replaced throughout by the subject given.
+    ///
+    /// A copy rather than a mutation, because the catalogue is shared and a resolved
+    /// profile is a different thing from the one that was shipped: its digest differs,
+    /// which is what keeps two subjects' stamps from claiming to have been built by the
+    /// same profile over different inputs.
+    #[must_use]
+    pub fn Resolved_For(&self, subject: &str) -> Self
+    {
+        let mut resolved = self.clone();
+        resolved.output = resolved.output.replace(SUBJECT, subject);
+
+        for section in &mut resolved.sections
+        {
+            section.filter.Substitute(subject);
+        }
+
+        return resolved;
+    }
+
+    /// A profile has to say what it is and what it renders as a heading.
+    fn Named(&self) -> Result<(), ProjectError>
+    {
+        if !Is_Blank(&self.id) && !Is_Blank(&self.title)
+        {
+            return Ok(());
+        }
+
+        return Err(ProjectError::Malformed(format!(
+            "a profile needs an identifier and a title; {:?} has {:?}",
+            self.id, self.title
+        )));
+    }
+}
+
+/// What a profile writes where a subject belongs.
+pub const SUBJECT: &str = "{subject}";
+
+fn Path_Is_Relative(profile: ProfileName<'_>, output: OutputPath<'_>) -> Result<(), ProjectError>
+{
+    let output = output.0;
+
+    let refused = output.trim().is_empty()
+        || output.starts_with('/')
+        || output.starts_with('\\')
+        || output.contains(':')
+        || output.contains('\\')
+        || output.split('/').any(|segment| return segment == "..");
+
+    if refused
+    {
+        let profile = profile.0;
+
+        return Err(ProjectError::NotRelative {
+            profile: profile.to_owned(),
+            output: output.to_owned(),
+        });
+    }
+
+    return Ok(());
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Content;
+
+    const MINIMAL: &str = r#"{
+        "id": "one", "title": "One", "format": "markdown", "output": "one.md",
+        "sections": [{ "title": "Nodes", "content": "nodes" }]
+    }"#;
+
+    #[test]
+    fn Test_A_Minimal_Profile_Should_Parse()
+    {
+        let profile = Profile::Parse(MINIMAL).expect("MINIMAL carries every field the profile parser names");
+
+        assert_eq!(profile.format, Format::Markdown);
+        assert_eq!(profile.sections.first().map(|section| section.content), Some(Content::Nodes));
+        assert_eq!(profile.sections.first().map(|section| section.may_be_empty), Some(false));
+    }
+
+    #[test]
+    fn Test_An_Unknown_Field_Should_Be_Refused()
+    {
+        let typo = MINIMAL.replace("\"content\": \"nodes\"", "\"content\": \"nodes\", \"fitler\": {}");
+
+        let refusal = Profile::Parse(&typo).expect_err("must refuse");
+
+        assert!(format!("{refusal}").contains("fitler"), "{refusal}");
+    }
+
+    #[test]
+    fn Test_An_Unknown_Content_Kind_Should_Be_Refused()
+    {
+        let unknown = MINIMAL.replace("\"nodes\"", "\"everything\"");
+
+        let refusal = Profile::Parse(&unknown).expect_err("must refuse");
+
+        assert!(matches!(refusal, ProjectError::Malformed(_)), "{refusal}");
+        assert!(format!("{refusal}").contains("everything"), "{refusal}");
+    }
+
+    #[test]
+    fn Test_Validate_Should_Refuse_A_Profile_With_No_Sections()
+    {
+        let empty = MINIMAL.replace(
+            "[{ \"title\": \"Nodes\", \"content\": \"nodes\" }]",
+            "[]",
+        );
+
+        let refusal = Profile::Parse(&empty).expect_err("must refuse");
+
+        assert!(format!("{refusal}").contains("declares no section"), "{refusal}");
+    }
+
+    #[test]
+    fn Test_An_Absolute_Output_Should_Be_Refused()
+    {
+        for &output in Escaping_Outputs()
+        {
+            let escaping = MINIMAL.replace("one.md", output);
+
+            assert!(
+                Profile::Parse(&escaping).is_err(),
+                "{output} was accepted as a projection output"
+            );
+        }
+    }
+
+    fn Escaping_Outputs() -> &'static [&'static str]
+    {
+        return &["/etc/one.md", "C:/build/one.md", "..\\one.md", "../../one.md"];
+    }
+
+    #[test]
+    fn Test_Is_Per_Subject_Should_Detect_The_Placeholder_In_Output_Or_A_Filter()
+    {
+        let per_subject = MINIMAL.replace("one.md", "{subject}.md");
+        let per_subject = Profile::Parse(&per_subject)
+            .expect("the replacement edits only one value MINIMAL carries");
+
+        assert!(per_subject.Is_Per_Subject());
+
+        let whole_store = Profile::Parse(MINIMAL).expect("MINIMAL carries every field the profile parser names");
+
+        assert!(!whole_store.Is_Per_Subject());
+    }
+
+    #[test]
+    fn Test_For_Should_Resolve_A_Per_Subject_Profile()
+    {
+        let per_subject = MINIMAL.replace("one.md", "{subject}.md");
+        let per_subject = Profile::Parse(&per_subject)
+            .expect("the replacement edits only one value MINIMAL carries");
+        let whole_store = Profile::Parse(MINIMAL).expect("MINIMAL carries every field the profile parser names");
+
+        assert!(per_subject.For(Some("AGT-EXEC-001")).is_ok());
+        assert!(matches!(
+            per_subject.For(None),
+            Err(ProjectError::SubjectMissing { .. })
+        ));
+        assert!(matches!(
+            whole_store.For(Some("AGT-EXEC-001")),
+            Err(ProjectError::SubjectUnexpected { .. })
+        ));
+    }
+
+    #[test]
+    fn Test_Resolved_For_Should_Replace_The_Subject_Placeholder_Throughout()
+    {
+        let per_subject = MINIMAL.replace("one.md", "{subject}.md");
+        let per_subject = Profile::Parse(&per_subject)
+            .expect("the replacement edits only one value MINIMAL carries");
+
+        let resolved = per_subject.Resolved_For("AGT-EXEC-001");
+
+        assert_eq!(resolved.output, "AGT-EXEC-001.md");
+        assert_ne!(resolved.Digest(), per_subject.Digest());
+    }
+
+    #[test]
+    fn Test_The_Digest_Should_Follow_The_Profile()
+    {
+        let profile = Profile::Parse(MINIMAL).expect("MINIMAL carries every field the profile parser names");
+        let renamed_source = MINIMAL.replace("\"One\"", "\"Two\"");
+        let renamed = Profile::Parse(&renamed_source)
+            .expect("the replacement edits only one value MINIMAL carries");
+
+        let rebuilt = Profile::Parse(MINIMAL).expect("MINIMAL carries every field the profile parser names");
+        assert_eq!(profile.Digest(), rebuilt.Digest());
+        assert_ne!(profile.Digest(), renamed.Digest());
+    }
+}

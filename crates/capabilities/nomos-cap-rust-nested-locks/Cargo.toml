@@ -1,0 +1,18 @@
+[package]
+name = "nomos-cap-rust-nested-locks"
+version = "0.1.0"
+description = "The nomos.cap.rust.nested_locks contract: every std::sync::Mutex<T> or RwLock<T> in an analyzed crate whose T a real compiler frontend resolved to another lock type. OD-ANALYSIS-007."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# One crate per capability and never one for the family: OD-ANALYSIS-007 version 2 refuses a
+# shared nomos-cap-rust-semantics by name, because these two capabilities share provider
+# mechanics and nothing contract-shaped.
+[dependencies]
+nomos-capability = { workspace = true }
+nomos-contracts = { workspace = true }
+
+[lints]
+workspace = true

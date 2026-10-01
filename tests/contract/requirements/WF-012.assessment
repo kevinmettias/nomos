@@ -1,0 +1,22 @@
+# The assessment of WF-012 against this build. The requirement identifier is this file's
+# stem and appears nowhere inside it, for the reason CHK-003.assessment already states.
+#
+# WF-012 has two clauses. The first -- retries shall not repeat a non-idempotent effect
+# without a compensation or deduplication token -- is a static coherence rule over a step's
+# own declared fields, checkable without an engine. WorkflowStep::Is_Coherent implements
+# exactly this rule, and Test_An_Uncovered_Retry_Of_A_Non_Idempotent_Side_Effecting_Step_
+# Should_Be_Incoherent is the fixture reproducing the failure the requirement's own text
+# names. The second clause -- cancellation shall report which side effects completed and
+# what remains reversible -- is a runtime reporting obligation an engine discharges over a
+# real execution, and no execution engine exists in this workspace (OD-WORKFLOW-002,
+# OD-WORKFLOW-003). CancellationBehavior's own doc comment names this split by design.
+#
+# Partial rather than Met: the first clause is real and tested; the second is not built and
+# cannot be until an engine exists to run a cancellation and observe what it did.
+#
+# Not recomputed from the corpus at check time. OD-TRACE-001 records why: CI has no corpus,
+# so a guard that read one would be green by being unable to look.
+verdict: Partial
+site: crates/contracts/nomos-contracts/src/workflow_step.rs#Is_Coherent
+site: crates/contracts/nomos-contracts/src/workflow_step.rs#Test_An_Uncovered_Retry_Of_A_Non_Idempotent_Side_Effecting_Step_Should_Be_Incoherent
+gap: crates/contracts/nomos-contracts/src/workflow_step/cancellation_behavior.rs#that reporting is the engine's job

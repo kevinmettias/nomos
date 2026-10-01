@@ -1,0 +1,3 @@
+# The registration for OD-SPEC-012. Writing the record file does not make a record
+# governing; this file does.
+path: docs/records/OD-SPEC-012-a-declared-constraint-says-which-node-kinds-a-relation-type-joins-and-how-many-a-node-may-carry.md

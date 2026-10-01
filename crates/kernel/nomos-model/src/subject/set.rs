@@ -1,0 +1,394 @@
+//! The one exclusion primitive: do these two pieces of work touch the same things?
+//!
+//! Three subsystems ask this question and they must not each answer it their own way:
+//!
+//! - the **work ledger**, deciding whether two agents may claim overlapping territory;
+//! - the **correction scheduler**, deciding whether two corrections may run in the same
+//!   parallel wave;
+//! - **agent leases**, deciding whether a delegated task's write scope is free.
+//!
+//! They differ in lifetime and authority — a ledger claim outlives every process, a
+//! wave reservation dies with the run — but the predicate is identical, and three
+//! implementations of one predicate is three chances to disagree about whether two
+//! writers may proceed. That disagreement is a lost edit.
+
+use nomos_contracts::SubjectId;
+use serde::{Deserialize, Serialize};
+
+use crate::Intersection;
+use crate::SetResolution;
+use crate::UnknownReason;
+use std::collections::BTreeSet;
+
+/// A set of subjects some piece of work reads or writes.
+///
+/// Membership is explicit. There is no "everything under this path" that resolves
+/// lazily at comparison time — a pattern that has not been expanded produces
+/// [`UnknownReason::UnexpandedPattern`] rather than an answer, because a comparison
+/// against an unexpanded pattern is a guess wearing the costume of a computation.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Set
+{
+    resolution: SetResolution,
+    members: BTreeSet<SubjectId>,
+    unexpanded: Vec<String>,
+}
+
+impl Set
+{
+    /// An empty set at the given resolution.
+    #[must_use]
+    pub fn Empty(resolution: SetResolution) -> Self
+    {
+        return Self {
+            resolution,
+            members: BTreeSet::new(),
+            unexpanded: Vec::new(),
+        };
+    }
+
+    /// A set with known members at the given resolution.
+    #[must_use]
+    pub fn Of(resolution: SetResolution, members: impl IntoIterator<Item = SubjectId>) -> Self
+    {
+        return Self {
+            resolution,
+            members: members.into_iter().collect(),
+            unexpanded: Vec::new(),
+        };
+    }
+
+    /// Records a pattern whose membership has not been resolved.
+    ///
+    /// The set remains usable — it can still be displayed, stored and reasoned about —
+    /// but every comparison involving it answers [`Intersection::Unknown`] until the
+    /// pattern is expanded. That is deliberate: the alternative is a comparison that
+    /// quietly ignores whatever the pattern would have matched.
+    #[must_use]
+    pub fn With_Unexpanded_Pattern(mut self, pattern: impl Into<String>) -> Self
+    {
+        self.unexpanded.push(pattern.into());
+        return self;
+    }
+
+    /// Adds a member.
+    pub fn Insert(&mut self, subject: SubjectId)
+    {
+        self.members.insert(subject);
+    }
+
+    /// The resolution at which this set states membership.
+    #[must_use]
+    pub const fn Resolution(&self) -> SetResolution
+    {
+        return self.resolution;
+    }
+
+    /// The known members, in a stable order.
+    pub fn Members(&self) -> impl Iterator<Item = &SubjectId>
+    {
+        return self.members.iter();
+    }
+
+    /// Whether the set has no known members and no unexpanded patterns.
+    #[must_use]
+    pub fn Is_Empty(&self) -> bool
+    {
+        return self.members.is_empty() && self.unexpanded.is_empty();
+    }
+
+    /// The number of known members.
+    #[must_use]
+    pub fn Length(&self) -> usize
+    {
+        return self.members.len();
+    }
+
+    #[must_use]
+    pub fn Intersect(&self, other: &Self) -> Intersection
+    {
+        if let Some(reason) = self.Incomparable(other)
+        {
+            return Intersection::Unknown(reason);
+        }
+
+        let shared: Vec<SubjectId> = self
+            .members
+            .intersection(&other.members)
+            .copied()
+            .collect();
+        if shared.is_empty()
+        {
+            return Intersection::Disjoint;
+        }
+
+        return Intersection::Overlaps(shared);
+    }
+
+    /// Whether two sets share a member.
+    ///
+    /// Answers [`Intersection::Unknown`] rather than guessing whenever an honest answer
+    /// is unavailable: an unexpanded pattern on either side, or two different
+    /// resolutions. The second case is the subtle one — a file-resolution set and a
+    /// symbol-resolution set cannot be compared by matching identifiers, because a file
+    /// identifier and a symbol identifier are different things and their absence from
+    /// each other's membership means nothing.
+    /// Why two sets cannot be compared at all, if they cannot.
+    ///
+    /// Both answers are about the sets rather than about their members: one of them still
+    /// holds an unexpanded pattern, or they were resolved to different kinds of thing.
+    /// Neither can be settled by looking at membership, which is why they are asked first.
+    fn Incomparable(&self, other: &Self) -> Option<UnknownReason>
+    {
+        if let Some(pattern) = self.unexpanded.first().or_else(|| return other.unexpanded.first())
+        {
+            return Some(UnknownReason::UnexpandedPattern {
+                pattern: pattern.clone(),
+            });
+        }
+
+        if self.resolution != other.resolution
+        {
+            return Some(UnknownReason::IncomparableResolution {
+                left: self.resolution,
+                right: other.resolution,
+            });
+        }
+
+        return None;
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::Content_Digest;
+
+    const MINIMUM_USEFUL_DESCRIPTION_LENGTH: usize = 20;
+
+    /// How many subjects the sets in these cases are built from.
+    const MEMBER_COUNT: usize = 2;
+
+    #[test]
+    fn Test_Disjoint_Sets_Should_Permit_Concurrency()
+    {
+        let left = Set::Of(SetResolution::File, [Subject_Named("a.rs")]);
+        let right = Set::Of(SetResolution::File, [Subject_Named("b.rs")]);
+
+        assert_eq!(left.Intersect(&right), Intersection::Disjoint);
+        assert!(left.Intersect(&right).Permits_Concurrency());
+    }
+
+    #[test]
+    fn Test_Of_Should_Build_A_Set_From_The_Given_Subjects()
+    {
+        let set = Set::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
+
+        assert_eq!(set.Members().count(), MEMBER_COUNT);
+        assert!(set.Members().any(|member| return *member == Subject_Named("a.rs")));
+    }
+
+    #[test]
+    fn Test_Insert_Should_Add_A_Member_To_The_Set()
+    {
+        let mut set = Set::Empty(SetResolution::File);
+
+        set.Insert(Subject_Named("a.rs"));
+
+        assert!(set.Members().any(|member| return *member == Subject_Named("a.rs")));
+    }
+
+    #[test]
+    fn Test_Resolution_Should_Report_The_Resolution_The_Set_Was_Built_At()
+    {
+        let set = Set::Of(SetResolution::Symbol, [Subject_Named("a.rs::foo")]);
+
+        assert_eq!(set.Resolution(), SetResolution::Symbol);
+    }
+
+    #[test]
+    fn Test_Is_Empty_Should_Require_No_Members_And_No_Unexpanded_Patterns()
+    {
+        assert!(Set::Empty(SetResolution::File).Is_Empty());
+        assert!(!Set::Of(SetResolution::File, [Subject_Named("a.rs")]).Is_Empty());
+        assert!(!Set::Empty(SetResolution::File)
+            .With_Unexpanded_Pattern("src/**")
+            .Is_Empty());
+    }
+
+    #[test]
+    fn Test_Length_Should_Count_How_Many_Subjects_Are_Known()
+    {
+        let set = Set::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
+
+        assert_eq!(set.Length(), MEMBER_COUNT);
+    }
+
+    #[test]
+    fn Test_Overlapping_Sets_Should_Report_The_Shared_Members()
+    {
+        let left = Set::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
+        let right = Set::Of(SetResolution::File, [Subject_Named("b.rs"), Subject_Named("c.rs")]);
+
+        let result = left.Intersect(&right);
+
+        assert!(!result.Permits_Concurrency());
+        assert_eq!(result.Conflicting(), &[Subject_Named("b.rs")]);
+    }
+
+    #[test]
+    fn Test_Unknown_Should_Never_Permit_Concurrency()
+    {
+        for reason in Every_Way_Independence_Can_Go_Unresolved()
+        {
+            assert!(
+                !Intersection::Unknown(reason).Permits_Concurrency(),
+                "unknown independence is not safe parallelism"
+            );
+        }
+    }
+
+    /// The property the whole type exists for. If this ever passes, two agents can be
+    /// told they may proceed when nobody established that they may.
+    /// Every way independence can fail to be established, so a new `UnknownReason`
+    /// variant is a diff to this table rather than a new test.
+    fn Every_Way_Independence_Can_Go_Unresolved() -> [UnknownReason; 4]
+    {
+        return [
+            UnknownReason::IncomparableResolution {
+                left: SetResolution::File,
+                right: SetResolution::Symbol,
+            },
+            UnknownReason::ResolutionUnavailable {
+                requested: SetResolution::Region,
+            },
+            UnknownReason::IncomparableSnapshots,
+            UnknownReason::UnexpandedPattern {
+                pattern: "src/**".to_owned(),
+            },
+        ];
+    }
+
+    /// A file set and a symbol set look disjoint if you just compare identifiers, and
+    /// they are not — the identifiers denote different kinds of thing, so absence from
+    /// each other's membership carries no information.
+    #[test]
+    fn Test_Mismatched_Resolutions_Should_Be_Unknown_Not_Disjoint()
+    {
+        let by_file = Set::Of(SetResolution::File, [Subject_Named("a.rs")]);
+        let by_symbol = Set::Of(SetResolution::Symbol, [Subject_Named("a.rs::foo")]);
+
+        let result = by_file.Intersect(&by_symbol);
+
+        assert!(matches!(result, Intersection::Unknown(_)));
+        assert!(!result.Permits_Concurrency());
+    }
+
+    /// An unexpanded pattern could match anything. Comparing against it as though it
+    /// matched nothing is the quiet version of the same bug.
+    #[test]
+    fn Test_With_Unexpanded_Pattern_Should_Make_The_Answer_Unknown()
+    {
+        let wildcard =
+            Set::Empty(SetResolution::File).With_Unexpanded_Pattern("src/**/*.rs");
+        let concrete = Set::Of(SetResolution::File, [Subject_Named("src/main.rs")]);
+
+        assert!(!wildcard.Intersect(&concrete).Permits_Concurrency());
+        assert!(
+            !concrete.Intersect(&wildcard).Permits_Concurrency(),
+            "the pattern must be caught from either side"
+        );
+    }
+
+    /// Two empty sets genuinely do not conflict, and must not be dragged into `Unknown`
+    /// by over-caution — a scheduler that cannot prove the trivial case will serialize
+    /// everything.
+    #[test]
+    fn Test_Empty_Sets_Should_Be_Disjoint()
+    {
+        let left = Set::Empty(SetResolution::File);
+        let right = Set::Empty(SetResolution::File);
+
+        assert_eq!(left.Intersect(&right), Intersection::Disjoint);
+    }
+
+    #[test]
+    fn Test_Intersection_Should_Be_Symmetric()
+    {
+        let left = Set::Of(SetResolution::File, [Subject_Named("a.rs"), Subject_Named("b.rs")]);
+        let right = Set::Of(SetResolution::File, [Subject_Named("b.rs")]);
+
+        assert_eq!(
+            left.Intersect(&right).Permits_Concurrency(),
+            right.Intersect(&left).Permits_Concurrency()
+        );
+        assert_eq!(
+            left.Intersect(&right).Conflicting(),
+            right.Intersect(&left).Conflicting()
+        );
+    }
+
+    /// A set overlaps itself unless it is empty. Trivial, and it is the sanity check
+    /// that catches an `Intersect` accidentally written as a difference.
+    #[test]
+    fn Test_Intersect_Should_Have_A_Nonempty_Set_Overlap_Itself()
+    {
+        let set = Set::Of(SetResolution::File, [Subject_Named("a.rs")]);
+
+        assert!(!set.Intersect(&set).Permits_Concurrency());
+    }
+
+    /// Members must iterate in a stable order regardless of insertion order, or a
+    /// territory rendered into the ledger file would churn under `git diff` and two
+    /// agents writing the same claim would produce different bytes.
+    #[test]
+    fn Test_Members_Should_Iterate_In_A_Stable_Order()
+    {
+        let forward = Set::Of(
+            SetResolution::File,
+            [Subject_Named("a.rs"), Subject_Named("b.rs"), Subject_Named("c.rs")],
+        );
+        let reverse = Set::Of(
+            SetResolution::File,
+            [Subject_Named("c.rs"), Subject_Named("b.rs"), Subject_Named("a.rs")],
+        );
+
+        let forward_order: Vec<&SubjectId> = forward.Members().collect();
+        let reverse_order: Vec<&SubjectId> = reverse.Members().collect();
+
+        assert_eq!(forward_order, reverse_order);
+    }
+
+    #[test]
+    fn Test_Every_Unknown_Reason_Should_Describe_Itself_Usefully()
+    {
+        let reasons = [
+            UnknownReason::IncomparableResolution {
+                left: SetResolution::File,
+                right: SetResolution::Region,
+            },
+            UnknownReason::ResolutionUnavailable {
+                requested: SetResolution::Symbol,
+            },
+            UnknownReason::IncomparableSnapshots,
+            UnknownReason::UnexpandedPattern {
+                pattern: "src/**".to_owned(),
+            },
+        ];
+
+        for reason in &reasons
+        {
+            assert!(
+                reason.Describe().len() > MINIMUM_USEFUL_DESCRIPTION_LENGTH,
+                "{} is too terse to act on",
+                reason.Describe()
+            );
+        }
+    }
+
+    fn Subject_Named(name: &str) -> SubjectId
+    {
+        return SubjectId::From_Digest(Content_Digest(name.as_bytes()));
+    }
+}

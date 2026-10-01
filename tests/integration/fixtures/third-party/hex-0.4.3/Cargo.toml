@@ -1,0 +1,33 @@
+# Not part of `hex` 0.4.3's own published manifest -- this fixture keeps only the crate's
+# two library source files (see ../PROVENANCE.md), and needs a manifest of its own so that
+# `cargo metadata`/`cargo clippy`/`cargo deny`, each invoked with this directory as `root` by
+# `calibration.rs`, have something to resolve. `[workspace]` is declared (empty) so cargo's
+# own upward manifest search stops here instead of continuing into the real nomos workspace
+# this fixture is committed inside -- without it, the three subprocess-backed capabilities
+# silently judge the *enclosing* nomos workspace instead of this fixture, which is worse than
+# refusing outright. See calibration.rs's own module doc for the measurement that found this.
+[workspace]
+
+[package]
+name = "hex-fixture"
+version = "0.0.0"
+edition = "2018"
+publish = false
+# The real hex 0.4.3's own declared licence (its Cargo.toml, checked in the registry
+# cache) -- see ../PROVENANCE.md. Declared here too so `cargo deny`'s own licensing check
+# judges this fixture crate's manifest honestly rather than reporting it unlicensed for a
+# gap in this Cargo.toml's own authoring, which would be a finding about this fixture's
+# test infrastructure, not about hex's own code.
+license = "MIT OR Apache-2.0"
+
+[lib]
+name = "hex_fixture"
+path = "lib.rs"
+
+# Mirrors hex 0.4.3's own [features] block exactly (Cargo.toml.orig in the registry cache),
+# since lib.rs's `#[cfg(feature = "alloc")]`/`#[cfg(feature = "std")]` gates are copied
+# verbatim and need the identical defaults to compile the functions they gate.
+[features]
+default = ["std"]
+alloc = []
+std = ["alloc"]

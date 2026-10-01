@@ -1,0 +1,18 @@
+[package]
+name = "nomos-cap-rust-copy-clones"
+version = "0.1.0"
+description = "The nomos.cap.rust.copy_clones contract: every .clone() call in an analyzed crate whose receiver a real compiler frontend resolved to a type that already implements Copy. OD-ANALYSIS-007."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# nomos-rules is this capability's second real party, which is the OD-CAPABILITY-002
+# contention criterion OD-ANALYSIS-007 version 2 names as the moment a bundled contract
+# moves out of its provider: a descriptor in that crate now requires this family.
+[dependencies]
+nomos-capability = { workspace = true }
+nomos-contracts = { workspace = true }
+
+[lints]
+workspace = true

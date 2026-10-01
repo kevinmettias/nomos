@@ -1,0 +1,22 @@
+[package]
+name = "nomos-platform"
+version = "0.1.0"
+description = "Port traits for everything Nomos needs from the machine underneath it."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde = { workspace = true }
+# The determinism vocabulary the four ports declare in. Protocol zone, which this
+# zone may depend on; and the same vocabulary the rest of this workspace's 29
+# strategy declarations already use, rather than a second one for the ports alone.
+nomos-contracts = { workspace = true }
+
+# The adapter asserts the committed ledger's byte format directly.
+[dev-dependencies]
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

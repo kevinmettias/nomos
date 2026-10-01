@@ -1,0 +1,26 @@
+[package]
+name = "nomos-spec-project"
+version = "0.1.0"
+description = "Projections of the specification store: profiles as data, renderers per format."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+# The determinism vocabulary, for the one declaration in `src/determinism.rs`. See the
+# same note in `nomos-spec-bundle`.
+nomos-contracts = { workspace = true }
+nomos-spec-model = { workspace = true }
+nomos-spec-store = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml_ng = { workspace = true }
+rusqlite = { workspace = true }
+
+[dev-dependencies]
+nomos-spec-bundle = { workspace = true }
+nomos-spec-ingest = { workspace = true }
+
+[lints]
+workspace = true

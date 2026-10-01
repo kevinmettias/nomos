@@ -1,0 +1,14 @@
+[package]
+name = "nomos-materialization"
+version = "0.1.0"
+description = "Performs a declared materialization intent against a real tree: never writes a UserOwned target, overwrites a GeneratedOwned one unconditionally, writes only a Composed one's declared owned region and refuses when the free region would be lost, and undoes every write it has already made when a later one fails. Names no package kind, no crate, no rule, no gate and no peer connection."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-platform = { workspace = true }
+
+[lints]
+workspace = true

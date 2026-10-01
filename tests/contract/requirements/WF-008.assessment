@@ -1,0 +1,21 @@
+# The assessment of WF-008 against this build. The requirement identifier is this file's
+# stem and appears nowhere inside it, for the reason CHK-003.assessment already states.
+#
+# WF-008 requires every WorkflowStep contract to declare typed inputs/outputs, side
+# effects, idempotency, retry policy, timeout, cacheability/cache key inputs, privileges,
+# cancellation behavior, compensation/rollback, determinism class, and evidence emitted.
+# OD-WORKFLOW-003 admitted WorkflowStep with exactly these eleven fields, none optional, so
+# the Rust type mechanically enforces the declaration for anything that gets constructed.
+#
+# Partial rather than Met: nothing in this workspace has ever constructed a WorkflowStep.
+# The requirement is a constraint on what a real contract declares, and there is no real
+# contract yet to check it against -- the same gap OD-WORKFLOW-003 itself names. A verdict
+# of Met here would be the vacuous-truth trap OD-CONTRACTS-001's honesty vocabularies exist
+# to refuse: "every WorkflowStep declares X" is true of zero WorkflowSteps for the same
+# reason it would be true of a million wrong ones.
+#
+# Not recomputed from the corpus at check time. OD-TRACE-001 records why: CI has no corpus,
+# so a guard that read one would be green by being unable to look.
+verdict: Partial
+site: crates/contracts/nomos-contracts/src/workflow_step.rs#WorkflowStep
+gap: docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#a real constructor, publisher, or consumer anywhere in this workspace

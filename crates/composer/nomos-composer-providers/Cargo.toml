@@ -1,0 +1,41 @@
+[package]
+name = "nomos-composer-providers"
+version = "0.1.0"
+description = "The standard provider set, selected once: the ComposedProviders table and the registry offers of the same providers, built together so a composition root names one selection instead of sixteen providers. OD-HOST-020. Selects and orchestrates nothing."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-analysis = { workspace = true }
+nomos-cap-requirement-trace = { workspace = true }
+nomos-cap-syntax = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-check-orchestration = { workspace = true }
+nomos-connector-coderabbit = { workspace = true }
+nomos-contracts = { workspace = true }
+nomos-lang-csharp = { workspace = true }
+nomos-lang-csharp-compiler = { workspace = true }
+nomos-lang-go = { workspace = true }
+nomos-lang-go-lint = { workspace = true }
+nomos-lang-go-types = { workspace = true }
+nomos-lang-go-modules = { workspace = true }
+nomos-lang-rust = { workspace = true }
+nomos-lang-rust-cargo = { workspace = true }
+nomos-lang-rust-clippy = { workspace = true }
+nomos-lang-rust-compiler = { workspace = true }
+nomos-lang-rust-complexity = { workspace = true }
+nomos-lang-rust-deny = { workspace = true }
+nomos-lang-rust-scan = { workspace = true }
+nomos-platform = { workspace = true }
+nomos-repo-policy = { workspace = true }
+
+[dev-dependencies]
+# Only the test asserting each language constant nomos-rules states agrees with the provider
+# that declares it. OD-HOST-020 section 4 keeps Rules out of this crate's component for exactly
+# this reason: a test assertion is a dev-dependency concern, not a reason to widen a library.
+nomos-rules = { workspace = true }
+
+[lints]
+workspace = true

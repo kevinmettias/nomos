@@ -1,0 +1,31 @@
+{
+  "id": "implementation-context-pack",
+  "title": "Implementation context",
+  "format": "contextpack",
+  "output": "context/{subject}/implementation.json",
+  "sections": [
+    {
+      "title": "Subject",
+      "content": "nodes",
+      "filter": {
+        "node_id": "{subject}"
+      }
+    },
+    {
+      "title": "Statements",
+      "content": "statements",
+      "filter": {
+        "node_id": "{subject}"
+      },
+      "may_be_empty": true
+    },
+    {
+      "title": "Neighbourhood",
+      "content": "neighbourhood",
+      "filter": {
+        "node_id": "{subject}"
+      },
+      "may_be_empty": true
+    }
+  ]
+}

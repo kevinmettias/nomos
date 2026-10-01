@@ -1,0 +1,8 @@
+Input text for the analysis and regression tests, not source this workspace builds. One
+file is malformed on purpose: `analysis/gamma/broken.rs` carries a U+FEFF byte order mark
+mid-file, so that a rollup over a directory it cannot read is a degraded answer rather than
+a smaller one. `analysis/README.md` states every figure the corpus is asserted against.
+
+Judging this tree reports the specimens as the defects they were written to be, and a check
+that must read the whole corpus before it can answer refuses the entire run over the one
+file that will never parse.

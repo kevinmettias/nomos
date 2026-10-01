@@ -1,0 +1,159 @@
+//! A writer that cannot account for the document does not get to rewrite it.
+//!
+//! P10-STALE-WRITER, decided in `OD-LEDGER-008`. The incident these tests are written against
+//! was a `work claim` that returned 0 and dropped a key on the way through: the state change
+//! survived, the data did not, and the surface reporting it could not tell the two apart.
+//!
+//! So the assertion here is on the **file**, not on the type. A refusal that exits 5 while
+//! quietly rewriting the ledger would satisfy every assertion about exit codes and would be the
+//! defect intact. The bytes written before the command are compared with the bytes after it.
+//!
+//! What no test in this process can do is run a genuinely older executable — one `cargo test`,
+//! one binary. The end-to-end experiment for that was run by hand and its observed result is
+//! recorded in `OD-LEDGER-008`.
+
+#[path = "scratch_ledger/board.rs"]
+mod board;
+
+use board::{Board, Ran};
+use nomos_ledger::SCHEMA_VERSION;
+
+/// A key no build of this crate declares, spliced onto an item.
+///
+/// Named for what it is rather than for a field somebody might later add, so this fixture cannot
+/// stop being the case it was written for by the schema catching up with it.
+const UNDECLARED: &str = ",\"a_field_this_build_does_not_know\":{\"holder\":\"agent-a\"}";
+
+/// The exit code for a ledger this build cannot use at all.
+///
+/// `README.md`'s table gives this its own code because it is the one that means *stop and
+/// fetch a person*, as against the claim codes that mean *try another item*.
+const EXIT_STORE_ERROR: i32 = 5;
+
+/// The JSON a fixture splices onto its item's last field.
+///
+/// A distinct type rather than a bare `&str`: [`A_Board`] takes a directory name and this
+/// text, both strings and both adjacent, so a caller who transposed them would name a
+/// directory after a key and splice a case name into the document.
+struct Splice<'a>(&'a str);
+
+/// A scratch board holding one claimable item, with the [`Splice`]'s text spliced into it.
+///
+/// The item text is what this suite is about and stays here; the directory it is written
+/// into is `scratch_ledger/board.rs`, shared with the suites beside this one.
+fn A_Board(name: &str, splice: Splice<'_>) -> Board
+{
+    let extra = splice.0;
+
+    return Board::New(
+        "stale",
+        name,
+        &format!(
+            "{{\n  \"schema_version\": 1,\n  \"items\": [\
+             {{\"id\":\"T-1\",\"title\":\"item T-1\",\"why\":\"because\",\
+             \"done_when\":\"the tests pass\",\
+             \"kind\":\"Correction\",\"origin\":\"Proposed\",\
+             \"widened\": [], \"territory\":{{\"resolution\":\"File\",\"paths\":[\"src/a.rs\"],\
+             \"patterns\":[]}},\
+             \"state\":\"Ready\",\"depends_on\":[],\"blocked\":null,\"claim\":null,\
+             \"verification\":null,\"verified\":null,\"abandoned\":[]{extra}}}\
+             ]\n}}\n"
+        ),
+    );
+}
+
+/// The assertion the item exists for, made on the file rather than on a type.
+///
+/// Step by step this is the incident: a verb that changes the board is run against a document
+/// carrying a key the running build cannot account for. It must exit 5 and it must leave the
+/// bytes alone. The exit code alone would pass on a build that refused *and* rewrote.
+#[test]
+fn Test_A_Build_That_Cannot_Read_The_Ledger_Should_Not_Rewrite_It()
+{
+    let board = A_Board("refuses-to-rewrite", Splice(UNDECLARED));
+    let before = board.Bytes();
+
+    let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
+
+    assert_eq!(
+        code, EXIT_STORE_ERROR,
+        "a build that cannot read the board must report the store unusable: {said}"
+    );
+    assert_eq!(
+        board.Bytes(),
+        before,
+        "the ledger was rewritten by a build that could not read it, which is the defect:\n{said}"
+    );
+}
+
+/// A read-only verb refuses too, which is where a stale session actually meets this.
+///
+/// `list` writes nothing, so nothing is lost by running it — and that is the argument for
+/// refusing it anyway. A session allowed to read a document it cannot account for goes on
+/// deciding what to claim from a board it is not seeing whole, which is the condition that
+/// produced the incident rather than the write that ended it.
+#[test]
+fn Test_Listing_A_Ledger_This_Build_Cannot_Account_For_Should_Refuse()
+{
+    let board = A_Board("refuses-to-list", Splice(UNDECLARED));
+
+    let Ran { said, code } = board.Work(&["list"]);
+
+    assert_eq!(code, EXIT_STORE_ERROR, "{said}");
+    assert!(
+        said.contains("a_field_this_build_does_not_know"),
+        "the refusal must name what could not be accounted for:\n{said}"
+    );
+}
+
+/// The control `done_when` asks for by name, and the one that gives the test above its teeth.
+///
+/// A guard that refused every write would stop the board rather than protect it. It also makes
+/// the byte comparison mean something: without this, "the bytes did not change" would pass on a
+/// binary that never writes at all.
+#[test]
+fn Test_A_Build_That_Can_Read_The_Ledger_Should_Still_Write_It()
+{
+    let board = A_Board("still-writes", Splice(""));
+    let before = board.Bytes();
+
+    let Ran { said, code } = board.Work(&["claim", "--item", "T-1", "--holder", "agent-b"]);
+
+    assert_eq!(code, 0, "a readable board must still be claimable: {said}");
+    assert_ne!(
+        board.Bytes(),
+        before,
+        "the claim was granted and nothing was written:\n{said}"
+    );
+}
+
+/// The operator-facing half: one command that answers "is the exe I copied current?".
+///
+/// Sessions run a copy of `nomos.exe`, because `finish` runs a predicate that rebuilds the
+/// running executable. `OD-LEDGER-008` documents that workaround rather than replacing it, and
+/// this line is what makes it checkable without having to provoke a refusal first.
+#[test]
+fn Test_Validate_Should_Report_The_Files_Schema_And_The_Builds()
+{
+    let board = A_Board("validate-reports-both", Splice(""));
+
+    let Ran { said, code } = board.Work(&["validate"]);
+
+    assert_eq!(code, 0, "{said}");
+    // A literal `1`, and it stays one: this reads the *fixture's* own version, which `Board`
+    // writes as `schema_version: 1` and which no bump to `SCHEMA_VERSION` changes. The two
+    // numbers on this line are different facts, and the next reader should not "fix" both.
+    assert!(
+        said.contains("schema 1"),
+        "validate must report the file's own schema version:\n{said}"
+    );
+    // The constant, never a literal spelling of its value. This assertion said "understands 1"
+    // until `P10-LAPSE-TAKEOVER` raised `SCHEMA_VERSION` to 2 and turned it red — a test in one
+    // item's territory pinned by a constant in another's, with nothing able to see the coupling
+    // because a file and a constant are `Disjoint` and the ledger reserves paths. Same shape as
+    // the trap `P10-RECORD-STEM` closed. Written this way the next bump cannot reach it.
+    assert!(
+        said.contains(&format!("this build understands {SCHEMA_VERSION}")),
+        "validate must report what the running build understands:\n{said}"
+    );
+}

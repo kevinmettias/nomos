@@ -1,0 +1,23 @@
+[package]
+name = "nomos-lang-go-types"
+version = "0.1.0"
+description = "The provider of nomos.cap.go.discarded_values: every value a Go file assigns to the blank identifier, typed by go/types through a standard-library helper the host's own Go toolchain runs."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-analysis = { workspace = true }
+nomos-cap-go-types = { workspace = true }
+nomos-platform = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+nomos-platform-std = { workspace = true }
+
+[lints]
+workspace = true

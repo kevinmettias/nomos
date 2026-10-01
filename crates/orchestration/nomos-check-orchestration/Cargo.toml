@@ -1,0 +1,68 @@
+[package]
+name = "nomos-check-orchestration"
+version = "0.1.0"
+description = "Composes the capability registry, ingests already-walked source into facts and runs the completeness rule over them, and hands back what was found -- the seam a second adapter calls without choosing a platform, walking a tree or rendering the answer."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-analysis = { workspace = true }
+nomos-cap-syntax = { workspace = true }
+nomos-cap-dependency = { workspace = true }
+nomos-cap-controlflow = { workspace = true }
+nomos-cap-complexity = { workspace = true }
+nomos-cap-lint = { workspace = true }
+nomos-cap-dependency-policy = { workspace = true }
+nomos-cap-naming-policy = { workspace = true }
+nomos-cap-limits-policy = { workspace = true }
+nomos-cap-scripting-policy = { workspace = true }
+nomos-cap-goals-policy = { workspace = true }
+nomos-cap-architecture = { workspace = true }
+nomos-cap-words-policy = { workspace = true }
+nomos-cap-test-material-policy = { workspace = true }
+nomos-cap-requirement-trace = { workspace = true }
+nomos-cap-review-finding = { workspace = true }
+nomos-cap-rust-copy-clones = { workspace = true }
+nomos-cap-rust-nested-locks = { workspace = true }
+nomos-cap-standards-corpus = { workspace = true }
+nomos-cap-csharp-semantics = { workspace = true }
+nomos-cap-go-types = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-package = { workspace = true }
+nomos-platform = { workspace = true }
+nomos-rule-package = { workspace = true }
+nomos-rules = { workspace = true }
+nomos-workspace = { workspace = true }
+
+[dev-dependencies]
+nomos-composer-providers = { workspace = true }
+nomos-connector-coderabbit = { workspace = true }
+nomos-lang-csharp = { workspace = true }
+nomos-lang-csharp-compiler = { workspace = true }
+nomos-lang-csharp-package = { workspace = true }
+nomos-lang-go = { workspace = true }
+nomos-lang-go-lint = { workspace = true }
+nomos-lang-go-types = { workspace = true }
+nomos-lang-go-modules = { workspace = true }
+nomos-lang-go-package = { workspace = true }
+nomos-lang-rust = { workspace = true }
+nomos-lang-rust-cargo = { workspace = true }
+nomos-lang-rust-clippy = { workspace = true }
+nomos-lang-rust-compiler = { workspace = true }
+nomos-lang-rust-complexity = { workspace = true }
+nomos-lang-rust-deny = { workspace = true }
+nomos-lang-rust-package = { workspace = true }
+nomos-lang-rust-scan = { workspace = true }
+nomos-platform-std = { workspace = true }
+nomos-repo-policy = { workspace = true }
+nomos-tool-package = { workspace = true }
+# The counting semaphore `tests/compiler_databases.rs` admits every compiler-backed provider
+# call through. The bound's value and its derivation stay in that file.
+nomos-test-permits = { workspace = true }
+
+[lints]
+workspace = true

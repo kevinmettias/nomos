@@ -1,0 +1,18 @@
+# The assessment of MODEL-ROUTE-009 against this build. The requirement identifier is
+# this file's stem and appears nowhere inside it, because a second place to spell the
+# identity is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a
+# record registration, and CHK-003.assessment states for this registry.
+#
+# MODEL-ROUTE-009: "Workflow validation shall detect unavailable models, incompatible
+# effort levels, prohibited backend combinations, unobservable usage/cost requirements,
+# context-limit violations, unsupported structured-output guarantees, and missing
+# fallback routes before execution where possible."
+#
+# WorkflowValidationFailure names the seven categories a validator would report, but no
+# workflow validation step exists anywhere in this workspace to detect any of them --
+# OD-WORKFLOW-003 already measured that nothing wires a WorkflowStep value into Gate,
+# nomos-cli, or nomos-api, and this requirement's own detector would need exactly that
+# wiring to exist first.
+verdict: Partial
+site: crates/packages/nomos-model-package/src/workflow_validation_failure.rs#WorkflowValidationFailure
+gap: crates/contracts/nomos-contracts/src/workflow_step.rs#WorkflowStep

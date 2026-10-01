@@ -1,0 +1,49 @@
+pub const fn nomos_cap_csharp_semantics::Branch::Label(self) -> &'static str
+pub const fn nomos_cap_csharp_semantics::BranchState::Label(self) -> &'static str
+pub const fn nomos_cap_csharp_semantics::Ceiling() -> Guarantee
+pub const fn nomos_cap_csharp_semantics::DefinitionEffect::Label(self) -> &'static str
+pub const nomos_cap_csharp_semantics::CAPABILITY: &str
+pub const nomos_cap_csharp_semantics::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_csharp_semantics::SCHEMA: &str
+pub enum nomos_cap_csharp_semantics::Branch
+pub enum nomos_cap_csharp_semantics::BranchState
+pub enum nomos_cap_csharp_semantics::DefinitionEffect
+pub enum variant nomos_cap_csharp_semantics::Branch::Elif
+pub enum variant nomos_cap_csharp_semantics::Branch::Else
+pub enum variant nomos_cap_csharp_semantics::Branch::If
+pub enum variant nomos_cap_csharp_semantics::BranchState::Compiled
+pub enum variant nomos_cap_csharp_semantics::BranchState::Skipped
+pub enum variant nomos_cap_csharp_semantics::BranchState::Unevaluated
+pub enum variant nomos_cap_csharp_semantics::DefinitionEffect::Define
+pub enum variant nomos_cap_csharp_semantics::DefinitionEffect::Undefine
+pub fn nomos_cap_csharp_semantics::Branch::From_Label(label: &str) -> Option<Self>
+pub fn nomos_cap_csharp_semantics::BranchState::From_Label(label: &str) -> Option<Self>
+pub fn nomos_cap_csharp_semantics::Capability() -> CapabilityId
+pub fn nomos_cap_csharp_semantics::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_csharp_semantics::DefinitionEffect::From_Label(label: &str) -> Option<Self>
+pub fn nomos_cap_csharp_semantics::Encode_Payload(payload: &ConditionalPayload) -> Vec<u8>
+pub fn nomos_cap_csharp_semantics::Parse_Payload(bytes: &[u8]) -> Result<ConditionalPayload, PayloadRefusal>
+pub fn nomos_cap_csharp_semantics::PayloadRefusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_cap_csharp_semantics::Payload_Schema() -> SchemaId
+pub impl nomos_cap_csharp_semantics::PayloadRefusal implements core::fmt::Display
+pub struct field nomos_cap_csharp_semantics::BuildSelection::configuration: String
+pub struct field nomos_cap_csharp_semantics::BuildSelection::project: String
+pub struct field nomos_cap_csharp_semantics::BuildSelection::target_framework: String
+pub struct field nomos_cap_csharp_semantics::ConditionalPayload::definitions: Vec<FileDefinition>
+pub struct field nomos_cap_csharp_semantics::ConditionalPayload::regions: Vec<ConditionalRegion>
+pub struct field nomos_cap_csharp_semantics::ConditionalPayload::selection: BuildSelection
+pub struct field nomos_cap_csharp_semantics::ConditionalPayload::symbols: Vec<String>
+pub struct field nomos_cap_csharp_semantics::ConditionalRegion::branch: Branch
+pub struct field nomos_cap_csharp_semantics::ConditionalRegion::condition: String
+pub struct field nomos_cap_csharp_semantics::ConditionalRegion::end_line: usize
+pub struct field nomos_cap_csharp_semantics::ConditionalRegion::line: usize
+pub struct field nomos_cap_csharp_semantics::ConditionalRegion::state: BranchState
+pub struct field nomos_cap_csharp_semantics::FileDefinition::effect: DefinitionEffect
+pub struct field nomos_cap_csharp_semantics::FileDefinition::line: usize
+pub struct field nomos_cap_csharp_semantics::FileDefinition::symbol: String
+pub struct field nomos_cap_csharp_semantics::PayloadRefusal::reason: String
+pub struct nomos_cap_csharp_semantics::BuildSelection
+pub struct nomos_cap_csharp_semantics::ConditionalPayload
+pub struct nomos_cap_csharp_semantics::ConditionalRegion
+pub struct nomos_cap_csharp_semantics::FileDefinition
+pub struct nomos_cap_csharp_semantics::PayloadRefusal

@@ -1,0 +1,402 @@
+name: gate
+
+# `dev` is named here because it is where the work is. Every commit in this repository is
+# pushed to `dev` and reaches `main` only by a merge, so a gate on `main` alone covers the
+# branch that receives finished work and not the branch that produces it -- and a workflow
+# that does not run on the branch it protects is a declaration of enforcement that nothing
+# executes. It has already been red on `dev` with nobody told: the only reason anyone knew
+# is that a session ran clippy by hand. OD-GATE-006.
+on:
+  pull_request:
+  push:
+    branches: [main, dev]
+
+# Every step in this gate reads. Checkout reads, and the rest run `cargo` over what it
+# fetched -- nothing here writes to the repository, and the token says so rather than
+# carrying whatever the repository-wide default happens to be. A default is a permission
+# grant decided in a settings page this file cannot show, which makes it the same shape as
+# a declaration nothing executes. Declared at the top level so a job or step added later
+# inherits the floor instead of the default.
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    # Two operating systems, and the second is chosen rather than reached for. This
+    # repository is developed on Windows -- every measurement in its ledger carries an
+    # `F:\repos\nomos` path -- so a gate on `ubuntu-latest` alone checked the environment
+    # nobody writes code in and nothing checked the one everybody does. OD-GATE-009 carries
+    # the choice and OD-GATE-006 is the principle: a declaration is exercised in every
+    # environment the claim needs, and a determinism claim's necessary environments are more
+    # than one.
+    #
+    # What makes it *this* platform is a claim in the tree rather than runner availability.
+    # `.gitattributes` states the risk in as many words -- content hashes are computed over
+    # file bytes and the governing records are embedded with `include_str!`, so a clone with
+    # `core.autocrlf=true` would change every block hash and "the same commit would validate
+    # on one machine and not on another". Line endings differ across exactly this pair of
+    # hosts, and the rest of the class -- path separators, directory iteration order,
+    # filename case -- differs on the same axis.
+    #
+    # `fail-fast: false` is not an excuse and must not be read as one. It does not let a leg
+    # fail; both legs must still be green. It stops one leg's failure from cancelling the
+    # other, which is what turns "Windows is red" into "Windows is red and Linux is fine" --
+    # the difference between a finding and a mystery. `continue-on-error` IS the excuse and
+    # appears nowhere here; `Test_No_Step_In_The_Gate_Should_Excuse_Itself` refuses it by name.
+    #
+    # A matrix, rather than a second job, because a second job needs a second `checkout` and
+    # this workflow asserts that every action it runs is pinned to a commit by listing them
+    # -- `Test_The_Pin_Check_Should_Reject_An_Action_On_A_Tag` measures that check against a
+    # fixture with one action in it. One job keeps one `uses:` line. Which steps run on which
+    # leg is then decided per step below, so nothing is copied.
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      # Pinned to a commit rather than to `v4`. A tag is a name its owner can move to any
+      # commit at any time, so `@v4` fetches whatever it points at on the morning the job
+      # runs -- and a tag that moves changes what executes here while changing nothing in
+      # this repository, which means the diff that would show it does not exist. The
+      # trailing comment names the release the SHA is, because forty unreviewable
+      # characters are how a pin becomes a paste nobody can check.
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      # The toolchain is pinned in rust-toolchain.toml and honoured automatically. It is
+      # `1.88.0` -- an exact release, not a channel name, for the same reason the `uses:` above
+      # is a commit and not a tag: a floating reference changes what this job runs on a morning
+      # nobody committed anything.
+      #
+      # It used to be `nightly`, and this comment used to say so: rustfmt's Allman brace option
+      # (`brace_style = "AlwaysNextLine"`) is nightly-only. `OD-GATE-012` dropped that pin,
+      # because the option's only consumer is `cargo fmt` and `cargo fmt` is forbidden in this
+      # workspace -- a toolchain pinned for a command nobody may run is pinned for nothing.
+      # rustfmt.toml still records the intended style, and still records why `cargo fmt --check`
+      # is NOT a gate step; on a stable toolchain its `unstable_features = true` now fails loudly
+      # rather than being ignored, which that file argues is the better failure.
+      - name: Show toolchain
+        run: cargo --version && rustc --version
+
+      # Severity is Cargo.toml's job, not this step's. `[workspace.lints.clippy]` denies
+      # unwrap_used, indexing_slicing, arithmetic_side_effects and float_cmp -- a panic on
+      # the analysis path is a determinism defect, because a replay must reach the same panic
+      # at the same step -- and marks clippy::all and clippy::pedantic warn, deliberately
+      # advisory rather than blocking. This step used to add `-- -D warnings`, which promoted
+      # the warn-level lints to hard failures here and nowhere else, so a contributor's own
+      # machine and this gate disagreed about what actually blocked a merge. `OD-GATE-007`
+      # removed the flag rather than mirror it into the table, so severity is stated once.
+      #
+      # Linux only, and the exclusion is measured rather than assumed. There is no
+      # `cfg(windows)`, no `cfg(unix)` and no `cfg(target_os = …)` anywhere in this
+      # workspace, so no code is hidden from this run and a second one would lint an
+      # identical token stream at full cost. That is a property of this tree and stops being
+      # true the day somebody adds the first `cfg`.
+      #
+      # The `if:` does not disturb `work finish`. `nomos_ledger::Derive_Step` moves between
+      # steps on `- name:` / `name:` and returns the first `run:` inside the one it wants,
+      # ignoring every other key, so this step still yields the same argv.
+      # Installed here rather than beside the `Supply chain` step it was written for, because
+      # `Test` below runs `nomos-lang-rust-deny`'s own provider against a real `cargo deny`,
+      # and a step cannot use a tool installed after it. It was ordered after `Test` until
+      # `P82`, so that provider ran on a machine with no `cargo deny` on every gate this
+      # workflow has ever run -- and reported the workspace's bans/licenses/sources verdict
+      # as *clean* rather than as unavailable, because the provider could not tell a failed
+      # run from a quiet one (`P81` closed that half, which is what made this visible).
+      #
+      # The rationale for building it from crates.io, and for pinning the version, is beside
+      # `Supply chain` below where it was published.
+      #
+      # The ordering is held by a test now, not by this comment:
+      # `nomos-cli`'s `tests/gate_step/step_order.rs` asserts that every `cargo install` here
+      # precedes the first step running `cargo test`, and its own doc records why the obvious
+      # assertion -- that the install precedes every step *naming* the tool -- is vacuous:
+      # `Test` never names it, because the launch happens inside a provider. Moving this step
+      # back below now fails that test rather than going unnoticed for another year.
+      #
+      # Both hosts, unlike the `Supply chain` step it was written for. That step is Linux-only
+      # because its *verdict* has no host in it; this install is not about a verdict but about
+      # a binary being present for tests that launch it. `Determinism` runs
+      # `nomos-integration-tests` on Windows, whose calibration test materializes every
+      # capability -- `nomos-lang-rust-deny`'s among them -- and it is the only package in that
+      # step's list needing this tool. It appeared to pass there for as long as the provider
+      # answered a missing `cargo deny` with a clean result, so dependency policy has never
+      # actually been judged on Windows; `P81` made that refuse and `P82` pays for it properly
+      # rather than deleting the check.
+      #
+      # The cost is a second build of cargo-deny, which is real. It buys the composed rule set
+      # being exercised on Windows over a real fixture tree, which is where path separators,
+      # filesystem case and directory order reach a rule -- the axis `P36`, `P68`, `P79` and
+      # `P80` were each a bug on. Line endings are *not* the reason: `.gitattributes` pins
+      # `eol=lf`, so both hosts read identical bytes.
+      - name: Install cargo-deny
+        run: cargo install cargo-deny --locked --version 0.20.2
+
+      - name: Lint
+        if: matrix.os == 'ubuntu-latest'
+        run: cargo clippy --workspace --all-targets
+
+      # The whole suite runs on Linux. On Windows the subset that makes platform-sensitive
+      # claims runs instead, below -- running the workspace twice would double the most
+      # expensive step in this gate to re-answer, on a second host, questions that have no
+      # host in them.
+      - name: Test
+        if: matrix.os == 'ubuntu-latest'
+        run: cargo test --workspace
+
+      # The compatibility floor `Cargo.toml` declares. `OD-GATE-006` decided a declaration of
+      # compatibility is incomplete until something compiles it in that configuration; `OD-GATE-008`
+      # is the record that measured this workspace's actual floor (`1.88`) and chose to check it
+      # rather than test it -- `rust-version` is a promise about what a consumer's compiler must be
+      # to build this crate, not about this workspace's own tests passing on one.
+      #
+      # RUSTUP_TOOLCHAIN, not `cargo +1.88.0`. `rust-toolchain.toml` pins a channel, and only
+      # RUSTUP_TOOLCHAIN out-ranks that pin -- a `+toolchain` argument selects among installed
+      # toolchains but does not beat a channel file present in the working directory. Pinned to the
+      # full patch release the floor was measured on, `1.88.0`, rather than `1.88` or `stable`, the
+      # same reasoning this workflow already applies to `actions/checkout` and `cargo-deny`: a
+      # floating reference changes what a lane checks on a morning nobody committed anything.
+      #
+      # `--all-targets`, because several of the `&& let` sites this floor exists for are inside
+      # `tests/`; checking library code alone would under-measure the same defect `OD-GATE-006`
+      # found.
+      #
+      # What this step buys changed when `OD-GATE-012` dropped the toolchain pin to `1.88.0`,
+      # and saying so is the point of this paragraph. The pin now *equals* the declared floor,
+      # so `Lint` and `Test` above already compile on this exact compiler, and this workspace
+      # declares no bench and no example for `--all-targets` to reach beyond what they build.
+      # This step is therefore not reaching a compiler the rest of the gate never sees, the way
+      # it did while the pin was `nightly`.
+      #
+      # It is kept, and not because removing it would be work. What it catches now is the two
+      # values *diverging*: a `rust-version` bump without a repin, or a repin past the floor,
+      # leaves this step checking a release the rest of the gate no longer exercises -- and that
+      # is precisely the state nothing else here would report, since a gate whose every step
+      # runs above the declared floor is how `rust-version` came to sit at a false `1.85`
+      # unnoticed (`P11-MSRV-UNCHECKED`, `OD-GATE-006`). The redundancy is the healthy reading
+      # of this step, not the argument against it.
+      #
+      # Linux only, matching `Lint` and `Rules` below, and for the reason `OD-GATE-009` measured
+      # for both: no `cfg(windows)`, `cfg(unix)` or `cfg(target_os = ...)` anywhere in this
+      # workspace, so a compilability question has no host in it and a second run would recheck an
+      # identical token stream.
+      - name: Install compatibility floor toolchain
+        if: matrix.os == 'ubuntu-latest'
+        run: rustup toolchain install 1.88.0 --profile minimal --no-self-update
+
+      - name: Compatibility floor
+        if: matrix.os == 'ubuntu-latest'
+        env:
+          RUSTUP_TOOLCHAIN: 1.88.0
+        run: cargo check --workspace --all-targets
+
+      # Windows only, because on Linux `Test` above already covers it.
+      #
+      # A decided subset, not a copy. Seven of these crates carry a `determinism.rs` and are
+      # therefore what `OD-DETERMINISM-001` and `OD-DETERMINISM-002` govern -- a determinism
+      # claim says the same input yields the same output, and the inputs that differ between
+      # these two hosts are exactly the ones such claims are usually wrong about.
+      # `nomos-spec-store` is here for a different reason: it owns the embedded-record
+      # carriage-return test that `.gitattributes` names as its only defence, and a line
+      # ending is the one input that cannot be checked on the host that cannot produce it.
+      #
+      # `--no-fail-fast` because a run that stops at the first failure reports one number
+      # when several are true, and a platform difference arrives in clusters.
+      - name: Determinism
+        if: matrix.os == 'windows-latest'
+        run: cargo test --no-fail-fast -p nomos-analysis -p nomos-workspace -p nomos-spec-bundle -p nomos-spec-project -p nomos-lang-rust -p nomos-lang-rust-scan -p nomos-integration-tests -p nomos-spec-store
+
+      # A crate that declares a `no_std` floor and is never compiled where there is no
+      # `std` has an unchecked claim, not a portable crate. `cargo check
+      # --no-default-features` on the host does not test it: the host `std` is still
+      # linked, so the crate passes while depending on something that requires it. Only a
+      # target without a standard library answers the question, and two are used because
+      # they disagree -- `x86_64-unknown-none` has 64-bit atomics and the MCU triple does
+      # not, so the first passing is not evidence for the second.
+      #
+      # The crate list is derived from the source rather than written here, so a crate that
+      # declares a floor is gated the day it lands instead of the day somebody remembers to
+      # add it. An empty derived list fails the step: a gate that cannot find its subject
+      # must say so rather than report a clean result over nothing.
+      #
+      # Linux only, for the reason the compatibility floor above gives: this workspace has
+      # no conditionally-compiled code, so a compilability question has no host in it.
+      - name: Install freestanding targets
+        if: matrix.os == 'ubuntu-latest'
+        run: rustup target add x86_64-unknown-none thumbv7em-none-eabihf
+
+      - name: Portability floor
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          set -euo pipefail
+          crates=$(grep -rlE '^#!\[(cfg_attr\(.*)?no_std' --include=lib.rs crates | sed 's#/src/lib.rs##' | xargs -r -n1 basename)
+          if [ -z "$crates" ]; then
+            echo "No crate declares a no_std floor; this gate has lost its subject." >&2
+            exit 1
+          fi
+          for crate in $crates; do
+            for triple in x86_64-unknown-none thumbv7em-none-eabihf; do
+              echo "== $crate on $triple"
+              cargo check -p "$crate" --no-default-features --target "$triple"
+            done
+          done
+
+      # The boundary assertions run as ordinary tests above. This step names them
+      # separately so a failure is legible in the job list rather than buried among
+      # a hundred unit tests -- these are the ones that fail when the architecture
+      # has quietly stopped being true.
+      #
+      # Deliberately on both legs, and it is the only test step that is. The surface
+      # snapshots it compares are produced by walking source files, so directory iteration
+      # order and filename case reach them -- which is the same class as the determinism
+      # crates above and not paperwork.
+      - name: Boundaries
+        run: cargo test -p nomos-contract-tests
+
+      # The one check that must not reuse anything. Every other step here is free to
+      # benefit from an incremental build; this one is the claim that this workspace really
+      # compiles against the pinned XVPE revision, and an incremental build cannot establish
+      # it. Measured 2026-09-14: `cargo check --workspace --all-targets` exited zero in
+      # twenty seconds having compiled no xvpe crate at all, because another process had
+      # warmed the shared target directory. `OD-GATE-028` names that class -- the
+      # verification mechanism bypassing the condition it exists to observe -- and
+      # `tests/contract/tests/crossing_cold.rs` is the response for this crossing.
+      #
+      # The test creates its own empty CARGO_TARGET_DIR and asserts from the build's own
+      # output that xvpe crates were compiled, and that every one of them carries the
+      # revision the manifest names. It is `#[ignore]` so an ordinary `cargo test` does not
+      # pay for a cold build, which is why this step passes `--ignored`.
+      #
+      # Linux only. What it proves is about dependency resolution and not about a host, and
+      # a second cold build would double the cost to re-derive the same fact.
+      - name: XVPE crossing (cold by construction)
+        if: matrix.os == 'ubuntu-latest'
+        run: cargo test -p nomos-contract-tests --test crossing_cold -- --ignored
+
+      # The projections this repository promises to ship, re-derived and compared against
+      # what is committed. `--require` is what makes an absence fail: without it the
+      # command reports on the outputs it happens to find, so deleting both halves of a
+      # governed pair would move it to "not built here" and still exit zero -- which would
+      # make `rm` the way to silence a drifted publication.
+      #
+      # Two profiles are named, and which two is decided by the runner rather than by
+      # taste. Fourteen of the eighteen shipped profiles refuse over a store holding only
+      # the governing records compiled into the binary -- measured, not assumed -- because a
+      # section selects corpus content and no corpus is present here (see the step below).
+      # Requiring one of those would fail for a variable that is not set rather than for a
+      # file that drifted. A profile that CANNOT be rebuilt here must not be required here.
+      #
+      # `diagram-set` reads the relations between the governing records.
+      # `domain-specification` reads their documents, headings and blocks, which makes it
+      # the record set as one readable document and the reason it is worth the price below.
+      #
+      # `html-site` and `traceability-matrix` also rebuild here and are deliberately NOT
+      # required. Every required projection is a re-render obligation on every future record
+      # author, and `html-site` is the same content as `domain-specification` in another
+      # format. `OD-PROJECT-002` records why the list is a declared list rather than every
+      # profile that happens to render, and the pair here is mirrored by
+      # `Test_Every_Required_Profile_Should_Render_Over_A_Seeded_Store`.
+      #
+      # This is publication policy, not a property of the profile: the catalogue says how
+      # each projection is built and nothing there says whether this repository ships it.
+      #
+      # On both legs, and the second one asks a different question. `freshness` recomputes a
+      # content hash over the rendered bytes and compares it to the committed sidecar, so a
+      # render that picked up a path separator or a directory order would agree with itself
+      # on the host that produced it and disagree on the other. The Linux leg checks that the
+      # committed projection is current; the Windows leg checks that "current" means the same
+      # thing on both hosts. That is the general form of what `.gitattributes` fears, applied
+      # to the artifacts this repository actually publishes.
+      - name: Required projections
+        run: cargo run --quiet -p nomos-cli -- spec freshness --into . --require diagram-set --require domain-specification
+
+      # The only step in this gate that judges code rather than paperwork. It runs the
+      # rule layer over this workspace and exits on what it found.
+      #
+      # There is deliberately NO exit-code branch here, and adding one would be a
+      # regression rather than a clarification. crates/host/nomos-cli/src/gate/exit_code.rs
+      # and gate/parsing.rs's USAGE string are the authority on what each code means; a
+      # `case $?` block restating 1, 5 and 6 in YAML would be a second place for one
+      # contract to be spelled -- the objection
+      # OD-LEDGER-003 makes about the lint command and OD-GATE-002 about the surface
+      # snapshot. Actions fails a step on any non-zero exit, and that default IS the
+      # policy this step needs: zero is the only success. In particular a run that judged
+      # nothing exits 6 and is not one -- a gate treating 6 as green would be
+      # OD-GATE-001's defect installed one level up from where that record found it.
+      #
+      # The `run:` line stays one bare command with no shell metacharacters, and this step
+      # must never be named `Lint`: `work finish` derives the gate's lint argv by scanning
+      # this file for the step named `Lint` (nomos_ledger::Derive_Step), so that name here
+      # would make finishing run this command instead of clippy, silently. A scripted
+      # `run:` is refused outright. See OD-GATE-004.
+      #
+      # Linux only. It judges code content, and code content does not vary with the host --
+      # measured green on Windows while this item was open, 830 files examined and the same
+      # 4 findings, none of which can fail a build. A second run buys a second identical
+      # answer.
+      - name: Rules
+        if: matrix.os == 'ubuntu-latest'
+        run: cargo run --quiet -p nomos-cli --bin nomos -- gate run --root .
+
+      # deny.toml is policy this repository declared and never ran. D-130 cites it as
+      # governing -- the GPU, windowing and UI ban is what keeps a headless CLI from
+      # acquiring a graphics stack transitively -- and the file itself says that ban is
+      # "what makes the distinction hold mechanically rather than by intention". Until
+      # this step it held by intention. OD-GATE-006 is why that is a defect rather than
+      # an omission.
+      #
+      # All four classes run, and the two that already passed are as load-bearing as the
+      # two that did not. The first execution refused 22 crates on licenses and 19 on
+      # bans, both for misconfiguration rather than for anything in the dependency graph:
+      # that is what an unexecuted declaration looks like from the inside, and it is why
+      # the narrow version of this step -- run the classes that are green, leave the rest
+      # -- would have been worse than no step at all.
+      #
+      # cargo-deny is built from crates.io rather than fetched through a third-party
+      # action. This workflow trusts exactly one action and a second one is a trust
+      # decision rather than a convenience; `cargo install --locked` adds no publisher
+      # the build does not already depend on. The cost is runner minutes, and it is
+      # chosen rather than defaulted into.
+      #
+      # The tool version is pinned, and the argument that it should not be was wrong.
+      # That argument ran: the advisory database varies with time whatever this step
+      # does, so pinning would buy determinism only for the three classes that already
+      # have it from Cargo.lock while costing fixes for the one class that cannot. It
+      # conflates the tool with the database the tool fetches. `cargo-deny` reads the
+      # advisory database over the network at run time, so the database moves with the
+      # calendar whichever binary reads it and a version pin costs no advisory freshness
+      # whatsoever. What the pin buys is the other half: the binary reading `Cargo.lock`
+      # for licenses, bans and sources stops changing underneath three classes that are
+      # otherwise fully determined. `--locked` was never that -- it pins the dependencies
+      # of the version it selected and does not select a version. OD-GATE-006 carries the
+      # correction, because that is where the reasoning was published.
+      #
+      # Linux only. This reads `Cargo.lock` and a policy file, neither of which has a host in
+      # it, so running it on a second host would re-answer a question that cannot differ.
+      #
+      # That reasoning is about this step's *verdict*, and `P82` found it had been over-read
+      # into the install: the install moved to before `Lint`/`Test` and now runs on both hosts,
+      # because a test that launches `cargo deny` needs the binary present wherever it runs,
+      # which is a different question from where the verdict is computed. See the install
+      # step's own comment for what that buys and what it costs.
+      - name: Supply chain
+        if: matrix.os == 'ubuntu-latest'
+        run: cargo deny check advisories bans licenses sources
+
+      # None of the three corpora is present on a CI runner: they live outside this
+      # repository. So the tests that read them return early and print ok, and this
+      # step is the only place the size of that hole appears. --nocapture is what
+      # makes it appear -- cargo swallows a passing test's output, which is exactly
+      # how sixty-eight assertions came to report success having read nothing.
+      #
+      # It does not fail. A gate that can never be green is a gate everybody learns
+      # to ignore, and a runner without the corpora is the normal case rather than a
+      # misconfiguration. What is guarded is the number: tests/contract/tests/
+      # corpus_gates.rs fails if the declared count stops matching the source.
+      #
+      # Linux only. The hole it reports is the absence of three corpora from the runner, and
+      # they are absent from both runners for the same reason -- they live outside this
+      # repository. Reporting the same number twice would make it look measured per host.
+      - name: Corpus gates (reports what did not run)
+        if: matrix.os == 'ubuntu-latest'
+        run: cargo test -p nomos-contract-tests --test corpus_gates -- --nocapture

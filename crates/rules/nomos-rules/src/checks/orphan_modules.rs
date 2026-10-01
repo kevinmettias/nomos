@@ -1,0 +1,438 @@
+//! A Rust source file no `mod` declaration reaches, ported from code-standards'
+//! `check-orphan-modules` (`rules/language-specific/rust/checks/check-orphan-modules`,
+//! `main.go` plus `module_reachability.go`).
+//!
+//! Rust compiles only what the module tree names. A `.rs` file nothing declares is never
+//! parsed: it does not compile, its tests do not run, its lints do not fire, and no part of
+//! the toolchain says a word. It reads as finished work — every editor opens it, every
+//! reviewer reads it, every doc links it — and it does nothing. The cost is not a bug in the
+//! file; it is the belief that the file is doing its job.
+//!
+//! Rust is unusual in needing this at all. Go compiles every file in a package directory and
+//! C# compiles every file the project globs, so neither language can carry an orphan. That
+//! is why this rule is scoped by path rather than by an [`crate::SourceFile::Is_Written_In`]
+//! guard: a file outside a crate's source tree has no module tree to be reachable from, and
+//! there is nothing for the rule to say about it.
+//!
+//! # Three shapes a naive version gets wrong
+//!
+//! Each is recorded in the Go implementation as a false positive it produced on real code,
+//! and a rule that cries wolf on live files is a rule somebody turns off — which is how the
+//! orphans get in.
+//!
+//!   - `mod r#match;` is backed by `match.rs`. The raw-identifier prefix is spelling, not
+//!     part of the name, and missing it reports a live, compiling file as an orphan.
+//!   - An inline module is backed by no file and declares nothing on disk, so the
+//!     terminating semicolon is required rather than incidental.
+//!   - `#[path = "…"]` names a file relative to *the directory the declaring file sits in*,
+//!     and the file it names then owns *the directory it lands in* — its children are its
+//!     siblings, not entries in a subdirectory named after it. Deriving that directory from
+//!     the file's own name reported all thirty-nine files of one live crate as orphans.
+//!
+//! # Resolution is against the sources, not the filesystem
+//!
+//! The Go original asks the filesystem whether each candidate exists. This one asks the set
+//! of files the run collected, which is what `D-134` and `OD-RULES-001` require of every
+//! rule here: a rule that reads the filesystem can only ever be judged against the tree it
+//! is standing in. The two answers move together — a file the walk did not collect can
+//! neither back a declaration nor be reported as an orphan — so no file changes verdict for
+//! having been resolved one way rather than the other.
+//!
+//! That assumption is load-bearing and was briefly false. `nomos gate run --include <file>`
+//! used to filter the walked set before this rule saw it, which collects a file while
+//! dropping the `lib.rs` that declares it — the one shape the sentence above rules out — and
+//! the rule duly reported a declared, compiling file as an orphan, advising a reader to
+//! delete or re-declare correct code. `OD-GATE-025` took the scope off the source set: a
+//! gate run judges every walked file and narrows only what it reports, so the walk this rule
+//! sees is whole again and the assumption holds by construction rather than by nobody having
+//! narrowed yet.
+//!
+//! A crate is likewise identified by a `src` path segment rather than by a `Cargo.toml`
+//! beside it, because a manifest is not a source this walk collects. Measured against this
+//! workspace when the rule was written: sixty source directories found this way, sixty with
+//! a sibling manifest, and none of either without the other — the two agree exactly, and the
+//! divergence is in what the rule can see rather than in what it decides.
+//!
+//! # What this port narrows, deliberately
+//!
+//! The original reads every direct `.rs` child of `src/bin/` as an auto-discovered binary
+//! root but not `src/bin/<name>/main.rs`, which Cargo also compiles as a root. That gap is
+//! inherited rather than repaired: widening it here would make this port disagree with the
+//! tool it is porting on a shape neither tree exercises, and the disagreement would be
+//! invisible until one did.
+//!
+//! Declarations are read one line at a time. The original's `mod` pattern is line-anchored
+//! and this is exactly equivalent for it; its path-attribute pattern is not, so an attribute
+//! split across lines, or a second one on the same line, is missed here and found there.
+//! Neither is a shape `rustfmt` produces.
+//!
+//! # Why no self-exemption
+//!
+//! Nine modules in this crate skip their own file, because their fixtures spell the very
+//! shape they judge. This one needs no such guard and deliberately carries none —
+//! `P45-CODE-PREFIX-KNOWS-STRINGS` is retiring that mechanism for keying on a path suffix
+//! any repository can match. A declaration read out of this file's own text would resolve
+//! against `crates/rules/nomos-rules/src/checks/orphan_modules/`, a directory that does not
+//! exist, so nothing it could find is a file anything else reaches. The fixtures below still
+//! avoid opening a line inside a string literal with the declaration keyword, so the
+//! question stays academic.
+
+use super::code_prefix::Code_Prefix;
+use crate::SourceFile;
+use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
+use path_syntax::{Declared_Module_Name, Declared_Path_Attribute};
+use std::collections::{BTreeMap, BTreeSet};
+
+mod path_syntax;
+
+/// The code-standards module-reachability rule id.
+pub const NO_ORPHAN_MODULES: &str = "no-orphan-modules";
+
+/// The directory segment that marks a crate's source tree.
+const SOURCE_DIRECTORY_NAME: &str = "src";
+
+/// The directory under a crate's source tree whose every direct `.rs` child Cargo compiles
+/// as its own crate root, with no declaration naming it.
+const BINARY_DIRECTORY_NAME: &str = "bin";
+
+/// The extension every file this rule judges carries.
+const RUST_SOURCE_SUFFIX: &str = ".rs";
+
+/// The pre-2018 directory-module file: `foo/mod.rs` backs `mod foo;` where `foo.rs` does not.
+const DIRECTORY_MODULE_FILE: &str = "mod.rs";
+
+/// The files Cargo compiles as a crate root without any declaration reaching them.
+const CRATE_ROOT_FILES: [&str; 2] = ["lib.rs", "main.rs"];
+
+/// A repo-relative directory path, forward-slashed, as this rule addresses one: the
+/// directory a declaration resolves against, and the directory a file's own children land in.
+///
+/// Named rather than a bare `&str` because every reader below takes it beside a second
+/// `&str` -- a relative path, a module name, a file's path -- and two bare `&str`s in
+/// adjacent positions are transposable at a call site with nothing to catch it.
+#[derive(Clone, Copy)]
+struct Directory<'a>(&'a str);
+
+/// Reports every Rust source under a crate's source tree that the crate's module tree does
+/// not reach.
+#[must_use]
+pub fn Check_No_Orphan_Modules(sources: &[SourceFile]) -> Vec<Finding>
+{
+    let tree = SourceTree::Of(sources);
+    let mut findings = Vec::new();
+
+    for source_directory in tree.Source_Directories()
+    {
+        findings.extend(tree.Orphan_Findings_Under(source_directory));
+    }
+
+    findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
+    return findings;
+}
+
+/// One reached module: the file itself, and the directory *its own* children resolve
+/// against.
+///
+/// The directory cannot be derived from the file's name, which is the subtlety that makes a
+/// naive version of this rule wrong. A crate root and a `mod.rs` own the directory they sit
+/// in; a plain `foo.rs` owns the sibling `foo/`; and a file a path attribute pulled in owns
+/// the directory it landed in, so its children are its siblings.
+struct Module
+{
+    file: String,
+    directory: String,
+}
+
+/// Every Rust source the run collected, addressed by the path a declaration would resolve to.
+struct SourceTree<'a>
+{
+    by_path: BTreeMap<&'a str, &'a SourceFile>,
+}
+
+impl<'a> SourceTree<'a>
+{
+    /// Indexes the Rust sources among `sources`, ignoring every other language.
+    fn Of(sources: &'a [SourceFile]) -> Self
+    {
+        let mut by_path = BTreeMap::new();
+
+        for source in sources.iter().filter(|source| return source.path.ends_with(RUST_SOURCE_SUFFIX))
+        {
+            by_path.insert(source.path.as_str(), source);
+        }
+
+        return Self { by_path };
+    }
+
+    /// Every crate source directory these sources sit under, each named once.
+    fn Source_Directories(&self) -> BTreeSet<&'a str>
+    {
+        return self.by_path.keys().filter_map(|path| return Source_Directory_Of(path)).collect();
+    }
+
+    /// The findings for one crate source directory: every Rust source beneath it that the
+    /// walk from its roots did not reach.
+    fn Orphan_Findings_Under(&self, source_directory: &str) -> Vec<Finding>
+    {
+        let reached = self.Reachable_Under(source_directory);
+        let mut findings = Vec::new();
+
+        for (path, source) in &self.by_path
+        {
+            if Source_Directory_Of(path) == Some(source_directory) && !reached.contains(*path)
+            {
+                findings.push(Orphan_Finding(source));
+            }
+        }
+
+        return findings;
+    }
+
+    /// The set of files the module tree under `source_directory` actually reaches, walked
+    /// out from every root Cargo compiles without a declaration.
+    fn Reachable_Under(&self, source_directory: &str) -> BTreeSet<String>
+    {
+        let mut reached = BTreeSet::new();
+        let mut pending = self.Roots_Under(source_directory);
+
+        while let Some(current) = pending.pop()
+        {
+            if !reached.insert(current.file.clone())
+            {
+                continue;
+            }
+
+            pending.extend(self.Children_Of(&current));
+        }
+
+        return reached;
+    }
+
+    /// The crate roots under `source_directory`: `lib.rs`, `main.rs`, and every direct `.rs`
+    /// child of `bin/`. A crate root owns the directory it sits in.
+    fn Roots_Under(&self, source_directory: &str) -> Vec<Module>
+    {
+        let mut roots = Vec::new();
+
+        for name in CRATE_ROOT_FILES
+        {
+            let candidate = format!("{source_directory}/{name}");
+
+            if self.by_path.contains_key(candidate.as_str())
+            {
+                roots.push(Module { file: candidate, directory: source_directory.to_owned() });
+            }
+        }
+
+        roots.extend(self.Binary_Roots_Under(source_directory));
+        return roots;
+    }
+
+    /// The `bin/` roots under `source_directory`: every `.rs` file sitting directly in its
+    /// `bin/` directory, each of which Cargo compiles as its own root. A nested
+    /// `bin/<name>/main.rs` is also one, and reading it is the widening the module doc
+    /// deliberately does not make.
+    fn Binary_Roots_Under(&self, source_directory: &str) -> Vec<Module>
+    {
+        let binary_directory = format!("{source_directory}/{BINARY_DIRECTORY_NAME}");
+
+        return self
+            .by_path
+            .keys()
+            .filter(|path| return Is_Direct_Child_Of(path, Directory(&binary_directory)))
+            .map(|path| return Module { file: (*path).to_owned(), directory: binary_directory.clone() })
+            .collect();
+    }
+
+    /// The modules `parent` declares, each paired with the directory *its* children resolve
+    /// against. A declaration backed by no collected file is skipped: that is a compile
+    /// error, and rustc reports it far better than this would.
+    fn Children_Of(&self, parent: &Module) -> Vec<Module>
+    {
+        let Some(source) = self.by_path.get(parent.file.as_str())
+        else
+        {
+            return Vec::new();
+        };
+
+        return self.Declared_Children_Of(source, parent);
+    }
+
+    /// The modules one file declares, each resolved against the directory that file's own
+    /// declarations reach: a path attribute against the directory the file sits in, a
+    /// `mod name;` against the directory the file owns.
+    fn Declared_Children_Of(&self, source: &SourceFile, parent: &Module) -> Vec<Module>
+    {
+        let declaring_directory = Directory(Parent_Directory_Of(&parent.file));
+        let mut children = Vec::new();
+
+        for line in source.text.lines()
+        {
+            let code = Code_Prefix(line);
+
+            if let Some(relative) = Declared_Path_Attribute(&code)
+                && let Some(child) = self.Resolve_Path_Attribute(declaring_directory, relative)
+            {
+                children.push(child);
+            }
+
+            if let Some(name) = Declared_Module_Name(&code)
+                && let Some(child) = self.Resolve_Declaration(Directory(&parent.directory), name)
+            {
+                children.push(child);
+            }
+        }
+
+        return children;
+    }
+
+    /// Resolves a path attribute against the directory the declaring file sits in. The file
+    /// it names owns the directory it lands in, so its own children are its siblings.
+    fn Resolve_Path_Attribute(&self, directory: Directory<'_>, relative: &str) -> Option<Module>
+    {
+        let file = Joined_Path(directory, relative)?;
+
+        if !self.by_path.contains_key(file.as_str())
+        {
+            return None;
+        }
+
+        let directory = Parent_Directory_Of(&file).to_owned();
+        return Some(Module { file, directory });
+    }
+
+    /// Resolves `mod name;` against `directory`, trying both layouts Rust allows: the
+    /// sibling file `name.rs` first, then the directory module `name/mod.rs`. Either way the
+    /// module it finds owns `directory/name`.
+    fn Resolve_Declaration(&self, directory: Directory<'_>, name: &str) -> Option<Module>
+    {
+        let owned = format!("{}/{name}", directory.0);
+        let sibling = format!("{owned}{RUST_SOURCE_SUFFIX}");
+
+        if self.by_path.contains_key(sibling.as_str())
+        {
+            return Some(Module { file: sibling, directory: owned });
+        }
+
+        let nested = format!("{owned}/{DIRECTORY_MODULE_FILE}");
+
+        if self.by_path.contains_key(nested.as_str())
+        {
+            return Some(Module { file: nested, directory: owned });
+        }
+
+        return None;
+    }
+}
+
+/// The one finding an unreachable source produces.
+fn Orphan_Finding(source: &SourceFile) -> Finding
+{
+    return Finding {
+        address: None,
+        rule: RuleId::New(NO_ORPHAN_MODULES),
+        subject: source.subject,
+        subject_name: source.path.clone(),
+        applicability: Applicability::Supported,
+        evidence: EvidenceClass::Derived,
+        gate: GateCategory::Blocking,
+        summary: format!(
+            "{} is not reachable from its crate's module tree: no declaration names it, so rustc never parses it and \
+             nothing in it compiles, runs or is linted -- declare it, or delete it",
+            source.path
+        ),
+        locations: vec![source.path.clone()],
+    };
+}
+
+/// The crate source directory `path` sits under: everything up to and including its first
+/// `src` segment, or `None` for a file outside any crate's source tree.
+fn Source_Directory_Of(path: &str) -> Option<&str>
+{
+    let mut offset = 0usize;
+
+    for segment in path.split('/')
+    {
+        let end = offset.saturating_add(segment.len());
+
+        if segment == SOURCE_DIRECTORY_NAME && end < path.len()
+        {
+            return path.get(..end);
+        }
+
+        offset = end.saturating_add(1);
+    }
+
+    return None;
+}
+
+/// Whether `path` names a `.rs` file sitting directly in `directory`, with no further
+/// directory between the two.
+fn Is_Direct_Child_Of(path: &str, directory: Directory<'_>) -> bool
+{
+    let Some(remainder) = path.strip_prefix(directory.0).and_then(|rest| return rest.strip_prefix('/'))
+    else
+    {
+        return false;
+    };
+
+    return remainder.ends_with(RUST_SOURCE_SUFFIX) && !remainder.contains('/');
+}
+
+/// The directory `path` sits in, empty when it sits at the root.
+fn Parent_Directory_Of(path: &str) -> &str
+{
+    return match path.rfind('/')
+           {
+        Some(separator) => path.get(..separator).unwrap_or(""),
+        None => "",
+           };
+}
+
+/// `relative` resolved against `directory`, with `.` dropped and `..` applied, or `None`
+/// when it climbs above the root it started from.
+fn Joined_Path(directory: Directory<'_>, relative: &str) -> Option<String>
+{
+    let mut segments = Directory_Segments(directory);
+
+    for segment in Recognized_Segments(relative)
+    {
+        match segment.as_str()
+        {
+            ".." =>
+            {
+                segments.pop()?;
+            },
+            _ => segments.push(segment),
+        }
+    }
+
+    return Some(segments.join("/"));
+}
+
+/// `directory`'s own segments, empty for the root the walk started at.
+fn Directory_Segments(directory: Directory<'_>) -> Vec<String>
+{
+    if directory.0.is_empty()
+    {
+        return Vec::new();
+    }
+
+    return directory.0.split('/').map(str::to_owned).collect();
+}
+
+/// `relative`'s segments, with a backslash read as a separator and every segment that names
+/// no directory of its own -- the empty one, and `.` -- dropped.
+fn Recognized_Segments(relative: &str) -> Vec<String>
+{
+    let normalized = relative.replace('\\', "/");
+
+    return normalized
+        .split('/')
+        .filter(|segment| return !segment.is_empty() && *segment != ".")
+        .map(str::to_owned)
+        .collect();
+}
+
+#[cfg(test)]
+mod tests;

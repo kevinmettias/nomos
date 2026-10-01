@@ -1,0 +1,18 @@
+[package]
+name = "nomos-cap-csharp-semantics"
+version = "0.1.0"
+description = "The nomos.cap.csharp.conditional_compilation contract: which of a C# file's #if/#elif/#else branches a named build compiles, owned by neither its provider nor any rule that reads it."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# No provider and no rule. nomos-lang-csharp-compiler offers against this contract, and a rule
+# will read it; OD-ANALYSIS-007 version 2 decided a compiler-backed contract leaves its provider's
+# crate so that Rules, which may not name a Provider, can read it at all.
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-capability = { workspace = true }
+
+[lints]
+workspace = true

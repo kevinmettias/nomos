@@ -1,0 +1,151 @@
+//! The declarations themselves: every domain in the tree, against the row of the contracts
+//! table it occupies.
+
+use nomos_contracts::{DeterminismStrength, Strategy};
+
+/// Every domain this workspace has, with the row of the contracts table it occupies.
+///
+/// # Why this test was renamed
+///
+/// It was `Test_The_Declared_Domains_Should_Be_The_Ones_This_Item_Covered`, and
+/// `docs/records/OD-DETERMINISM-001` cites it by that name as the place the two undeclared
+/// rows were written down. Both are declared now, so the sentence that name asserts is
+/// false. A citation that resolves to a test asserting the opposite of what the citing
+/// record says is worse than one that resolves to nothing, so the name moved and
+/// `docs/records/OD-DETERMINISM-002` records where it went.
+///
+/// # What is still not covered, and why that is not a gap
+///
+/// One of the table's six rows has no domain in this tree: "Progress UI, logs, telemetry,
+/// agent execution", the `None` row — the CLI prints, and nothing about what it prints is
+/// a fact. "Correction planning and staging" was the other; `nomos-corrections` occupies it
+/// now, below. That is not an omission a declaration would repair;
+/// `tests/contract/tests/determinism_declarations.rs` is where the remaining row is
+/// accounted for, so that a crate arriving to occupy it cannot do so silently.
+#[test]
+fn Test_Every_Domain_In_The_Tree_Should_Declare_And_Be_Registered()
+{
+    let declared = Declared_Domains();
+    assert_eq!(
+        declared.len(),
+        26,
+        "twenty-six productions are covered by twenty-four declarations; a new producer needs \
+         a row in this table and a test of its own, whether or not it also needs a \
+         declaration of its own"
+    );
+
+    Each_Domain_Declares_A_Strategy_And_Is_Registered(declared);
+}
+
+/// Every domain this workspace has, with the row of the contracts table it occupies.
+fn Declared_Domains() -> [(&'static str, DeterminismStrength); 26]
+{
+    use nomos_analysis::FactReuse;
+    use nomos_cap_requirement_trace::RequirementTraceFactProduction;
+    use nomos_connector_coderabbit::ReviewFindingProduction;
+    use nomos_corrections::CorrectionStaging;
+    use nomos_lang_rust::SyntaxFactProduction;
+    use nomos_lang_rust_cargo::DependencyFactProduction;
+    use nomos_lang_rust_clippy::LintFactProduction;
+    use nomos_lang_rust_compiler::CloneOnCopyFactProduction;
+    use nomos_lang_rust_compiler::NestedLockFactProduction;
+    use nomos_lang_rust_complexity::ComplexityFactProduction;
+    use nomos_lang_csharp_compiler::ConditionalFactProduction;
+    use nomos_lang_rust_deny::DependencyPolicyFactProduction;
+    use nomos_lang_rust_scan::ScanFactProduction;
+    use nomos_repo_policy::limits::LimitsPolicyFactProduction;
+    use nomos_repo_policy::goals::GoalsPolicyFactProduction;
+    use nomos_repo_policy::scripting::ScriptingPolicyFactProduction;
+    use nomos_repo_policy::naming::NamingPolicyFactProduction;
+    use nomos_repo_policy::words::WordsPolicyFactProduction;
+    use nomos_spec_bundle::BundleSerialization;
+    use nomos_spec_project::ProjectionOutput;
+    use nomos_workspace::SnapshotSerialization;
+
+    return [
+        ("syntax-fact-production", SyntaxFactProduction::STRENGTH),
+        // The same declaration, discharged over the other things it covers. Entries and
+        // one strategy is the shape `P10-ROLLUP-DETERMINISM` settled on: `nomos-lang-rust`
+        // has fact producers occupying one row of the contracts table, so they are one
+        // promise — and a promise covering more than one producer has to be run over each,
+        // or the rest are covered by a sentence and measured by nothing.
+        ("module-index-rollup", SyntaxFactProduction::STRENGTH),
+        // The reachability offer's Materialize_Reachability_Fact is the identical shape: one file's bytes in,
+        // deterministic bytes out, `syn`'s own source-order traversal. `SyntaxFactProduction`
+        // is reused rather than a fourth Strategy type declared for it, per its own module
+        // doc's stated policy for a producer holding the same triple.
+        ("controlflow-reachability-production", SyntaxFactProduction::STRENGTH),
+        ("scan-fact-production", ScanFactProduction::STRENGTH),
+        // One file's bytes in, one complexity payload out, in `syn`'s source order -- the
+        // parser's row, declared by the complexity provider's own type.
+        ("complexity-fact-production", ComplexityFactProduction::STRENGTH),
+        // One C# file's text and a stated build's definition set in, one conditional-compilation
+        // payload out. MSBuild's own evaluation is not in the production: its answer is the SDK's,
+        // and the declaration covers the fact given the set, which is what it says it covers.
+        ("conditional-fact-production", ConditionalFactProduction::STRENGTH),
+        ("dependency-fact-production", DependencyFactProduction::STRENGTH),
+        // A second, distinct provider of the same capability, over Go's own module files
+        // instead of Cargo's -- its own crate declares its own Strategy type rather than
+        // reusing the one above, the same way `nomos_lang_go::SyntaxFactProduction` is its
+        // own type rather than a reuse of `nomos_lang_rust::SyntaxFactProduction`.
+        (
+            "go-dependency-fact-production",
+            <nomos_lang_go_modules::DependencyFactProduction as Strategy>::STRENGTH,
+        ),
+        ("lint-fact-production", LintFactProduction::STRENGTH),
+        // A second provider of the lint capability, over each Go module `go vet` answers for -- its
+        // own crate's own Strategy type, the same way the two dependency providers each declare
+        // theirs.
+        ("go-lint-fact-production", <nomos_lang_go_lint::LintFactProduction as Strategy>::STRENGTH),
+        // Go's discarded values, one fact per file the `go/types` helper checked.
+        ("go-types-fact-production", <nomos_lang_go_types::TypesFactProduction as Strategy>::STRENGTH),
+        (
+            "dependency-policy-fact-production",
+            DependencyPolicyFactProduction::STRENGTH,
+        ),
+        ("copy-clones-fact-production", CloneOnCopyFactProduction::STRENGTH),
+        ("nested-locks-fact-production", NestedLockFactProduction::STRENGTH),
+        ("limits-policy-fact-production", LimitsPolicyFactProduction::STRENGTH),
+        ("naming-policy-fact-production", NamingPolicyFactProduction::STRENGTH),
+        ("scripting-policy-fact-production", ScriptingPolicyFactProduction::STRENGTH),
+        ("words-policy-fact-production", WordsPolicyFactProduction::STRENGTH),
+        ("goals-policy-fact-production", GoalsPolicyFactProduction::STRENGTH),
+        (
+            "requirement-trace-fact-production",
+            RequirementTraceFactProduction::STRENGTH,
+        ),
+        // The one connector's own translation: fixed vendor bytes in, deterministic
+        // canonical bytes out, over the fixture crate::translation reads. OD-CONNECTOR-002's
+        // evidence rule is why this declares over the translation rather than a live `gh`
+        // call, the identical reasoning every same-process ToolProvider row above gives for
+        // declaring CrossRun rather than something a live subprocess result could not honor.
+        ("connector-review-finding-fact-production", ReviewFindingProduction::STRENGTH),
+        ("fact-reuse", FactReuse::STRENGTH),
+        ("snapshot-serialization", SnapshotSerialization::STRENGTH),
+        ("bundle-serialization", BundleSerialization::STRENGTH),
+        ("projection-output", ProjectionOutput::STRENGTH),
+        ("correction-staging", CorrectionStaging::STRENGTH),
+    ];
+}
+
+/// Each declared domain has a test registered under its name, and measures something —
+/// `DeterminismStrength::None` would be an obligation this loop discharges without ever
+/// checking anything.
+fn Each_Domain_Declares_A_Strategy_And_Is_Registered(declared: [(&str, DeterminismStrength); 26])
+{
+    use crate::harness::Test_Name_For;
+
+    for (domain, strength) in declared
+    {
+        assert!(
+            !Test_Name_For(domain).is_empty(),
+            "{domain} declares a strategy and has no test registered"
+        );
+        assert_ne!(
+            strength,
+            DeterminismStrength::None,
+            "{domain} is measured here and promises nothing, so the measurement is \
+             discharging no obligation"
+        );
+    }
+}

@@ -1,0 +1,27 @@
+pub const fn nomos_cap_review_finding::Ceiling() -> Guarantee
+pub const nomos_cap_review_finding::CAPABILITY: &str
+pub const nomos_cap_review_finding::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_review_finding::SCHEMA: &str
+pub fn nomos_cap_review_finding::Capability() -> CapabilityId
+pub fn nomos_cap_review_finding::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_review_finding::Encode_Payload(payload: &FindingPayload) -> Vec<u8>
+pub fn nomos_cap_review_finding::Parse_Payload(bytes: &[u8]) -> Result<FindingPayload, PayloadRefusal>
+pub fn nomos_cap_review_finding::PayloadRefusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_cap_review_finding::Payload_Schema() -> SchemaId
+pub fn nomos_cap_review_finding::ReviewFindingId::As_Str(&self) -> &str
+pub fn nomos_cap_review_finding::ReviewFindingId::New(value: impl Into<String>) -> Self
+pub fn nomos_cap_review_finding::ReviewFindingId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub impl nomos_cap_review_finding::PayloadRefusal implements core::fmt::Display
+pub impl nomos_cap_review_finding::ReviewFindingId implements core::fmt::Display
+pub struct field nomos_cap_review_finding::FindingPayload::category: String
+pub struct field nomos_cap_review_finding::FindingPayload::external_id: ReviewFindingId
+pub struct field nomos_cap_review_finding::FindingPayload::external_system: String
+pub struct field nomos_cap_review_finding::FindingPayload::line: String
+pub struct field nomos_cap_review_finding::FindingPayload::locator: String
+pub struct field nomos_cap_review_finding::FindingPayload::message: String
+pub struct field nomos_cap_review_finding::FindingPayload::path: String
+pub struct field nomos_cap_review_finding::FindingPayload::severity: String
+pub struct field nomos_cap_review_finding::PayloadRefusal::reason: String
+pub struct nomos_cap_review_finding::FindingPayload
+pub struct nomos_cap_review_finding::PayloadRefusal
+pub struct nomos_cap_review_finding::ReviewFindingId(String)

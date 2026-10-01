@@ -1,0 +1,78 @@
+[package]
+name = "nomos-contract-tests"
+version = "0.1.0"
+description = "Assertions about the workspace itself: dependency bands, the contracts allowlist, and module reachability."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+# The rule crate, for recognising a declared universe in a file. Named here rather
+# than reimplemented: `nomos check` runs the same recognition, and two scanners for one
+# rule is how they come to disagree. Rules observed from Verification, which is the
+# direction this crate exists to watch.
+# The declaration these assertions judge the real workspace against, and the one provider
+# that reads it. Read through that provider rather than parsed here: the independence these
+# tests are for is asserting against `cargo metadata`, not parsing the declaration a second
+# way, and two readers of one format with different expectations is the defect this
+# declaration exists to remove rather than to repeat.
+nomos-cap-architecture = { workspace = true }
+nomos-repo-policy = { workspace = true }
+nomos-rules = { workspace = true }
+# The syntax capability and the provider that answers it, to derive the universes this
+# crate quantifies over. `nomos-rules` stopped parsing under `P10-SYNTAX-V2` and reads a
+# `nomos.syntax.items.v2` payload instead, so the walk here has to produce one — through
+# the real provider, which is what a run does. Verification observing Capability Contract
+# and Provider.
+nomos-cap-syntax = { workspace = true }
+nomos-lang-rust = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+nomos-composer-providers = { workspace = true }
+# `nomos-check-orchestration` for `tests/rule_descriptors.rs` alone: it owns
+# `Composed_Rules`, and this crate is the only one above both it and `nomos-rules`, so it
+# is the only place the descriptor table and the composed table can be compared. A dev
+# dependency rather than a real one, because nothing this crate publishes needs it.
+nomos-check-orchestration = { workspace = true }
+# The store and the workspace a real `Run` carries, for `tests/boundaries/findings.rs`
+# alone. Every rule that declares an address reads syntax facts, so that guard's fixture of
+# fact-free rules could not reach the fourth derivation `OD-ANALYSIS-011` carries. Named here
+# rather than satisfied with a stub `FactReader`: a stub is a second composition, and a
+# boundary asserted against it would say nothing about the one that ships.
+nomos-analysis = { workspace = true }
+nomos-workspace = { workspace = true }
+# `nomos-model` for `tests/boundaries/findings.rs` alone: it recomputes the four subject
+# derivations `OD-ANALYSIS-011` permits, which needs `Subject_Of_Path` and `Content_Digest`.
+nomos-model = { workspace = true }
+nomos-contracts = { workspace = true }
+# The ledger crate is used only by integration tests that check the agent contract
+# and toolchain-floor workflow derivation.
+nomos-ledger = { workspace = true }
+# The canonical Assessment/Verdict/Site vocabulary, the refusing reader and the five
+# predicates `tests/requirement_trace` compares the committed corpus with — named here
+# rather than reimplemented, for the identical reason `nomos-rules` above is: two readers
+# of one registry is how they come to disagree. `P42-REQUIREMENT-TRACE-STALENESS-RULE-2`
+# promoted what this suite used to carry alone into a real, gate-composed rule's own
+# provider; this suite now imports that logic rather than duplicating it. A dev
+# dependency, like `nomos-check-orchestration` above: only `tests/requirement_trace` uses
+# it, nothing this crate publishes does.
+nomos-cap-requirement-trace = { workspace = true }
+# The FileSystem port nomos_cap_requirement_trace's own reader and predicates now read
+# through, and its std implementation to read the real disk this suite has always run
+# against.
+nomos-platform = { workspace = true }
+nomos-platform-std = { workspace = true }
+# The sibling engine's copy of the determinism vocabulary, for
+# `tests/determinism_vocabulary.rs` alone. `nomos-contracts` may not name it -- that
+# crate's dependency list is a contract asserted by `tests/boundaries/graph.rs`, and its
+# types are reimplemented by peers that never compile it -- so the two definitions of
+# `Strategy` and its three axes are deliberately separate. A dev dependency here is the
+# one place both can be seen at once, which is what makes their agreement checkable
+# instead of assumed.
+xvpe-primitives = { workspace = true }
+
+
+[lints]
+workspace = true

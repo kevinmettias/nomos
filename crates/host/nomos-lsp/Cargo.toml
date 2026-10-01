@@ -1,0 +1,70 @@
+[package]
+name = "nomos-lsp"
+version = "0.1.0"
+description = "A language server over stdio: translates nomos-check-orchestration's own real Run into LSP diagnostics, with no rule judgment of its own."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[[bin]]
+name = "nomos-lsp"
+path = "src/main.rs"
+
+[dependencies]
+# The engine's provider contract, and the server that speaks the protocol over it. The wire
+# types and the stdio transport are that crate's; nothing here names either, which is what
+# lets every case in this crate be asserted without a client.
+xvpe-diagnostics = { workspace = true }
+xvpe-language-server-backend-lsp = { workspace = true }
+xvpe-primitives = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+nomos-contracts = { workspace = true }
+# `ArchitecturePayload` and `Component_Of`, which this crate reads to answer "which
+# architectural component" without judging anything itself. The declaration those name is
+# data in `nomos-architecture.json` at the root of the repository under check, not a
+# constant in any crate: `OD-RULES-024` removed the last component and crate name of this
+# workspace from `nomos-rules`, so there is no `ZONES` here to read.
+nomos-cap-architecture = { workspace = true }
+# nomos-repo-policy for the one provider of that contract: the architectural component a
+# diagnostic carries is resolved against the repository's own declaration, so this host
+# reads it the same way it already composes a platform.
+nomos-repo-policy = { workspace = true }
+# `Assessments_In`, `Assessment` and `REGISTRY`: the one reader that takes a committed
+# assessment as data rather than as a test fixture, which is what lets a diagnostic reach the
+# corpus requirements its rule is declared to enforce (`OD-HOST-015`). Read, never judged --
+# the verdict a link carries is the entry's own word, and whether a declared identifier names
+# a rule this build composes is `tests/contract`'s comparison and not this crate's.
+nomos-cap-requirement-trace = { workspace = true }
+# `DESCRIPTORS`, which answers "which governing rule" without judging anything itself, and
+# `SourceFile`, `RequiredFact` and `SubjectKind`, the shapes the walk and that answer are
+# written in. "Which correction family" is not answered from here: that is
+# `nomos-correction-orchestration`'s own `CorrectionFamily`, below. `COMPLETENESS_MIRROR`
+# and `NO_TRAILING_WHITESPACE` appear in this crate's tests as fixture rule ids and nowhere
+# in what it compiles for a real run.
+nomos-rules = { workspace = true }
+nomos-composer-std = { workspace = true }
+nomos-composer-providers = { workspace = true }
+nomos-workspace = { workspace = true }
+nomos-analysis = { workspace = true }
+nomos-capability = { workspace = true }
+# The seam this crate is a thin adapter over: `Run` composes the registry, materializes
+# facts and judges every rule `nomos-cli::check` already composes. `crates/host/nomos-lsp`
+# owns none of that judgment; it walks a tree through `nomos-workspace-discovery`, the same
+# canonical walk every other host now calls, and renders what `Run` returns.
+nomos-check-orchestration = { workspace = true }
+# The walk this crate's own `sources.rs` is a thin wrapper over -- `OD-HOST-008`.
+nomos-workspace-discovery = { workspace = true }
+# The narrow, real answer to "is a correction available for this finding": `CorrectionFamily`,
+# that crate's own declaration of which rules it composes a correction for, read here rather
+# than copied. This crate declared that membership itself until
+# `P73-LSP-CORRECTION-FAMILY-DUPLICATED-2` exported it, which is why the dependency is a
+# lookup and no longer a duplicate. `Run_Correction` is still never invoked -- see
+# `walk_outward/available_correction.rs`'s own doc for why reading the declaration beats
+# re-judging the whole tree per diagnostic for a coarser, first-claim-wins answer.
+nomos-correction-orchestration = { workspace = true }
+nomos-model = { workspace = true }
+
+[lints]
+workspace = true

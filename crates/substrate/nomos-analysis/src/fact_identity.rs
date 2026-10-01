@@ -1,0 +1,112 @@
+//! A fact key together with the inputs and guarantee that produced it.
+//!
+//! Declared at the crate root rather than in `fact/`, and `lib.rs` says why where it
+//! declares it: the name it is published under already carries the fact, so a file named
+//! for it cannot also sit inside the folder that name would otherwise group it with.
+
+use nomos_contracts::Digest128;
+use nomos_contracts::GenerationId;
+use crate::FactKey;
+#[derive(Clone, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
+pub struct FactIdentity
+{
+    pub key: FactKey,
+    pub generation: GenerationId,
+}
+
+impl FactIdentity
+{
+    #[must_use]
+    pub const fn Key(&self) -> &FactKey
+    {
+        return &self.key;
+    }
+
+    #[must_use]
+    pub fn Digest(&self) -> Digest128
+    {
+        return self.key.Digest();
+    }
+}
+
+impl core::fmt::Display for FactIdentity
+{
+    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+    {
+        return write!(
+            formatter,
+            "{}@{} of {} by {} at {}",
+            self.key.contract, self.key.contract_version, self.key.subject, self.key.provider,
+            self.generation
+        );
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::GuaranteeDigest;
+    use crate::InputDigest;
+    use nomos_contracts::{
+        Assurance, BuildVariantId, CapabilityId, ConfigurationId, ContractVersion, FactVariant,
+        Guarantee, IncrementalGranularity, ProviderId, SubjectId,
+    };
+
+    /// The generation every identity in this module is taken at. Nothing here compares two
+    /// generations against each other, so one named value stands for both.
+    const SAMPLE_GENERATION: u64 = 5;
+
+    /// The variant component of the sample key, seeded apart from the subject and the
+    /// configuration so a key built with the wrong one still asserts unequal.
+    const VARIANT_SEED: u8 = 3;
+
+    /// The configuration component of the sample key; distinct from [`VARIANT_SEED`] for the
+    /// reason given there.
+    const CONFIGURATION_SEED: u8 = 4;
+
+    #[test]
+    fn Test_Key_Should_Return_The_Identitys_Own_Key()
+    {
+        let key = Sample_Key();
+        let identity = key.clone().At(GenerationId::From_Raw(SAMPLE_GENERATION));
+
+        assert_eq!(identity.Key(), &key);
+    }
+
+    #[test]
+    fn Test_Digest_Should_Match_The_Keys_Own_Digest()
+    {
+        let key = Sample_Key();
+        let identity = key.clone().At(GenerationId::From_Raw(SAMPLE_GENERATION));
+
+        assert_eq!(identity.Digest(), key.Digest());
+    }
+
+    fn Seeded_Digest(seed: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([seed; Digest128::BYTE_LENGTH]);
+    }
+
+    fn Sample_Key() -> FactKey
+    {
+        let guarantee = Guarantee::New(
+            FactVariant::Syntactic,
+            Assurance::Sound,
+            Assurance::Sound,
+            IncrementalGranularity::File,
+        );
+
+        return FactKey {
+            contract: CapabilityId::New("nomos.cap.test.identity"),
+            contract_version: ContractVersion::New(1, 0),
+            subject: SubjectId::From_Digest(Seeded_Digest(1)),
+            semantic_inputs: InputDigest::Of(&[b"fn main() {}"]),
+            provider: ProviderId::New("nomos.provider.test"),
+            provider_version: ContractVersion::New(1, 0),
+            guarantee: GuaranteeDigest::Of(&guarantee),
+            variant: BuildVariantId::From_Digest(Seeded_Digest(VARIANT_SEED)),
+            configuration: ConfigurationId::From_Digest(Seeded_Digest(CONFIGURATION_SEED)),
+        };
+    }
+}

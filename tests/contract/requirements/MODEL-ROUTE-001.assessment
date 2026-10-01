@@ -1,0 +1,29 @@
+# The assessment of MODEL-ROUTE-001 against this build. The requirement identifier is
+# this file's stem and appears nowhere inside it, because a second place to spell the
+# identity is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a
+# record registration, and CHK-003.assessment states for this registry.
+#
+# MODEL-ROUTE-001: "Gates, phases, workflows, rules/checks, and agent task classes shall
+# be able to reference a ModelExecutionProfile for every agent-assisted operation. The
+# smallest explicit assignment shall override inherited defaults subject to organization
+# and repository policy constraints."
+#
+# Two of five referencing surfaces are real now. GateCommand::model was already a genuine
+# typed field a gate carries a profile through. Workflows became the second under
+# P40-MODEL-ROUTING-DISPATCH-WIRING: a workflow step is a Body::Agent carrying an
+# AgentBody, whose profile field is what selects the backend that answers it, replacing
+# the two per-backend variants that made the variant itself the choice.
+#
+# Three are still absent, and they are the gap rather than the reference this wiring
+# closed. Rules and checks declare through nomos_rules::RuleDescriptor, which has no field
+# to hold a profile; phases and agent task classes have no structured type either --
+# nomos_agent_contracts::TaskEnvelope carries goal, effort and tools, and the profile that
+# decides what runs it rides beside the envelope rather than in it.
+#
+# The second sentence is untouched. Selected_Dispatch attempts a named preference ahead of
+# a resolution, which is a precedence between two things a caller stated; it is not the
+# inheritance MODEL-ROUTE-001 names, and nothing in this workspace holds an organization
+# or repository policy for a smaller assignment to override.
+verdict: Partial
+site: crates/orchestration/nomos-gate-orchestration/src/gate_command.rs#GateCommand
+gap: crates/rules/nomos-rules/src/rule_descriptor.rs#RuleDescriptor

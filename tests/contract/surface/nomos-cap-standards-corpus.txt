@@ -1,0 +1,47 @@
+pub const fn nomos_cap_standards_corpus::Ceiling() -> Guarantee
+pub const fn nomos_cap_standards_corpus::DeclarationKind::Is_Rule(self) -> bool
+pub const fn nomos_cap_standards_corpus::DeclarationKind::Label(self) -> &'static str
+pub const fn nomos_cap_standards_corpus::RuleSeverity::Label(self) -> &'static str
+pub const nomos_cap_standards_corpus::CAPABILITY: &str
+pub const nomos_cap_standards_corpus::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_standards_corpus::SCHEMA: &str
+pub enum nomos_cap_standards_corpus::DeclarationKind
+pub enum nomos_cap_standards_corpus::RuleSeverity
+pub enum variant nomos_cap_standards_corpus::DeclarationKind::Index
+pub enum variant nomos_cap_standards_corpus::DeclarationKind::Reference
+pub enum variant nomos_cap_standards_corpus::DeclarationKind::Rule
+pub enum variant nomos_cap_standards_corpus::DeclarationKind::Undeclared
+pub enum variant nomos_cap_standards_corpus::RuleSeverity::May
+pub enum variant nomos_cap_standards_corpus::RuleSeverity::Must
+pub enum variant nomos_cap_standards_corpus::RuleSeverity::MustNot
+pub enum variant nomos_cap_standards_corpus::RuleSeverity::Should
+pub enum variant nomos_cap_standards_corpus::RuleSeverity::ShouldNot
+pub fn nomos_cap_standards_corpus::Capability() -> CapabilityId
+pub fn nomos_cap_standards_corpus::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_standards_corpus::DeclarationKind::Declared_By(declared: &str) -> Option<Self>
+pub fn nomos_cap_standards_corpus::DeclarationKind::From_Label(label: &str) -> Option<Self>
+pub fn nomos_cap_standards_corpus::Declared_Gate(declared: &str) -> Option<GateCategory>
+pub fn nomos_cap_standards_corpus::Encode_Payload(payload: &StandardsCorpusPayload) -> Vec<u8>
+pub fn nomos_cap_standards_corpus::Parse_Payload(bytes: &[u8]) -> Result<StandardsCorpusPayload, Refusal>
+pub fn nomos_cap_standards_corpus::Payload_Schema() -> SchemaId
+pub fn nomos_cap_standards_corpus::RuleSeverity::Declared_By(declared: &str) -> Option<Self>
+pub struct field nomos_cap_standards_corpus::DeclarationIssue::path: String
+pub struct field nomos_cap_standards_corpus::DeclarationIssue::reason: String
+pub struct field nomos_cap_standards_corpus::DeclaredRule::enforced_by: Vec<String>
+pub struct field nomos_cap_standards_corpus::DeclaredRule::gate: GateCategory
+pub struct field nomos_cap_standards_corpus::DeclaredRule::id: String
+pub struct field nomos_cap_standards_corpus::DeclaredRule::path: String
+pub struct field nomos_cap_standards_corpus::DeclaredRule::severity: RuleSeverity
+pub struct field nomos_cap_standards_corpus::DeclaredRule::title: String
+pub struct field nomos_cap_standards_corpus::DocumentDeclaration::kind: DeclarationKind
+pub struct field nomos_cap_standards_corpus::DocumentDeclaration::path: String
+pub struct field nomos_cap_standards_corpus::Refusal::reason: String
+pub struct field nomos_cap_standards_corpus::StandardsCorpusPayload::documents: Vec<DocumentDeclaration>
+pub struct field nomos_cap_standards_corpus::StandardsCorpusPayload::issues: Vec<DeclarationIssue>
+pub struct field nomos_cap_standards_corpus::StandardsCorpusPayload::roots: Vec<String>
+pub struct field nomos_cap_standards_corpus::StandardsCorpusPayload::rules: Vec<DeclaredRule>
+pub struct nomos_cap_standards_corpus::DeclarationIssue
+pub struct nomos_cap_standards_corpus::DeclaredRule
+pub struct nomos_cap_standards_corpus::DocumentDeclaration
+pub struct nomos_cap_standards_corpus::Refusal
+pub struct nomos_cap_standards_corpus::StandardsCorpusPayload

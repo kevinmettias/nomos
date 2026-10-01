@@ -1,0 +1,39 @@
+# The assessment of AGT-001 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity
+# is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a record
+# registration, and CHK-003.assessment states for this registry.
+#
+# AGT-001: "Before agent work, Nomos shall produce a typed task envelope containing goal,
+# scope, authoritative knowledge context, applicable rules, prohibited changes, available
+# tools, and expected output schema." Seven named parts.
+#
+# 'Authoritative knowledge context' is ARC-ECOSYSTEM-001's own worked example of substance
+# that is genuinely KWB's, not Nomos's -- "What did a source or a decision claim? KWB." --
+# so that clause does not bind this registry and is left out of this verdict rather than
+# forced NotBinding for the whole requirement.
+#
+# The remaining six are what `TaskEnvelope` (`nomos-agent-contracts`, since
+# P13-AGT-001-002-TASK-ENVELOPE-WORK-RESULT) bundles into exactly one typed,
+# Serialize/Deserialize artifact: `goal`, `scope`, `applicable_rules`, `prohibited_changes`,
+# `available_tools` and `expected_output_schema`, reusing `Territory` at two different
+# membership senses for the two scope-shaped fields and a real `SchemaId` rather than prose
+# for the output schema. This is not merely declared and unused: `nomos-cli`'s `agent
+# execute` and `agent judge-role` verbs each dispatch through a real `TaskEnvelope`
+# construction -- `Bare_Task` and `Judgment_Task`, both in `nomos-agent-orchestration`
+# since `P43-AGENT-CANONICAL-SEAM-2` moved them out of `nomos-cli`'s own former
+# `dispatch.rs`/`judge_role.rs` so `nomos-api` could reach the identical construction --
+# and hand it to a real `AgentExecutor` (`nomos_agent_executor_claude_code::Execute_Task`)
+# before that agent work runs, which is this requirement's own "before agent work" clause.
+#
+# What is not yet true is a separate, stronger property this requirement does not itself
+# ask for: today's real construction sites populate `scope`/`prohibited_changes`/
+# `available_tools` with empty values because neither CLI verb has a configuration surface
+# to source real ones from yet, and nothing downstream constrains the run by what the
+# envelope declares -- `P42-AGENT-ENVELOPE-ENFORCEMENT` is the open item for that. AGT-001
+# asks only that Nomos produce the typed envelope, not that its fields already bind the
+# run, so that gap does not weaken this verdict.
+verdict: Met
+site: crates/agent/nomos-agent-contracts/src/task_envelope.rs#TaskEnvelope
+site: crates/orchestration/nomos-agent-orchestration/src/run.rs#Bare_Task
+site: crates/orchestration/nomos-agent-orchestration/src/run.rs#Judgment_Task
+site: crates/agent/nomos-agent-executor-claude-code/src/lib.rs#Execute_Task

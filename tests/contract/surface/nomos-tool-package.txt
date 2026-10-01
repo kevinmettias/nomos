@@ -1,0 +1,50 @@
+pub const fn nomos_tool_package::Family::Label(self) -> &'static str
+pub const nomos_tool_package::KNOWN_PROVIDERS: &[&str]
+pub const nomos_tool_package::SCHEMA_VERSION: u32
+pub enum nomos_tool_package::Family
+pub enum nomos_tool_package::ManifestError
+pub enum variant nomos_tool_package::Family::Compiler
+pub enum variant nomos_tool_package::Family::DocumentationGenerator
+pub enum variant nomos_tool_package::Family::Formatter
+pub enum variant nomos_tool_package::Family::Indexer
+pub enum variant nomos_tool_package::Family::LanguageServer
+pub enum variant nomos_tool_package::Family::Linter
+pub enum variant nomos_tool_package::Family::PackageManager
+pub enum variant nomos_tool_package::Family::Parser
+pub enum variant nomos_tool_package::Family::RefactoringEngine
+pub enum variant nomos_tool_package::Family::SemanticModel
+pub enum variant nomos_tool_package::Family::TestRunner
+pub enum variant nomos_tool_package::Family::TypeChecker
+pub enum variant nomos_tool_package::ManifestError::EmptyList { at: String, field: String, }
+pub enum variant nomos_tool_package::ManifestError::InvertedProtocolRange { at: String, }
+pub enum variant nomos_tool_package::ManifestError::MalformedVersion { at: String, field: String, cause: String, }
+pub enum variant nomos_tool_package::ManifestError::MissingField { at: String, field: String, }
+pub enum variant nomos_tool_package::ManifestError::NotJson { at: String, cause: String, }
+pub enum variant nomos_tool_package::ManifestError::UnknownPackageKind { at: String, found: String, }
+pub enum variant nomos_tool_package::ManifestError::UnknownSchema { at: String, understood: u32, found: u32, }
+pub enum variant nomos_tool_package::ManifestError::Unreadable { at: String, cause: String, }
+pub enum variant nomos_tool_package::ManifestError::UnresolvedProvider { at: String, provider: String, }
+pub enum variant nomos_tool_package::ManifestError::WrongPackageKind { at: String, found: PackageKind, }
+pub enum variant nomos_tool_package::ManifestError::WrongType { at: String, field: String, expected: String, }
+pub fn nomos_tool_package::Family::Of_Label(label: &str) -> Option<Self>
+pub fn nomos_tool_package::Family::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_tool_package::Is_Known(provider: &str) -> bool
+pub fn nomos_tool_package::ManifestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_tool_package::Parse_Manifest(text: &str, at: &str) -> Result<ToolPackage, ManifestError>
+pub fn nomos_tool_package::Read_Manifest(path: &Path) -> Result<ToolPackage, ManifestError>
+pub impl nomos_tool_package::Family implements core::fmt::Display
+pub impl nomos_tool_package::ManifestError implements core::fmt::Display
+pub struct field nomos_tool_package::ToolPackage::package_id: PackageId
+pub struct field nomos_tool_package::ToolPackage::package_kind: PackageKind
+pub struct field nomos_tool_package::ToolPackage::package_version: PackageVersion
+pub struct field nomos_tool_package::ToolPackage::protocol_range: ProtocolRange
+pub struct field nomos_tool_package::ToolPackage::providers: Vec<ToolProviderRegistration>
+pub struct field nomos_tool_package::ToolProviderRegistration::family: Family
+pub struct field nomos_tool_package::ToolProviderRegistration::provider: ProviderId
+pub struct field nomos_tool_package::ToolProviderRegistration::tool_version: PackageVersion
+pub struct nomos_tool_package::ToolPackage
+pub struct nomos_tool_package::ToolProviderRegistration
+
+# re-exports of items declared outside this crate
+pub use nomos_package::PackageVersion
+pub use nomos_package::ProtocolRange

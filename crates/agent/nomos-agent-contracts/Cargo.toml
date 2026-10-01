@@ -1,0 +1,24 @@
+[package]
+name = "nomos-agent-contracts"
+version = "0.1.0"
+description = "AGT-001's TaskEnvelope and AGT-002's WorkResult -- the typed input and output shape an agent-assisted operation carries, bundling what today is scattered across nomos-scope-verification, nomos-contracts and nomos-corrections."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-corrections = { workspace = true }
+nomos-model-package = { workspace = true }
+nomos-scope-verification = { workspace = true }
+serde = { workspace = true }
+# MicroDollars, the engine's exact money. `AgentExecution::spend` is what an
+# `AgentExecutorPackage` measured, and the engine measures money as an integer, so a
+# second money type here would make a reported cost and the ceiling it is bounded by two
+# incomparable kinds of number. Inherited from `[workspace.dependencies]`, so this line
+# adds no second declaration of the crossing revision.
+xvpe-agent-execution = { workspace = true }
+
+[lints]
+workspace = true

@@ -1,0 +1,544 @@
+use nomos_contract_tests::Workspace;
+use nomos_ledger::{LedgerDocument, LedgerItem};
+use std::collections::BTreeSet;
+use std::path::{Path, PathBuf};
+use crate::readers::{
+    Board, Checked_Out_Paths, Crossing_Counts, Declared_Skill_Name, Gate_Run_Commands,
+    Harness_Files, Imports, Ledger_Verb_Lines, Missing_Paths, Named_Items, Named_Paths,
+    Read_Harness_File, Read_Repo_File, Restated_Gate_Commands, Restated_Ledger_Verb_Lines,
+    Restated_Rows, Skill_Directories,
+};
+use crate::{
+    ADAPTER, ADAPTER_LINE_BUDGET, CONTRACT, CONTRACT_LINE_BUDGET, DELIBERATELY_ABSENT_PATHS,
+    GATE_WORKFLOW, LEDGER_VERB_REFERENCE, ROUTED_AUTHORITIES, TEMPORARY_HAZARDS,
+};
+
+/// The harness files every agent looks for by name at the repository root.
+const FRONT_DOOR_FILES: [&str; 2] = [CONTRACT, ADAPTER];
+
+/// The front door has to be at the door.
+///
+/// Claude Code and Codex both look for a file by name before they look at anything else,
+/// and neither existed here. Empty counts as absent: a file present and saying nothing
+/// routes an agent nowhere while making the absence undetectable.
+#[test]
+fn Test_The_Repository_Should_Have_An_Agent_Front_Door()
+{
+    for name in FRONT_DOOR_FILES
+    {
+        let text = Read_Harness_File(name);
+
+        assert!(
+            text.lines().filter(|line| return !line.trim().is_empty()).count() > 5,
+            "{name} exists and says almost nothing, which is indistinguishable from its \
+             absence to the agent reading it"
+        );
+    }
+}
+
+/// The adapter imports the contract; it does not grow a second one.
+///
+/// Two independently maintained instruction files is the drift `OD-AGENT-001` refuses,
+/// and it is worse than one stale file because the two disagree without either being
+/// wrong on its face.
+#[test]
+fn Test_The_Adapter_Should_Import_The_Contract_Rather_Than_Repeat_It()
+{
+    let adapter = Read_Harness_File(ADAPTER);
+
+    assert!(
+        Imports(&adapter, CONTRACT),
+        "{ADAPTER} does not import {CONTRACT}. An adapter that restates the contract is a \
+         second authority, and OD-AGENT-001 admits only vendor mechanics here."
+    );
+
+    let lines = adapter.lines().count();
+    assert!(
+        lines <= ADAPTER_LINE_BUDGET,
+        "{ADAPTER} is {lines} lines against a budget of {ADAPTER_LINE_BUDGET}. Everything \
+         it might restate is one import away, so length here is the tell."
+    );
+}
+
+/// Routing does not need the room, so the budget is what keeps it routing.
+#[test]
+fn Test_The_Contract_Should_Stay_Inside_Its_Line_Budget()
+{
+    let lines = Read_Harness_File(CONTRACT).lines().count();
+
+    assert!(
+        lines <= CONTRACT_LINE_BUDGET,
+        "{CONTRACT} is {lines} lines against a budget of {CONTRACT_LINE_BUDGET}. The limit \
+         is the mechanism OD-AGENT-001 relies on: a contract that grows past it has started \
+         restating something, one reasonable paragraph at a time."
+    );
+}
+
+/// A route to a file somebody moved is a route to nothing, and so is a route to a file only
+/// this machine has.
+///
+/// This is the half of correctness a machine can check. It runs over the skills too, so a
+/// path named inside a procedure is held to the same standard as one in the contract.
+///
+/// Judged against the checkout rather than the disk, and the two answers differ only where it
+/// matters. A path that is real here and in no clone used to pass, which made this a report
+/// about one workstation rather than about the repository. A path that is absent by design is
+/// admitted by name through `DELIBERATELY_ABSENT_PATHS` and by nothing else, so the third
+/// state -- an untracked file quietly satisfying a route -- has no spelling left.
+#[test]
+fn Test_Every_Path_The_Harness_Names_Should_Exist()
+{
+    let broken = Routes_A_Fresh_Checkout_Cannot_Follow();
+
+    assert!(
+        broken.is_empty(),
+        "the harness routes to paths a fresh checkout does not have: {broken:#?}.\n\
+         A path that has moved and a path that was never committed fail the same way here, \
+         because somebody cloning this repository cannot tell them apart either. A path that \
+         is absent by design belongs in DELIBERATELY_ABSENT_PATHS, where a second check holds \
+         it to being absent and to still being named."
+    );
+}
+
+/// Every route the harness states that a fresh checkout cannot follow, less the paths declared
+/// absent by design.
+fn Routes_A_Fresh_Checkout_Cannot_Follow() -> Vec<String>
+{
+    let checkout = Checked_Out_Paths();
+    let declared: BTreeSet<&str> =
+        DELIBERATELY_ABSENT_PATHS.iter().map(|(path, _)| return *path).collect();
+    let mut broken = Vec::new();
+
+    for (name, text) in Harness_Files()
+    {
+        let unfollowable = Missing_Paths(&text, &checkout)
+            .into_iter()
+            .filter(|missing| return !declared.contains(missing.as_str()));
+
+        for missing in unfollowable
+        {
+            broken.push(format!("{name} names {missing}, which a fresh checkout does not have"));
+        }
+    }
+
+    return broken;
+}
+
+/// A declared absence that has stopped being either absent or named is a stale exemption.
+///
+/// This is the direction that keeps `DELIBERATELY_ABSENT_PATHS` from growing into the blanket
+/// that would answer the machine-dependence question by dropping the question the route check
+/// was added for. An entry whose file has since been committed fails, because the exemption
+/// would then be covering a path that is really there -- and would go on covering it silently
+/// if the file were removed again. An entry no harness file names fails, because an exemption
+/// that outlives its sentence is a line nobody will ever have a reason to delete. An entry
+/// citing a record the tree does not carry fails, because an absence by design has to be
+/// somebody's decision and not this list's own assertion.
+#[test]
+fn Test_Every_Deliberately_Absent_Path_Should_Still_Be_Absent_And_Still_Be_Named()
+{
+    let checkout = Checked_Out_Paths();
+    let named: BTreeSet<String> =
+        Harness_Files().iter().flat_map(|(_, text)| return Named_Paths(text)).collect();
+
+    for (path, record) in DELIBERATELY_ABSENT_PATHS
+    {
+        assert!(
+            !checkout.contains(*path),
+            "{path} is declared deliberately absent and a fresh checkout has it. While the \
+             declaration stands, the route check cannot report that file going away again."
+        );
+        assert!(
+            named.contains(*path),
+            "{path} is declared deliberately absent and no harness file names it any more, so \
+             the exemption has outlived the sentence it was written for."
+        );
+        assert!(
+            Record_Carried_By(record, &checkout),
+            "{path} is declared deliberately absent on the authority of {record}, and the \
+             record set carries no such record."
+        );
+    }
+}
+
+/// Whether the record set carries the record an entry cites.
+///
+/// By identifier rather than by file name: a record's slug is part of its path and moves when
+/// the record is reworded, so matching the whole name would make a rewording look like a
+/// missing authority.
+fn Record_Carried_By(record: &str, checkout: &BTreeSet<String>) -> bool
+{
+    let prefix = format!("docs/records/{record}-");
+
+    return checkout.iter().any(|entry| return entry.starts_with(prefix.as_str()));
+}
+
+/// The band table is checked where it lives, and nowhere else may hold a copy.
+///
+/// `tests/contract/tests/boundaries/readme.rs` compares the README's rows against the
+/// workspace in both directions. A second copy in a file nobody reviews would be unchecked,
+/// and would go stale exactly the way the README already had when `OD-PROJECT-001` found
+/// it: twenty-two members described by eleven rows.
+#[test]
+fn Test_The_Harness_Should_Not_Restate_The_Band_Table()
+{
+    let workspace = Workspace::Load();
+    let members: BTreeSet<String> = workspace
+        .Members()
+        .into_iter()
+        .map(|member| return member.name.clone())
+        .collect();
+
+    assert!(
+        !members.is_empty(),
+        "no workspace members were resolved, so this check would pass over any file at all"
+    );
+
+    let restated = Restated_Anywhere(&members);
+
+    assert!(
+        restated.is_empty(),
+        "the harness carries table rows naming workspace crates: {restated:#?}.\n\
+         OD-AGENT-001 admits a link to README.md and refuses a copy of it."
+    );
+}
+
+/// Every band row any harness file carries, labelled with the file that carries it.
+pub(crate) fn Restated_Anywhere(members: &BTreeSet<String>) -> Vec<String>
+{
+    let mut restated = Vec::new();
+    for (name, text) in Harness_Files()
+    {
+        for row in Restated_Rows(&text, members)
+        {
+            restated.push(format!("{name}: {row}"));
+        }
+    }
+
+    return restated;
+}
+
+/// The gate's command list is checked where it runs, and nowhere else may hold a copy.
+///
+/// `.github/workflows/gate.yml` is what actually executes the gate, and `OD-AGENT-002`
+/// names it as one of the three shapes a handoff — or any other harness file — must not
+/// restate. Derived from the workflow's own `run:` lines rather than retyped here, the same
+/// way `Restated_Anywhere` derives the crate list from the real workspace instead of a
+/// hand-kept set.
+///
+/// Two or more, not one: a single command named as a routing example — `AGENTS.md` already
+/// does this for `nomos work validate` below — is a reference, not a copy of the list. Two
+/// together is the shape a paste takes.
+#[test]
+fn Test_The_Harness_Should_Not_Restate_The_Gate_Command_List()
+{
+    let commands = Gate_Run_Commands(&Read_Repo_File(GATE_WORKFLOW));
+
+    assert!(
+        !commands.is_empty(),
+        "no `run:` line was found in {GATE_WORKFLOW}, so this check would pass over any \
+         file at all"
+    );
+
+    let restated = Files_Restating_Two_Or_More(&commands, Restated_Gate_Commands);
+
+    assert!(
+        restated.is_empty(),
+        "the harness carries two or more of the gate's own commands: {restated:#?}.\n\
+         OD-AGENT-002 admits naming one command in passing and refuses a copy of the list \
+         `.github/workflows/gate.yml` already runs."
+    );
+}
+
+/// Every harness file that restates two or more of `lines`, formatted as `name: found`.
+///
+/// Shared by [`Test_The_Harness_Should_Not_Restate_The_Gate_Command_List`] and
+/// [`Test_The_Harness_Should_Not_Restate_The_Ledger_Verb_Reference`] below -- both check the
+/// same rule against a different source (the gate's commands, the ledger's verb reference),
+/// and "two or more is a copy, one in passing is a reference" is one rule, not two.
+fn Files_Restating_Two_Or_More(
+    lines: &[String],
+    restated_in: impl Fn(&str, &[String]) -> Vec<String>,
+) -> Vec<String>
+{
+    let mut restated = Vec::new();
+    for (name, text) in Harness_Files()
+    {
+        let found = restated_in(&text, lines);
+
+        if found.len() >= 2
+        {
+            restated.push(format!("{name}: {found:#?}"));
+        }
+    }
+
+    return restated;
+}
+
+/// The ledger verb reference is checked where `README.md` already documents it, and nowhere
+/// else may hold a copy.
+///
+/// `OD-AGENT-002` names this as the third shape a handoff must not restate, alongside the
+/// crate table and the gate command list. Matched whole line to whole line, because a
+/// sentence mentioning one verb in a code span is a routing reference and only a pasted
+/// block of the usage lines is the reference itself.
+#[test]
+fn Test_The_Harness_Should_Not_Restate_The_Ledger_Verb_Reference()
+{
+    let verbs = Ledger_Verb_Lines(&Read_Repo_File(LEDGER_VERB_REFERENCE));
+
+    assert!(
+        !verbs.is_empty(),
+        "no `nomos work <verb>` usage line was found in {LEDGER_VERB_REFERENCE}, so this \
+         check would pass over any file at all"
+    );
+
+    let restated = Files_Restating_Two_Or_More(&verbs, Restated_Ledger_Verb_Lines);
+
+    assert!(
+        restated.is_empty(),
+        "the harness carries two or more lines from the ledger verb reference: \
+         {restated:#?}.\n\
+         OD-AGENT-002 admits naming one verb in passing and refuses a copy of the block \
+         README.md already documents."
+    );
+}
+
+/// Routing is the contract's whole job, so every authority it routes to is required.
+///
+/// Named as paths rather than as prose, because a path is what an agent can open. None of
+/// the four is inferable from the tree by an arriving session: the ledger is not
+/// discoverable from the source, a record explains a decision the code only shows the
+/// result of, and the pair that says what the workspace is and what checks it are the two
+/// this file spent its whole existence refusing to copy — so the route to them has to hold.
+#[test]
+fn Test_The_Contract_Should_Name_Every_Authority_It_Routes_To()
+{
+    let named: BTreeSet<String> = Named_Paths(&Read_Harness_File(CONTRACT)).into_iter().collect();
+
+    for authority in ROUTED_AUTHORITIES
+    {
+        assert!(
+            named.iter().any(|path| return path.starts_with(authority)),
+            "{CONTRACT} never names {authority}. An agent that does not find the board \
+             invents one, an agent that does not find the records repeats a decision \
+             somebody already made, and an agent that does not find the workspace \
+             description infers the architecture from whatever code is nearest."
+        );
+    }
+}
+
+/// A hazard that outlives its defect is a step every session spends on nothing.
+///
+/// Both directions, because each catches the failure the other cannot see. The sentence
+/// must still be there while the item is open, so a warning cannot be deleted early. The
+/// item must still be open, so a warning cannot be left behind — and the day
+/// `P10-STALE-WRITER` is finished, this test is what says so and where.
+#[test]
+fn Test_Every_Temporary_Hazard_Should_Name_An_Item_That_Is_Still_Open()
+{
+    let board = Board();
+
+    for (file, item) in TEMPORARY_HAZARDS
+    {
+        Assert_The_Hazard_Is_Still_Live(&board, file, item);
+    }
+}
+
+/// The sentence must still be there while the item is open, and the item must still be open
+/// while the sentence is there.
+pub(crate) fn Assert_The_Hazard_Is_Still_Live(board: &LedgerDocument, file: &str, item: &str)
+{
+    Assert_Hazard_Sentence_Still_Present(file, item);
+
+    let entry = Board_Entry_For(board, file, item);
+
+    assert!(
+        !entry.state.Is_Finished(),
+        "{item} is finished, so the hazard {file} carries for it is over. Remove the \
+         warning and its entry here — OD-AGENT-001 admits a temporary hazard on \
+         exactly this condition."
+    );
+}
+
+/// The sentence declaring `item`'s hazard must still be in `file`, or the warning was
+/// removed while the defect it names is still open.
+fn Assert_Hazard_Sentence_Still_Present(file: &str, item: &str)
+{
+    let text = Read_Harness_File(file);
+
+    assert!(
+        Named_Items(&text).iter().any(|named| return named == item),
+        "{file} is declared to carry the {item} hazard and no longer mentions it. \
+         Either the warning was removed while the defect is still open, or this \
+         declaration should have gone with it."
+    );
+}
+
+/// The board entry for `item`, or a panic naming `file` -- with no entry there is nothing for
+/// the finished-state assertion in the caller to run against, and returning quietly instead
+/// would let a hazard declaration cite an id that is on no board and still pass, which is the
+/// one arrangement nobody can retire.
+fn Board_Entry_For<'a>(board: &'a LedgerDocument, file: &str, item: &str) -> &'a LedgerItem
+{
+    let Some(entry) = board.items.iter().find(|entry| return entry.id.As_Text() == item)
+    else
+    {
+        panic!("{file} names {item}, which is on no board. A hazard pointing at an \
+                item nobody can look up cannot be retired by anybody.");
+    };
+
+    return entry;
+}
+
+/// A hazard cannot be added quietly, which is what makes the declaration above worth having.
+///
+/// The derived direction. Without it the table is a list somebody remembers to update, and
+/// `OD-COMPLETENESS-001` is this workspace's record of what that is worth.
+#[test]
+fn Test_Every_Item_The_Harness_Names_Should_Be_Declared_As_A_Temporary_Hazard()
+{
+    let undeclared = Items_Named_Without_A_Declaration();
+
+    assert!(
+        undeclared.is_empty(),
+        "the harness names ledger items that are not declared as temporary hazards: \
+         {undeclared:#?}.\n\
+         An item id in an instruction file is a promise that the sentence around it \
+         expires; declaring it is how the expiry is noticed."
+    );
+}
+
+/// Every item a harness file names that the table does not declare for that file.
+pub(crate) fn Items_Named_Without_A_Declaration() -> Vec<String>
+{
+    let mut undeclared = Vec::new();
+    for (file, text) in Harness_Files()
+    {
+        for item in Named_Items(&text)
+        {
+            if !Declared_Hazard(&file, &item)
+            {
+                undeclared.push(format!("{file} names {item}"));
+            }
+        }
+    }
+
+    return undeclared;
+}
+
+/// Whether the table declares this file as carrying this item's hazard.
+pub(crate) fn Declared_Hazard(file: &str, item: &str) -> bool
+{
+    return TEMPORARY_HAZARDS
+        .iter()
+        .any(|(declared_file, declared_item)| {
+            return *declared_file == file && *declared_item == item;
+        });
+}
+
+/// A skill is addressed by name, and the name it declares must be the one it is found at.
+///
+/// A mismatch is not cosmetic: the directory is how the tool finds it and the front matter
+/// is how the tool describes it, so the two disagreeing produces a skill that is invoked
+/// under one name and reports itself under another.
+#[test]
+fn Test_Every_Committed_Skill_Should_Declare_A_Name_Matching_Its_Directory()
+{
+    for directory in Skill_Directories()
+    {
+        Assert_The_Skill_Is_Named_For_Its_Directory(&directory);
+    }
+}
+
+/// The directory is how the tool finds a skill and the front matter is how the tool describes
+/// it, so the two disagreeing produces a skill invoked under one name and reported under
+/// another.
+pub(crate) fn Assert_The_Skill_Is_Named_For_Its_Directory(directory: &Path)
+{
+    let label = directory.display().to_string().replace('\\', "/");
+    let manifest = Assert_Skill_Manifest_Exists(directory, &label);
+    let declared = Declared_Name_In_Manifest(&manifest, &label);
+    let expected = directory
+        .file_name()
+        .map(|name| return name.to_string_lossy().into_owned())
+        .unwrap_or_default();
+
+    assert_eq!(
+        declared, expected,
+        "{label}/SKILL.md calls itself {declared} while living at {expected}"
+    );
+}
+
+/// The skill's `SKILL.md`, or a panic naming `label` -- a directory with no manifest is one
+/// the tool will not load, and a reader has no way to notice that from the directory alone.
+fn Assert_Skill_Manifest_Exists(directory: &Path, label: &str) -> PathBuf
+{
+    let manifest = directory.join("SKILL.md");
+
+    assert!(
+        manifest.is_file(),
+        "{label} is a skill directory with no SKILL.md, so it is a directory the tool \
+         will not load and a reader will assume works"
+    );
+
+    return manifest;
+}
+
+/// The name `manifest`'s front matter declares, or a panic naming `label` -- unreadable or
+/// nameless front matter leaves nothing for the caller's comparison to run against.
+fn Declared_Name_In_Manifest(manifest: &Path, label: &str) -> String
+{
+    let text = std::fs::read_to_string(manifest)
+        // The caller already established this manifest is a file, so a read that fails
+        // here is a SKILL.md the tool would fail to load too. There is no name left to
+        // compare and no weaker comparison to fall back to.
+        .unwrap_or_else(|error| panic!("cannot read {label}/SKILL.md: {error}"));
+
+    return Declared_Skill_Name(&text)
+        // Front matter with no name is worse than front matter with the wrong one: the tool
+        // then has nothing to report the skill under at all. Reading the absence as "nothing
+        // to compare" would pass it through the check that exists to pin the name down.
+        .unwrap_or_else(|| panic!("{label}/SKILL.md declares no name in its front matter"));
+}
+
+/// The test that measures the crossing, and the authority on every number about it.
+const CROSSING_AUTHORITY: &str = "tests/contract/tests/boundaries/lock_pinning.rs";
+
+/// The crossing's numbers are measured where the crossing is, and are not restated here.
+///
+/// The contract claimed six crates named an `xvpe-*` dependency by a relative path into a
+/// sibling checkout, with ten reaching one transitively, and was wrong on the count, the
+/// mechanism and the premise all at once. Nothing re-derived it. This suite asserts the
+/// contract's structure — that its paths exist, that it names the authorities it routes to,
+/// that a temporary hazard names an open item — and deliberately says nothing about whether
+/// its prose is still true, so the sentence sat under "what must pass before I finish", in
+/// the file every session reads first, for a week after the crossing had stopped working
+/// that way.
+///
+/// A number here is a second encoding of a fact this workspace already measures, which is
+/// `OD-GATE-011`'s defect and is how the two came to disagree. The route is asserted as well
+/// as the absence, so the check cannot be satisfied by deleting the paragraph and leaving
+/// nothing in its place — that would be `OD-GATE-001`'s shape one level up, a check reading
+/// clean over a file that has stopped saying anything.
+#[test]
+fn Test_The_Contract_Should_Not_Restate_The_Crossing_Count()
+{
+    let contract = Read_Harness_File(CONTRACT);
+
+    let counts = Crossing_Counts(&contract);
+
+    assert!(
+        counts.is_empty(),
+        "the contract states a count about the XVPE crossing: {counts:#?}.\n\
+         How many packages cross, and how they are declared, is what \
+         `{CROSSING_AUTHORITY}` measures in both directions. A copy here is unchecked, and \
+         drifted once already: it read six crates over eight manifests carrying sixteen \
+         declarations."
+    );
+    assert!(
+        contract.contains(CROSSING_AUTHORITY),
+        "the contract no longer names `{CROSSING_AUTHORITY}`, so whatever it says about the \
+         crossing routes to nothing that measures it."
+    );
+}

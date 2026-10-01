@@ -1,0 +1,438 @@
+//! A held territory can be enlarged by its holder, and every way of getting it wrong is refused.
+//!
+//! A reservation is authored before the change it reserves has been attempted, so it is a
+//! prediction. Until `OD-LEDGER-039` the ledger's only answer to a prediction that was short by
+//! one file was to end the item: abandon, decline, re-author, and re-author every dependent the
+//! decline stranded. Worse, the board then carried no record that the prediction had been
+//! short, because a decline stores a holder, a timestamp and free prose.
+//!
+//! Every test here has a negative control, for the reason `exclusion_holds.rs` gives: a guard
+//! nobody has watched fail is a test that would pass just as happily if the thing it checks
+//! were deleted. The two that matter most are the contention pair and the lapse pair, because
+//! each has a sibling in which the *same* widening is granted -- so neither can be satisfied by
+//! an implementation that simply refuses everything.
+//!
+//! What an item, a clock and a board are lives in `fixtures`; the lock the atomicity test
+//! watches lives in `watching_lock`.
+
+mod fixtures;
+mod watching_lock;
+
+use crate::fixtures::{
+    Board, Board_After_The_Lease_Lapsed, Board_At, BoardOnDisk, ClaimRefusal, Holder, Item_Reserving_Files, ItemId,
+    LedgerDocument, Ledger_At, Item_Named_In_File, Only_Item, Path, Strings_From_Paths, SCHEMA_VERSION,
+    Claim_For_Holder, Temporary_Directory, Timestamp, AT_NOW, NOW,
+};
+use crate::watching_lock::{Assert_One_Lock_Acquisition, WatchedBoard, Watched_Board_At};
+
+/// The two widenings the multiplicity fixture performs, and so the two rows its board must
+/// carry afterwards.
+///
+/// One name, because the fixture's count and the assertion's expectation are the same number:
+/// an edit that changed one without the other would leave the second measuring nothing.
+const WIDENINGS: usize = 2;
+
+
+// ---------------------------------------------------------------------------------------
+// What a widening does when it is allowed
+// ---------------------------------------------------------------------------------------
+
+/// The whole of the happy path: the territory grows and the growth is kept.
+///
+/// Both halves, because either alone is satisfiable by an implementation with the defect the
+/// other catches. A territory that grew without a record is the measurement lost, which is the
+/// thing `OD-LEDGER-039` is mostly about; a record without the growth is a note about work the
+/// holder still cannot do.
+#[test]
+fn Test_A_Holder_Should_Widen_Their_Own_Territory_And_The_Widening_Should_Be_Kept()
+{
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("kept", vec![Item_Reserving_Files("T-1", &["a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
+
+    let added = ledger
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs", "c.rs"]))
+        .expect("the holder may widen their own item");
+    assert_eq!(added, Strings_From_Paths(&["b.rs", "c.rs"]), "the verb reports what it added");
+    Assert_The_Widening_Was_Kept(&ledger, &["b.rs", "c.rs"]);
+}
+
+/// The growth and the row that records it, in that order and with no path lost between them.
+fn Assert_The_Widening_Was_Kept(ledger: &Board, added: &[&str])
+{
+    let item = Only_Item(ledger);
+    assert_eq!(
+        item.territory.paths,
+        Strings_From_Paths(&["a.rs", "b.rs", "c.rs"]),
+        "the reserved paths must be the original ones plus the added ones, in that order"
+    );
+    assert_eq!(item.widened.len(), 1, "one widening happened, so one is recorded");
+    let recorded = item.widened.first().expect("the length was just asserted");
+    assert_eq!(recorded.holder, "agent-a", "who found the reservation short");
+    assert_eq!(recorded.added, Strings_From_Paths(added), "and exactly what they added");
+    assert_eq!(
+        recorded.widened_at,
+        Timestamp::From_Unix_Seconds(NOW),
+        "and when, so an escape rate can be measured over time rather than merely counted"
+    );
+}
+
+/// Two widenings are two rows, kept oldest first.
+///
+/// The falsifier for coalescing. An implementation that merged them into one row with four
+/// paths would leave the territory correct and every other test here green, while destroying
+/// the fact that this holder was wrong twice — which is the difference between one bad
+/// prediction and a reservation that was never a serious attempt.
+#[test]
+fn Test_Two_Widenings_Should_Be_Two_Rows_Rather_Than_One_Coalesced_One()
+{
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("multiplicity", vec![Item_Reserving_Files("T-1", &["a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
+
+    ledger
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .expect("the first widening is granted");
+    ledger
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["c.rs", "d.rs"]))
+        .expect("the second widening is granted");
+    Assert_The_Widenings_Are_Two_Rows(&ledger);
+}
+
+/// Two rows, oldest first, over a territory carrying every path either of them added.
+fn Assert_The_Widenings_Are_Two_Rows(ledger: &Board)
+{
+    let item = Only_Item(ledger);
+    assert_eq!(item.widened.len(), WIDENINGS, "two widenings, two rows");
+    let [first, second] = item.widened.as_slice()
+    else
+    {
+        panic!("the length was just asserted");
+    };
+    assert_eq!(first.added, Strings_From_Paths(&["b.rs"]), "oldest first");
+    assert_eq!(second.added, Strings_From_Paths(&["c.rs", "d.rs"]), "and the later one after it");
+    assert_eq!(
+        item.territory.paths,
+        Strings_From_Paths(&["a.rs", "b.rs", "c.rs", "d.rs"]),
+        "and the territory carries every path either of them added"
+    );
+}
+
+/// A path already reserved adds nothing, and nothing is recorded.
+///
+/// Recording it would overstate the escape, and the escape rate is the one number these rows
+/// exist to carry honestly. Two spellings of one path are one path, for the same reason and by
+/// the same normalization `Territory::Intersect` uses: a holder who re-reserves `./a.rs` has
+/// not widened anything.
+#[test]
+fn Test_A_Path_Already_Reserved_Should_Add_Nothing_And_Record_Nothing()
+{
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("already", vec![Item_Reserving_Files("T-1", &["a.rs", "dir/b.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
+
+    let added = ledger
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["a.rs", "./dir/b.rs"]))
+        .expect("asking for what you already hold is not an error");
+
+    assert!(added.is_empty(), "nothing was added, so nothing is reported as added: {added:?}");
+
+    let item = Only_Item(&ledger);
+    assert_eq!(item.territory.paths, Strings_From_Paths(&["a.rs", "dir/b.rs"]), "the territory is untouched");
+    assert!(
+        item.widened.is_empty(),
+        "a widening that added nothing must not be recorded as one: {:?}",
+        item.widened
+    );
+}
+
+/// The same path named twice in one widening is one path.
+#[test]
+fn Test_A_Path_Named_Twice_In_One_Widening_Should_Be_Added_Once()
+{
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("twice", vec![Item_Reserving_Files("T-1", &["a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
+
+    let added = ledger
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs", "b.rs"]))
+        .expect("the holder may widen their own item");
+
+    assert_eq!(added, Strings_From_Paths(&["b.rs"]), "one path was added, however many times it was named");
+    assert_eq!(Only_Item(&ledger).territory.paths, Strings_From_Paths(&["a.rs", "b.rs"]));
+}
+
+/// Widening only ever adds, so every path reserved before one is still reserved after it.
+///
+/// There is no argument on the verb that could express a replacement territory, which is what
+/// makes this a property of the signature rather than of the body. The assertion is here so
+/// that a later change adding one fails a test rather than merely a review: dropping a path
+/// drops the `done_when` clause that path carried.
+#[test]
+fn Test_Widening_Should_Never_Remove_A_Path()
+{
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("superset", vec![Item_Reserving_Files("T-1", &["a.rs", "b.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
+
+    let before = Only_Item(&ledger).territory.paths;
+    ledger
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["c.rs"]))
+        .expect("the holder may widen their own item");
+    let after = Only_Item(&ledger).territory.paths;
+
+    for path in &before
+    {
+        assert!(after.contains(path), "{path} was reserved before the widening and is not after");
+    }
+}
+
+
+// ---------------------------------------------------------------------------------------
+// What refuses a widening
+// ---------------------------------------------------------------------------------------
+
+/// Ground a peer actively holds refuses the widening, and the item is left alone.
+///
+/// This is the refusal the whole verb has to earn. A holder who could reach any path by
+/// widening would have the exclusion the board is for, and the check would never be asked.
+#[test]
+fn Test_A_Widening_Onto_Ground_A_Peer_Holds_Should_Be_Refused()
+{
+    let BoardOnDisk { directory: _directory, mut ledger } = Board_At(
+        "contested",
+        vec![Item_Reserving_Files("T-1", &["a.rs"]), Item_Reserving_Files("T-2", &["b.rs"])],
+    );
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
+    Claim_For_Holder(&mut ledger, "T-2", &Holder::from("agent-b"));
+
+    let refusal = ledger
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .expect_err("b.rs is held by agent-b through T-2");
+
+    assert!(
+        matches!(refusal, ClaimRefusal::HeldBy { .. }),
+        "the refusal must name the live claim in the way a claim's would: {}",
+        refusal.Describe()
+    );
+
+    let item = Item_Named_In_File(&ledger, "T-1");
+    assert_eq!(item.territory.paths, Strings_From_Paths(&["a.rs"]), "a refused widening writes no path");
+    assert!(item.widened.is_empty(), "and records no widening: {:?}", item.widened);
+}
+
+/// The negative control for the test above: the same widening, granted once nothing holds the
+/// ground.
+///
+/// Without this, an implementation that refused every widening would satisfy the contention
+/// test — and the point of the verb is that it grants the ones it should.
+#[test]
+fn Test_The_Same_Widening_Should_Be_Granted_When_No_Peer_Holds_The_Ground()
+{
+    let BoardOnDisk { directory: _directory, mut ledger } = Board_At(
+        "uncontested",
+        vec![Item_Reserving_Files("T-1", &["a.rs"]), Item_Reserving_Files("T-2", &["b.rs"])],
+    );
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
+
+    let added = ledger
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .expect("T-2 reserves b.rs but nobody is holding T-2");
+
+    assert_eq!(added, Strings_From_Paths(&["b.rs"]), "an unclaimed peer's territory excludes nobody");
+}
+
+/// Somebody who is not the holder may not widen, even onto free ground.
+#[test]
+fn Test_A_Widening_By_Somebody_Who_Is_Not_The_Holder_Should_Be_Refused()
+{
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("notholder", vec![Item_Reserving_Files("T-1", &["a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
+
+    let refusal = ledger
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-b"), &Strings_From_Paths(&["b.rs"]))
+        .expect_err("agent-b does not hold T-1");
+
+    assert!(
+        matches!(refusal, ClaimRefusal::StillHeld { .. }),
+        "the refusal must say who does hold it: {}",
+        refusal.Describe()
+    );
+    assert_eq!(Only_Item(&ledger).territory.paths, Strings_From_Paths(&["a.rs"]), "and write nothing");
+}
+
+/// An item nobody holds may not be widened.
+///
+/// Territory on a `Ready` item is the author's prediction and has not been tested against
+/// anything yet, so there is no evidence to correct it with. The repair for a reservation that
+/// is wrong before any work began is to decline and re-author.
+#[test]
+fn Test_A_Widening_Of_An_Item_Nobody_Holds_Should_Be_Refused()
+{
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("unclaimed", vec![Item_Reserving_Files("T-1", &["a.rs"])]);
+
+    let refusal = ledger
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .expect_err("nobody holds T-1");
+
+    assert!(
+        matches!(refusal, ClaimRefusal::NotClaimable { .. }),
+        "an unheld item has no holder to be: {}",
+        refusal.Describe()
+    );
+    assert!(Only_Item(&ledger).widened.is_empty(), "and nothing is written");
+}
+
+/// A holder whose lease has run out may not widen, and their name still matching is exactly
+/// why this needs its own refusal.
+///
+/// A lapsed claim stops excluding — `store/refusal.rs` records that for takeovers — so another
+/// item may since have been claimed over the very files this one reserves. Enlarging a
+/// reservation that currently excludes nobody is that hazard reached through a new verb. The
+/// remedy named is `takeover`, which is the verb that makes the claim live again.
+#[test]
+fn Test_A_Widening_By_A_Holder_Whose_Lease_Has_Run_Out_Should_Be_Refused()
+{
+    let BoardOnDisk { directory: _directory, mut ledger } = Board_After_The_Lease_Lapsed("lapsed");
+
+    let refusal = ledger
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .expect_err("agent-a's lease ran out an hour ago");
+    Assert_A_Lapse_Refuses(&refusal);
+    Assert_No_Widening_Was_Written(&ledger);
+}
+
+/// A refusal that says a dead lease is not authorization, and names the verb that revives one.
+fn Assert_A_Lapse_Refuses(refusal: &ClaimRefusal)
+{
+    assert!(
+        matches!(refusal, ClaimRefusal::Lapsed { .. }),
+        "a dead lease is not authorization, however well the name matches: {}",
+        refusal.Describe()
+    );
+    assert!(
+        refusal.Describe().contains("takeover"),
+        "and the remedy must be named: {}",
+        refusal.Describe()
+    );
+}
+
+/// A refused widening wrote nothing at all: no added path and no row.
+fn Assert_No_Widening_Was_Written(ledger: &Board)
+{
+    let item = Only_Item(ledger);
+    assert_eq!(item.territory.paths, Strings_From_Paths(&["a.rs"]), "a refused widening writes no path");
+    assert!(item.widened.is_empty(), "and records no widening");
+}
+
+/// The negative control for the lapse: the same holder, the same item, before the lease runs
+/// out.
+#[test]
+fn Test_The_Same_Holder_Should_Widen_While_The_Lease_Is_Still_Live()
+{
+    let BoardOnDisk { directory: _directory, mut ledger } =
+        Board_At("live", vec![Item_Reserving_Files("T-1", &["a.rs"])]);
+    Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
+
+    let added = ledger
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .expect("the lease has not run out");
+
+    assert_eq!(added, Strings_From_Paths(&["b.rs"]), "a live lease is what the refusal above turns on");
+}
+
+
+// ---------------------------------------------------------------------------------------
+// Where the decision is made
+// ---------------------------------------------------------------------------------------
+
+/// One widening, one acquisition, and the widening already on disk when it ends.
+#[test]
+fn Test_A_Widening_Should_Decide_And_Write_Inside_One_Lock_Acquisition()
+{
+    let WatchedBoard { directory: _directory, mut ledger, log } = Watched_Board_At("atomic");
+    let taken_before = log.lock().expect("the log is not poisoned").acquisitions;
+
+    ledger
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .expect("the holder may widen their own item");
+    Assert_One_Lock_Acquisition(&log, taken_before);
+}
+
+
+// ---------------------------------------------------------------------------------------
+// What the document promises about itself
+// ---------------------------------------------------------------------------------------
+
+/// A row written before this field existed is refused rather than read as never widened.
+///
+/// The direction `#[serde(default)]` decides, and the reason this field carries none. An item
+/// that predates the verb may well have been widened by the only means there was — declining it
+/// and re-authoring it with more paths — so defaulting the field to empty would be a claim
+/// about history the document cannot support. The board is migrated instead.
+///
+/// The schema number is deliberately not what performs this refusal, and `OD-LEDGER-008` is
+/// why. It is consulted after a parse has already failed, and only to choose which sentence
+/// the operator reads.
+#[test]
+fn Test_An_Item_Written_Without_The_Widened_Field_Should_Be_Refused()
+{
+    let directory = Temporary_Directory("unmigrated");
+    let ledger = Ledger_At(&directory, &AT_NOW);
+    ledger
+        .Save(&LedgerDocument { schema_version: SCHEMA_VERSION, items: vec![Item_Reserving_Files("T-1", &["a.rs"])] })
+        .expect("a fresh ledger is valid");
+
+    let path = directory.join("ledger.json");
+    Rewrite_The_Board_Without_The_Widened_Field(&path);
+    Assert_A_Missing_Field_Is_Refused(&ledger);
+}
+
+/// Removes the `widened` key from the board's one item, as JSON rather than as text.
+///
+/// Text removal would make the fixture a document that does not parse at all, which would pass
+/// the caller for the wrong reason -- and would pass it just as happily if the field carried a
+/// default.
+fn Rewrite_The_Board_Without_The_Widened_Field(path: &Path)
+{
+    let written = std::fs::read_to_string(path).expect("the board was written");
+    Assert_The_Field_Is_Always_Serialized(&written);
+
+    let mut document: serde_json::Value =
+        serde_json::from_str(&written).expect("the board this build wrote is JSON");
+    let removed = document
+        .get_mut("items")
+        .and_then(|items| return items.get_mut(0))
+        .and_then(serde_json::Value::as_object_mut)
+        .expect("the board this build wrote has one item, and an item is an object")
+        .remove("widened");
+    assert!(removed.is_some(), "the fixture must actually remove the field");
+    let unmigrated = serde_json::to_string_pretty(&document).expect("the fixture serializes");
+    serde_json::from_str::<serde_json::Value>(&unmigrated)
+        .expect("the fixture must still be well-formed JSON, or this tests the parser");
+    std::fs::write(path, &unmigrated).expect("the fixture is written");
+}
+
+/// The key is on every item, whatever it holds, which is what makes a stale writer detectable.
+fn Assert_The_Field_Is_Always_Serialized(written: &str)
+{
+    assert!(
+        written.contains("\"widened\""),
+        "the field must be serialized on every item, whatever it holds -- counting the key \
+         across the file is how a stale writer is detected, and a key whose presence depends \
+         on its content cannot be counted"
+    );
+}
+
+/// The refusal names the field an operator has to migrate to.
+fn Assert_A_Missing_Field_Is_Refused(ledger: &Board)
+{
+    let error = ledger.Load().expect_err("a row missing the field is not a row with an empty one");
+    let said = format!("{error:?}");
+    assert!(
+        said.contains("widened"),
+        "the refusal must name the field an operator has to migrate: {said}"
+    );
+}

@@ -1,0 +1,37 @@
+pub const fn nomos_lang_go_types::Declared_Guarantee() -> Guarantee
+pub const fn nomos_lang_go_types::TypesFailure::Applicability(self) -> Applicability
+pub const nomos_lang_go_types::PROVIDER: &str
+pub const nomos_lang_go_types::TypesFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_go_types::TypesFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_go_types::TypesFactProduction::TRACE: TraceEquivalence
+pub enum nomos_lang_go_types::TypesFailure
+pub enum nomos_lang_go_types::Untyped
+pub enum variant nomos_lang_go_types::TypesFailure::DidNotFinish
+pub enum variant nomos_lang_go_types::TypesFailure::Failed
+pub enum variant nomos_lang_go_types::TypesFailure::GoUnavailable
+pub enum variant nomos_lang_go_types::TypesFailure::HelperUnwritable
+pub enum variant nomos_lang_go_types::TypesFailure::Unreadable
+pub enum variant nomos_lang_go_types::Untyped::Module { path: String, failure: TypesFailure, reason: String, }
+pub enum variant nomos_lang_go_types::Untyped::Outside { files: Vec<String>, }
+pub enum variant nomos_lang_go_types::Untyped::Package { package: String, files: Vec<String>, reason: String, }
+pub enum variant nomos_lang_go_types::Untyped::Unchecked { module: String, files: Vec<String>, }
+pub fn nomos_lang_go_types::Materialize_Files<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( root: &Path, files: &[&str], context: FactContext, ports: &TypesPorts<'_, Launcher, Fs, Env>, ) -> TypesAnswer
+pub fn nomos_lang_go_types::Provider_Offer() -> ProviderOffer
+pub impl nomos_lang_go_types::TypesFactProduction implements Strategy
+pub struct field nomos_lang_go_types::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_go_types::FactContext::generation: GenerationId
+pub struct field nomos_lang_go_types::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_go_types::FactContext::variant: BuildVariantId
+pub struct field nomos_lang_go_types::FileFact::fact: MaterializedFact
+pub struct field nomos_lang_go_types::FileFact::path: String
+pub struct field nomos_lang_go_types::FileFact::subject: SubjectId
+pub struct field nomos_lang_go_types::TypesAnswer::facts: Vec<FileFact>
+pub struct field nomos_lang_go_types::TypesAnswer::untyped: Vec<Untyped>
+pub struct field nomos_lang_go_types::TypesPorts::environment: &'ports Env
+pub struct field nomos_lang_go_types::TypesPorts::filesystem: &'ports Fs
+pub struct field nomos_lang_go_types::TypesPorts::launcher: &'ports Launcher
+pub struct nomos_lang_go_types::FactContext
+pub struct nomos_lang_go_types::FileFact
+pub struct nomos_lang_go_types::TypesAnswer
+pub struct nomos_lang_go_types::TypesFactProduction
+pub struct nomos_lang_go_types::TypesPorts<'ports, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>

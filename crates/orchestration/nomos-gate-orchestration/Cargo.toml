@@ -1,0 +1,42 @@
+[package]
+name = "nomos-gate-orchestration"
+version = "0.1.0"
+description = "The seam for the first-class Gate object ARC-ROADMAP-001 names: Plan wires a real rule registry, Run_Gate composes nomos-check-orchestration into a judged disposition, apart from choosing a platform, selecting scope or rendering the answer."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+# MemoryFactStore, the fact store nomos_check_orchestration::RunContext now takes as a
+# caller-supplied value rather than building internally, per OD-ANALYSIS-009's own first
+# increment — this crate constructs a fresh one per call, same as before.
+nomos-analysis = { workspace = true }
+nomos-check-orchestration = { workspace = true }
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-model-package = { workspace = true }
+nomos-platform = { workspace = true }
+nomos-cap-architecture = { workspace = true }
+# nomos-repo-policy for the one provider of that contract: `admits` answers from the
+# repository's own declaration, and reading it is this crate's concern rather than every
+# host's. Application Service reaching Provider is an edge the declaration already permits.
+nomos-repo-policy = { workspace = true }
+nomos-rules = { workspace = true }
+nomos-workspace = { workspace = true }
+# The policy file `P40-GATE-POLICY-AUTHORING-3` added is JSON, the format this workspace
+# already reads for `standards.json` and `work/ledger.json`. `serde` is derive-only here:
+# the deserialized shapes live in `policy/gate_policy_file.rs` and never reach the domain
+# policy types, so no public type in this crate gains a serde bound.
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+nomos-composer-providers = { workspace = true }
+nomos-platform-std = { workspace = true }
+# The counting semaphore `tests/repository_judgments.rs` admits every judgment over the
+# repository's root through. The bound's value and its derivation stay in that file.
+nomos-test-permits = { workspace = true }
+
+[lints]
+workspace = true

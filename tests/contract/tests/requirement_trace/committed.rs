@@ -1,0 +1,313 @@
+//! The three things `OD-TRACE-001` said the guard asserts, against the entries this
+//! repository has really committed.
+
+use crate::predicates::{
+    Divergences_With_No_Record, Partials_With_No_Gap, Unresolved_Gaps, Unresolved_Records,
+    Unresolved_Rules, Unresolved_Sites,
+};
+use crate::registry::Committed;
+use nomos_contract_tests::Workspace;
+
+/// How few assessments this repository may hold.
+///
+/// A floor, not a count, and `OD-SPEC-007` settled the trade for the identical case one
+/// directory over. Adding an assessment costs no edit here, which is the whole point —
+/// two people assessing two requirements must not collide on a third file. Removing one
+/// costs lowering this, which is the deliberate step that keeps an entry from being quietly
+/// deleted to make a divergence disappear.
+///
+/// Its guarantee is exact only while the count sits on it. Once the registry has grown
+/// above, a deletion inside the slack is caught by nothing here — the same slack
+/// `OD-SPEC-007` accepted, for the same reason: an upper bound would reintroduce the shared
+/// edit on an unpredictable schedule.
+pub(crate) const FEWEST_ASSESSMENTS: usize = 4;
+
+/// Every entry names a site that exists in the workspace.
+#[test]
+fn Test_Every_Assessment_Should_Name_A_Site_That_Exists()
+{
+    let root = Workspace::Workspace_Root();
+    let assessments = Committed(&root);
+
+    assert!(
+        !assessments.is_empty(),
+        "no assessment was read from the registry, so every comparison in this suite would \
+         pass over an empty set — reporting that the registry is sound because nothing \
+         contradicted it, which is the shape of defect OD-TRACE-001 is about"
+    );
+
+    let missing = Unresolved_Sites(&root, &assessments);
+
+    assert!(
+        missing.is_empty(),
+        "these assessments name a site that is not there: {missing:#?}.\n\
+         Either the code moved, in which case update the entry, or the thing the verdict \
+         was about is gone, in which case the verdict is about nothing and the entry has \
+         to be re-authored against what replaced it."
+    );
+}
+
+/// Every entry that names a record names one that exists and is registered.
+///
+/// Wider than `OD-TRACE-001` requires, which is only that a `Diverges` entry does. A `Met`
+/// entry may omit a record; naming one that does not resolve is a different thing, and a
+/// dangling citation is worth catching wherever it appears. The narrower obligation — that
+/// a divergence names a record *at all* — is
+/// [`Test_Every_Divergence_Should_Name_A_Governing_Record`].
+///
+/// "Registered" is `OD-SPEC-007`'s sense: a document under `docs/records` is not governing
+/// until a file under `crates/spec/nomos-spec-store/records/` says so. An entry citing an
+/// unregistered document would be citing prose.
+#[test]
+fn Test_Every_Named_Record_Should_Exist_And_Be_Registered()
+{
+    let root = Workspace::Workspace_Root();
+    let assessments = Committed(&root);
+
+    let cited = assessments
+        .iter()
+        .filter(|assessment| return assessment.record.is_some())
+        .count();
+    assert!(
+        cited > 0,
+        "no committed assessment names a record, so this comparison read nothing"
+    );
+
+    let unresolved = Unresolved_Records(&root, &assessments);
+
+    assert!(
+        unresolved.is_empty(),
+        "these assessments name a record that does not resolve: {unresolved:#?}.\n\
+         A record is registered by its own file under crates/spec/nomos-spec-store/records/ \
+         — OD-SPEC-007 — and writing the document alone does not make it governing."
+    );
+}
+
+/// Every rule an entry declares is a rule this build composes.
+///
+/// `OD-HOST-015` decided the `rule` line and put this comparison here: the declared universe
+/// is the set of `rule` lines, its reality is `nomos_rules::DESCRIPTORS`, and
+/// `OD-COMPLETENESS-001` requires a declared universe to have a check against the reality it
+/// claims to enumerate. Below this suite there is no band that can see both — `Capability
+/// Contract` may not name `Rules` — so a dangling line reddens here and deliberately does not
+/// redden `nomos check`.
+///
+/// The reverse direction is deliberately not asserted. `OD-HOST-015` measured fifty-nine of
+/// this build's seventy-one rules as ported code-standards rules bearing on no corpus
+/// requirement at all, so requiring every rule to be named by some entry would demand a
+/// corpus claim that does not exist — the count-not-floor shape `OD-SPEC-007` and
+/// `OD-TRACE-002` both refused.
+#[test]
+fn Test_Every_Declared_Rule_Should_Be_A_Rule_This_Build_Composes()
+{
+    let root = Workspace::Workspace_Root();
+    let assessments = Committed(&root);
+
+    Assert_Some_Entry_Declares_A_Rule(&assessments);
+
+    let dangling = Unresolved_Rules(&assessments);
+
+    assert!(
+        dangling.is_empty(),
+        "these assessments declare a rule this build does not compose: {dangling:#?}.\n\
+         A rule identifier is a `pub const` in nomos-rules, so this is a typo, a rename or \
+         a deletion. The repair is the assessment that names it, never the rule — the \
+         direction a vanished site already takes."
+    );
+}
+
+/// At least one committed entry declares a rule, or the comparison above reads nothing.
+///
+/// A floor on the declared set, not a requirement on any entry. **An entry with no `rule`
+/// line is not thereby saying no rule bears on its requirement** — absence means nobody
+/// declared one, which is `OD-TRACE-001`'s reading for this whole registry and the reason
+/// `OD-TRACE-002` refused a written `Unassessed`. Nothing may read a missing line as a
+/// report that a requirement is unenforced. What is asserted here is only that the guard
+/// above has something to be wrong about.
+fn Assert_Some_Entry_Declares_A_Rule(assessments: &[crate::assessment::Assessment])
+{
+    let declaring = assessments
+        .iter()
+        .filter(|assessment| return !assessment.rules.is_empty())
+        .count();
+
+    assert!(
+        declaring > 0,
+        "no committed assessment declares a rule, so the comparison against \
+         nomos_rules::DESCRIPTORS read nothing and would pass over an empty set"
+    );
+}
+
+/// A divergence with no record is not a verdict.
+///
+/// **This assertion is vacuous today and that is stated rather than hidden.** Every
+/// committed entry is `Met`, so the loop below runs over an empty set. The two divergences
+/// `OD-TRACE-001` hand-audited — `WORK-LEDGER-005` dropping `StaleProbeArtifact` and
+/// `WORK-LEDGER-001` dropping `priority` — cannot be entered yet precisely because neither
+/// has a record saying why, which is `P10-LEDGER-CORPUS`'s subject and not this suite's.
+///
+/// What keeps the vacuity from being a hole is
+/// [`crate::controls::Test_A_Divergence_With_No_Record_Should_Be_Refused`], which runs this
+/// same function over a synthetic entry. It calls `Divergences_With_No_Record`, not a copy
+/// of it, so the control exercises the guard rather than something written beside it.
+#[test]
+fn Test_Every_Divergence_Should_Name_A_Governing_Record()
+{
+    let root = Workspace::Workspace_Root();
+    let assessments = Committed(&root);
+    let unreasoned = Divergences_With_No_Record(&assessments);
+
+    assert!(
+        unreasoned.is_empty(),
+        "these assessments depart from a requirement and say nothing about why: \
+         {unreasoned:#?}.\n\
+         A divergence with no record is the state OD-TRACE-001 exists to end. Write the \
+         record, register it, and name it here."
+    );
+}
+
+/// Every `Partial` entry names a gap: where the requirement is not yet satisfied.
+///
+/// **This assertion is vacuous today and that is stated rather than hidden.** No committed
+/// entry is `Partial` yet — `FEWEST_ASSESSMENTS`'s floor does not force the case, only the
+/// first honest partial assessment does, per `OD-TRACE-003`. What keeps the vacuity from
+/// being a hole is
+/// [`crate::controls::Test_A_Partial_With_No_Gap_Should_Be_Refused`], which runs this same
+/// function over a synthetic entry. It calls `Partials_With_No_Gap`, not a copy of it, so
+/// the control exercises the guard rather than something written beside it.
+#[test]
+fn Test_Every_Partial_Should_Name_A_Gap()
+{
+    let root = Workspace::Workspace_Root();
+    let assessments = Committed(&root);
+    let unnamed = Partials_With_No_Gap(&assessments);
+
+    assert!(
+        unnamed.is_empty(),
+        "these assessments claim Partial and name no gap: {unnamed:#?}.\n\
+         A Partial with no gap is a softer Met, which is the state OD-TRACE-003 exists to \
+         end. Name at least one gap: a site where the unsatisfied part lives."
+    );
+}
+
+/// Every gap a `Partial` entry names still resolves in the workspace.
+///
+/// Also vacuous today, for the same reason as the assertion above. Kept honest by
+/// [`crate::controls::Test_An_Entry_Naming_A_Vanished_Gap_Should_Be_Reported`].
+#[test]
+fn Test_Every_Gap_Should_Resolve()
+{
+    let root = Workspace::Workspace_Root();
+    let assessments = Committed(&root);
+    let missing = Unresolved_Gaps(&root, &assessments);
+
+    assert!(
+        missing.is_empty(),
+        "these Partial entries name a gap that is not there: {missing:#?}.\n\
+         Either the unsatisfied part moved, in which case update the entry, or it was \
+         closed, in which case the entry is stale: promote it to Met with real sites, or \
+         re-author it against what the gap became."
+    );
+}
+
+/// The assessed set only grows.
+#[test]
+fn Test_The_Assessed_Set_Should_Not_Shrink()
+{
+    let root = Workspace::Workspace_Root();
+    let assessments = Committed(&root);
+
+    Assert_At_Least_The_Floor(&assessments);
+    Assert_No_Requirement_Assessed_Twice(&assessments);
+}
+
+/// The assessed set may not shrink below `FEWEST_ASSESSMENTS`. An entry cannot be quietly
+/// deleted to make a divergence disappear; a deliberate removal must lower the floor in the
+/// same commit and say why.
+fn Assert_At_Least_The_Floor(assessments: &[crate::assessment::Assessment])
+{
+    assert!(
+        assessments.len() >= FEWEST_ASSESSMENTS,
+        "{} requirements are assessed and FEWEST_ASSESSMENTS says at least \
+         {FEWEST_ASSESSMENTS}.\n\
+         An entry cannot be quietly deleted to make a divergence disappear. If a removal \
+         is deliberate, lower the floor in the same commit and say why in the message.",
+        assessments.len()
+    );
+}
+
+/// No two entries assess the same requirement, or the floor above counts a requirement
+/// twice.
+fn Assert_No_Requirement_Assessed_Twice(assessments: &[crate::assessment::Assessment])
+{
+    use std::collections::BTreeSet;
+
+    let distinct: BTreeSet<&str> = assessments
+        .iter()
+        .map(|assessment| return assessment.requirement.as_str())
+        .collect();
+    assert_eq!(
+        distinct.len(),
+        assessments.len(),
+        "two entries assess one requirement, so the floor counts a requirement twice"
+    );
+}
+
+/// The two source files `OD-CONTRACTS-002`'s territory named for `CHK-003`.
+const CHK_003_SITE_FILES: [&str; 2] = [
+    "crates/contracts/nomos-contracts/src/reporting/finding/applicability.rs",
+    "crates/contracts/nomos-contracts/src/reporting/finding/evidence_class.rs",
+];
+
+/// `CHK-003`'s verdict stops living in prose.
+///
+/// The entry this whole item exists to make readable. `OD-CONTRACTS-002` argued that
+/// `CHK-003` binds this build, decided the seventh reporting category, and then had to say
+/// **Met** in its own prose because the registry had no home yet — its territory was two
+/// source files, two surface snapshots and one record, and territory cannot be widened
+/// mid-claim. This is the entry that replaces that sentence.
+#[test]
+fn Test_CHK_003_Should_Be_Assessed_Met_By_The_Record_That_Decided_It()
+{
+    let root = Workspace::Workspace_Root();
+    let assessments = Committed(&root);
+    let entry = Chk_003_Entry(&assessments);
+
+    Assert_Decided_Met_By_OD_Contracts_002(entry);
+
+    for file in CHK_003_SITE_FILES
+    {
+        Assert_Entry_Names_A_Site_In(entry, file);
+    }
+}
+
+/// The committed assessment for `CHK-003`, or a panic -- OD-CONTRACTS-002 says Met in prose
+/// until this entry exists.
+fn Chk_003_Entry(assessments: &[crate::assessment::Assessment]) -> &crate::assessment::Assessment
+{
+    return assessments
+        .iter()
+        .find(|assessment| return assessment.requirement == "CHK-003")
+        .expect("CHK-003 must be assessed; OD-CONTRACTS-002 says Met in prose until it is");
+}
+
+/// `entry` must be Met, and decided by the record that argued it.
+fn Assert_Decided_Met_By_OD_Contracts_002(entry: &crate::assessment::Assessment)
+{
+    use crate::assessment::Verdict;
+
+    assert_eq!(entry.verdict, Verdict::Met);
+    assert_eq!(entry.record.as_deref(), Some("OD-CONTRACTS-002"));
+}
+
+/// `entry` must name a site in `file` -- the seventh reporting category is a variant in one
+/// and the evidence class it must not be confused with is in the other.
+fn Assert_Entry_Names_A_Site_In(entry: &crate::assessment::Assessment, file: &str)
+{
+    assert!(
+        entry.sites.iter().any(|site| return site.path == file),
+        "CHK-003's entry must name a site in {file}; the seventh reporting category is \
+         a variant in one and the evidence class it must not be confused with is in \
+         the other"
+    );
+}

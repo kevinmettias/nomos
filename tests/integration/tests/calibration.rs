@@ -1,0 +1,367 @@
+//! `P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON`'s own `done_when`: judges
+//! `tests/integration/fixtures/third-party/hex-0.4.3/` -- a committed, unmodified excerpt of
+//! `hex` 0.4.3's own library source (see the fixture directory's own `PROVENANCE.md`) -- with
+//! this workspace's full composed rule set, through the identical `nomos_check_orchestration::
+//! Run` seam `nomos-cli check`/`nomos gate run` compose through
+//! (`crates/orchestration/nomos-check-orchestration/tests/run_seam.rs` is the pattern this
+//! file follows, adapted to a fixture root rather than this repository's own).
+//!
+//! # Every one of the composed rules gets a stated verdict, not a total
+//!
+//! [`Verdicts`] names one entry per rule [`nomos_check_orchestration::Composed_Rules`]
+//! currently composes -- [`Test_Table_Names_Exactly_The_Composed_Rule_Set`] asserts the two
+//! sets are identical, so a rule added or removed there must gain or lose an entry here
+//! rather than silently changing what this file measures. [`Expected::Clean`] is a real,
+//! checked zero: the rule looked at the fixture's own code and found nothing to report.
+//! [`Expected::TruePositive`] names a count where every finding is individually justified
+//! below as a real, deserved report against this specific fixture's own code.
+//! [`Expected::NotAllDeserved`] -- currently claimed by no rule, see its own doc -- pins a
+//! real, currently-produced count where at least one of
+//! the findings is *not* claimed as deserved -- named and explained below, per `done_when`'s
+//! own "or is an open item naming the rule" allowance; the count still guards against a
+//! silent regression, but is not itself a claim that the rule is right.
+//! [`Expected::Uncalibrated`] makes no claim about the count at all: what the rule checks
+//! does not, or structurally cannot, describe a real property of a third-party repository's
+//! own code, so a number here would be exactly what `done_when` warns against -- "a number
+//! that matches whatever it currently does."
+//!
+//! # Two real capability-materialization defects, found and worked around while building this
+//!
+//! Both are about `root` -- the tree `Materialize_Dependencies`/`Materialize_Lint`/
+//! `Materialize_Policy` hand to a real subprocess -- and neither is about this crate's own
+//! rule logic.
+//!
+//! **`cargo clippy`/`cargo metadata` silently escape a nested fixture root.** Measured
+//! directly: before `../hex-0.4.3/Cargo.toml` existed, running this file's own `Run` call
+//! with `root` pointed at the fixture directory (which sits inside *this* repository's own
+//! Cargo workspace) produced 174 `lint-diagnostics` findings about dozens of unrelated crates
+//! under `crates/` -- `cargo clippy --workspace`, invoked with the fixture directory as its
+//! working directory and no local manifest to stop there, walked upward and clippy'd *this
+//! whole repository* instead of the two-file fixture. Giving the fixture its own `Cargo.toml`
+//! declaring an empty `[workspace]` (stopping cargo's own upward manifest search at that
+//! boundary) fixed this for both `dependency-direction`'s `cargo metadata` call and
+//! `lint-diagnostics`'s `cargo clippy` call: `lint-diagnostics` now reports exactly one real,
+//! fixture-scoped clippy diagnostic (see below), and `dependency-*`'s facts are real, scoped
+//! `cargo metadata` output about the fixture's own one-member workspace.
+//!
+//! **`cargo deny`'s own config discovery is a *second*, independent escape the same fix does
+//! not close.** Measured directly: with the `[workspace]` fix already in place,
+//! `dependency-policy` still reported eight `license-not-encountered` advisories --
+//! one per license this *repository's own* root `deny.toml` allows, none of which a
+//! zero-dependency fixture could ever "encounter". `cargo deny`'s own manifest/config
+//! discovery is independent of cargo's workspace-root resolution and is not scoped by
+//! `nomos_lang_rust_deny::Materialize_Workspace` at all (`Cargo_Deny_Command` sets only
+//! `working_directory`; no `--config` is ever passed) -- it walked upward past the fixture's
+//! own workspace boundary and picked up this repository's real policy regardless.
+//! `../hex-0.4.3/deny.toml`'s own module doc names this exactly, and giving the fixture a
+//! minimal, permissive `deny.toml` of its own (mirroring what `../hex-0.4.3/standards.json`
+//! already does for naming) fixed it the same way: `dependency-policy` now reports a real,
+//! checked zero. **Nothing in this crate's own rule logic changed either time** -- both are
+//! `nomos-lang-rust-clippy`/`nomos-lang-rust-deny`/`nomos-lang-rust-cargo`'s own materialization
+//! failing to confine a real subprocess to `root`, worth a follow-up item in their own right
+//! (flagged in this session's own final report; not filed here, since authoring a new ledger
+//! item is outside this file's territory).
+//!
+//! # The architecture family, proven against a repository that is not this one
+//!
+//! Three of the rules below were `Uncalibrated` for one shared reason: `dependency-direction`,
+//! `dependency-completeness` and `dependency-write-authority` judged against tables compiled
+//! into `nomos-rules` whose entries were this workspace's own crate names. `hex-fixture` could
+//! not appear in them, so two of the three could never fire at all and the third fired against
+//! every non-nomos crate for not being nomos. `OD-RULES-029` measured exactly that.
+//!
+//! `OD-RULES-003`'s third prerequisite moved those tables into a declaration the repository
+//! under check authors. `../hex-0.4.3/nomos-architecture.json` is this fixture's, and it names
+//! its one component `Library` -- a word this workspace's own architecture does not use, which
+//! is the point. All three rules now produce real, checked zeros, and `dependency-completeness`
+//! produces its zero *because* of that file: delete it and the rule reports
+//! `Applicability::NotApplicable` rather than the per-crate finding it used to, since a
+//! repository that declared nothing and a member left out of a declaration are finally
+//! different states.
+//!
+//! # The naming-policy hypothesis, proven with real before/after numbers
+//!
+//! `naming.rs`'s own module doc says `OD-RULES-011` generalized `function-naming-convention`'s
+//! `Pascal_Snake_Case`/`upper-snake` default onto a resolved read of a repository's own
+//! `nomos.cap.naming.policy`. Measured directly, twice, over the identical fixture: with
+//! `../hex-0.4.3/standards.json` deleted (temporarily, to measure -- it is restored in the
+//! committed fixture), `function-naming-convention` reported **13** findings, one for every
+//! real function and method the fixture declares (`encode_hex`, `decode_to_slice`, `val`,
+//! `byte2hex`, ...), each carrying the exact hardcoded citation
+//! `P45-RULES-CALIBRATED-AGAINST-CODE-THEY-WERE-NOT-TUNED-ON`'s own `why` names: "README.md's
+//! Conventions section requires function names to be `Pascal_Snake_Case` ... nothing else was
+//! checking it" -- *this* repository's README, describing *this* repository's convention,
+//! cited against a fixture that is not this repository. With `standards.json` declaring
+//! `{"naming": {"function": "lower-snake"}}` (this repository's own root `standards.json`, so
+//! `Check_Naming_Convention`'s `Resolve_Case(facts, None, "function", ...)` call reads the
+//! repository-wide row rather than a language-scoped one), the same 13 real names resolve
+//! clean: **0** findings. The hypothesis holds, exactly as predicted, with no residual
+//! findings and nothing further to fix in this rule for this fixture. The README-citation
+//! wording this rule's `Finding::summary` still hardcodes is real (seen verbatim in the
+//! `standards.json`-deleted run above) but is provably inert once a repository declares its
+//! own convention -- it did not fire once in the fixture's own committed, correctly-configured
+//! state, so this file makes no claim needing it fixed; flagged in this session's own report
+//! as a latent wording defect for whichever future finding does reach it.
+
+use nomos_analysis::MemoryFactStore;
+use nomos_check_orchestration::{CheckOutcome, Run, RunContext};
+use nomos_contracts::Finding;
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
+use nomos_rules::SourceFile;
+use nomos_workspace::BuildVariant;
+use std::collections::{BTreeMap, BTreeSet};
+use std::path::PathBuf;
+
+/// The fixture's own root -- also `Materialize_Naming_Policy`/`Materialize_Dependencies`/
+/// `Materialize_Lint`/`Materialize_Policy`'s own `root`, so its own `standards.json`,
+/// `Cargo.toml` and `deny.toml` are what every capability this run materializes resolves
+/// against, never this repository's.
+fn Fixture_Root() -> PathBuf
+{
+    let manifest = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    return manifest.join("fixtures").join("third-party").join("hex-0.4.3");
+}
+
+/// The fixture's own files, read directly rather than walked: a fixture of exactly three
+/// named files needs no walk at all, and `nomos_platform::FileSystem`'s `Read_Directory` is
+/// one level rather than the recursive shape `nomos-cli::check::sources` documents.
+/// `samples/example_credential.rs` is this test's own addition, not hex 0.4.3's: it proves
+/// the test-material exemption against a location no fixed clause names.
+fn Fixture_Sources() -> Vec<SourceFile>
+{
+    let root = Fixture_Root();
+    let mut sources = Vec::new();
+    for name in ["lib.rs", "error.rs", "samples/example_credential.rs"]
+    {
+        let text = std::fs::read_to_string(root.join(name)).expect("the fixture's own files are committed and readable");
+        sources.push(SourceFile::New(name, nomos_model::Subject_Of_Path(name), text));
+    }
+    return sources;
+}
+
+fn Test_Variant() -> BuildVariant
+{
+    return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
+}
+
+/// Runs the real, composed rule set over the fixture exactly once and files every finding
+/// under the rule id that produced it -- one real `Run`, since three of its own
+/// materializations launch a real subprocess (`cargo metadata`/`clippy`/`deny`) and doing
+/// that once per rule assertion, over dozens of rules, would be both slow and a second, differently-
+/// shaped run per rule rather than the one real run a caller like `nomos-cli check` performs.
+fn Findings_By_Rule() -> BTreeMap<String, Vec<Finding>>
+{
+    let sources = Fixture_Sources();
+    let root = Fixture_Root();
+
+    let providers = nomos_composer_providers::Standard_Providers();
+    let outcome = Run(
+        &sources,
+        RunContext {
+            variant: Test_Variant(),
+            root: &root,
+            launcher: &StdProgramLauncher,
+            filesystem: &StdFileSystem,
+            environment: &StdEnvironment,
+            workspace: &mut None,
+            store: &mut MemoryFactStore::New(),
+            providers: &providers,
+        },
+        &[],
+    );
+
+    let CheckOutcome::Judged { findings, examined, claim, .. } = outcome
+    else
+    {
+        panic!("the fixture is a real, readable tree the syntax provider recognizes; a refusal here is a test-setup bug, not a caller-facing failure: {outcome:?}");
+    };
+
+    // Both fixture files must have a current syntax fact and nothing must be left
+    // incomplete -- the same vacuity guard `nomos-cli::check` applies before trusting any
+    // finding list at all.
+    assert_eq!(examined, nomos_check_orchestration::Examined { files: 3, facts: 3 }, "all three fixture files must be read and parsed");
+    assert_eq!(claim, nomos_check_orchestration::Claim::Complete, "no subject may be left in a debt or agent-required state");
+
+    let mut by_rule: BTreeMap<String, Vec<Finding>> = BTreeMap::new();
+    for finding in findings
+    {
+        by_rule.entry(finding.rule.As_Str().to_owned()).or_default().push(finding);
+    }
+    return by_rule;
+}
+
+/// One rule's stated expected outcome against the fixture -- see this file's own module doc
+/// for what each variant claims and does not claim.
+enum Expected
+{
+    Clean,
+    TruePositive(usize),
+    /// Uninhabited since `P96` closed the one rule that used it, and kept rather than
+    /// deleted: this is the state that lets a calibration author pin a real count without
+    /// claiming the rule producing it is right, and without it the next author of an
+    /// undeserved finding must choose between calling it a true positive, which is a lie,
+    /// and `Uncalibrated`, which stops measuring the count at all. `#[expect]` rather than
+    /// `#[allow]` on purpose -- when a rule lands here again, the attribute itself goes red
+    /// rather than sitting on a variant that is no longer dead.
+    #[expect(dead_code)]
+    NotAllDeserved(usize),
+    Uncalibrated,
+}
+
+/// One row of the per-rule verdict table: the rule this entry is about, its expected outcome,
+/// and why -- printed on assertion failure so a regression names its own cause rather than
+/// just a changed number.
+struct RuleVerdict
+{
+    id: &'static str,
+    expected: Expected,
+    reason: &'static str,
+}
+
+/// One entry per rule [`nomos_check_orchestration::Composed_Rules`] currently composes, in
+/// that function's own table order. [`Test_Table_Names_Exactly_The_Composed_Rule_Set`]
+/// verifies the id sets are identical -- see this file's own module doc for the three
+/// findings this table's own construction surfaced.
+fn Verdicts() -> Vec<RuleVerdict>
+{
+    return vec![
+        RuleVerdict { id: "completeness-mirror", expected: Expected::Clean, reason: "opt-in: judges a declared completeness-universe doc-comment claim (`OD-COMPLETENESS-001`'s own nomos-specific marker); the fixture's real rustdoc comments never use it, so there is nothing to reconcile -- a generalizable, unused mechanism, not a hardcoded nomos-only table." },
+        RuleVerdict { id: "function-naming-convention", expected: Expected::Clean, reason: "the calibration's own centerpiece. Every real function/method (encode_hex, decode_to_slice, val, byte2hex, new, next, size_hint, len, from_hex, ...) is genuine lower_snake, and resolves clean ONLY because ../hex-0.4.3/standards.json declares {\"naming\":{\"function\":\"lower-snake\"}}. Measured directly with that file removed: 13/13 real names flagged, citing this repository's own README verbatim -- see this file's own module doc for the exact before/after counts and text." },
+        RuleVerdict { id: "dependency-direction", expected: Expected::Clean, reason: "a real, checked zero over a real, empty edge set. The rule used to be Uncalibrated here because it judged against a table hardcoded to this workspace's own crate names, so hex-fixture could never appear in it and a 0 meant \"never checked\". It now judges against ../hex-0.4.3/nomos-architecture.json, which places hex-fixture in a component of its own naming (`Library`, a word this workspace does not use), so the declaration is read and the package resolves. What the fixture cannot supply is an edge: its Cargo.toml declares no first-party dependency, so there is nothing for direction to admit or refuse. The zero is honest and it is about an empty set -- the enforcement proof is nomos-rules' own dependency.rs tests, which drive real declarations through a real registry, store and reader." },
+        RuleVerdict { id: "dependency-completeness", expected: Expected::Clean, reason: "the calibration's second centerpiece, and the one that proves the architecture family reaches a repository that is not this one. It used to report \"hex-fixture has no declared zone\" for literally every non-nomos crate, which said nothing about the fixture's own practices and only that it is not nomos -- the exact defect OD-RULES-029 measured. hex-fixture now resolves clean, and resolves clean ONLY because ../hex-0.4.3/nomos-architecture.json declares {\"components\":[\"Library\"],\"members\":{\"hex-fixture\":\"Library\"}}. Removing that file does not restore the old finding either: with no declaration at all the rule reports Applicability::NotApplicable, which is what OD-RULES-003 decided a repository that declared nothing is owed. Three states, all distinguishable, where there used to be one." },
+        RuleVerdict { id: "dependency-write-authority", expected: Expected::Clean, reason: "a real, checked zero. The rule used to be Uncalibrated because the authorities were a WRITE_DOORS constant naming nomos's own private crates, which a published third-party crate cannot depend on, so it could never fire against non-nomos code in either direction. Authorities now travel with the declaration, and ../hex-0.4.3/nomos-architecture.json declares none -- so a repository with no authorities is judged to have violated none, which is a different and truer statement than the structural silence it replaces." },
+        RuleVerdict { id: "lint-diagnostics", expected: Expected::TruePositive(1), reason: "one real clippy::uninlined_format_args at error.rs:27 (write!(f, \"...{:?}...{}\", c, index) instead of write!(f, \"...{c:?}...{index}\")) -- clippy's own accurate, unmodified opinion about hex's real Display impl, reached only once ../hex-0.4.3/Cargo.toml's own [workspace] table stopped cargo clippy's upward escape into this repository (see this file's own module doc)." },
+        RuleVerdict { id: "dependency-policy", expected: Expected::Clean, reason: "cargo deny check bans/licenses/sources against the fixture's own scoped deny.toml and its correctly declared `license = \"MIT OR Apache-2.0\"`: a real, checked zero, reached only once the fixture carried its own deny.toml (see this file's own module doc for the escape this closes and the 8-then-3-then-1-then-0 findings measured while closing it)." },
+        RuleVerdict { id: "unread-reaches-finding", expected: Expected::Clean, reason: "heuristic over control-flow shapes specific to nomos's own fact-read-failure-must-reach-a-Finding idiom (nomos_cap_controlflow's ArmShape analysis); hex's code contains no fact-reading/Applicability-shaped control flow of that kind for the heuristic to examine." },
+        RuleVerdict { id: "review-finding", expected: Expected::Uncalibrated, reason: "Materialize_Review() is unconditionally empty for every caller today -- no pull-request/comment discovery mechanism is wired to anything yet (ARC-CONNECTOR-001). A zero here reflects that nothing has ever been connected, not a judgment about this fixture." },
+        RuleVerdict { id: "cross-language-correspondence", expected: Expected::Clean, reason: "opt-in: judges a `/// Corresponds to `Name`.` doc-comment marker (OD-CAPABILITY-010) declaring a Go counterpart struct. hex's real doc comments never declare one -- a generalizable, unused mechanism." },
+        RuleVerdict { id: "no-trailing-whitespace", expected: Expected::Clean, reason: "the committed fixture text (copied from the registry cache, trimmed only of the excluded sections named in PROVENANCE.md) carries no trailing whitespace." },
+        RuleVerdict { id: "todo-format-is-todo-name-description-ticket", expected: Expected::Clean, reason: "no TODO/FIXME marker anywhere in the fixture's real text." },
+        RuleVerdict { id: "deprecation", expected: Expected::Clean, reason: "no #[deprecated] attribute in the fixture." },
+        RuleVerdict { id: "a-rust-path-stays-within-its-own-subtree", expected: Expected::Clean, reason: "no #[path = \"...\"] attribute in the fixture." },
+        RuleVerdict { id: "shared-interior-mutability-says-why", expected: Expected::Clean, reason: "no Rc<RefCell<...>>-shaped construct anywhere in the fixture." },
+        RuleVerdict { id: "every-allow-carries-a-justification", expected: Expected::TruePositive(1), reason: "lib.rs:38's real #![allow(clippy::unreadable_literal)] (hex's own crate-level attribute, copied verbatim) has no adjacent comment of any kind -- Has_Local_Allow_Justification's own \"any non-empty comment satisfies it\" bar is not met by an absent one. A real, deserved finding against hex's own unmodified source." },
+        RuleVerdict { id: "unsafe-justification", expected: Expected::Clean, reason: "no `unsafe` block anywhere in the fixture." },
+        RuleVerdict { id: "scripts-use-a-portable-shebang", expected: Expected::Clean, reason: "not applicable: this rule judges shell/PowerShell/batch script sources, and the fixture is walked as exactly two named .rs files -- no script source is ever handed to this rule." },
+        RuleVerdict { id: "a-script-declares-its-purpose", expected: Expected::Clean, reason: "not applicable, same reason as scripts-use-a-portable-shebang: no script source in the fixture's own source list." },
+        RuleVerdict { id: "executed-scripts-set-nounset", expected: Expected::Clean, reason: "not applicable, same reason as scripts-use-a-portable-shebang." },
+        RuleVerdict { id: "sleep-based-synchronization", expected: Expected::Clean, reason: "no `sleep`-based synchronization pattern in the fixture." },
+        RuleVerdict { id: "zero-flake-policy", expected: Expected::Clean, reason: "the fixture carries no #[test] functions at all (PROVENANCE.md: hex's own dev-dependency test module was excluded), so there is nothing shaped like a retried test to examine -- a real but shallow zero, not evidence of disciplined test authorship one way or the other." },
+        RuleVerdict { id: "no-mod-rs-files", expected: Expected::Clean, reason: "the fixture's files are lib.rs, error.rs and samples/example_credential.rs, none named mod.rs." },
+        RuleVerdict { id: "a-credential-is-not-hardcoded-in-source", expected: Expected::Clean, reason: "the calibration's test-material centerpiece. The fixture's one credential-shaped literal sits in samples/example_credential.rs, under a location ../nomos-test-material.json declares as a fixture location, so the rule exempts it and reports zero. Without that declaration the same file would be judged and the literal reported as a real credential -- the false positive the nomos.cap.test.material.policy family exists to close, and the reason this file is this test's own addition rather than hex's. lib.rs and error.rs carry no credential-shaped literal at all." },
+        RuleVerdict { id: "a-secret-does-not-travel-in-a-url", expected: Expected::Clean, reason: "no URL literal anywhere in the fixture." },
+        RuleVerdict { id: "certificate-verification-is-not-disabled", expected: Expected::Clean, reason: "no certificate-verification code of any kind in the fixture." },
+        RuleVerdict { id: "a-discarded-error-is-explained", expected: Expected::Clean, reason: "Go-only: judged over the Go files nomos.cap.go.discarded_values answered for, and a Rust-only fixture holds none, so the provider is asked about nothing and nothing is judged." },
+        RuleVerdict { id: "a-skipped-test-states-why", expected: Expected::Clean, reason: "Go-only (Check_A_Skipped_Test_States_Why gates on source.Is_Written_In(GO_LANGUAGE) despite living in nomos-rules::checks::go_text): not applicable to a Rust-only fixture." },
+        RuleVerdict { id: "an-excluded-file-says-why", expected: Expected::Clean, reason: "Go-only, same gate as a-skipped-test-states-why: not applicable." },
+        RuleVerdict { id: "suppression-directives-carry-a-reason", expected: Expected::Clean, reason: "Go-only (judges `//nolint` directives), same gate as a-skipped-test-states-why: not applicable." },
+        RuleVerdict { id: "workspace-markers-carry-a-reason", expected: Expected::Clean, reason: "Go-only, same gate as a-skipped-test-states-why: not applicable." },
+        RuleVerdict { id: "a-package-is-named-after-its-directory", expected: Expected::Clean, reason: "Go-only despite its language-agnostic-sounding name (Check_A_Package_Is_Named_After_Its_Directory returns None immediately for a non-Go source): never reads Cargo.toml or the fixture's own directory name at all, so the real `hex-fixture` vs `hex-0.4.3` naming mismatch is never even examined by this rule." },
+        RuleVerdict { id: "atomic-ordering-choices-are-justified", expected: Expected::Clean, reason: "no atomic type or Ordering:: usage anywhere in the fixture." },
+        RuleVerdict { id: "seqcst-justified-explicitly", expected: Expected::Clean, reason: "no Ordering::SeqCst usage in the fixture." },
+        RuleVerdict { id: "relaxed-not-used-when-ordering-matters", expected: Expected::Clean, reason: "no Ordering::Relaxed usage in the fixture." },
+        RuleVerdict { id: "data-names-stay-lower-snake", expected: Expected::Clean, reason: "judges module/field names against Case::LowerSnake, which is this rule's own hardcoded default (data_names.rs's Resolve_Case calls already pass Case::LowerSnake, not nomos's own upper-snake) -- already the real, idiomatic Rust convention hex's one real module (error) and its struct fields (inner, table, next) already follow, with no fixture-side override needed." },
+        RuleVerdict { id: "file-name-matches-declared-type", expected: Expected::TruePositive(1), reason: "error.rs declares the public type `FromHexError` but is named for what it holds generically rather than for that type -- file_names.rs's own Comparable_Stem exempts lib/main/mod but not error, and this file exports no free public function alongside the type (Is_Declaring_A_Public_Operation is false), so the Is_Declaring_A_Public_Operation exemption OD-RULES-015 carved out (a module named for what it does) does not apply either. nomos's own tree renames this exact shape to `<type>_error.rs` (clippy_error.rs, metadata_error.rs, deny_error.rs); hex's `error.rs` is a real, ordinary difference in file-naming convention between the two projects, correctly caught." },
+        RuleVerdict { id: "constants-split-by-export", expected: Expected::Clean, reason: "Go-only: not applicable to a Rust-only fixture." },
+        RuleVerdict { id: "variables-use-lower-snake-case", expected: Expected::Clean, reason: "Go-only: not applicable." },
+        RuleVerdict { id: "exported-functions-use-upper-snake-case", expected: Expected::Clean, reason: "Go-only: not applicable." },
+        RuleVerdict { id: "unexported-functions-lowercase-only-the-first-letter", expected: Expected::Clean, reason: "Go-only: not applicable." },
+        RuleVerdict { id: "types-use-upper-camel-case-lower-camel-case", expected: Expected::Clean, reason: "Go-only: not applicable." },
+        RuleVerdict { id: "parameter-count", expected: Expected::Clean, reason: "every real function in the fixture takes at most 2 value parameters (e.g. decode_to_slice(data, out), val(c, idx)), well under the default 4-parameter ceiling (5 with an allowed receiver)." },
+        RuleVerdict { id: "go-helpers-package-five-inputs", expected: Expected::Clean, reason: "Go-only: not applicable." },
+        RuleVerdict { id: "declared-tooling-language-for-scripts", expected: Expected::Clean, reason: "no script source in the fixture's own source list (same reason as scripts-use-a-portable-shebang)." },
+        RuleVerdict { id: "1500-lines", expected: Expected::Clean, reason: "lib.rs is roughly 330 lines, far under the default 1500-line justification-trigger ceiling." },
+        RuleVerdict { id: "nonnegative-storage-is-unsigned", expected: Expected::Clean, reason: "opt-in: only examines a field preceded by a #[validate(range(min = _, max = _))] attribute (nomos's own validation-attribute convention). The fixture uses no such attribute anywhere -- a generalizable, unused mechanism, composed 2026-09-06 after being measured at zero findings against this repository's own tree." },
+        RuleVerdict { id: "a-known-range-picks-its-type", expected: Expected::Clean, reason: "the same #[validate(range(...))] opt-in as nonnegative-storage-is-unsigned, over the fixture's own text: nothing to examine." },
+        RuleVerdict { id: "named-fields-over-positional-variant-payloads", expected: Expected::Clean, reason: "real, non-vacuous: error.rs's FromHexError::InvalidHexCharacter { c: char, index: usize } is a genuine multi-field enum variant, and it already uses named-field form -- exactly what this rule wants and nothing this rule's own tuple-variant text scan (Tuple_Variant_Match) matches. The fixture's other two variants (OddLength, InvalidStringLength) carry no payload at all." },
+        RuleVerdict { id: "one-thousand-line-hard-trigger", expected: Expected::Clean, reason: "Go-only: not applicable." },
+        RuleVerdict { id: "five-hundred-line-review-trigger", expected: Expected::Clean, reason: "Go-only: not applicable." },
+        RuleVerdict { id: "lowercase-first-letter", expected: Expected::Clean, reason: "only judges a #[error(\"...\")] thiserror-style attribute's own message text (error_text.rs's own module doc: judging every write!/writeln! would convict ordinary logging). hex's FromHexError implements Display by hand with write!/writeln! and carries no #[error(...)] attribute at all, so this rule has nothing in its own deliberately narrow scope to examine here -- a real design boundary, not a gap, and not exercised by this fixture's own shape." },
+        RuleVerdict { id: "no-trailing-punctuation", expected: Expected::Clean, reason: "same #[error(\"...\")]-only scope as lowercase-first-letter: nothing in the fixture for it to examine." },
+        RuleVerdict { id: "eager-vs-lazy-context", expected: Expected::Clean, reason: "looks for a literal `.With_Context(` call (nomos's own Pascal_Snake-cased helper name, not the real ecosystem's lowercase anyhow/eyre `.with_context(`/`.context(`); the fixture has no error-context-chaining code in any casing, so this is a real zero either way. Worth flagging separately: this hardcoded spelling would also miss the real anti-pattern in ordinary third-party code using the standard lowercase method name, which this fixture happens not to exercise." },
+        RuleVerdict { id: "goals-and-parts-line-up", expected: Expected::Clean, reason: "opt-in: judges a repository's own declared nomos.cap.goals.policy (standards.json's \"goals\" block); the fixture declares none, and Check_Goals_And_Parts_Line_Up's own doc states a repository that has not written one down has not opted in -- a generalizable, unused mechanism, not a hardcoded nomos-only table." },
+        RuleVerdict { id: "requirement-trace-staleness", expected: Expected::Clean, reason: "opt-in: judges a repository's own tests/contract/requirements/*.assessment corpus; the fixture has none, which Discover_Workspace's own doc treats identically to \"declares none\" or \"every entry resolves\" -- a generalizable, unused mechanism." },
+        RuleVerdict { id: "abbreviations", expected: Expected::TruePositive(1), reason: "1 finding, deserved. `val` (the real, private function fn val(c, idx) -> Result<u8, FromHexError>) is a genuine, deserved true positive: DEFAULT_BANNED_WORDS lists \"val\" verbatim (ported from code-standards' own defaults.go) and hex's author really did choose that terse name. `alloc` -- the name of `extern crate alloc;`, fixed by the real crate being linked, not chosen at this site -- was a real false positive when this verdict was first written (`P68-ABBREVIATIONS-DOES-NOT-EXEMPT-EXTERN-CRATE`); Is_Exempt now recognizes ItemKind::ExternCrate the same way it already recognized ItemKind::Use, and this fixture is what proved the fix." },
+        RuleVerdict { id: "single-letter-names", expected: Expected::Clean, reason: "a real, checked zero, and it was 1-finding-0-deserved until P96. `T` was never a struct field or an ordinarily-declared item name a human carelessly abbreviated -- it is `impl<T: AsRef<[u8]>> ToHex for T`'s own Self type, and nomos_lang_rust::syntax::walk's visit_item_impl records an Implementation item's `name` as `Type_Head(&node.self_ty)`, which for this common, idiomatic blanket-impl-over-a-generic-parameter shape is literally the generic parameter's own already-declared name. The gap took two increments and not one: P68 was DECLINED because the payload carried no fact that could tell this apart from `impl Trait for X` over a real, single-letter-named struct somebody chose, and a name-only heuristic would have hidden that second, deserved case. OD-CAPABILITY-014 decided the extension, P96-AN-IMPL-BLOCKS-GENERIC-PARAMETERS-REACH-THE-SYNTAX-PAYLOAD built it (Impl_Shape now carries the block's own type parameters, read back by Impl_Generics), and the rule now exempts an Implementation item whose own name is one of them -- still reporting one whose name is not. This fixture is what surfaced the gap, by using an entirely ordinary Rust idiom nomos's own tree does not happen to write, and is what now measures it closed." },
+        RuleVerdict { id: "a-disabled-test-states-why", expected: Expected::Clean, reason: "the fixture carries no #[test] functions at all (see zero-flake-policy's identical note), so there is no #[ignore] attribute for this rule to examine either." },
+        RuleVerdict { id: "guarantee-declares-its-exerciser", expected: Expected::Clean, reason: "a real, checked zero, and an opt-in one. The rule judges a function named Declared_Guarantee -- a nomos provider convention, exported by agreement rather than by any trait -- and asks whether its doc names an exerciser behind OD-CAPABILITY-016's marker. hex 0.4.3 declares no provider guarantee, so the rule finds no subject and reports nothing. That is the same judgement completeness-mirror already carries in this table for the same reason: a generalizable mechanism whose marker a third-party crate has no occasion to use, not a hardcoded nomos-only table. It is worth saying what this Clean is NOT evidence of: nothing here exercises the rule's resolution half, which is what fires over a repository that does declare guarantees -- 16 findings over this workspace as of 5dacebe9. The rule's own unit tests cover that half; this entry covers only that it stays silent where it has nothing to judge." },
+        RuleVerdict { id: "inline-always-requires-justification", expected: Expected::Clean, reason: "no #[inline(always)] attribute in the fixture (only plain #[inline], which this rule does not judge)." },
+        RuleVerdict { id: "no-wildcard-imports", expected: Expected::Clean, reason: "every `use` in the fixture names what it imports (core::iter, alloc::{string::String, vec::Vec}, core::fmt); no `use ...::*;` anywhere." },
+        RuleVerdict { id: "no-single-line-function-bodies", expected: Expected::Clean, reason: "no function in the fixture is written as a single-line body in the shape this rule judges." },
+        RuleVerdict { id: "no-orphan-modules", expected: Expected::Clean, reason: "lib.rs's own `mod error;` is backed by a real, read error.rs -- no orphaned module declaration." },
+        RuleVerdict { id: "parameters-borrow-unless-ownership-is-taken", expected: Expected::Clean, reason: "the fixture's few owned-by-value parameters are all generic (`T: AsRef<[u8]>`), the shape this rule's own text scan does not flag; no concrete owned type (String/Vec/...) is taken by value where a borrow would do." },
+        RuleVerdict { id: "lifetimes-follow-the-descriptive-naming-rule", expected: Expected::Clean, reason: "every lifetime-carrying declaration in the fixture (struct BytesToHexChars<'a>, impl<'a> ... for BytesToHexChars<'a>) names exactly one lifetime, and this rule's own LIFETIMES_NEEDING_NAMES gate (2 or more distinct lifetimes on one declaration) is the documented, deliberate reason a lone 'a is exempt: \"where there is nothing to tell apart, 'a names the only borrow there is\". Correctly, not vacuously, exercised: the fixture is exactly the common single-lifetime-named-'a shape this rule is designed to leave alone." },
+        RuleVerdict { id: "static-bounds-are-justified", expected: Expected::Clean, reason: "the fixture's only `'static` usage (`table: &'static [u8; 16]`) is a reference's own lifetime, not a trait bound (`T: 'static`); Is_Bounding_By_Static's own scan only recognizes the latter, and its own doc states a `&'static` reference is deliberately not this rule's subject. Correctly, not vacuously, exercised." },
+        RuleVerdict { id: "prefer-macro-rules-over-procedural-macros", expected: Expected::Clean, reason: "the fixture's one macro (from_hex_array_impl!) is declarative macro_rules! -- the approved form this rule prefers -- and there is no proc-macro definition anywhere in the fixture. A real, meaningfully-exercised clean." },
+        RuleVerdict { id: "nesting-depth", expected: Expected::Clean, reason: "every function body in the fixture stays within a shallow, ordinary nesting depth (at most a for-loop over one if/match)." },
+        RuleVerdict { id: "cyclomatic-complexity", expected: Expected::TruePositive(1), reason: "1 finding, deserved, and about the fixture's declaration rather than its code: hex carries no nomos-limits.json, and cyclomatic-complexity-max is reported as undeclared rather than judged against a default nobody chose (OD-RULES-035 section 3) -- a NotApplicable advisory, not coverage debt, which is what a real third-party repository running this rule sees. What the finding carries is the calibration: 17 functions measured in all 3 of the fixture's Rust sources, the most complex decode_to_slice at lib.rs:304 with 6 -- its two length checks, its for loop and its two `?` operators, counted by hand against the source. The functions from_hex_array_impl! generates are not among the 17, which is the provider's declared blindness to macro-generated code. Any declared limit of 6 or more would judge this fixture clean." },
+        RuleVerdict { id: "closure-bounds-are-minimal", expected: Expected::Clean, reason: "judges an inline Fn*-bound parameter on a `pub fn` line, or a closure bound explicitly widened with Send/Sync/'static; the fixture's closures (plain `.map(|byte| {...})` calls) carry no explicit trait bound of any kind for this rule to examine." },
+        RuleVerdict { id: "boxed-closures-are-justified-and-off-hot-paths", expected: Expected::Clean, reason: "no Box<dyn Fn*>/Arc<dyn Fn*>/Rc<dyn Fn*> anywhere in the fixture." },
+        RuleVerdict { id: "copy-clones", expected: Expected::Clean, reason: "a real, checked zero over a real compiler-resolved analysis: ra_ap_hir loads the fixture as its own Cargo project (../hex-0.4.3/Cargo.toml declares an empty [workspace], which is what stops the load escaping upward into this repository the same way cargo clippy's did) and resolves every method call in lib.rs, error.rs and samples/. hex 0.4.3's own library source contains no `.clone()` call at all, so there is no receiver for the Copy lookup to reach a verdict about -- clean because the question was asked of real, resolved types and answered no, not because the provider was never reached. This is also the calibration's first entry whose fact comes from a compiler frontend rather than a parse, a manifest or another tool's report." },
+        RuleVerdict { id: "nested-locks", expected: Expected::Clean, reason: "a real, checked zero, from the same loaded ra_ap_hir analysis copy-clones reads one row above, asked its other question: the fixture declares no std::sync::Mutex or RwLock anywhere, so no outer lock's type argument exists to resolve past an alias and find a second lock behind. Clean over an empty subject set rather than over a set the analysis declined to examine -- the enforcement proof that this rule sees a nesting only a resolved type reveals is nomos-lang-rust-compiler's own nested_lock_sample fixture, whose one positive case is invisible without resolving a type alias." },
+        RuleVerdict { id: "standards-corpus", expected: Expected::Clean, reason: "a zero over an absent declaration, and stated as that rather than as a judgment of hex's code: the fixture carries no nomos-standards-corpus.json, and a repository that declares no corpus is judged exactly as it was before this rule existed (standards_corpus.rs's own module doc). The rule relays a declared corpus's documents as findings, so there is no population here for it to relay. The zero still guards something real -- the rule manufacturing a finding for a repository that declared nothing -- and the proof that it reports a corpus that is declared is nomos-rules' own standards_corpus tests and P149-A-DECLARED-STANDARDS-CORPUS-IS-READABLE-WHERE-IT-IS-DECLARED's measurement of two real corpora." },
+        RuleVerdict { id: "undeclared-policy-key", expected: Expected::Clean, reason: "a zero over an absent declaration, the same shape as standards-corpus one row above: the fixture carries no nomos-limits.json, so there is no key for the rule to find undeclared, and a repository that writes no limits file declares nothing that can be misspelled. The zero guards the rule reporting a key nobody wrote; the proof that it reports a key no limits axis names, and never a naming key read from standards.json, is nomos-rules' own undeclared_policy_key tests." },
+        RuleVerdict { id: "uncompiled-conditional-branch", expected: Expected::Clean, reason: "a zero over an absent population, and stated as that: hex is a Rust crate with no C# source, so the provider launches nothing and reports nothing -- not even the undeclared-builds advisory, which is for a repository that has C# and has not said which builds it ships. The zero guards the rule, or its composition, reporting on a repository with nothing for a build to decide, which would be every Rust-only repository this tool runs against. The proof that it reports a branch no declared build compiles, against the real .NET SDK, is nomos-check-orchestration's csharp_conditional tests." },
+    ];
+}
+
+#[test]
+fn Test_Table_Names_Exactly_The_Composed_Rule_Set()
+{
+    let table: Vec<&str> = Verdicts().iter().map(|verdict| return verdict.id).collect();
+    let table_set: BTreeSet<&str> = table.iter().copied().collect();
+    assert_eq!(table.len(), table_set.len(), "the verdict table names the same rule id twice");
+
+    let composed = nomos_check_orchestration::Composed_Rules();
+    let composed_set: BTreeSet<String> = composed.iter().map(|id| return id.As_Str().to_owned()).collect();
+    let table_owned: BTreeSet<String> = table_set.iter().map(|id| return (*id).to_owned()).collect();
+
+    assert_eq!(
+        table_owned, composed_set,
+        "this file's own verdict table must name exactly the rules nomos_check_orchestration::Composed_Rules() \
+         currently composes -- a rule added or removed there must gain or lose an entry here"
+    );
+}
+
+/// The full per-rule calibration: every entry in [`Verdicts`] checked against one real run
+/// of the composed rule set over the fixture. See this file's own module doc for the
+/// fixture's provenance, the two capability-materialization defects found while building it,
+/// and the naming-policy before/after measurement.
+#[test]
+fn Test_Composed_Rules_Against_An_Idiomatic_Third_Party_Fixture()
+{
+    let by_rule = Findings_By_Rule();
+
+    for verdict in Verdicts()
+    {
+        let empty: Vec<Finding> = Vec::new();
+        let findings = by_rule.get(verdict.id).unwrap_or(&empty);
+
+        match verdict.expected
+        {
+            Expected::Clean =>
+            {
+                assert!(findings.is_empty(), "{}: expected zero findings ({}), got {findings:?}", verdict.id, verdict.reason);
+            }
+            Expected::TruePositive(count) =>
+            {
+                assert_eq!(findings.len(), count, "{}: expected {count} true-positive finding(s) ({}), got {findings:?}", verdict.id, verdict.reason);
+            }
+            Expected::NotAllDeserved(count) =>
+            {
+                assert_eq!(
+                    findings.len(), count,
+                    "{}: expected {count} finding(s), not all deserved ({}), got {findings:?}", verdict.id, verdict.reason
+                );
+            }
+            Expected::Uncalibrated =>
+            {
+                // No assertion: this rule's own expected verdict cannot be honestly stated
+                // today (see `reason`), so no count here would mean what it looks like it
+                // means. `Test_Table_Names_Exactly_The_Composed_Rule_Set` still guards that
+                // this entry exists and stays paired with a real, composed rule id.
+                let _ = verdict.reason;
+            }
+        }
+    }
+}

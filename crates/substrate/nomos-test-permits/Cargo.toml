@@ -1,0 +1,11 @@
+[package]
+name = "nomos-test-permits"
+version = "0.1.0"
+description = "The counting semaphore a test suite admits its compiler databases through, and the two tests that falsify it. A dev-dependency of nomos-gate-orchestration, nomos-check-orchestration and nomos-api and of nothing else; each of them keeps its own bound and the measurement it was derived from."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lints]
+workspace = true

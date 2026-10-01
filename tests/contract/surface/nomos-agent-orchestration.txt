@@ -1,0 +1,34 @@
+pub enum nomos_agent_orchestration::AgentDispatchOutcome
+pub enum nomos_agent_orchestration::BackendAbsence
+pub enum nomos_agent_orchestration::ProfileAbsence
+pub enum nomos_agent_orchestration::ProfileResolution<'port>
+pub enum nomos_agent_orchestration::ValidatedCorrectionOutcome
+pub enum variant nomos_agent_orchestration::AgentDispatchOutcome::Answered { family: String, answer: ModelAnswer, }
+pub enum variant nomos_agent_orchestration::AgentDispatchOutcome::Executed { family: String, execution: AgentExecution, }
+pub enum variant nomos_agent_orchestration::AgentDispatchOutcome::NotSelected(crate::BackendAbsence)
+pub enum variant nomos_agent_orchestration::AgentDispatchOutcome::Unavailable { family: String, reason: String, }
+pub enum variant nomos_agent_orchestration::BackendAbsence::PreferenceNotDeclared { preferred: String, }
+pub enum variant nomos_agent_orchestration::BackendAbsence::Unresolved { selector: ModelSelector, absence: ProfileAbsence, }
+pub enum variant nomos_agent_orchestration::ProfileAbsence::NoDeclaredTargetOfThatFamily
+pub enum variant nomos_agent_orchestration::ProfileAbsence::NoModelIdentityVocabulary
+pub enum variant nomos_agent_orchestration::ProfileAbsence::NoModelSetVocabulary
+pub enum variant nomos_agent_orchestration::ProfileAbsence::NoPredicateVocabulary
+pub enum variant nomos_agent_orchestration::ProfileAbsence::NoRankingVocabulary
+pub enum variant nomos_agent_orchestration::ProfileResolution::Resolved { config: DispatchConfig<'port>, also_satisfied: Vec<&'port str>, }
+pub enum variant nomos_agent_orchestration::ProfileResolution::Unresolved { selector: ModelSelector, absence: ProfileAbsence, }
+pub enum variant nomos_agent_orchestration::ValidatedCorrectionOutcome::Committed { preview: Preview, committed: CommittedPlan, }
+pub enum variant nomos_agent_orchestration::ValidatedCorrectionOutcome::NoPlan
+pub fn nomos_agent_orchestration::Resolve_Profile<'port>( profile: &ModelExecutionProfile, declared: &'port [DeclaredTarget<'port>], ) -> ProfileResolution<'port>
+pub fn nomos_agent_orchestration::Run_Agent_Execute(goal: &str, selection: &BackendSelection<'_>) -> AgentDispatchOutcome
+pub fn nomos_agent_orchestration::Run_Agent_Judgment( pair: &RoleSurfacePair, finding: &Finding, selection: &BackendSelection<'_>, ) -> AgentDispatchOutcome
+pub fn nomos_agent_orchestration::Run_Agent_Task(task: &TaskEnvelope, selection: &BackendSelection<'_>) -> AgentDispatchOutcome
+pub fn nomos_agent_orchestration::Run_Validated_Correction( result: &WorkResult, workspace: &mut Workspace, evidence: Evidence, ) -> Result<ValidatedCorrectionOutcome, CorrectionError>
+pub fn nomos_agent_orchestration::Selected_Dispatch<'port>( selection: &BackendSelection<'port>, ) -> Result<DispatchConfig<'port>, BackendAbsence>
+pub struct field nomos_agent_orchestration::BackendSelection::declared: &'port [DeclaredTarget<'port>]
+pub struct field nomos_agent_orchestration::BackendSelection::preferred: Option<&'port str>
+pub struct field nomos_agent_orchestration::BackendSelection::profile: &'port ModelExecutionProfile
+pub struct field nomos_agent_orchestration::DispatchConfig::effort: EffortLevel
+pub struct field nomos_agent_orchestration::DispatchConfig::family: &'port str
+pub struct field nomos_agent_orchestration::DispatchConfig::port: DispatchPort<'port>
+pub struct nomos_agent_orchestration::BackendSelection<'port>
+pub struct nomos_agent_orchestration::DispatchConfig<'port>

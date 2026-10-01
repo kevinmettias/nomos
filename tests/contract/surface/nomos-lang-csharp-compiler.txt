@@ -1,0 +1,70 @@
+pub const fn nomos_lang_csharp_compiler::Declared_Guarantee() -> Guarantee
+pub const fn nomos_lang_csharp_compiler::EvaluationFailure::Applicability(self) -> Applicability
+pub const nomos_lang_csharp_compiler::ConditionalFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_csharp_compiler::ConditionalFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_csharp_compiler::ConditionalFactProduction::TRACE: TraceEquivalence
+pub const nomos_lang_csharp_compiler::PROVIDER: &str
+pub enum nomos_lang_csharp_compiler::ConditionalReading
+pub enum nomos_lang_csharp_compiler::EvaluationFailure
+pub enum nomos_lang_csharp_compiler::Materialization
+pub enum nomos_lang_csharp_compiler::Unjudged
+pub enum variant nomos_lang_csharp_compiler::ConditionalReading::Read { definitions: Vec<FileDefinition>, regions: Vec<ConditionalRegion>, }
+pub enum variant nomos_lang_csharp_compiler::ConditionalReading::Refused(ParseFailure)
+pub enum variant nomos_lang_csharp_compiler::EvaluationFailure::DidNotFinish
+pub enum variant nomos_lang_csharp_compiler::EvaluationFailure::DotnetUnavailable
+pub enum variant nomos_lang_csharp_compiler::EvaluationFailure::Refused
+pub enum variant nomos_lang_csharp_compiler::Materialization::Materialized(Box<MaterializedFact>)
+pub enum variant nomos_lang_csharp_compiler::Materialization::Refused(ParseFailure)
+pub enum variant nomos_lang_csharp_compiler::Unjudged::Build { request: EvaluationRequest, error: EvaluationError }
+pub enum variant nomos_lang_csharp_compiler::Unjudged::File { path: String, failure: ParseFailure }
+pub fn nomos_lang_csharp_compiler::BuildEvaluation::Compiles(&self, path: &str) -> bool
+pub fn nomos_lang_csharp_compiler::Build_Subject(file: SubjectId, selection: &BuildSelection) -> SubjectId
+pub fn nomos_lang_csharp_compiler::DefinitionSet::New(selection: BuildSelection, symbols: BTreeSet<String>) -> Self
+pub fn nomos_lang_csharp_compiler::Evaluate_Build<Launcher: ProgramLauncher, Env: Environment>( request: &EvaluationRequest, launcher: &Launcher, environment: &Env, ) -> Result<BuildEvaluation, EvaluationError>
+pub fn nomos_lang_csharp_compiler::EvaluationError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_csharp_compiler::Materialize_Build_Set<Launcher: ProgramLauncher, Env: Environment>( requests: &[EvaluationRequest], files: &[FileToJudge<'_>], context: FactContext, ports: &BuildPorts<'_, Launcher, Env>, ) -> BuildSetAnswer
+pub fn nomos_lang_csharp_compiler::Materialize_Conditional_Fact(subject: SubjectId, source: &str, definitions: &DefinitionSet, context: FactContext) -> Materialization
+pub fn nomos_lang_csharp_compiler::ParseFailure::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_csharp_compiler::Provider_Offer() -> ProviderOffer
+pub fn nomos_lang_csharp_compiler::Read_Conditionals(source: &str, symbols: &BTreeSet<String>) -> ConditionalReading
+pub impl nomos_lang_csharp_compiler::ConditionalFactProduction implements Strategy
+pub impl nomos_lang_csharp_compiler::EvaluationError implements core::fmt::Display
+pub impl nomos_lang_csharp_compiler::EvaluationError implements std::error::Error
+pub impl nomos_lang_csharp_compiler::ParseFailure implements core::fmt::Display
+pub impl nomos_lang_csharp_compiler::ParseFailure implements std::error::Error
+pub struct field nomos_lang_csharp_compiler::BuildEvaluation::compiled: BTreeSet<String>
+pub struct field nomos_lang_csharp_compiler::BuildEvaluation::definitions: DefinitionSet
+pub struct field nomos_lang_csharp_compiler::BuildPorts::environment: &'ports Env
+pub struct field nomos_lang_csharp_compiler::BuildPorts::launcher: &'ports Launcher
+pub struct field nomos_lang_csharp_compiler::BuildSetAnswer::facts: Vec<JudgedFile>
+pub struct field nomos_lang_csharp_compiler::BuildSetAnswer::unjudged: Vec<Unjudged>
+pub struct field nomos_lang_csharp_compiler::DefinitionSet::selection: BuildSelection
+pub struct field nomos_lang_csharp_compiler::DefinitionSet::symbols: BTreeSet<String>
+pub struct field nomos_lang_csharp_compiler::EvaluationError::failure: EvaluationFailure
+pub struct field nomos_lang_csharp_compiler::EvaluationError::reason: String
+pub struct field nomos_lang_csharp_compiler::EvaluationRequest::configuration: String
+pub struct field nomos_lang_csharp_compiler::EvaluationRequest::project: String
+pub struct field nomos_lang_csharp_compiler::EvaluationRequest::root: PathBuf
+pub struct field nomos_lang_csharp_compiler::EvaluationRequest::target_framework: Option<String>
+pub struct field nomos_lang_csharp_compiler::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_csharp_compiler::FactContext::generation: GenerationId
+pub struct field nomos_lang_csharp_compiler::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_csharp_compiler::FactContext::variant: BuildVariantId
+pub struct field nomos_lang_csharp_compiler::FileToJudge::path: &'text str
+pub struct field nomos_lang_csharp_compiler::FileToJudge::subject: SubjectId
+pub struct field nomos_lang_csharp_compiler::FileToJudge::text: &'text str
+pub struct field nomos_lang_csharp_compiler::JudgedFile::fact: MaterializedFact
+pub struct field nomos_lang_csharp_compiler::JudgedFile::path: String
+pub struct field nomos_lang_csharp_compiler::ParseFailure::line: usize
+pub struct field nomos_lang_csharp_compiler::ParseFailure::message: String
+pub struct nomos_lang_csharp_compiler::BuildEvaluation
+pub struct nomos_lang_csharp_compiler::BuildPorts<'ports, Launcher: ProgramLauncher, Env: Environment>
+pub struct nomos_lang_csharp_compiler::BuildSetAnswer
+pub struct nomos_lang_csharp_compiler::ConditionalFactProduction
+pub struct nomos_lang_csharp_compiler::DefinitionSet
+pub struct nomos_lang_csharp_compiler::EvaluationError
+pub struct nomos_lang_csharp_compiler::EvaluationRequest
+pub struct nomos_lang_csharp_compiler::FactContext
+pub struct nomos_lang_csharp_compiler::FileToJudge<'text>
+pub struct nomos_lang_csharp_compiler::JudgedFile
+pub struct nomos_lang_csharp_compiler::ParseFailure

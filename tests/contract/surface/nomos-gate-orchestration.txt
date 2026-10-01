@@ -1,0 +1,289 @@
+pub const fn nomos_gate_orchestration::Admissibility::Is_A_Judgment(self) -> bool
+pub const fn nomos_gate_orchestration::BaselinePopulation::Excess(&self) -> u32
+pub const fn nomos_gate_orchestration::BaselinePopulation::Is_Exceeded(&self) -> bool
+pub const fn nomos_gate_orchestration::EvidenceFloor::Required(self) -> Option<EvidenceClass>
+pub const fn nomos_gate_orchestration::PolicyField::Label(self) -> &'static str
+pub const fn nomos_gate_orchestration::SuppressionStatus::Is_Suppressing(self) -> bool
+pub const nomos_gate_orchestration::ARCHITECTURE_DECLARATION_FILE: &str
+pub const nomos_gate_orchestration::PHASE_POLICY_UNIT: PolicyUnit
+pub enum nomos_gate_orchestration::Admissibility
+pub enum nomos_gate_orchestration::BaselineAllowance
+pub enum nomos_gate_orchestration::Comparability
+pub enum nomos_gate_orchestration::CoveragePolicy
+pub enum nomos_gate_orchestration::EvidenceFloor
+pub enum nomos_gate_orchestration::Explanation
+pub enum nomos_gate_orchestration::FindingDisposition
+pub enum nomos_gate_orchestration::GateOutcome
+pub enum nomos_gate_orchestration::GateRunOutcome
+pub enum nomos_gate_orchestration::JudgmentDifference
+pub enum nomos_gate_orchestration::NoVerdict
+pub enum nomos_gate_orchestration::PhaseDisposition
+pub enum nomos_gate_orchestration::PhaseThreshold
+pub enum nomos_gate_orchestration::PolicyField
+pub enum nomos_gate_orchestration::PolicyRefusal
+pub enum nomos_gate_orchestration::RuleCompositionError
+pub enum nomos_gate_orchestration::SuppressionDisposition
+pub enum nomos_gate_orchestration::SuppressionStatus
+pub enum variant nomos_gate_orchestration::Admissibility::NotJudged
+pub enum variant nomos_gate_orchestration::Admissibility::Permitted
+pub enum variant nomos_gate_orchestration::Admissibility::Refused
+pub enum variant nomos_gate_orchestration::BaselineAllowance::AtMost(u32)
+pub enum variant nomos_gate_orchestration::BaselineAllowance::Unbounded
+pub enum variant nomos_gate_orchestration::Comparability::Compatible
+pub enum variant nomos_gate_orchestration::Comparability::CompatibleWith(Vec<JudgmentDifference>)
+pub enum variant nomos_gate_orchestration::Comparability::Incomparable(Vec<RunId>)
+pub enum variant nomos_gate_orchestration::CoveragePolicy::RequireCompleteness
+pub enum variant nomos_gate_orchestration::CoveragePolicy::Unset
+pub enum variant nomos_gate_orchestration::EvidenceFloor::AtLeast(EvidenceClass)
+pub enum variant nomos_gate_orchestration::EvidenceFloor::Unset
+pub enum variant nomos_gate_orchestration::Explanation::Found { finding: Box<Finding>, would_block: bool, floored_by: Option<EvidenceClass>, calibrated_by: Option<RuleCalibration>, suppressed_by: Option<Suppression>, baselined_by: Option<BaselineDebt>, contract: Option<(String, u32)>, }
+pub enum variant nomos_gate_orchestration::Explanation::NotFound
+pub enum variant nomos_gate_orchestration::FindingDisposition::BaselineExceeded
+pub enum variant nomos_gate_orchestration::FindingDisposition::Baselined
+pub enum variant nomos_gate_orchestration::FindingDisposition::BelowEvidenceFloor
+pub enum variant nomos_gate_orchestration::FindingDisposition::Blocking
+pub enum variant nomos_gate_orchestration::FindingDisposition::Calibrated
+pub enum variant nomos_gate_orchestration::FindingDisposition::Suppressed
+pub enum variant nomos_gate_orchestration::GateOutcome::Contradictory(RuleCompositionError)
+pub enum variant nomos_gate_orchestration::GateOutcome::Planned(GatePlan)
+pub enum variant nomos_gate_orchestration::GateRunOutcome::Failed
+pub enum variant nomos_gate_orchestration::GateRunOutcome::Indeterminate
+pub enum variant nomos_gate_orchestration::GateRunOutcome::Passed
+pub enum variant nomos_gate_orchestration::JudgmentDifference::Instrument
+pub enum variant nomos_gate_orchestration::JudgmentDifference::Policy
+pub enum variant nomos_gate_orchestration::JudgmentDifference::Selection
+pub enum variant nomos_gate_orchestration::NoVerdict::IncompleteCoverage
+pub enum variant nomos_gate_orchestration::NoVerdict::MalformedPolicy(String)
+pub enum variant nomos_gate_orchestration::NoVerdict::UnreadablePolicy(String)
+pub enum variant nomos_gate_orchestration::PhaseDisposition::Failed
+pub enum variant nomos_gate_orchestration::PhaseDisposition::Passed
+pub enum variant nomos_gate_orchestration::PhaseDisposition::Skipped
+pub enum variant nomos_gate_orchestration::PhaseThreshold::AnyBlockingFinding
+pub enum variant nomos_gate_orchestration::PhaseThreshold::MaxBlockingFindings { max: usize, }
+pub enum variant nomos_gate_orchestration::PolicyField::Adoption
+pub enum variant nomos_gate_orchestration::PolicyField::Approvals
+pub enum variant nomos_gate_orchestration::PolicyField::Baseline
+pub enum variant nomos_gate_orchestration::PolicyField::Coverage
+pub enum variant nomos_gate_orchestration::PolicyField::EvidenceFloor
+pub enum variant nomos_gate_orchestration::PolicyField::Phases
+pub enum variant nomos_gate_orchestration::PolicyField::Suppressions
+pub enum variant nomos_gate_orchestration::PolicyRefusal::CompanionWithoutADecidingField { unit: PolicyUnit, field: PolicyField, layer: ConfigurationLayer, artifact: String, }
+pub enum variant nomos_gate_orchestration::PolicyRefusal::ContradictionWithinALayer { layer: ConfigurationLayer, field: PolicyField, key: String, artifacts: Vec<String>, }
+pub enum variant nomos_gate_orchestration::PolicyRefusal::LockedOverride { field: PolicyField, locked_by: FieldProvenance, offered_by: FieldProvenance, }
+pub enum variant nomos_gate_orchestration::PolicyRefusal::UnreadableArtifact { layer: ConfigurationLayer, artifact: String, detail: String, }
+pub enum variant nomos_gate_orchestration::RuleCompositionError::Registration(RuleRegistryError)
+pub enum variant nomos_gate_orchestration::RuleCompositionError::Resolution(RuleResolutionError)
+pub enum variant nomos_gate_orchestration::SuppressionDisposition::AcceptedBaselineDebt
+pub enum variant nomos_gate_orchestration::SuppressionDisposition::FalsePositiveDisposition
+pub enum variant nomos_gate_orchestration::SuppressionDisposition::FormalRiskAcceptance
+pub enum variant nomos_gate_orchestration::SuppressionDisposition::InlineSuppression
+pub enum variant nomos_gate_orchestration::SuppressionDisposition::RepositoryPolicyException
+pub enum variant nomos_gate_orchestration::SuppressionDisposition::TemporaryWaiver
+pub enum variant nomos_gate_orchestration::SuppressionStatus::Active
+pub enum variant nomos_gate_orchestration::SuppressionStatus::Expired
+pub fn nomos_gate_orchestration::Admits_Edge(architecture: &ArchitecturePayload, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
+pub fn nomos_gate_orchestration::Admits_Under<Fs: FileSystem>(root: &Path, filesystem: &Fs, depending: DependingCrate<'_>, depended: DependedCrate<'_>) -> Admissibility
+pub fn nomos_gate_orchestration::AdoptionPolicy::Calibrating<'a>(&'a self, finding: &Finding) -> Option<&'a RuleCalibration>
+pub fn nomos_gate_orchestration::BaselineDebt::Is_Applicable_To(&self, finding: &Finding) -> bool
+pub fn nomos_gate_orchestration::BaselinePolicy::Tolerating<'a>(&'a self, finding: &Finding) -> Option<&'a BaselineDebt>
+pub fn nomos_gate_orchestration::Compare_Gate_Runs( baseline: &GateRunResult, candidate: &GateRunResult, ) -> Result<GateCompareResult, CollidingOccurrences>
+pub fn nomos_gate_orchestration::Disposition_Of_Findings(findings: &[Finding]) -> GateRunOutcome
+pub fn nomos_gate_orchestration::EffectivePolicy::Deciding(&self, field: PolicyField) -> Option<&ResolvedField>
+pub fn nomos_gate_orchestration::Effective_Gate_Policy(contributions: &[PolicyContribution]) -> Result<EffectivePolicy, PolicyRefusal>
+pub fn nomos_gate_orchestration::Effective_Policy_Report(policy: &EffectivePolicy) -> Vec<String>
+pub fn nomos_gate_orchestration::Evaluated_Phases(phases: &[GatePhase], findings: &[Finding], approvals: &[PhaseApproval]) -> Vec<PhaseOutcome>
+pub fn nomos_gate_orchestration::EvidenceFloor::Admits(self, evidence: EvidenceClass) -> bool
+pub fn nomos_gate_orchestration::Explain_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, Launcher, Fs, Env>, command: &GateCommand, query: &FindingQuery, ) -> GateExplainResult
+pub fn nomos_gate_orchestration::FieldProvenance::Sentence(&self) -> String
+pub fn nomos_gate_orchestration::FindingLines::Of_Check_Run(outcome: &CheckOutcome) -> Self
+pub fn nomos_gate_orchestration::FindingLines::Of_Gate_Run(result: &GateRunResult) -> Self
+pub fn nomos_gate_orchestration::FindingLines::Serialized(&self) -> Result<String, serde_json::Error>
+pub fn nomos_gate_orchestration::FindingTable::Of_Check_Run(outcome: &CheckOutcome) -> Self
+pub fn nomos_gate_orchestration::FindingTable::Of_Gate_Run(result: &GateRunResult) -> Self
+pub fn nomos_gate_orchestration::FindingTable::Rendered(&self) -> String
+pub fn nomos_gate_orchestration::Fresh_Run_Id(now: Timestamp) -> RunId
+pub fn nomos_gate_orchestration::Phased_Disposition(disposition: crate::GateRunOutcome, phases: &[GatePhase], outcomes: &[PhaseOutcome], blocking: &[Finding]) -> crate::GateRunOutcome
+pub fn nomos_gate_orchestration::PolicyContribution::Silent(layer: ConfigurationLayer, artifact: &str) -> Self
+pub fn nomos_gate_orchestration::PolicyContribution::States(&self, field: PolicyField) -> bool
+pub fn nomos_gate_orchestration::PolicyField::fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result
+pub fn nomos_gate_orchestration::PolicyRefusal::Sentence(&self) -> String
+pub fn nomos_gate_orchestration::PolicyUnit::Contains(&self, field: PolicyField) -> bool
+pub fn nomos_gate_orchestration::Registered() -> Result<RuleRegistry, RuleCompositionError>
+pub fn nomos_gate_orchestration::RuleCalibration::Is_Applicable_To(&self, finding: &Finding) -> bool
+pub fn nomos_gate_orchestration::RuleCompositionError::from(error: RuleRegistryError) -> Self
+pub fn nomos_gate_orchestration::RuleCompositionError::from(error: RuleResolutionError) -> Self
+pub fn nomos_gate_orchestration::RuleSelector::Is_Included(&self, rule: &RuleId) -> bool
+pub fn nomos_gate_orchestration::Run(command: &GateCommand) -> GateOutcome
+pub fn nomos_gate_orchestration::Run_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( walked: Option<Vec<SourceFile>>, environment: GateEnvironment<'_, Launcher, Fs, Env>, command: &GateCommand, run: RunId, ) -> GateRunResult
+pub fn nomos_gate_orchestration::SarifLog::Of_Check_Run(root: &Path, outcome: &CheckOutcome) -> Self
+pub fn nomos_gate_orchestration::SarifLog::Of_Gate_Run(result: &GateRunResult) -> Self
+pub fn nomos_gate_orchestration::SarifLog::Serialized(&self) -> Result<String, serde_json::Error>
+pub fn nomos_gate_orchestration::ScopeSelector::Is_In_Scope(&self, path: &str) -> bool
+pub fn nomos_gate_orchestration::SupportingFactGraph::Of_Check_Run(outcome: &CheckOutcome) -> Self
+pub fn nomos_gate_orchestration::SupportingFactGraph::Of_Gate_Run(result: &GateRunResult) -> Self
+pub fn nomos_gate_orchestration::SupportingFactGraph::Rendered(&self) -> String
+pub fn nomos_gate_orchestration::Suppression::Is_Applicable_To(&self, finding: &Finding) -> bool
+pub fn nomos_gate_orchestration::Suppression::Status_At(&self, now: Timestamp) -> SuppressionStatus
+pub fn nomos_gate_orchestration::SuppressionPolicy::Lapsed<'a>(&'a self, finding: &Finding, now: Timestamp) -> Vec<&'a Suppression>
+pub fn nomos_gate_orchestration::SuppressionPolicy::Suppressing<'a>(&'a self, finding: &Finding, now: Timestamp) -> Option<&'a Suppression>
+pub impl nomos_gate_orchestration::PolicyField implements std::fmt::Display
+pub impl nomos_gate_orchestration::RuleCompositionError implements From<RuleRegistryError>
+pub impl nomos_gate_orchestration::RuleCompositionError implements From<RuleResolutionError>
+pub struct field nomos_gate_orchestration::AdoptionPolicy::calibrated: Vec<RuleCalibration>
+pub struct field nomos_gate_orchestration::BaselineDebt::allowance: BaselineAllowance
+pub struct field nomos_gate_orchestration::BaselineDebt::declared_path: Option<String>
+pub struct field nomos_gate_orchestration::BaselineDebt::rationale: String
+pub struct field nomos_gate_orchestration::BaselineDebt::rule: RuleId
+pub struct field nomos_gate_orchestration::BaselineDebt::subject: SubjectId
+pub struct field nomos_gate_orchestration::BaselinePolicy::debt: Vec<BaselineDebt>
+pub struct field nomos_gate_orchestration::BaselinePopulation::allowed: BaselineAllowance
+pub struct field nomos_gate_orchestration::BaselinePopulation::declared_path: Option<String>
+pub struct field nomos_gate_orchestration::BaselinePopulation::observed: u32
+pub struct field nomos_gate_orchestration::BaselinePopulation::rule: RuleId
+pub struct field nomos_gate_orchestration::BaselinePopulation::subject: SubjectId
+pub struct field nomos_gate_orchestration::CollidingOccurrences::collisions: Vec<OccurrenceCollision>
+pub struct field nomos_gate_orchestration::CollidingOccurrences::run: RunId
+pub struct field nomos_gate_orchestration::DispositionChange::after: FindingDisposition
+pub struct field nomos_gate_orchestration::DispositionChange::after_reason: Option<SuppressionReason>
+pub struct field nomos_gate_orchestration::DispositionChange::before: FindingDisposition
+pub struct field nomos_gate_orchestration::DispositionChange::before_reason: Option<SuppressionReason>
+pub struct field nomos_gate_orchestration::DispositionChange::locations: Vec<String>
+pub struct field nomos_gate_orchestration::DispositionChange::rule: RuleId
+pub struct field nomos_gate_orchestration::DispositionChange::subject: SubjectId
+pub struct field nomos_gate_orchestration::DispositionChange::subject_name: String
+pub struct field nomos_gate_orchestration::EffectivePolicy::absent_layers: Vec<ConfigurationLayer>
+pub struct field nomos_gate_orchestration::EffectivePolicy::fields: Vec<ResolvedField>
+pub struct field nomos_gate_orchestration::FieldProvenance::artifact: String
+pub struct field nomos_gate_orchestration::FieldProvenance::decided_by_unit: Option<PolicyUnit>
+pub struct field nomos_gate_orchestration::FieldProvenance::layer: ConfigurationLayer
+pub struct field nomos_gate_orchestration::FindingQuery::location: String
+pub struct field nomos_gate_orchestration::FindingQuery::rule: RuleId
+pub struct field nomos_gate_orchestration::GateCommand::adoption: AdoptionPolicy
+pub struct field nomos_gate_orchestration::GateCommand::approvals: Vec<PhaseApproval>
+pub struct field nomos_gate_orchestration::GateCommand::baseline: BaselinePolicy
+pub struct field nomos_gate_orchestration::GateCommand::coverage: CoveragePolicy
+pub struct field nomos_gate_orchestration::GateCommand::evidence_floor: EvidenceFloor
+pub struct field nomos_gate_orchestration::GateCommand::model: Option<ModelExecutionProfile>
+pub struct field nomos_gate_orchestration::GateCommand::phases: Vec<GatePhase>
+pub struct field nomos_gate_orchestration::GateCommand::root: PathBuf
+pub struct field nomos_gate_orchestration::GateCommand::rules: RuleSelector
+pub struct field nomos_gate_orchestration::GateCommand::scope: ScopeSelector
+pub struct field nomos_gate_orchestration::GateCommand::suppressions: SuppressionPolicy
+pub struct field nomos_gate_orchestration::GateCompareResult::added: Vec<Finding>
+pub struct field nomos_gate_orchestration::GateCompareResult::baseline: RunId
+pub struct field nomos_gate_orchestration::GateCompareResult::candidate: RunId
+pub struct field nomos_gate_orchestration::GateCompareResult::changed: Vec<DispositionChange>
+pub struct field nomos_gate_orchestration::GateCompareResult::comparability: Comparability
+pub struct field nomos_gate_orchestration::GateCompareResult::removed: Vec<Finding>
+pub struct field nomos_gate_orchestration::GateEnvironment::environment: &'a Env
+pub struct field nomos_gate_orchestration::GateEnvironment::filesystem: &'a Fs
+pub struct field nomos_gate_orchestration::GateEnvironment::launcher: &'a Launcher
+pub struct field nomos_gate_orchestration::GateEnvironment::now: Timestamp
+pub struct field nomos_gate_orchestration::GateEnvironment::providers: &'a ComposedProviders<Launcher, Fs, Env>
+pub struct field nomos_gate_orchestration::GateEnvironment::variant: BuildVariant
+pub struct field nomos_gate_orchestration::GateExplainResult::check_outcome: CheckOutcome
+pub struct field nomos_gate_orchestration::GateExplainResult::explanation: Explanation
+pub struct field nomos_gate_orchestration::GateExplainResult::root: PathBuf
+pub struct field nomos_gate_orchestration::GateFindings::baseline_exceeded_findings: Vec<Finding>
+pub struct field nomos_gate_orchestration::GateFindings::baseline_populations: Vec<BaselinePopulation>
+pub struct field nomos_gate_orchestration::GateFindings::baselined_findings: Vec<Finding>
+pub struct field nomos_gate_orchestration::GateFindings::below_evidence_floor_findings: Vec<Finding>
+pub struct field nomos_gate_orchestration::GateFindings::blocking_findings: Vec<Finding>
+pub struct field nomos_gate_orchestration::GateFindings::calibrated_findings: Vec<Finding>
+pub struct field nomos_gate_orchestration::GateFindings::suppressed_findings: Vec<Finding>
+pub struct field nomos_gate_orchestration::GateFindings::suppression_reasons: std::collections::BTreeMap<(nomos_contracts::RuleId, nomos_contracts::SubjectId), crate::SuppressionReason>
+pub struct field nomos_gate_orchestration::GatePhase::name: String
+pub struct field nomos_gate_orchestration::GatePhase::rules: Vec<RuleId>
+pub struct field nomos_gate_orchestration::GatePhase::threshold: PhaseThreshold
+pub struct field nomos_gate_orchestration::GatePlan::rules: Vec<RuleOffer>
+pub struct field nomos_gate_orchestration::GateRunProvenance::at: Timestamp
+pub struct field nomos_gate_orchestration::GateRunProvenance::instrument: Digest128
+pub struct field nomos_gate_orchestration::GateRunProvenance::policy: Digest128
+pub struct field nomos_gate_orchestration::GateRunProvenance::selection: Digest128
+pub struct field nomos_gate_orchestration::GateRunProvenance::source: Digest128
+pub struct field nomos_gate_orchestration::GateRunResult::check_outcome: CheckOutcome
+pub struct field nomos_gate_orchestration::GateRunResult::disposition: GateRunOutcome
+pub struct field nomos_gate_orchestration::GateRunResult::findings: GateFindings
+pub struct field nomos_gate_orchestration::GateRunResult::no_verdict: Option<NoVerdict>
+pub struct field nomos_gate_orchestration::GateRunResult::policy: Option<Box<EffectivePolicy>>
+pub struct field nomos_gate_orchestration::GateRunResult::provenance: Option<GateRunProvenance>
+pub struct field nomos_gate_orchestration::GateRunResult::root: PathBuf
+pub struct field nomos_gate_orchestration::GateRunResult::run: RunId
+pub struct field nomos_gate_orchestration::GateRunResult::unmatched_policy: Vec<String>
+pub struct field nomos_gate_orchestration::PhaseApproval::phase: String
+pub struct field nomos_gate_orchestration::PhaseApproval::rationale: String
+pub struct field nomos_gate_orchestration::PhaseOutcome::approved: bool
+pub struct field nomos_gate_orchestration::PhaseOutcome::blocking_findings: Vec<Finding>
+pub struct field nomos_gate_orchestration::PhaseOutcome::disposition: PhaseDisposition
+pub struct field nomos_gate_orchestration::PhaseOutcome::name: String
+pub struct field nomos_gate_orchestration::PhaseOutcome::ran: bool
+pub struct field nomos_gate_orchestration::PolicyContribution::adoption: Option<AdoptionPolicy>
+pub struct field nomos_gate_orchestration::PolicyContribution::approvals: Option<Vec<PhaseApproval>>
+pub struct field nomos_gate_orchestration::PolicyContribution::artifact: String
+pub struct field nomos_gate_orchestration::PolicyContribution::baseline: Option<BaselinePolicy>
+pub struct field nomos_gate_orchestration::PolicyContribution::coverage: Option<CoveragePolicy>
+pub struct field nomos_gate_orchestration::PolicyContribution::evidence_floor: Option<EvidenceFloor>
+pub struct field nomos_gate_orchestration::PolicyContribution::layer: ConfigurationLayer
+pub struct field nomos_gate_orchestration::PolicyContribution::locks: Vec<PolicyField>
+pub struct field nomos_gate_orchestration::PolicyContribution::phases: Option<Vec<GatePhase>>
+pub struct field nomos_gate_orchestration::PolicyContribution::suppressions: Option<SuppressionPolicy>
+pub struct field nomos_gate_orchestration::PolicyContribution::unreadable: Option<String>
+pub struct field nomos_gate_orchestration::PolicyUnit::companion_fields: &'static [PolicyField]
+pub struct field nomos_gate_orchestration::PolicyUnit::deciding_field: PolicyField
+pub struct field nomos_gate_orchestration::PolicyUnit::name: &'static str
+pub struct field nomos_gate_orchestration::RejectedOverride::offered_by: FieldProvenance
+pub struct field nomos_gate_orchestration::RejectedOverride::reason: String
+pub struct field nomos_gate_orchestration::ResolvedField::decided_by: FieldProvenance
+pub struct field nomos_gate_orchestration::ResolvedField::field: PolicyField
+pub struct field nomos_gate_orchestration::ResolvedField::overrode: Vec<FieldProvenance>
+pub struct field nomos_gate_orchestration::ResolvedField::rejected: Vec<RejectedOverride>
+pub struct field nomos_gate_orchestration::RuleCalibration::rationale: String
+pub struct field nomos_gate_orchestration::RuleCalibration::rule: RuleId
+pub struct field nomos_gate_orchestration::RuleSelector::include: Vec<RuleId>
+pub struct field nomos_gate_orchestration::ScopeSelector::exclude: Vec<String>
+pub struct field nomos_gate_orchestration::ScopeSelector::include: Vec<String>
+pub struct field nomos_gate_orchestration::Suppression::disposition: SuppressionDisposition
+pub struct field nomos_gate_orchestration::Suppression::expiry: Option<Timestamp>
+pub struct field nomos_gate_orchestration::Suppression::owner: String
+pub struct field nomos_gate_orchestration::Suppression::rationale: String
+pub struct field nomos_gate_orchestration::Suppression::rule: RuleId
+pub struct field nomos_gate_orchestration::Suppression::subject: SubjectId
+pub struct field nomos_gate_orchestration::SuppressionPolicy::suppressions: Vec<Suppression>
+pub struct field nomos_gate_orchestration::SuppressionReason::disposition: SuppressionDisposition
+pub struct field nomos_gate_orchestration::SuppressionReason::status: SuppressionStatus
+pub struct nomos_gate_orchestration::AdoptionPolicy
+pub struct nomos_gate_orchestration::BaselineDebt
+pub struct nomos_gate_orchestration::BaselinePolicy
+pub struct nomos_gate_orchestration::BaselinePopulation
+pub struct nomos_gate_orchestration::CollidingOccurrences
+pub struct nomos_gate_orchestration::DependedCrate<'a>(pub &'a str)
+pub struct nomos_gate_orchestration::DependingCrate<'a>(pub &'a str)
+pub struct nomos_gate_orchestration::DispositionChange
+pub struct nomos_gate_orchestration::EffectivePolicy
+pub struct nomos_gate_orchestration::FieldProvenance
+pub struct nomos_gate_orchestration::FindingLines
+pub struct nomos_gate_orchestration::FindingQuery
+pub struct nomos_gate_orchestration::FindingTable
+pub struct nomos_gate_orchestration::GateCommand
+pub struct nomos_gate_orchestration::GateCompareResult
+pub struct nomos_gate_orchestration::GateEnvironment<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
+pub struct nomos_gate_orchestration::GateExplainResult
+pub struct nomos_gate_orchestration::GateFindings
+pub struct nomos_gate_orchestration::GatePhase
+pub struct nomos_gate_orchestration::GatePlan
+pub struct nomos_gate_orchestration::GateRunProvenance
+pub struct nomos_gate_orchestration::GateRunResult
+pub struct nomos_gate_orchestration::PhaseApproval
+pub struct nomos_gate_orchestration::PhaseOutcome
+pub struct nomos_gate_orchestration::PolicyContribution
+pub struct nomos_gate_orchestration::PolicyUnit
+pub struct nomos_gate_orchestration::RejectedOverride
+pub struct nomos_gate_orchestration::ResolvedField
+pub struct nomos_gate_orchestration::RuleCalibration
+pub struct nomos_gate_orchestration::RuleSelector
+pub struct nomos_gate_orchestration::SarifLog
+pub struct nomos_gate_orchestration::ScopeSelector
+pub struct nomos_gate_orchestration::SupportingFactGraph
+pub struct nomos_gate_orchestration::Suppression
+pub struct nomos_gate_orchestration::SuppressionPolicy
+pub struct nomos_gate_orchestration::SuppressionReason

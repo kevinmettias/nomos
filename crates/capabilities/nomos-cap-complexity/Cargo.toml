@@ -1,0 +1,18 @@
+[package]
+name = "nomos-cap-complexity"
+version = "0.1.0"
+description = "The nomos.cap.metric.complexity contract: each function's cyclomatic complexity, with the MET-006 descriptor that says how the number may and may not be read, owned by neither its provider nor the rule that reads it."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# No provider and no rule, the position every nomos-cap-* crate holds:
+# nomos-lang-rust-complexity offers against this contract and nomos-rules reads it, and
+# neither names the other.
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-capability = { workspace = true }
+
+[lints]
+workspace = true

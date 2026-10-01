@@ -1,0 +1,32 @@
+[package]
+name = "nomos-lang-rust-complexity"
+version = "0.1.0"
+description = "Each Rust function's cyclomatic complexity, counted over its parse tree and offered against nomos.cap.metric.complexity with a guarantee that says what a macro hides."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# No nomos-lang-rust, although both parse with `syn`: a provider names no sibling in its band,
+# and this one needs nothing of that crate's but the parse, which `syn` already is.
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-analysis = { workspace = true }
+nomos-cap-complexity = { workspace = true }
+# `full` for every item form and `visit` for the walk; `span-locations` so a function's line is
+# the line it is on rather than zero.
+syn = { version = "2", default-features = false, features = [
+    "full",
+    "parsing",
+    "visit",
+] }
+proc-macro2 = { version = "1", default-features = false, features = [
+    "span-locations",
+] }
+
+[dev-dependencies]
+nomos-model = { workspace = true }
+
+[lints]
+workspace = true

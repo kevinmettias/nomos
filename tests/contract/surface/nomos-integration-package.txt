@@ -1,0 +1,34 @@
+pub const nomos_integration_package::SCHEMA_VERSION: u32
+pub enum nomos_integration_package::ManifestError
+pub enum variant nomos_integration_package::ManifestError::AbsoluteTarget { at: String, field: String, target: String, }
+pub enum variant nomos_integration_package::ManifestError::EmptyList { at: String, field: String, }
+pub enum variant nomos_integration_package::ManifestError::EscapingTarget { at: String, field: String, target: String, }
+pub enum variant nomos_integration_package::ManifestError::InvertedProtocolRange { at: String, }
+pub enum variant nomos_integration_package::ManifestError::MalformedVersion { at: String, field: String, cause: String, }
+pub enum variant nomos_integration_package::ManifestError::MissingField { at: String, field: String, }
+pub enum variant nomos_integration_package::ManifestError::NotJson { at: String, cause: String, }
+pub enum variant nomos_integration_package::ManifestError::UnknownOwnershipClass { at: String, field: String, found: String, }
+pub enum variant nomos_integration_package::ManifestError::UnknownPackageKind { at: String, found: String, }
+pub enum variant nomos_integration_package::ManifestError::UnknownPublicationScope { at: String, field: String, found: String, }
+pub enum variant nomos_integration_package::ManifestError::UnknownSchema { at: String, understood: u32, found: u32, }
+pub enum variant nomos_integration_package::ManifestError::Unreadable { at: String, cause: String, }
+pub enum variant nomos_integration_package::ManifestError::WrongPackageKind { at: String, found: PackageKind, }
+pub enum variant nomos_integration_package::ManifestError::WrongType { at: String, field: String, expected: String, }
+pub fn nomos_integration_package::ManifestError::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_integration_package::Parse_Manifest(text: &str, at: &str) -> Result<IntegrationPackage, ManifestError>
+pub fn nomos_integration_package::Read_Manifest(path: &Path) -> Result<IntegrationPackage, ManifestError>
+pub impl nomos_integration_package::ManifestError implements core::fmt::Display
+pub struct field nomos_integration_package::IntegrationPackage::intents: Vec<MaterializationIntent>
+pub struct field nomos_integration_package::IntegrationPackage::package_id: PackageId
+pub struct field nomos_integration_package::IntegrationPackage::package_kind: PackageKind
+pub struct field nomos_integration_package::IntegrationPackage::package_version: PackageVersion
+pub struct field nomos_integration_package::IntegrationPackage::protocol_range: ProtocolRange
+pub struct nomos_integration_package::IntegrationPackage
+
+# re-exports of items declared outside this crate
+pub use nomos_materialization::MaterializationIntent
+pub use nomos_materialization::OwnedRegion
+pub use nomos_materialization::OwnershipClass
+pub use nomos_materialization::PublicationScope
+pub use nomos_package::PackageVersion
+pub use nomos_package::ProtocolRange

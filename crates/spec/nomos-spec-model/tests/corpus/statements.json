@@ -1,0 +1,242 @@
+[
+ {
+  "id": "AGT-001",
+  "kind": "Requirement",
+  "canonical_text": "Before agent work, Nomos shall produce a typed task envelope containing goal, scope, authoritative knowledge context, applicable rules, prohibited changes, available tools, and expected output schema.",
+  "canonical_hash": "sha256:2bd882723853e34f4262b5c3d78ee0762f18e0594dff643ef26ad1fc93673f6a"
+ },
+ {
+  "id": "AGT-017",
+  "kind": "Requirement",
+  "canonical_text": "Post-completion knowledge handoff — After an authorized merge, release, or equivalent completion event, Nomos shall be able to produce a provenance-preserving CompletionHandoff containing the final ChangeIntent disposition; actual semantic and textual changes; final snapshot; findings and finding transitions; suppressions, waivers, and their dispositions; tests; runtime or benchmark evidence; accepted, rejected, limited, superseded, withdrawn, and pending claims where applicable; approvals; rejected alternatives; package, provider, model, executor, workflow, rule, and capability-contract versions; and links to commits, reviews, attestations, capsules, captures, and other retained artifacts. The handoff shall preserve evidence bounds, source roles, authority, contradiction and supersession state, retention and privacy treatment, and enough identity and version information for later change preparation, audit, and bounded comparison.Every handoff shall have a stable identity and content-addressed version. Delivery to a knowledge peer shall be idempotent for the same handoff identity and version; retries shall not duplicate records, relationships, or evidence bindings. Partial ingestion, rejected items, unavailable dependencies, and deferred processing shall remain visible through per-attempt and per-item dispositions. Later corrections, commit reverts, benchmark invalidations, rationale corrections, decision supersession, retractions, or evidence withdrawals shall produce new versioned correction or supersession records linked to the affected handoff and items rather than rewriting or deleting prior evidence. Consumers shall be able to determine the currently effective disposition while retaining the historical record.The handoff may be ingested by KnowledgeWorkbench through the neutral Knowledge Integration Adapter, but failure, unavailability, truncation, rejection, delayed ingestion, correction, or supersession processing shall not alter the completed Nomos gate, run, release, or attestation result. Nomos shall not infer that every changed artifact, review statement, benchmark observation, agent explanation, accepted suppression, or rejected alternative is an adopted architectural decision, generalized claim, or normative rule. Promotion into repository policy or executable enforcement shall continue to require the applicable authority, epistemic-stage, RulePackage, review, versioning, publication, and rollout lifecycle.",
+  "canonical_hash": "sha256:ac05b3f4950aebdf3d5676ed39b8e5fcadf0b565d1c1b278a26590e3581fa5ac"
+ },
+ {
+  "id": "AGT-018",
+  "kind": "Requirement",
+  "canonical_text": "Semantic change authority resolution — Before an agent-originated mutation is authorized, Nomos shall classify its predicted effects into SemanticChangeClass values including at minimum local implementation, contract-compatible extension, public-interface change, dependency-boundary change, architecture-topology change, behavioral-default change, correctness or safety obligation change, policy or configuration change, rule change, generated-artifact change, and destructive removal. Organization and repository policy shall resolve every applicable class to an allowed authority level, required approver role, evidence obligations, permitted mutation mode, rollback boundary, validation scope, and autonomous-execution disposition. Resolution shall consider actual and predicted semantic effects, applicable architecture and decision contracts, generated lineage, affected variants, and governing ChangeIntent rather than file paths, textual edit size, or the operation label alone. Unresolved effects, scope expansion, or newly discovered effects requiring higher authority shall pause or reject mutation and create an explicit approval or re-authorization dependency; they shall not inherit the original authorization. After staging and before publication, Nomos shall compare observed effects with the resolved authorization and reject, roll back, or require approval for any unresolved higher-authority class. Before mutation, Nomos shall expose a user-visible projection of the resolved decision that states the classified effects, governing policy, trust evidence where used, required validation, approver roles, and the reason the operation is autonomous, preview-only, proposal-only, review-required, or prohibited. The projection shall refresh whenever staged or observed effects differ materially from predicted effects.",
+  "canonical_hash": "sha256:c970460ee39322b1de731d92172d5507b8d5a4452b74935abc44e30c1e71e299"
+ },
+ {
+  "id": "ARC-012",
+  "kind": "Requirement",
+  "canonical_text": "Every ProtocolBinding shall preserve endpoints, contract/version, mapping method, direction, confidence, provenance, configuration variant, and unresolved ambiguity.",
+  "canonical_hash": "sha256:c720d97c1e7b66b1471523f61e3a7552bcb3746b54bed4f3c70bf56a9b00006e"
+ },
+ {
+  "id": "CAL-003",
+  "kind": "Requirement",
+  "canonical_text": "KnowledgeWorkbench may generalize observations, identify recurring patterns, explain rationale, and propose a new rule or calibration change, but those outputs shall remain claims or proposals and shall not modify applicability, severity, thresholds, suppressions, or enforcement automatically.",
+  "canonical_hash": "sha256:f33653fbdd8813f3ea9c74108d8c4ec74bad926e28776a7cd22d7aa720cd1134"
+ },
+ {
+  "id": "CAL-008",
+  "kind": "Requirement",
+  "canonical_text": "The lifecycle shall preserve the epistemic sequence ObservedFact → GeneralizedClaim → AdoptedNorm → ExecutableEnforcement and shall prevent any later stage from being inferred solely from the existence of an earlier stage.",
+  "canonical_hash": "sha256:6bd95bacd97c6915586c9176334633ce2f9f331a2413221501e4930081fbebab"
+ },
+ {
+  "id": "COMP-TRANS-007",
+  "kind": "Requirement",
+  "canonical_text": "Compilation-transformation support is an optional provider family and shall not be required for the first usable deterministic check platform. Missing compiler-pass, optimization-report, intermediate-representation, linker, or binary capabilities shall degrade only dependent Atlas, analysis, or rule features and shall remain explicit. [Maturity: Optional provider family; Target: Release 5]",
+  "canonical_hash": "sha256:38ea5fe5f198fd9d8900d82c85d3b6e91974b4869aceb009e62d2372f3f643b2"
+ },
+ {
+  "id": "COR-CONFLICT-005",
+  "kind": "Requirement",
+  "canonical_text": "TemporalConflict identifies a required before/after relation or a correction whose validity depends on an intermediate state. ScopeConflict identifies required changes outside the authorized or declared change boundary.",
+  "canonical_hash": "sha256:df580a433826634879599092045234c479034234905fdbd3a2c63f61eec44412"
+ },
+ {
+  "id": "EGRAPH-003",
+  "kind": "Requirement",
+  "canonical_text": "EvidenceRequirement shall identify the required evidence type, governing obligation, subject, provider guarantee, scenario or workload, variant, completeness threshold, freshness conditions, and acceptance rule.",
+  "canonical_hash": "sha256:53ba1e784b2d33c35fce2a57e79bdc0f842993fee3d3a661cfa0a5feb95003b6"
+ },
+ {
+  "id": "FIND-011",
+  "kind": "Requirement",
+  "canonical_text": "ClusterGeometry shall declare whether membership is Exclusive or Overlapping. Overlapping membership is permitted when the grouping relation supports it; every member shall retain membership evidence, confidence or coverage where applicable, and grouping provenance.",
+  "canonical_hash": "sha256:35b680a754b32d0717dd7901301e88bebd27ea575633c0cb3580fe6bc4656495"
+ },
+ {
+  "id": "IF-001",
+  "kind": "Requirement",
+  "canonical_text": "Every user-visible query/action shall have a canonical application service and API/CLI equivalent.",
+  "canonical_hash": "sha256:518a8b10b05cedaf503aa044f6b33eb42dc1112d5c070ae459819d09b2e4702e"
+ },
+ {
+  "id": "IF-008",
+  "kind": "Requirement",
+  "canonical_text": "Cross-system protocol ownership — Schemas used to exchange identities, context requests, evidence references, task envelopes, operation references, and result provenance among Nomos, KnowledgeWorkbench, XVPE, orchestration clients, and other peers shall be governed as neutral versioned contracts. No participating peer's internal storage model, database identity, native graph type, private API, or release-specific implementation type shall become the shared protocol. Protocol evolution shall define compatibility ranges, extension namespaces, deprecation, migration, unknown-field behavior, and conformance independently from any one peer's release lifecycle.",
+  "canonical_hash": "sha256:d3fed763598544c555551a5da5a2ec7ec0501b838f60f8bbb3acba8162afe1bc"
+ },
+ {
+  "id": "MET-007",
+  "kind": "Requirement",
+  "canonical_text": "A client may not aggregate or blend a metric beyond the descriptor’s declared semantics. Non-aggregable metrics must remain at their native granularity or use an explicitly named derived metric.",
+  "canonical_hash": "sha256:982296a4798d5889e0b0a5046c6a42569096d12b01d3b13802540e0d4e0035d4"
+ },
+ {
+  "id": "MET-COMP-004",
+  "kind": "Requirement",
+  "canonical_text": "A projection may identify dominated, nondominated, incomparable, and equivalently bounded alternatives only under the declared dimensions, directionality, tolerances, uncertainty treatment, and missing-data policy. Dominance status shall be recomputed when any of those inputs changes.",
+  "canonical_hash": "sha256:1e412dff67cf62caee0ba4f6181f129d5d1efcc9f83c89b163131fe99127e6ab"
+ },
+ {
+  "id": "NFR-EXT-001",
+  "kind": "Requirement",
+  "canonical_text": "Core schemas remain small and stable; provider-specific facts use namespaced extensions and self-describing descriptors.",
+  "canonical_hash": "sha256:81d68755ff4f5a264b070d96ca37559a2d964164f622bb447011b4de2e62fcb9"
+ },
+ {
+  "id": "PERF-MODE-001",
+  "kind": "Requirement",
+  "canonical_text": "Every shipped operating mode shall have an OperatingModeProfile defining representative dataset scale, cold and warm latency targets, freshness guarantee, cancellation responsiveness, peak and steady-state memory budget, incremental invalidation budget, streaming/pagination behavior, approximation or truncation policy, and degraded-mode behavior.",
+  "canonical_hash": "sha256:e3ff95190f0acd4f12ce501e37fb671b35a88a0478a044907f6927daf9609d82"
+ },
+ {
+  "id": "PKG-002",
+  "kind": "Requirement",
+  "canonical_text": "The system shall derive effective rule applicability from the rule’s canonical capability requirements, target language features, verified provider capabilities, installed and available tools, repository configuration, target context, and compatibility-test results. No manually duplicated language-rule support list shall be authoritative.",
+  "canonical_hash": "sha256:d767fd9cb7d7b64202df2fb39ace1734c3b37c09c54045ae3f7568e58b9fb80d"
+ },
+ {
+  "id": "PKG-019",
+  "kind": "Requirement",
+  "canonical_text": "Availability states shall distinguish ProviderUnavailable from DependencyUnavailable. DependencyUnavailable covers a required SDK, executable, runtime, compiler, service, license, or environment prerequisite.",
+  "canonical_hash": "sha256:5dece8419c2654652ffde5b26e5c4d17cd36a3e8d955ff2455f46af0a24a5c54"
+ },
+ {
+  "id": "RUNTIME-001",
+  "kind": "Requirement",
+  "canonical_text": "Runtime-rule execution modes shall be OfflineCaptureEvaluation, StreamingObservation, or ActiveRuntimeGuard. These modes are distinct capability, authority, performance, and deployment contracts and shall never be inferred from one another.",
+  "canonical_hash": "sha256:d024f07ec15cc131143e4a1d7e17a9113786a79baac428d34550b055150203f2"
+ },
+ {
+  "id": "US-AGT-001",
+  "kind": "User Story",
+  "canonical_text": "— Developer: As a developer, I can prepare an agent change that includes architecture context, relevant decisions, applicable rules, permitted paths, required tests, and forbidden actions.",
+  "canonical_hash": "sha256:c0df26048521a01115817641e5e28b3a5199b06852fffbe15bc04fe2cba6a8bc"
+ },
+ {
+  "id": "US-AGT-002",
+  "kind": "User Story",
+  "canonical_text": "— Developer: As a developer, I can review an agent’s plan, assumptions, expected artifacts, and requested scope expansion before edits are applied.",
+  "canonical_hash": "sha256:cfc33d3da752ffaef65cdcc7990c2ffeedaf04b210734b5cea9c4f6ed9f36d45"
+ },
+ {
+  "id": "US-AGT-003",
+  "kind": "User Story",
+  "canonical_text": "— Agent: As an agent, I can request semantic operations such as rename, references, move, generator, compile, test, or check through Nomos capabilities.",
+  "canonical_hash": "sha256:ba8deecbcbc8628ca33658616a9f5c89c08619aa9382a566c28c64f45b225811"
+ },
+ {
+  "id": "US-AGT-004",
+  "kind": "User Story",
+  "canonical_text": "— Reviewer: As a reviewer, I can distinguish compiler/test/Nomos evidence from agent judgment in the final PR package.",
+  "canonical_hash": "sha256:9319cfffe7ea2d36930dec2e414b3a8d29b0a70f90675cd1767d9925816eeae9"
+ },
+ {
+  "id": "US-AGT-005",
+  "kind": "User Story",
+  "canonical_text": "— Knowledge curator: As a curator, I can connect Nomos findings, fixes, suppressions, and false positives to standards and design decisions in KnowledgeWorkbench.",
+  "canonical_hash": "sha256:b839679ef689416490da603da50f19e8c482b2e538cb5a00bd55444b7d4d8a7a"
+ },
+ {
+  "id": "US-AGT-006",
+  "kind": "User Story",
+  "canonical_text": "— Developer or agent: As a developer or approved agent, I can prepare change context for a symbol, scope, or task and receive one provenance-preserving package containing architecture and decision context, applicable Nomos rules, allowed scope, required tests and evidence, prohibited actions, unavailable analysis, and approved tools. Acceptance: the response pins snapshot and build variant, distinguishes KnowledgeWorkbench explanation from executable Nomos constraints, and is available through API, CLI, MCP, and capable clients.",
+  "canonical_hash": "sha256:b4b168e061df6b8f113e33f2a9a0fb2b55dba26ee7fb8f0324a5a4bd7e5f0f59"
+ },
+ {
+  "id": "US-AGT-007",
+  "kind": "User Story",
+  "canonical_text": "— Developer or reviewer: As a developer or reviewer, I can contextualize a Nomos finding with its purpose, motivating defects, related decisions, accepted exceptions, prior false positives or suppressions, comparable corrections, contradictions, and citations. Acceptance: the original finding remains immutable and visibly distinct from the contextual layer; KnowledgeWorkbench content cannot change whether the finding exists, passes, blocks, or is suppressed.",
+  "canonical_hash": "sha256:b6f94ac6aa06cb41991b39c04794b9cc4dbeb813d7f1cdd261e22aeac7fd966b"
+ },
+ {
+  "id": "US-AGT-008",
+  "kind": "User Story",
+  "canonical_text": "— Developer or agent: As a developer or approved agent, I can inspect the source role, authority, scope, freshness, and permitted use of every item in prepared change context. Acceptance: repository policy, approved decisions, implementation documentation, code/test evidence, runtime observations, external references, historical rationale, and agent interpretation are visibly distinct; relevance ranking cannot silently promote a lower-authority source.",
+  "canonical_hash": "sha256:39608031670065dab1f83eb91381f2ee13b675521070aa7990385b0c2a33c374"
+ },
+ {
+  "id": "US-AGT-009",
+  "kind": "User Story",
+  "canonical_text": "— Reviewer or architect: As a reviewer or architect, I can see contradictory or superseded sources alongside the current governing contract and understand why each item was included. Acceptance: historical rationale and external references remain explanatory; bounded benchmark observations retain workload/environment limits; agent-generated synthesis is labeled; unresolved authority conflicts prevent the context from being represented as a complete normative instruction set.",
+  "canonical_hash": "sha256:e7922b17284caa09efc30957de76d5747dc3e93d7a6a3b107736bf55d33bb80d"
+ },
+ {
+  "id": "US-AGT-010",
+  "kind": "User Story",
+  "canonical_text": "— Developer, reviewer, or release operator: As a developer, reviewer, or release operator, I can produce a post-completion handoff after an authorized merge, release, or equivalent completion event so that later work can reuse the final change disposition, evidence, decisions, alternatives, and artifact relationships without reinterpreting raw history.",
+  "canonical_hash": "sha256:09e029899d01885493369f4d8e49bc48ed71aaef87a4e507bd5e889f672c034b"
+ },
+ {
+  "id": "US-AGT-011",
+  "kind": "User Story",
+  "canonical_text": "— Repository owner, architect, or agent operator: As a repository owner, architect, or agent operator, I can inspect how a proposed agent mutation is classified and why it is autonomous, review-required, proposal-only, or prohibited before any repository change occurs.",
+  "canonical_hash": "sha256:7b31dbb4c029250631dd50d78d97c8ffdeb3608feb33cf82e91e7490715560d5"
+ },
+ {
+  "id": "US-API-001",
+  "kind": "User Story",
+  "canonical_text": "— External tool builder: As an external builder, I can query raw symbols, edges, metrics, findings, coverage, snapshots, and provider outputs.",
+  "canonical_hash": "sha256:2590c294badb6d370bc8efe31c072b31316d082b029962e6570e70b53a088d7e"
+ },
+ {
+  "id": "US-API-002",
+  "kind": "User Story",
+  "canonical_text": "— External tool builder: As an external builder, I can call derived queries for boundaries, cycles, coupling, hotspots, atlas regions, diffs, and transformation previews.",
+  "canonical_hash": "sha256:6981d7ec0a5d692689e8b1cb1ff203a790f9d2374e392a7336f402800e1f0334"
+ },
+ {
+  "id": "US-APP-001",
+  "kind": "User Story",
+  "canonical_text": "— Developer: As a developer, I can always see the active repository, revision or working tree, build variant, effective configuration, package set, analysis freshness, authority, and trust context in a rich client.",
+  "canonical_hash": "sha256:12e9da8f32654f4b90e38ec86cfcc7292a1f0ce7f1a0d4e9c11e2b1155886bbd"
+ },
+ {
+  "id": "US-APP-002",
+  "kind": "User Story",
+  "canonical_text": "— User: As a user, I can carry one canonical SelectionContext across Check Workspace, Software Atlas, Architecture Explorer, Feature and Test modes, Debug, Workflow Editor, Run Explorer, Rule Studio, Integrations, and Settings.",
+  "canonical_hash": "sha256:14d1cc2afd6e4743d0905e10539a82ffdab43dfc5d1c5be427acb765791a0572"
+ },
+ {
+  "id": "US-ARC-005",
+  "kind": "User Story",
+  "canonical_text": "— Developer: As a developer, I can preview how moving or splitting a symbol/module changes coupling, cycles, boundary surface, findings, and public APIs.",
+  "canonical_hash": "sha256:5706d027771da954ca298d9aa4cdcf47ad9446469b13b86d0854d326a5920a21"
+ },
+ {
+  "id": "US-CLIENT-SHELL-002",
+  "kind": "User Story",
+  "canonical_text": "— Web user: As a web user, I can review PR/CI runs, compare shared snapshots, administer policy, collaborate, approve workflows, and use remote/self-hosted workers without installing the full client.",
+  "canonical_hash": "sha256:455dc9e657de31feb59c194f23aa8b2e0b0873800cbab1d4f81bbd5c3c1fe577"
+ },
+ {
+  "id": "US-EGRAPH-001",
+  "kind": "User Story",
+  "canonical_text": "— Reviewer: As a reviewer, I can trace every completion, conformance, compatibility, performance, or safety claim to the exact evidence that supports, limits, contradicts, or leaves it unresolved.",
+  "canonical_hash": "sha256:3dfde1bcde7ef692da3b49ff148909fdf5d35c0c29e88f946525477298aeabbc"
+ },
+ {
+  "id": "US-IDE-001",
+  "kind": "User Story",
+  "canonical_text": "— Neovim user: As a Neovim user, I can compose Nomos commands, Lua APIs, trees, quickfix lists, extmarks, diagnostics, DAP integration, and synchronized external visual views.",
+  "canonical_hash": "sha256:6f81f32078cc7b16713dd24e37f960ae7e2089298178f3e17d07535431548d65"
+ },
+ {
+  "id": "US-PKG-004",
+  "kind": "User Story",
+  "canonical_text": "— Rule author: As a rule author, I can simulate a proposed rule/version across historical snapshots before enabling it.",
+  "canonical_hash": "sha256:b14342271cd5b5b22153d6520dcc3ef921b611ec42eb6f316cd2204dfe9d8f8a"
+ },
+ {
+  "id": "US-SDK-001",
+  "kind": "User Story",
+  "canonical_text": "— Package developer: As a package developer, I can scaffold, validate, test, package, sign, and locally load supported package families through one headless SDK and conformance toolchain.",
+  "canonical_hash": "sha256:dab76af49757b25b313089ab9b05cb1265ae2fda1304b57e1704267e49100dce"
+ }
+]

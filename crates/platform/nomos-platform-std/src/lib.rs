@@ -1,0 +1,20 @@
+//! Zone: Backend — the std implementation of the platform port.
+//!
+//! Ordinary operating-system facilities, with two pieces that are worth reading rather
+//! than skimming: the atomic file replace, and the cross-process lock.
+
+#![forbid(unsafe_code)]
+
+mod system_clock;
+mod file_lock_guard;
+mod std_file_system;
+mod std_program_launcher;
+mod file_lock;
+mod std_environment;
+
+pub use system_clock::SystemClock;
+pub use std_file_system::StdFileSystem;
+pub use std_program_launcher::StdProgramLauncher;
+pub use file_lock_guard::FileLockGuard;
+pub use file_lock::FileLock;
+pub use std_environment::StdEnvironment;

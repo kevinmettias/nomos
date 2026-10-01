@@ -1,0 +1,73 @@
+//! What `nomos check` was asked for.
+
+use super::{CheckCommand, CheckInvocation, Named_Value_From_String_Arguments, PathBuf};
+use crate::gate::{Sarif_Destination_From_Arguments, SARIF_FLAG};
+
+pub(super) const USAGE: &str = "usage: nomos check [--root <path>] [--sarif [<path>]]\n\n\
+     Runs every rule over the tree and reports what they find. Which rules those are is \
+     deliberately not named here: `nomos gate plan --root <path>` names every one of them, \
+     read out of the rule set this binary composes, so the answer cannot be a rule behind \
+     the binary printing it. See `OD-AGENT-004`.\n\n\
+     --sarif also writes the judgment as a SARIF 2.1.0 log: to <path>, or to standard output \
+     when no path follows it, in which case the report moves to standard error. It changes no \
+     exit code.\n\n\
+     exit codes: 0 nothing blocking, 1 findings that can fail a build, 2 usage,\n\
+     \x20           5 unreadable tree, 6 nothing was judged";
+
+/// Parses the group's arguments.
+///
+/// # Errors
+///
+/// Returns the usage message when an argument is not understood.
+pub fn Check_Command_From_String_Arguments(arguments: &[String]) -> Result<CheckInvocation, String>
+{
+    if let Some(unknown) = arguments
+        .iter()
+        .find(|argument| return argument.starts_with('-') && argument.as_str() != "--root" && argument.as_str() != SARIF_FLAG)
+    {
+        return Err(format!("unknown argument `{unknown}`.\n\n{USAGE}"));
+    }
+
+    return Ok(CheckInvocation {
+        command: CheckCommand {
+            root: Named_Value_From_String_Arguments(arguments, "--root").map_or_else(|| return PathBuf::from("."), PathBuf::from),
+        },
+        sarif: Sarif_Destination_From_Arguments(arguments),
+    });
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Check_Command_From_String_Arguments_Should_Default_Root_To_The_Current_Directory()
+    {
+        let command =
+            Check_Command_From_String_Arguments(&[]).expect("no argument is present for the parser to refuse");
+
+        assert_eq!(command.command.root, PathBuf::from("."));
+    }
+
+    #[test]
+    fn Test_Check_Command_From_String_Arguments_Should_Read_An_Explicit_Root()
+    {
+        let arguments = vec!["--root".to_owned(), "some/tree".to_owned()];
+
+        let command = Check_Command_From_String_Arguments(&arguments)
+            .expect("`--root` is a flag the check parser accepts, and it carries a value");
+
+        assert_eq!(command.command.root, PathBuf::from("some/tree"));
+    }
+
+    #[test]
+    fn Test_Check_Command_From_String_Arguments_Should_Refuse_An_Unknown_Flag()
+    {
+        let arguments = vec!["--not-a-real-flag".to_owned()];
+
+        let error = Check_Command_From_String_Arguments(&arguments).expect_err("unknown flag");
+
+        assert!(error.contains("unknown argument"), "{error}");
+    }
+}

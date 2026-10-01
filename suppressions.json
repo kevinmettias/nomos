@@ -1,0 +1,1940 @@
+{
+  "schema": 1,
+  "waivers": [
+    {
+      "check": "check-explicit-return",
+      "path": "tests/contract/src/reading/source_files.rs",
+      "fingerprint": "c086a8f3093dd299",
+      "reason": "this function's tail expression is a match/loop where every reachable arm already exits via its own explicit return -- the construct as a whole diverges, so wrapping it in an outer return produces a genuine rustc unreachable_code warning rather than a real fix (confirmed by applying --fix and rebuilding). Each arm's own explicit return already gives the 'visual landmark' this check exists for.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-closure-bounds",
+      "path": "tests/integration/src/verification.rs",
+      "fingerprint": "3d68d4d1a7215e69",
+      "reason": "Fn is the minimal bound: the producer is invoked once per repetition through a shared reference (rules out FnOnce), and FnMut is refused deliberately since mutable state across repetitions is exactly what this verifier exists to rule out. check-closure-bounds is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-lifetime-discipline",
+      "path": "crates/platform/nomos-platform-std/src/launcher/drain.rs",
+      "fingerprint": "bb192e8207fa83dc",
+      "reason": "'static is required by std::thread::spawn, which moves the reader onto a detached thread that outlives this call -- not a bound chosen here. check-lifetime-discipline is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker. Fingerprint refreshed 2026-08-29: P19-NAMING-ATTRS renamed the generic parameter on this line (R -\u003e Source), which is all that changed.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-closure-bounds",
+      "path": "crates/substrate/nomos-ledger/tests/exclusion_holds/interleaving.rs",
+      "fingerprint": "9730566a4eff1eb3",
+      "reason": "Send is required by std::thread::scope(..).spawn(..), which runs this closure on another thread -- not a habitual bound. check-closure-bounds is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-closure-bounds",
+      "path": "crates/substrate/nomos-ledger/tests/exclusion_holds/interleaving.rs",
+      "fingerprint": "7b4b62ef2bcce807",
+      "reason": "Send is required by std::thread::scope(..).spawn(..), which runs this closure on another thread -- not a habitual bound. check-closure-bounds is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-closure-bounds",
+      "path": "crates/substrate/nomos-ledger/tests/exclusion_holds/interleaving.rs",
+      "fingerprint": "5dddefc6a59d4112",
+      "reason": "Send is required by std::thread::scope(..).spawn(..), which runs this closure on another thread -- not a habitual bound. check-closure-bounds is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-closure-bounds",
+      "path": "crates/substrate/nomos-ledger/tests/exclusion_holds/interleaving.rs",
+      "fingerprint": "3df057a7db61e9c7",
+      "reason": "Send is required by std::thread::scope(..).spawn(..), which runs this closure on another thread -- not a habitual bound. check-closure-bounds is not one of the safety-critical checks an in-code marker still argues under this repository's safety-only policy, so this moves here per OD-GATE-018's own remedy for an unhonoured marker.",
+      "owner": "@kmettias",
+      "expires": "2027-02-25"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/contracts/nomos-contracts/src/package_kind.rs",
+      "fingerprint": "d347fc248bbfe845",
+      "reason": "ServiceModule is the corpus-quoted PackageKind variant name transcribed verbatim from OD-PACKAGE-002's source volume, not a vague filler word. Renaming it would break its 1:1 mirror with its 15 sibling *_MODULE_LABEL/*_PACKAGE_LABEL/etc. constants and diverge from the taxonomy's own transcribed spelling.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/contracts/nomos-contracts/src/determinism/strategy.rs",
+      "fingerprint": "eedb83af016fb5a3",
+      "reason": "Real external callers outside crates/rules and crates/contracts; renaming here would require a coordinated cross-crate edit this mechanical sweep did not scope for. Deferred as its own future increment rather than expanding this item's territory.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/contracts/nomos-contracts/src/guarantee.rs",
+      "fingerprint": "360d9daf83002951",
+      "reason": "Real external callers outside crates/rules and crates/contracts; renaming here would require a coordinated cross-crate edit this mechanical sweep did not scope for. Deferred as its own future increment rather than expanding this item's territory.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/contracts/nomos-contracts/src/guarantee/assurance.rs",
+      "fingerprint": "190fce7aaa0c758b",
+      "reason": "Real external callers outside crates/rules and crates/contracts; renaming here would require a coordinated cross-crate edit this mechanical sweep did not scope for. Deferred as its own future increment rather than expanding this item's territory.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-file-name",
+      "path": "crates/rules/nomos-rules/src/lib.rs",
+      "fingerprint": "d66975421123cd78",
+      "reason": "lib.rs is the crate root and every crate needs one as its entry point; renaming it to follow a type it happens to declare is not a real option.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-scope-discipline",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/run_id.rs",
+      "fingerprint": "8b0cf7dec592cfe7",
+      "reason": "process-lifetime atomic counter; sole purpose is disambiguating same-second calls to Fresh_Run_Id process-wide -- no single caller can own it without threading a counter through every crates/host call site.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/addressing/document_path.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/addressing/document_revision.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/store/relation/from_node_id.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/store/relation/inverse_relation_type.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/store/relation/to_node_id.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/table/suite_authority/suite_id.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/spec/nomos-spec-store/src/table/suite_authority/suite_title.rs",
+      "fingerprint": "408aed039fe7e893",
+      "reason": "the \u0026String parameter is the concrete type argument of impl From\u003c\u0026'a String\u003e, kept beside a sibling impl From\u003c\u0026'a str\u003e so a generic impl Into\u003cT\u003e bound accepts a borrowed String too -- retyping this parameter to \u0026str would collide with (duplicate) that sibling impl.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/capabilities/nomos-cap-syntax/src/payload/render.rs",
+      "fingerprint": "29cdccead203ca09",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/platform/nomos-platform-std/src/std_process_launcher.rs",
+      "fingerprint": "c3de846cce983bca",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/platform/nomos-platform/src/process_launcher/command.rs",
+      "fingerprint": "f018bfac7f6373cb",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/platform/nomos-platform/src/process_launcher/process_output.rs",
+      "fingerprint": "4eadb5f5c7607525",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/capabilities/nomos-cap-syntax/src/payload/observation.rs",
+      "fingerprint": "21b4e5d3772c97df",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/capabilities/nomos-cap-syntax/src/payload_item.rs",
+      "fingerprint": "e16e254e4e6fb173",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/kernel/nomos-model/src/subject/intersection.rs",
+      "fingerprint": "5ea882dbc3ef1387",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-boolean-predicate",
+      "path": "crates/platform/nomos-platform/src/file_system.rs",
+      "fingerprint": "8ccbbef49176d115",
+      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "4940532994168ea6",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "68336b661525bfc3",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "dee6e9d1efbe4a72",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "d124db8e1623cdbd",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "bf206271cd66221b",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "649fd5753e95024a",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run.rs",
+      "fingerprint": "b632e102c8e41ed8",
+      "reason": "this pub use forms part of the crate's real public API surface -- nomos_spec_orchestration::Commit_Staged_Edit (and its siblings) is called directly by that qualified path from crates/host/nomos-cli, so this is a load-bearing re-export chain, not a private import for internal convenience. The checker can't distinguish a pub use from a movable one and doesn't see the external caller.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-crate-split",
+      "path": "crates/platform/nomos-platform",
+      "reason": "nomos-platform is Band 1p, the single platform port crate: its own lib.rs doc comment states the reason all its trait groups are bundled -- 'exactly one crate in the workspace names a platform dependency,' so swapping the implementation cannot recompile the bands above. Reviewed and answered already in commit 57386670 ('Bind imports to the facade, and answer the four crate-split reviews'); splitting it now would undo that settled decision, not fix a defect.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-crate-split",
+      "path": "crates/platform/nomos-platform-std",
+      "reason": "nomos-platform-std is the std implementation of nomos-platform's unified port (Band 1p) and mirrors its bundled shape for the same reason -- a caller depending on the real implementation needs the whole port, not one trait's worth. Same 57386670 review as nomos-platform.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-crate-split",
+      "path": "crates/spec/nomos-spec-model",
+      "reason": "nomos-spec-model's own lib.rs doc comment already answers this: the content model and the submission vocabulary are correctly read as two unreferencing groups today because the typed layer that would connect them (a submission naming the content it is about) does not exist yet. The comment states explicitly that splitting is a band-and-ownership decision this repository settles deliberately, not one to make while tidying the tree.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/capabilities/nomos-cap-dependency/src/dependency_kind.rs",
+      "fingerprint": "b827df24de40d8a4",
+      "reason": "a small 'strip a tag prefix, else return a local refusal' idiom with no natural shared home: nomos_contracts is charter-restricted (OD-CONTRACTS-001) to types crossing a process/peer boundary, which this private parser isn't, and nomos_capability is chartered to registry/contract resolution. Also demonstrably fragile -- the fingerprint shifts which two files it pairs against after an unrelated identifier rename, indicating it matches a generic idiom near the check's minimum-size threshold rather than a stable design duplication.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/capabilities/nomos-cap-lint/src/payload.rs",
+      "fingerprint": "f35e6f1d6e198ab4",
+      "reason": "a small 'strip a tag prefix, else return a local refusal' idiom with no natural shared home: nomos_contracts is charter-restricted (OD-CONTRACTS-001) to types crossing a process/peer boundary, which this private parser isn't, and nomos_capability is chartered to registry/contract resolution. Also demonstrably fragile -- the fingerprint shifts which two files it pairs against after an unrelated identifier rename, indicating it matches a generic idiom near the check's minimum-size threshold rather than a stable design duplication.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-bundle/src/export.rs",
+      "fingerprint": "b83faf284cc04f65",
+      "reason": "renamed facade re-export Export: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because pre-existing, on this naming-clarity-phase campaign's central-exclusion list.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-model/src/block.rs",
+      "fingerprint": "8fc8eb4eaa57e9f0",
+      "reason": "renamed facade re-export Segment: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because ~30 call sites across crates/spec plus tests/integration/tests/determinism/spec_productions.rs, outside this sweep's territory.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-project/src/build.rs",
+      "fingerprint": "8e3abaced8aec843",
+      "reason": "renamed facade re-export Build: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because called from nomos-spec-orchestration and tests/integration, outside this sweep's territory.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-project/src/build.rs",
+      "fingerprint": "4c4d0b13c37b6553",
+      "reason": "renamed facade re-export Check: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because called from nomos-spec-orchestration and tests/integration, outside this sweep's territory.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-bundle/src/lib.rs",
+      "fingerprint": "e2adc69d25e10a14",
+      "reason": "renamed facade re-export RecordRelation: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because real collision: the destuttered bare name Relation would collide with this same crate's row::relation::Relation.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-ingest/src/lib.rs",
+      "fingerprint": "ef76cadf45166270",
+      "reason": "renamed facade re-export BlockLineage: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because real sibling-name collision: this crate also declares SectionLineage, both would destutter to Lineage.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-ingest/src/lib.rs",
+      "fingerprint": "858ae6ef0b5e35d5",
+      "reason": "renamed facade re-export SectionLineage: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because real sibling-name collision with BlockLineage, both would destutter to Lineage.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-ingest/src/lib.rs",
+      "fingerprint": "781467335098acbc",
+      "reason": "renamed facade re-export StatementReport: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because real sibling-name collision: this crate also declares OverlayReport, both would destutter to Report.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-model/src/lib.rs",
+      "fingerprint": "01d1adef4947bee8",
+      "reason": "renamed facade re-export BlockKind: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because real sibling-name collision: this crate also declares StatementKind, both would destutter to Kind.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-model/src/lib.rs",
+      "fingerprint": "935ea9581fd212ff",
+      "reason": "renamed facade re-export StatementKind: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because real sibling-name collision with BlockKind, both would destutter to Kind.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-validate/src/rule.rs",
+      "fingerprint": "e0ffd602d11c80c4",
+      "reason": "renamed facade re-export RuleOutcome: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because the destuttered bare name has ~10-file in-crate fan-out, large enough to not be a clean 1-line fix.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-validate/src/rule.rs",
+      "fingerprint": "41556306ee4b2753",
+      "reason": "renamed facade re-export RuleResult: the internal type/file was destuttered per the check-tree-legibility fix, but the facade alias is kept here rather than propagated because the destuttered bare name Result would shadow std::result::Result everywhere it's imported.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/contracts/nomos-contracts/src/authority.rs",
+      "fingerprint": "f615551ea6a6b29b",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/contracts/nomos-contracts/src/determinism.rs",
+      "fingerprint": "659bec45531474bf",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/contracts/nomos-contracts/src/peer.rs",
+      "fingerprint": "91a36146a4f7ac6d",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/contracts/nomos-contracts/src/reporting/enforcement.rs",
+      "fingerprint": "27c905ef36853fb4",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/contracts/nomos-contracts/src/reporting/enforcement.rs",
+      "fingerprint": "46652040908deb7c",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/entity.rs",
+      "fingerprint": "b430c9e37dd25474",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/evidence.rs",
+      "fingerprint": "e9a9a50378ff71bf",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/identity.rs",
+      "fingerprint": "3cf8586a04cb0077",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/identity.rs",
+      "fingerprint": "78d4f4b4eca519ff",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/identity.rs",
+      "fingerprint": "70b61e1693e9c2b5",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/subject.rs",
+      "fingerprint": "b883ab01e1f6bc75",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/subject.rs",
+      "fingerprint": "b7117ce6c7419f27",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-model/src/subject.rs",
+      "fingerprint": "1120399493fee2c0",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-store/src/document.rs",
+      "fingerprint": "70f6bab1041f4184",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/kernel/nomos-store/src/document.rs",
+      "fingerprint": "6cd9f0e0a0d8393b",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/platform/nomos-platform/src/file_system.rs",
+      "fingerprint": "41f0801335041e73",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-analysis/src/fact_payload.rs",
+      "fingerprint": "bb3e716fab8d75d1",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-analysis/src/fact_payload.rs",
+      "fingerprint": "5b98be1964765c3c",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-analysis/src/fact_payload.rs",
+      "fingerprint": "30acc7c7e3bbbe53",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-analysis/src/fact_payload.rs",
+      "fingerprint": "d3f99d041046e3f0",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-analysis/src/fact_payload.rs",
+      "fingerprint": "3e080e585491eb77",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-analysis/src/invalidation.rs",
+      "fingerprint": "377a8e2e340c411e",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-capability/src/registry.rs",
+      "fingerprint": "a2f62324e38e8bb4",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-capability/src/registry.rs",
+      "fingerprint": "1511ea7f989e4bdb",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/finish.rs",
+      "fingerprint": "30baf79202a76534",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/gate_unknown.rs",
+      "fingerprint": "d512931f8b0a986c",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/holder.rs",
+      "fingerprint": "0692801c15b4ed7a",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/holder.rs",
+      "fingerprint": "dada7883a34fd288",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/holder.rs",
+      "fingerprint": "39104a0d37eb9345",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/holder.rs",
+      "fingerprint": "c0d8a894c66b7eed",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-ledger/src/verification.rs",
+      "fingerprint": "975bee25d9ba748d",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-workspace/src/change.rs",
+      "fingerprint": "c669a276c704f014",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-workspace/src/change.rs",
+      "fingerprint": "c0fb601be2bab403",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-workspace/src/effect.rs",
+      "fingerprint": "a9217138b43a349a",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-workspace/src/workspace.rs",
+      "fingerprint": "fe54064c65e89aab",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/substrate/nomos-workspace/src/workspace.rs",
+      "fingerprint": "8866ea7bdbab7103",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple this mechanical sweep did not scope for. The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-tree-legibility",
+      "path": "crates/spec/nomos-spec-project/src/profile/profile_section.rs",
+      "fingerprint": "c6680fba896f0fbf",
+      "reason": "lib.rs already carries a deliberate comment explaining ProfileSection keeps its longer name because section::Section (a different concept, a rendered-projection section) is also exported bare from this crate, and aliasing at the facade was explicitly rejected there as worse than the descriptive declaration name.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-folder-organization",
+      "path": "crates/contracts/nomos-contracts/src",
+      "fingerprint": "14bb214cc5d29cf6",
+      "reason": "each remaining top-level module is an independently-versioned protocol vocabulary axis (OD-CONTRACTS-001), and the crate's own module doc rejects merging any of them further. Already reduced from 12 to 11 files by a real regroup (enforcement+finding moved under reporting/).",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-folder-organization",
+      "path": "crates/corrections/nomos-corrections/src",
+      "fingerprint": "472b5af0e004b6cd",
+      "reason": "genuinely coherent: one domain (the correction preview-\u003estage-\u003evalidate-\u003ecommit-\u003erollback lifecycle plus its supporting vocabulary), every file name is already self-descriptive, and the existing subfolders already group the multi-file concepts.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-folder-organization",
+      "path": "crates/host/nomos-api/src/spec",
+      "fingerprint": "22a74bd5ef8f1542",
+      "reason": "this module's own doc already states an explicit one-file-per-verb-and-response convention; shared twin types span multiple verbs so a subfolder split would need an arbitrary owner.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-folder-organization",
+      "path": "crates/host/nomos-api/src/work",
+      "fingerprint": "c45d3c1db69287e7",
+      "reason": "same reasoning as spec/: this module's own doc states an explicit one-file-per-verb-and-response convention; a subfolder split would need an arbitrary owner.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-folder-organization",
+      "path": "crates/spec/nomos-spec-store/src",
+      "fingerprint": "a1955fdbc17f6c33",
+      "reason": "each of the 9 facade/directory pairs is already a distinct, doc-commented responsibility, and registration is pinned at the crate root specifically because build.rs reaches it via a hardcoded #[path = \"src/registration.rs\"] (a build-script constraint, not a legibility problem).",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-folder-organization",
+      "path": "crates/substrate/nomos-analysis/src",
+      "fingerprint": "8c2cf4513d3e56a6",
+      "reason": "flat top level of single-responsibility files (Component, Context, FactReuse, GenerationCause, InputDigest, ReadOutcome, Reader, Propagation); multi-file concepts already carved into their own subfolders (fact/, invalidation/, reading/, store/).",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/agent/nomos-agent-contracts/src/work_result.rs",
+      "reason": "WorkResult.plan is a direct, intentional composition of a pre-existing nomos_corrections type (per this crate's own doc comment, its purpose is bundling scattered contract types) -- not misplaced logic, the edge is genuinely the module's.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/agent/nomos-agent-executor-claude-code/src/lib.rs",
+      "reason": "small (4-file) adapter crate whose entire job is consuming the shared contract type; 'one file' is a symptom of crate size, not misplacement.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/agent/nomos-model-backend-ollama/src/lib.rs",
+      "reason": "small (4-file) adapter crate whose entire job is consuming the shared contract type; 'one file' is a symptom of crate size, not misplacement.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/capabilities/nomos-cap-controlflow/src/contract.rs",
+      "reason": "each capability crate is deliberately single-file by long-standing documented architecture (band 23, one purpose: a contract crate exists specifically to be owned by neither its provider nor any rule). The check's own suggested alternative -- 'general form that belongs beneath them both' -- is now literally satisfied by nomos_capability::contract_testing; the 'one file' signal persists only because the crate correctly has exactly one file.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/capabilities/nomos-cap-dependency-policy/src/contract.rs",
+      "reason": "each capability crate is deliberately single-file by long-standing documented architecture (band 23, one purpose: a contract crate exists specifically to be owned by neither its provider nor any rule). The check's own suggested alternative -- 'general form that belongs beneath them both' -- is now literally satisfied by nomos_capability::contract_testing; the 'one file' signal persists only because the crate correctly has exactly one file.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/capabilities/nomos-cap-dependency/src/contract.rs",
+      "reason": "each capability crate is deliberately single-file by long-standing documented architecture (band 23, one purpose: a contract crate exists specifically to be owned by neither its provider nor any rule). The check's own suggested alternative -- 'general form that belongs beneath them both' -- is now literally satisfied by nomos_capability::contract_testing; the 'one file' signal persists only because the crate correctly has exactly one file.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/capabilities/nomos-cap-lint/src/contract.rs",
+      "reason": "each capability crate is deliberately single-file by long-standing documented architecture (band 23, one purpose: a contract crate exists specifically to be owned by neither its provider nor any rule). The check's own suggested alternative -- 'general form that belongs beneath them both' -- is now literally satisfied by nomos_capability::contract_testing; the 'one file' signal persists only because the crate correctly has exactly one file.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/host/nomos-api/src/composition.rs",
+      "reason": "env! resolves per-caller, can't move -- legitimate composition/dispatch point for its crate.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/host/nomos-api/src/sources.rs",
+      "reason": "inherent to its composition-root walk role -- legitimate composition/dispatch point for its crate.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/languages/nomos-lang-go-modules/src/fact_context.rs",
+      "reason": "a fact_context.rs or guarantee.rs file that is the sole place its crate touches this dependency, by design -- a language provider's fact-context/guarantee integration point.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/languages/nomos-lang-go-modules/src/guarantee.rs",
+      "reason": "a fact_context.rs or guarantee.rs file that is the sole place its crate touches this dependency, by design -- a language provider's fact-context/guarantee integration point.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/languages/nomos-lang-go/src/fact_context.rs",
+      "reason": "a fact_context.rs or guarantee.rs file that is the sole place its crate touches this dependency, by design -- a language provider's fact-context/guarantee integration point.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/languages/nomos-lang-rust-cargo/src/fact_context.rs",
+      "reason": "a fact_context.rs or guarantee.rs file that is the sole place its crate touches this dependency, by design -- a language provider's fact-context/guarantee integration point.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/languages/nomos-lang-rust-cargo/src/guarantee.rs",
+      "reason": "a fact_context.rs or guarantee.rs file that is the sole place its crate touches this dependency, by design -- a language provider's fact-context/guarantee integration point.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/fact_context.rs",
+      "reason": "a fact_context.rs or guarantee.rs file that is the sole place its crate touches this dependency, by design -- a language provider's fact-context/guarantee integration point.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/guarantee.rs",
+      "reason": "a fact_context.rs or guarantee.rs file that is the sole place its crate touches this dependency, by design -- a language provider's fact-context/guarantee integration point.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/languages/nomos-lang-rust-deny/src/guarantee.rs",
+      "reason": "a fact_context.rs or guarantee.rs file that is the sole place its crate touches this dependency, by design -- a language provider's fact-context/guarantee integration point.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/languages/nomos-lang-rust-scan/src/fact_context.rs",
+      "reason": "a fact_context.rs or guarantee.rs file that is the sole place its crate touches this dependency, by design -- a language provider's fact-context/guarantee integration point. (nomos-lang-rust-scan/src/fact_context.rs already carries a comment from a prior session justifying the identical pattern.)",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+      "reason": "a composition-root file (composition.rs / corpus.rs) that deliberately wires together many capability/language-provider crates or corpus-ingest crates on purpose -- a designed integration point, not misplaced logic.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/spec/nomos-spec-validate/src/validation_run.rs",
+      "reason": "reuses ContentHash, the model's own name for what a preserved block hashes to; a second copy would be a second authority on text sameness.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "crates/substrate/nomos-scope-verification/src/territory.rs",
+      "reason": "SubjectId is the shared band-0 identity a Territory is a territory of; not misplaced logic, moving it would only relocate the boundary. Already documented in-code at lines 27-30 of the same file.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-dependency-placement",
+      "path": "tests/contract/src/universes.rs",
+      "reason": "tests/contract is nomos's own cross-cutting contract-test harness; universes.rs deliberately builds test fixtures spanning the whole type system (syntax, rules, capability) to exercise cross-cutting invariants, so touching several otherwise-unrelated crates from one file is inherent to its role, not misplacement.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-cli/src/arguments.rs",
+      "fingerprint": "c1dd6eedcc1ca17d",
+      "reason": "nomos-surface-provenance's own doc comment says sharing isn't worth the dependency edge for eight lines of argument-parsing boilerplate.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-surface-provenance/src/arguments.rs",
+      "fingerprint": "c1dd6eedcc1ca17d",
+      "reason": "nomos-surface-provenance's own doc comment says sharing isn't worth the dependency edge for eight lines of argument-parsing boilerplate.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-go-modules/src/fact_context.rs",
+      "fingerprint": "713c5023df51d0c9",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-go/src/fact_context.rs",
+      "fingerprint": "ff8a2a97d7e4da57",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-go/src/fact_context.rs",
+      "fingerprint": "866a5bd2069612a4",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-go/src/guarantee.rs",
+      "fingerprint": "0d24104153f54091",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust-cargo/src/fact_context.rs",
+      "fingerprint": "ea54fa099db812cf",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust-clippy/src/fact_context.rs",
+      "fingerprint": "225a1b18e6897227",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust/src/fact_context.rs",
+      "fingerprint": "ff8a2a97d7e4da57",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust/src/fact_context.rs",
+      "fingerprint": "bc434d65b92205ba",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust/src/reachability/guarantee.rs",
+      "fingerprint": "778de643d0f56c58",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-go-modules/src/fact_context.rs",
+      "fingerprint": "57efdb609f47b7b9",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust-cargo/src/fact_context.rs",
+      "fingerprint": "d1046c6c67ba5276",
+      "reason": "real, identified duplication: each provider crate's FactContext + Compute_Fact_Key/MaterializedFact-assembly shape is structurally identical, and crates/substrate/nomos-analysis already has an identically-shaped Context struct with a manual conversion already in place (nomos-lang-rust::rollup::materialize::Reading_Context). The real fix is unifying provider FactContext with nomos_analysis::Context -- deferred as its own future increment since it spans crates/languages and crates/substrate at once, a bigger coordinated change than this mechanical placement pass scoped for.",
+      "owner": "@claude-p20-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/corpus.rs",
+      "fingerprint": "9d04b2d46a595da6",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple into crates/host (call sites confirmed via full workspace grep before renaming). The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/spec_outcome/commit_answer/commit_refusal.rs",
+      "fingerprint": "395164ad035ce057",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple into crates/host (call sites confirmed via full workspace grep before renaming). The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/spec_outcome/commit_answer/commit_refusal.rs",
+      "fingerprint": "0756f02c55e5713c",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple into crates/host (call sites confirmed via full workspace grep before renaming). The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-model/src/record.rs",
+      "fingerprint": "d81e228c8acd269d",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple into crates/host (call sites confirmed via full workspace grep before renaming). The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-model/src/submission.rs",
+      "fingerprint": "ece3c6385ab47dce",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple into crates/host (call sites confirmed via full workspace grep before renaming). The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-model/src/submission.rs",
+      "fingerprint": "610b3b9656f2aecb",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple into crates/host (call sites confirmed via full workspace grep before renaming). The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-store/src/lib.rs",
+      "fingerprint": "6699df0d5f55245c",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple into crates/host (call sites confirmed via full workspace grep before renaming). The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-store/src/lib.rs",
+      "fingerprint": "ff7833be345021f8",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple into crates/host (call sites confirmed via full workspace grep before renaming). The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-store/src/lib.rs",
+      "fingerprint": "235c4d99620f8d24",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple into crates/host (call sites confirmed via full workspace grep before renaming). The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-store/src/lib.rs",
+      "fingerprint": "c3fe9058f062f758",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple into crates/host (call sites confirmed via full workspace grep before renaming). The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-facade-surface",
+      "path": "crates/spec/nomos-spec-store/src/lib.rs",
+      "fingerprint": "d478c479f29db680",
+      "reason": "renamed facade re-export: the internal type and its file were destuttered per the check-tree-legibility fix (drop the redundant module-derived prefix), but the crate's public-facing name is deliberately kept via this alias to avoid a cross-crate rename ripple into crates/host (call sites confirmed via full workspace grep before renaming). The public API is unchanged; only the internal declaration and file path were destuttered.",
+      "owner": "@claude-p19-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-scope-discipline",
+      "path": "crates/host/nomos-api/src/test_support.rs",
+      "fingerprint": "2b6789fe8b9dfe48",
+      "reason": "test-code exemption (OD-GATE-018 category a, reaffirmed by P22 shared guidance): file is #[cfg(test)]-gated; clippy.toml already permits this ergonomics class in test code",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-import-scope",
+      "path": "crates/substrate/nomos-workspace/src/change.rs",
+      "fingerprint": "093ee41e99af6d07",
+      "reason": "check-import-scope's rust_Imported_Names (language-kernels/programming/rust/rustlang/rust_import_scope.go) double-counts a use-with-alias: it walks the whole use-declaration subtree and appends the use_as_clause's alias (the real bound name, ChangeSource) but ALSO independently appends the inner scoped_identifier's last path segment (Source, the pre-alias name) since that scoped_identifier's parent is the use_as_clause rather than another scoped_identifier, so the walker's skip condition never fires for it. Source is never actually bound into scope by 'pub use source::Source as ChangeSource;' -- only ChangeSource is -- but the checker treats the discarded path segment as a second countable import name, then finds its only textual match at line 85's unrelated '.Source()' method call (a method defined on WorkspaceChangeSet in workspace/change_set.rs, spelled the same by coincidence) inside Test_A_Change_Set_Should_Carry_Its_Source_And_Its_Changes, and reports that as the import's sole use. ChangeSource itself (the actual imported/bound name) is used throughout this file and re-exported from crate::lib.rs for the whole workspace (nomos_workspace::ChangeSource), so the suggested remedy of moving the pub use into that one test function is not applicable: it is a public re-export the whole crate and its dependents need, not a module-scope convenience import serving one function.",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-go/src/fact_context.rs",
+      "fingerprint": "3ea201be5f1efb65",
+      "reason": "the go and rust syntax providers' Test_This_Providers_Payload_Should_Decode_Under_The_Schemas_Own_Reader tests are deliberately structured alike but deliberately independent -- each file's own doc comment states the agreement is checked against the shared nomos-cap-syntax grammar rather than against the other provider, specifically so a shared helper could not mask a real divergence between them; extracting a cross-crate helper would undermine that independence for a purely structural similarity",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/languages/nomos-lang-rust/src/fact_context.rs",
+      "fingerprint": "41c533dc94a10858",
+      "reason": "the go and rust syntax providers' Test_This_Providers_Payload_Should_Decode_Under_The_Schemas_Own_Reader tests are deliberately structured alike but deliberately independent -- each file's own doc comment states the agreement is checked against the shared nomos-cap-syntax grammar rather than against the other provider, specifically so a shared helper could not mask a real divergence between them; extracting a cross-crate helper would undermine that independence for a purely structural similarity",
+      "owner": "@claude-p22-campaign",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/capabilities/nomos-cap-dependency-policy",
+      "fingerprint": "ab20a2221b586938",
+      "reason": "nomos-cap-dependency-policy and nomos-cap-lint have no actual code coupling -- neither Cargo.toml lists the other as a dependency, and there is no use/call site in either crate's src/. The shared identifiers this check finds (nomos_cap_lint::Encode_Payload, nomos_cap_lint::LintDiagnostic, nomos_cap_lint::LintLevel) are purely doc-comment prose comparing the two capability contracts' parallel design (both wrap an external tool's diagnostics behind a capability, OD-RULES-010), never a compiled reference. Writing an integration test that drives nomos_cap_lint through nomos_cap_dependency_policy's public API is not possible because that API never touches nomos_cap_lint's types; fabricating a Cargo dependency between two sibling capability contracts just to satisfy this check would violate the architecture these crates exist under (a capability contract names no other party -- see each crate's own Cargo.toml comment on OD-CAPABILITY-002).",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/capabilities/nomos-cap-lint",
+      "fingerprint": "54ce691223051f8f",
+      "reason": "nomos-cap-lint and nomos-cap-dependency have no actual code coupling -- neither Cargo.toml lists the other as a dependency, and there is no use/call site in either crate's src/. The one shared identifier this check finds (nomos_cap_dependency::DiagnosticsPayload, in a doc comment) is prose comparing the two capability contracts' parallel design (both wrap an external tool's output behind a capability, OD-RULES-010), never a compiled reference. Writing an integration test that drives nomos_cap_dependency through nomos_cap_lint's public API is not possible because that API never touches nomos_cap_dependency's types; fabricating a Cargo dependency between two sibling capability contracts just to satisfy this check would violate the architecture these crates exist under (a capability contract names no other party -- see each crate's own Cargo.toml comment on OD-CAPABILITY-002).",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/agent/nomos-agent-contracts",
+      "fingerprint": "b8e75acd641f096c",
+      "reason": "false positive: nomos-agent-contracts has no Cargo dependency on nomos-ledger and no use/call site anywhere in its source -- the only match is a doc-comment reference in work_result.rs, which explicitly states this crate no longer depends on nomos-ledger. The checker's cross-crate seam detector matched prose, not a real call.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/agent/nomos-agent-executor-claude-code",
+      "fingerprint": "8b688d5a7b0d47d3",
+      "reason": "false positive: nomos-agent-executor-claude-code has no Cargo dependency on nomos-lang-rust-cargo and no use/call site anywhere in its source. The checker's cross-crate seam detector matched a doc-comment cross-reference between two unrelated designs, not a real call.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/agent/nomos-model-backend-ollama",
+      "fingerprint": "891e2b2fff3eaca4",
+      "reason": "false positive: nomos-model-backend-ollama has no Cargo dependency on nomos-agent-executor-claude-code (its own Cargo.toml description states it is deliberately independent) and no use/call site anywhere in its source -- only doc-comment prose contrasting the two designs.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-go-modules",
+      "fingerprint": "e7ff17fadd41d831",
+      "reason": "false positive: nomos_lang_go_modules and its sibling language-provider crate share no Cargo dependency (verified via Cargo.toml and a full-crate grep for a real `use` statement) -- the sibling's name appears only in cross-referencing doc-comment prose comparing this provider's design choices to its sibling's. There is no real integration surface for a test to exercise.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-go-modules",
+      "fingerprint": "01a1e07a14b9eb63",
+      "reason": "false positive: nomos_lang_go_modules and its sibling language-provider crate share no Cargo dependency (verified via Cargo.toml and a full-crate grep for a real `use` statement) -- the sibling's name appears only in cross-referencing doc-comment prose comparing this provider's design choices to its sibling's. There is no real integration surface for a test to exercise.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-go-modules",
+      "fingerprint": "f48253e7603cfff7",
+      "reason": "false positive: nomos_lang_go_modules and its sibling language-provider crate share no Cargo dependency (verified via Cargo.toml and a full-crate grep for a real `use` statement) -- the sibling's name appears only in cross-referencing doc-comment prose comparing this provider's design choices to its sibling's. There is no real integration surface for a test to exercise.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-rust-cargo",
+      "fingerprint": "39e2ea9c62377f3f",
+      "reason": "false positive: nomos_lang_rust_cargo and its sibling language-provider crate share no Cargo dependency (verified via Cargo.toml and a full-crate grep for a real `use` statement) -- the sibling's name appears only in cross-referencing doc-comment prose comparing this provider's design choices to its sibling's. There is no real integration surface for a test to exercise.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-rust-cargo",
+      "fingerprint": "fbe4212d8e4b90ee",
+      "reason": "false positive: nomos_lang_rust_cargo and its sibling language-provider crate share no Cargo dependency (verified via Cargo.toml and a full-crate grep for a real `use` statement) -- the sibling's name appears only in cross-referencing doc-comment prose comparing this provider's design choices to its sibling's. There is no real integration surface for a test to exercise.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-rust-clippy",
+      "fingerprint": "a338ba5ea05b09b1",
+      "reason": "false positive: nomos_lang_rust_clippy and its sibling language-provider crate share no Cargo dependency (verified via Cargo.toml and a full-crate grep for a real `use` statement) -- the sibling's name appears only in cross-referencing doc-comment prose comparing this provider's design choices to its sibling's. There is no real integration surface for a test to exercise, inside or outside the crate.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-rust-deny",
+      "fingerprint": "1e7084a548cd8df2",
+      "reason": "false positive: nomos_lang_rust_deny and its sibling language-provider crate share no Cargo dependency (verified via Cargo.toml and a full-crate grep for a real `use` statement) -- the sibling's name appears only in cross-referencing doc-comment prose comparing this provider's design choices to its sibling's. There is no real integration surface for a test to exercise, inside or outside the crate.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-rust-deny",
+      "fingerprint": "5174a915664df1c7",
+      "reason": "false positive: nomos_lang_rust_deny and its sibling language-provider crate share no Cargo dependency (verified via Cargo.toml and a full-crate grep for a real `use` statement) -- the sibling's name appears only in cross-referencing doc-comment prose comparing this provider's design choices to its sibling's. There is no real integration surface for a test to exercise.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-error-tests",
+      "path": "crates/substrate/nomos-analysis/src/fact/memory_fact_store.rs",
+      "fingerprint": "297390429adcd8a2",
+      "reason": "Lookup's error type is () by design -- every failure path (absent, invalidated-by-then, materialized-after-at) collapses to the same unit error on purpose, because the caller (Reader) always turns it into its own richer applicability (ReadOutcome, FactError variants) rather than reading a reason off this internal method. There is no variant to discriminate.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/orchestration/nomos-check-orchestration",
+      "fingerprint": "5897dbc949380066",
+      "reason": "false positive: nomos-check-orchestration has no Cargo dependency on nomos-gate-orchestration or nomos-work-orchestration and no use/call site in its source -- only doc-comment cross-references. Fixing nomos-gate-orchestration's own doc-comment findings would also invert this workspace's band hierarchy (gate-orchestration sits above check-orchestration).",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/orchestration/nomos-check-orchestration",
+      "fingerprint": "22a5fa4118a2a7b5",
+      "reason": "false positive: nomos-check-orchestration has no Cargo dependency on nomos-gate-orchestration or nomos-work-orchestration and no use/call site in its source -- only doc-comment cross-references. Fixing nomos-gate-orchestration's own doc-comment findings would also invert this workspace's band hierarchy (gate-orchestration sits above check-orchestration).",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/orchestration/nomos-gate-orchestration",
+      "fingerprint": "8fb5563fccd3888b",
+      "reason": "false positive: nomos-gate-orchestration has no Cargo dependency on nomos-work-orchestration and no use/call site in its source -- only a doc-comment cross-reference.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/orchestration/nomos-spec-orchestration",
+      "fingerprint": "f2fddc111305a951",
+      "reason": "false positive: nomos-spec-orchestration has no Cargo dependency on nomos-check-orchestration or nomos-work-orchestration and no use/call site in its source -- only doc-comment cross-references between parallel designs.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/orchestration/nomos-spec-orchestration",
+      "fingerprint": "a455383331688bef",
+      "reason": "false positive: nomos-spec-orchestration has no Cargo dependency on nomos-check-orchestration or nomos-work-orchestration and no use/call site in its source -- only doc-comment cross-references between parallel designs.",
+      "owner": "@claude-p23-testing",
+      "expires": "2026-11-27"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/capabilities/nomos-cap-syntax/src/syntax_payload.rs",
+      "fingerprint": "d788e4a46e8a5ad8",
+      "reason": "test-only helper Item(qualified_name) in #[cfg(test)] mod tests; P24 regression sweep, OD-GATE-018 test-code exemption for check-naming-clarity",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-ingest/src/archaeology/census.rs",
+      "fingerprint": "3da9a5c5a39f28e4",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-ingest/src/archaeology/relocations.rs",
+      "fingerprint": "89bc4b2a8df9aefd",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/report/reconciliation_report.rs",
+      "fingerprint": "e396cec1c47df9a3",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-ingest/src/reconciliation/report/regression_report.rs",
+      "fingerprint": "e53a9a3f52ccb670",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-ingest/src/restore/extract.rs",
+      "fingerprint": "6db03b1dd069343d",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-ingest/src/revisions/walk.rs",
+      "fingerprint": "12ac21aa359ea4d6",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-ingest/src/siblings/commentary.rs",
+      "fingerprint": "8156711141483d91",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-model/src/statement/normative_statement.rs",
+      "fingerprint": "42a9061c1933f83b",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-store/src/authoring/difference.rs",
+      "fingerprint": "c4bd13d5cc21e15a",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-store/src/authoring/write.rs",
+      "fingerprint": "d0020157c20e944b",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-store/src/registration.rs",
+      "fingerprint": "86df5f284ab12fba",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-validate/src/preserve.rs",
+      "fingerprint": "64e8619addaafad4",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/contracts/nomos-contracts/src/authority/class.rs",
+      "fingerprint": "668a1523671f39c4",
+      "reason": "deliberately-independent enum Label-uniqueness tests (each enumerates its own variants against its own Label() match arms); a shared generic helper would mask a missed variant in any one of them, per SHARED_GUIDANCE parallel-design exemption",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/contracts/nomos-contracts/src/authority/mutation_class.rs",
+      "fingerprint": "668a1523671f39c4",
+      "reason": "deliberately-independent enum Label-uniqueness tests (each enumerates its own variants against its own Label() match arms); a shared generic helper would mask a missed variant in any one of them, per SHARED_GUIDANCE parallel-design exemption",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/contracts/nomos-contracts/src/guarantee/fact_variant.rs",
+      "fingerprint": "668a1523671f39c4",
+      "reason": "deliberately-independent enum Label-uniqueness tests (each enumerates its own variants against its own Label() match arms); a shared generic helper would mask a missed variant in any one of them, per SHARED_GUIDANCE parallel-design exemption",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/contracts/nomos-contracts/src/guarantee/incremental_granularity.rs",
+      "fingerprint": "668a1523671f39c4",
+      "reason": "deliberately-independent enum Label-uniqueness tests (each enumerates its own variants against its own Label() match arms); a shared generic helper would mask a missed variant in any one of them, per SHARED_GUIDANCE parallel-design exemption",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/contracts/nomos-contracts/src/peer/synchronization_state.rs",
+      "fingerprint": "668a1523671f39c4",
+      "reason": "deliberately-independent enum Label-uniqueness tests (each enumerates its own variants against its own Label() match arms); a shared generic helper would mask a missed variant in any one of them, per SHARED_GUIDANCE parallel-design exemption",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-analysis/src/fact_identity.rs",
+      "fingerprint": "4cc6f54badca4bf5",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-analysis/src/fact_key.rs",
+      "fingerprint": "4cc6f54badca4bf5",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-analysis/src/fact/materialized_fact.rs",
+      "fingerprint": "4cc6f54badca4bf5",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-analysis/src/fact/memory_fact_store.rs",
+      "fingerprint": "4cc6f54badca4bf5",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-analysis/src/fact/memory_store/invalidation.rs",
+      "fingerprint": "4cc6f54badca4bf5",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-analysis/src/generation_cause.rs",
+      "fingerprint": "4cc6f54badca4bf5",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-analysis/src/invalidation_report.rs",
+      "fingerprint": "4cc6f54badca4bf5",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-analysis/src/reader.rs",
+      "fingerprint": "4cc6f54badca4bf5",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-analysis/src/reading/trail.rs",
+      "fingerprint": "4cc6f54badca4bf5",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-analysis/src/store/rematerialization_group.rs",
+      "fingerprint": "4cc6f54badca4bf5",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-capability/src/registry.rs",
+      "fingerprint": "2d18b5945825e53f",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-ledger/src/finish/release_outcome.rs",
+      "fingerprint": "3ef1c20ab65e16fc",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/contracts/nomos-contracts/src/reporting/finding/display_label.rs",
+      "fingerprint": "668a1523671f39c4",
+      "reason": "deliberately-independent enum Label-uniqueness tests (each enumerates its own variants against its own Label() match arms); a shared generic helper would mask a missed variant in any one of them, per SHARED_GUIDANCE parallel-design exemption",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-ledger/src/item/ledger_item.rs",
+      "fingerprint": "3ef1c20ab65e16fc",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-ledger/src/item/ledger_item.rs",
+      "fingerprint": "247492996e27d8a9",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/substrate/nomos-ledger/src/store/claiming.rs",
+      "fingerprint": "3ef1c20ab65e16fc",
+      "reason": "test-only helper function inside #[cfg(test)] mod tests; check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-ingest/src/archaeology/judgment.rs",
+      "fingerprint": "de36cac224f616a2",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/kernel/nomos-store/src/commit.rs",
+      "fingerprint": "fdbb6cacae1997ed",
+      "reason": "OD-GATE-018 test-code exemption: check-naming-clarity on a function inside #[cfg(test)] mod tests is out of scope per P24 shared guidance",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/kernel/nomos-store/src/commit.rs",
+      "fingerprint": "843da21e2245d898",
+      "reason": "OD-GATE-018 test-code exemption: check-naming-clarity on a function inside #[cfg(test)] mod tests is out of scope per P24 shared guidance",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/kernel/nomos-store/src/document_store.rs",
+      "fingerprint": "fdbb6cacae1997ed",
+      "reason": "OD-GATE-018 test-code exemption: check-naming-clarity on a function inside #[cfg(test)] mod tests is out of scope per P24 shared guidance",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/kernel/nomos-store/src/document_store.rs",
+      "fingerprint": "843da21e2245d898",
+      "reason": "OD-GATE-018 test-code exemption: check-naming-clarity on a function inside #[cfg(test)] mod tests is out of scope per P24 shared guidance",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/kernel/nomos-store/src/document_store.rs",
+      "fingerprint": "601898a8b4aded57",
+      "reason": "OD-GATE-018 test-code exemption: check-naming-clarity on a function inside #[cfg(test)] mod tests is out of scope per P24 shared guidance",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/kernel/nomos-store/src/index.rs",
+      "fingerprint": "843da21e2245d898",
+      "reason": "OD-GATE-018 test-code exemption: check-naming-clarity on a function inside #[cfg(test)] mod tests is out of scope per P24 shared guidance",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/kernel/nomos-store/src/index.rs",
+      "fingerprint": "601898a8b4aded57",
+      "reason": "OD-GATE-018 test-code exemption: check-naming-clarity on a function inside #[cfg(test)] mod tests is out of scope per P24 shared guidance",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-ingest/src/archaeology/judgment.rs",
+      "fingerprint": "3da9a5c5a39f28e4",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-ingest/src/archive.rs",
+      "fingerprint": "ed87597cdcad769d",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-ingest/src/archaeology/regression.rs",
+      "fingerprint": "3da9a5c5a39f28e4",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/spec/nomos-spec-ingest/src/archaeology/sections.rs",
+      "fingerprint": "3da9a5c5a39f28e4",
+      "reason": "test-code-exempt (OD-GATE-018 pre-decided category): finding sits inside an inline #[cfg(test)] test module; test code is out of scope for this check",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/rules/nomos-rules/src/checks.rs",
+      "fingerprint": "996912d535ff53a9",
+      "reason": "P24 regression sweep: finding sits inside a #[cfg(test)] test module that P23's testing-phase campaign added; test code is out of scope for this check per OD-GATE-018's pre-decided category boundaries.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/rules/nomos-rules/src/checks/crosslang/reading.rs",
+      "fingerprint": "996912d535ff53a9",
+      "reason": "P24 regression sweep: finding sits inside a #[cfg(test)] test module that P23's testing-phase campaign added; test code is out of scope for this check per OD-GATE-018's pre-decided category boundaries.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/rules/nomos-rules/src/checks/crosslang/comparison.rs",
+      "fingerprint": "996912d535ff53a9",
+      "reason": "P24 regression sweep: finding sits inside a #[cfg(test)] test module that P23's testing-phase campaign added; test code is out of scope for this check per OD-GATE-018's pre-decided category boundaries.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/rules/nomos-rules/src/checks/dependency/reading.rs",
+      "fingerprint": "fd58d9645ef51c08",
+      "reason": "P24 regression sweep: finding sits inside a #[cfg(test)] test module that P23's testing-phase campaign added; test code is out of scope for this check per OD-GATE-018's pre-decided category boundaries.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/rules/nomos-rules/src/checks/mirror/verdict.rs",
+      "fingerprint": "67e466de6aa052ac",
+      "reason": "P24 regression sweep: finding sits inside a #[cfg(test)] test module that P23's testing-phase campaign added; test code is out of scope for this check per OD-GATE-018's pre-decided category boundaries.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/languages/nomos-lang-go/src/syntax/documentation.rs",
+      "fingerprint": "3a134cd6fe57b1de",
+      "reason": "test-only helper (fn Parse/Subject) inside #[cfg(test)] mod tests; OD-GATE-018 test-code exemption for check-naming-clarity",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/languages/nomos-lang-go/src/syntax/walk/functions.rs",
+      "fingerprint": "3a134cd6fe57b1de",
+      "reason": "test-only helper (fn Parse/Subject) inside #[cfg(test)] mod tests; OD-GATE-018 test-code exemption for check-naming-clarity",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/languages/nomos-lang-go/src/syntax/walk/imports.rs",
+      "fingerprint": "3a134cd6fe57b1de",
+      "reason": "test-only helper (fn Parse/Subject) inside #[cfg(test)] mod tests; OD-GATE-018 test-code exemption for check-naming-clarity",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/languages/nomos-lang-go/src/syntax/walk/support.rs",
+      "fingerprint": "3a134cd6fe57b1de",
+      "reason": "test-only helper (fn Parse/Subject) inside #[cfg(test)] mod tests; OD-GATE-018 test-code exemption for check-naming-clarity",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/languages/nomos-lang-go/src/syntax/walk/types.rs",
+      "fingerprint": "3a134cd6fe57b1de",
+      "reason": "test-only helper (fn Parse/Subject) inside #[cfg(test)] mod tests; OD-GATE-018 test-code exemption for check-naming-clarity",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/languages/nomos-lang-go/src/syntax/walk/values.rs",
+      "fingerprint": "3a134cd6fe57b1de",
+      "reason": "test-only helper (fn Parse/Subject) inside #[cfg(test)] mod tests; OD-GATE-018 test-code exemption for check-naming-clarity",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/languages/nomos-lang-rust/src/rollup/materialize.rs",
+      "fingerprint": "9997b217d5f20c97",
+      "reason": "test-only helper (fn Parse/Subject) inside #[cfg(test)] mod tests; OD-GATE-018 test-code exemption for check-naming-clarity",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/languages/nomos-lang-rust/src/rollup/module/index.rs",
+      "fingerprint": "9997b217d5f20c97",
+      "reason": "test-only helper (fn Parse/Subject) inside #[cfg(test)] mod tests; OD-GATE-018 test-code exemption for check-naming-clarity",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/platform/nomos-platform-std/src/launcher/drain.rs",
+      "fingerprint": "4f52ff11b64f9b09",
+      "reason": "function Awaited is a private test-only helper inside #[cfg(test)] mod tests (a polling wait for a test fixture, called only by tests in this same module); check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/platform/nomos-platform-std/src/launcher/spawn.rs",
+      "fingerprint": "39c10423afe0f6d8",
+      "reason": "function Awaited is a private test-only helper inside #[cfg(test)] mod tests (a polling wait for a test fixture, called only by tests in this same module); check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-gate-orchestration/src/run_id.rs",
+      "fingerprint": "18af558324df8edc",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/corpus/roots.rs",
+      "fingerprint": "4915360e1dfc3f97",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/corpus/volumes.rs",
+      "fingerprint": "202c74f17f1ac12d",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run/commit.rs",
+      "fingerprint": "b530a68a2d49eb44",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run/freshness.rs",
+      "fingerprint": "b530a68a2d49eb44",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run/preview.rs",
+      "fingerprint": "b530a68a2d49eb44",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/orchestration/nomos-spec-orchestration/src/run/render.rs",
+      "fingerprint": "fb89a78151d6a765",
+      "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/host/nomos-cli/src/spec/parsing.rs",
+      "fingerprint": "c405a22fae9dd8a0",
+      "reason": "private test-only helper function inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-naming-clarity",
+      "path": "crates/host/nomos-cli/src/work/listing.rs",
+      "fingerprint": "3ef1c20ab65e16fc",
+      "reason": "private test-only helper function inside #[cfg(test)] mod tests -- test-code-exempt per OD-GATE-018 (P24 shared guidance)",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-api/src/spec/failure_response.rs",
+      "fingerprint": "d51df7ed75ab9430",
+      "reason": "two independent twin-response types (different domain structs) that only coincidentally share test shape; a shared generic helper would mask a real divergence between two unrelated conversions -- the sibling-independent-provider pattern named in P24 shared guidance",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-interfile-duplication",
+      "path": "crates/host/nomos-api/src/spec/identity_change_response.rs",
+      "fingerprint": "87cac8f1c686d345",
+      "reason": "two independent twin-response types (different domain structs) that only coincidentally share test shape; a shared generic helper would mask a real divergence between two unrelated conversions -- the sibling-independent-provider pattern named in P24 shared guidance",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-crate-split",
+      "path": "crates/substrate/nomos-workspace",
+      "fingerprint": "5a500fd1775515fb",
+      "reason": "review, not defect, per this check own doc (when-a-module-earns-its-boundary.md): \"the module may hold two unrelated source trees on purpose... no reference graph can see intent.\" Empirically isolated (a scratch copy with workspace_snapshot.rs test module reverted inline no longer trips this check) to be a side effect of extracting workspace_snapshot.rs own oversized test module out to workspace_snapshot/tests.rs (the check-file-size remedy this same P24 sweep applied) -- the actual production reference graph is unchanged: workspace_snapshot.rs still imports and uses crate::Member exactly as before this split, verified against git HEAD by diff.",
+      "owner": "@claude-p24-regression",
+      "expires": "2026-11-28"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/contracts/nomos-contracts",
+      "fingerprint": "8be678bded2ce68b",
+      "reason": "checker false positive: nomos_platform is named only inside a doc comment in workflow_step/timeout.rs (explaining a resolution choice in prose), not a real dependency -- confirmed no nomos-platform line in Cargo.toml and no use/path reference in src/. The Rust front end's crate-reach detector is a regex text-scanner over the whole file including comments, and cannot tell prose from code",
+      "owner": "@claude-p25-integration",
+      "expires": "2026-11-29"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/kernel/nomos-model",
+      "fingerprint": "66c3852521908374",
+      "reason": "checker false positive: nomos_ledger is named only inside a doc comment in path.rs (explaining that nomos_ledger::Normalize_Path builds on this crate's own normalization), not a real dependency -- confirmed no nomos-ledger line in Cargo.toml and no use/path reference in src/",
+      "owner": "@claude-p25-integration",
+      "expires": "2026-11-29"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-go-modules",
+      "fingerprint": "e873838ba1bac28e",
+      "reason": "checker false positive: nomos_rules is named only inside a doc comment in guarantee.rs (describing what a real caller's positive control would look like), not a real dependency -- confirmed no nomos-rules line in Cargo.toml and no use/path reference in src/",
+      "owner": "@claude-p25-integration",
+      "expires": "2026-11-29"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-rust-cargo",
+      "fingerprint": "d69ce4d4cfd9d31e",
+      "reason": "checker false positive: nomos_gate_orchestration is named only inside a module-doc comment in lib.rs (describing today's real callers of this crate, in prose), not a real dependency -- confirmed no nomos-gate-orchestration line in Cargo.toml and no use/path reference in src/",
+      "owner": "@claude-p25-integration",
+      "expires": "2026-11-29"
+    },
+    {
+      "check": "check-integration-coverage",
+      "path": "crates/languages/nomos-lang-rust-cargo",
+      "fingerprint": "13569ad852bcb6e7",
+      "reason": "checker false positive: nomos_rules is named only in a Cargo.toml comment explaining why nomos-cap-dependency (the actual dependency) is listed instead, and inside a doc comment in provider/package_fact.rs -- confirmed no nomos-rules line in [dependencies] and no use/path reference in src/",
+      "owner": "@claude-p25-integration",
+      "expires": "2026-11-29"
+    },
+    {
+      "check": "check-naming",
+      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
+      "fingerprint": "43036e9f5dc5b7f3",
+      "reason": "nomos_platform::timestamp_serde is a serde with-module: five sites in nomos-api apply the serde with attribute naming it, and serde resolves that attribute to exactly the module functions serialize and deserialize. Those two names are the foreign contract rather than this repository's choice, and renaming either stops every ledger timestamp field from deserializing. check-naming does exempt a name a foreign trait mandates, but that exemption is scoped to an impl-Trait-for block and so does not reach a free function in a with-module. The only remedy left is a newtype with hand-written Serialize and Deserialize impls, which is architecture invented to satisfy a naming rule.",
+      "owner": "@claude-p114-naming",
+      "expires": "2027-03-15"
+    },
+    {
+      "check": "check-naming",
+      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
+      "fingerprint": "cc6699c3dc9c8318",
+      "reason": "nomos_platform::timestamp_serde is a serde with-module: five sites in nomos-api apply the serde with attribute naming it, and serde resolves that attribute to exactly the module functions serialize and deserialize. Those two names are the foreign contract rather than this repository's choice, and renaming either stops every ledger timestamp field from deserializing. check-naming does exempt a name a foreign trait mandates, but that exemption is scoped to an impl-Trait-for block and so does not reach a free function in a with-module. The only remedy left is a newtype with hand-written Serialize and Deserialize impls, which is architecture invented to satisfy a naming rule.",
+      "owner": "@claude-p114-naming",
+      "expires": "2027-03-15"
+    },
+    {
+      "check": "check-reference-parameter",
+      "path": "crates/host/nomos-cli/tests/support/mod.rs",
+      "fingerprint": "eb8b5a47fdcebe4a",
+      "reason": "impl From for FileName exists for the value a format! produces, and it is reached through Tree::With, whose parameter is an Into bound rather than a concrete reference type. A trait bound resolves a String reference to this impl exactly; the deref coercion this check reasons from applies only where the parameter type is already known, so replacing the type argument would not widen what callers may pass, it would stop two seam tests compiling. The seven entries already in the ledger for this check have the same shape.",
+      "owner": "@claude-p114-naming",
+      "expires": "2027-03-15"
+    }
+  ]
+}

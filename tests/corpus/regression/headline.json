@@ -1,0 +1,195 @@
+[
+  {
+    "id": "disappeared.table_row",
+    "row": "disappeared",
+    "clause": "282 table_row",
+    "family": null,
+    "counts_entry": "table.pipe_lines",
+    "fates": null,
+    "measured": {
+      "volumes.absent": 10
+    },
+    "resolution": "Confirmed, and as a loss of the documents rather than of the rows. All ten domain volumes are absent from v15.0 and no path was kept, so every row went with the document carrying it. What 282 counts is settled in OD-SPEC-002 and lives in the counts register: 282 pipe lines, 258 authored rows, 234 data rows."
+  },
+  {
+    "id": "disappeared.code_block",
+    "row": "disappeared",
+    "clause": "6 code_block",
+    "family": null,
+    "counts_entry": "code.fence_lines",
+    "fates": null,
+    "measured": {},
+    "resolution": "Confirmed on the same basis. The register carries both readings — 6 fence lines, 3 fenced blocks — and P3-ARCHAEOLOGY's census over the archive records that v15.0 carries no fenced block anywhere in the tree, not merely none in the volumes."
+  },
+  {
+    "id": "disappeared.roadmap_milestone",
+    "row": "disappeared",
+    "clause": "8 roadmap_milestone",
+    "family": "roadmap_milestone",
+    "counts_entry": "roadmap.milestones",
+    "fates": {
+      "preserved": 0,
+      "hollowed": 8,
+      "mentioned": 0,
+      "gone": 0
+    },
+    "measured": {},
+    "resolution": "Hollowed, not disappeared. Every one of the eight keeps its heading in v15.0 and stands on a paragraph a hundred and eighty-seven other sections also stand on. The content is gone and the family census says the family is intact, which is the reason a member-level report exists."
+  },
+  {
+    "id": "disappeared.scenario",
+    "row": "disappeared",
+    "clause": "8 scenario",
+    "family": "scenario",
+    "counts_entry": "scenario.end_to_end",
+    "fates": {
+      "preserved": 0,
+      "hollowed": 4,
+      "mentioned": 0,
+      "gone": 0
+    },
+    "measured": {},
+    "resolution": "Hollowed. The plan's 8 is the appendix-G section count, settled in the register as scenario.appendix_g_sections; four of those sections are end-to-end scenarios and those four are what the restoration mints. All four keep their headings and lose their bodies, to a template no declared pattern matches."
+  },
+  {
+    "id": "disappeared.service",
+    "row": "disappeared",
+    "clause": "54 service",
+    "family": "service",
+    "counts_entry": "service.service_headings",
+    "fates": {
+      "preserved": 0,
+      "hollowed": 40,
+      "mentioned": 0,
+      "gone": 0
+    },
+    "measured": {},
+    "resolution": "Hollowed. The plan's 54 is the one figure no extraction over v14.36 reproduces and the register records it as unreproducible; the 40 depth-4 headings naming a Service are what the restoration mints. Every one of them survives in v15.0 as a heading over declared filler."
+  },
+  {
+    "id": "disappeared.glossary_term",
+    "row": "disappeared",
+    "clause": "N glossary_term",
+    "family": "glossary_term",
+    "counts_entry": "glossary.definitions",
+    "fates": {
+      "preserved": 1,
+      "hollowed": 18,
+      "mentioned": 23,
+      "gone": 8
+    },
+    "measured": {},
+    "resolution": "The glossary is the family that splits, because it is two shapes. The 19 terms authored as sections survive as headings — 18 hollowed, 1 still carrying prose — and the 31 authored as table rows have no heading to keep: 23 of them occur only as mentions and 8 occur nowhere in v15.0 at all."
+  },
+  {
+    "id": "disappeared.appendix_d",
+    "row": "disappeared",
+    "clause": "all appendix-D schema",
+    "family": "appendix_d",
+    "counts_entry": "appendix_d.members",
+    "fates": {
+      "preserved": 0,
+      "hollowed": 16,
+      "mentioned": 0,
+      "gone": 0
+    },
+    "measured": {},
+    "resolution": "Hollowed, and by the template the ledger's blocklist does not match. Sixteen members — eight sections and eight report profiles — keep their headings; D.0's five thousand characters of schema become two hundred characters of form letter."
+  },
+  {
+    "id": "disappeared.appendix_h",
+    "row": "disappeared",
+    "clause": "all appendix-H section",
+    "family": "appendix_h",
+    "counts_entry": "appendix_h.sections",
+    "fates": {
+      "preserved": 0,
+      "hollowed": 7,
+      "mentioned": 0,
+      "gone": 0
+    },
+    "measured": {},
+    "resolution": "Hollowed, by the undeclared template. All seven junction-telemetry sections keep their headings."
+  },
+  {
+    "id": "context.headless_inventory",
+    "row": "context",
+    "clause": "the E.1 headless inventory",
+    "family": "headless_inventory",
+    "counts_entry": "headless_inventory.sections",
+    "fates": {
+      "preserved": 0,
+      "hollowed": 11,
+      "mentioned": 0,
+      "gone": 0
+    },
+    "measured": {},
+    "resolution": "Hollowed, by the undeclared template. Named in the plan's list of what v15.0 lost rather than in the headline block, and measured here so no family answers by being left out."
+  },
+  {
+    "id": "context.ide_profile",
+    "row": "context",
+    "clause": "F.1 IDE profiles",
+    "family": "ide_profile",
+    "counts_entry": "ide_profiles.sections",
+    "fates": {
+      "preserved": 0,
+      "hollowed": 6,
+      "mentioned": 0,
+      "gone": 0
+    },
+    "measured": {},
+    "resolution": "Hollowed, by the undeclared template."
+  },
+  {
+    "id": "context.canonical_domain_model",
+    "row": "context",
+    "clause": "the entire §5 canonical domain model",
+    "family": "canonical_domain_model",
+    "counts_entry": "domain_model.named_models",
+    "fates": {
+      "preserved": 1,
+      "hollowed": 0,
+      "mentioned": 26,
+      "gone": 11
+    },
+    "measured": {
+      "members.gone": 19
+    },
+    "resolution": "The heaviest real loss in the corpus, and the only family with no hollowed member, because a table row has no heading to keep. Eleven of the 38 models the table names occur nowhere in v15.0; 26 survive only as mentions in prose. The one preserved resolves to a heading named Architecture in an architecture record, which is the weakest kind of survival this report will report and is stated rather than counted as a save."
+  },
+  {
+    "id": "changed.filler",
+    "row": "changed in place",
+    "clause": "132 sections replaced by filler",
+    "family": null,
+    "counts_entry": null,
+    "fates": null,
+    "measured": {
+      "filler.widest_undeclared_documents": 132,
+      "filler.widest_undeclared_sections": 196,
+      "filler.declared_documents": 99,
+      "filler.stub_documents": 105,
+      "members.hollowed_by_a_declared_pattern": 66,
+      "members.hollowed_by_an_undeclared_template": 44
+    },
+    "resolution": "Reproduced exactly, and by a sentence the preservation ledger cannot see. 132 documents, over 196 sections, stand on one template: 'This section preserves the governed reference or explanatory material for {}.' The declared blocklist carries 'This section preserves the reference or explanatory material for' and the inserted word defeats it. 44 restored members are hollowed by that template alone, so a blocklist-only NSV-PRESERVE-004 would pass every one of them. Recorded in OD-SPEC-004."
+  },
+  {
+    "id": "appeared.records",
+    "row": "appeared",
+    "clause": "64 records (records/ + spec-governance/records/)",
+    "family": null,
+    "counts_entry": "v15.records",
+    "fates": null,
+    "measured": {
+      "records.relocated": 64,
+      "records.new": 2,
+      "documents.relocated": 64,
+      "documents.appeared": 208,
+      "documents.disappeared": 2226,
+      "documents.changed": 0
+    },
+    "resolution": "The plan's 64 is exact and is not an appearance. v15.0 carries 66 record files, of which 64 are byte-identical to a v14.36 document at another path — they moved — and 2 are new: ARC-ARCHWORKBENCH-001 and ARC-FEATOVERLAY-001. Those 64 are also every relocation in the whole pair; the remaining 208 v15.0 documents are new writing and the 2,290 the path walk calls disappeared are 2,226 once the moves are taken out."
+  }
+]

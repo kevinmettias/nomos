@@ -1,0 +1,273 @@
+//! [`Handle_Gate_Explain`] and its own [`GateExplainResponse`], paired in one file the same
+//! way [`super::gate_run_response`] pairs [`super::gate_run_response::Handle_Gate_Run`] with
+//! [`super::gate_run_response::GateRunResponse`].
+
+use crate::{composition, sources};
+use nomos_contracts::Finding;
+use nomos_gate_orchestration::{Explanation, FindingQuery, GateCommand};
+use serde::Serialize;
+use std::path::Path;
+
+use super::{BaselineDebtResponse, RuleCalibrationResponse, SuppressionResponse};
+
+/// Walks `root`, judges it exactly as `nomos gate run` would, and answers `query` against
+/// what was judged -- exactly as `nomos gate explain` would -- and hands back a
+/// JSON-serializable [`GateExplainResponse`].
+///
+/// The same walk-and-judge composition [`crate::response::gate_run_response::Handle_Gate_Run`] already
+/// uses, over the default [`GateCommand`] narrowed only by `root`: `Explain_Gate` itself does
+/// not consult `command.scope` or `command.rules`, by its own doc.
+#[must_use]
+pub fn Handle_Gate_Explain(root: &Path, query: &FindingQuery) -> GateExplainResponse
+{
+    use nomos_composer_std::{CLOCK, ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
+    use nomos_platform::Clock;
+
+    let command = GateCommand { root: root.to_path_buf(), ..Default::default() };
+    let walked = sources::Walked_Sources(root);
+    let providers = nomos_composer_providers::Standard_Providers();
+    let result = nomos_gate_orchestration::Explain_Gate(
+        walked,
+        nomos_gate_orchestration::GateEnvironment {
+            variant: composition::Host_Variant(),
+            launcher: &LAUNCHER,
+            filesystem: &FILE_SYSTEM,
+            environment: &ENVIRONMENT,
+            now: CLOCK.Now(),
+            providers: &providers,
+        },
+        &command,
+        query,
+    );
+
+    return GateExplainResponse::From(result.explanation);
+}
+
+/// What a real `nomos gate explain` produced, in a shape `serde_json` can hand across a
+/// wire.
+///
+/// Carries no `root` and no `check_outcome`: this crate's caller already supplied `root`,
+/// and `GateRunResponse` already sets the precedent of dropping `check_outcome` from its own
+/// wire shape entirely, rather than re-exposing `CheckOutcome` for a caller to reconstruct a
+/// distinction `Explain_Gate` itself does not draw -- see [`Self::NotFound`]'s own doc for
+/// the one it collapses.
+#[derive(Debug, Serialize)]
+#[serde(tag = "outcome", rename_all = "snake_case")]
+pub enum GateExplainResponse
+{
+    /// No finding from the query's rule at the query's location exists in this judgment.
+    ///
+    /// Two different causes collapse into this one value, by `Explain_Gate`'s own design
+    /// (`crates/orchestration/nomos-gate-orchestration/src/explain.rs`'s `Explained`): a
+    /// tree that was never judged at all, and a judged tree whose real findings simply do
+    /// not include this rule and location. This type preserves that collapse rather than
+    /// inventing a finer distinction the orchestration crate does not draw.
+    NotFound,
+    /// The finding the query names, and what it would do to a real run's disposition.
+    Found
+    {
+        /// The finding itself, in full. `Finding` already derives `Serialize`. Boxed, the
+        /// same reason `ShowResponse::Found::item` is: `NotFound` carries nothing, and
+        /// an unboxed `Finding` here would size every `GateExplainResponse` to `Found`'s own
+        /// width regardless of which variant it holds.
+        finding: Box<Finding>,
+        /// Whether this finding, on its own, could fail a build a real `run` reduces it
+        /// into.
+        would_block: bool,
+        /// The evidence class the gate's declared floor requires, when `would_block` is
+        /// `false` because this finding's evidence is weaker than it.
+        ///
+        /// `OD-GATE-034`, carried as the class's own stable `PascalCase` label rather than as
+        /// a boolean: a caller told only that something kept the finding from blocking cannot
+        /// tell which floor to argue with.
+        floored_by: Option<String>,
+        /// The calibration that kept it from blocking, when `would_block` is `false`
+        /// because of one.
+        calibrated_by: Option<RuleCalibrationResponse>,
+        /// The suppression that kept it from blocking, when `would_block` is `false`,
+        /// `calibrated_by` is `None`, and a suppression matched. Boxed: `SuppressionResponse`
+        /// is the largest of the three calibration/suppression/baseline fields (it alone
+        /// carries two owned `String`s beside `rule` and `subject`), so it is the one
+        /// `clippy::large_enum_variant` names to shrink `Found`'s own width by.
+        suppressed_by: Box<Option<SuppressionResponse>>,
+        /// The baseline debt entry that kept it from blocking, when `would_block` is
+        /// `false` and both `calibrated_by` and `suppressed_by` are `None`.
+        baselined_by: Option<BaselineDebtResponse>,
+        /// The governing record `finding.rule`'s implementation cites, and the version
+        /// of that record it was written against -- `AGT-008`'s "rule version" clause.
+        /// `None` only for a rule this build's registry does not hold; see
+        /// [`nomos_gate_orchestration::Explanation::Found`]'s own doc for why the
+        /// ordinary "no `CONTRACT_RECORD`" case is a real citation, not this.
+        contract_record: Option<String>,
+        /// The version of `contract_record` this rule's implementation was written
+        /// against. Always `Some` exactly when `contract_record` is.
+        contract_record_version: Option<u32>,
+    },
+}
+
+impl GateExplainResponse
+{
+    pub(crate) fn From(explanation: Explanation) -> Self
+    {
+        return match explanation
+        {
+            Explanation::NotFound => Self::NotFound,
+            Explanation::Found { finding, would_block, floored_by, calibrated_by, suppressed_by, baselined_by, contract } =>
+            {
+                let (contract_record, contract_record_version) = match contract
+                {
+                    Some((record, version)) => (Some(record), Some(version)),
+                    None => (None, None),
+                };
+
+                Self::Found {
+                    finding,
+                    would_block,
+                    floored_by: floored_by.map(|floor| return floor.Label().to_owned()),
+                    calibrated_by: calibrated_by.map(RuleCalibrationResponse::From),
+                    suppressed_by: Box::new(suppressed_by.map(SuppressionResponse::From)),
+                    baselined_by: baselined_by.map(BaselineDebtResponse::From),
+                    contract_record,
+                    contract_record_version,
+                }
+            }
+        };
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use crate::test_support::{Area, Assert_Round_Trips_As_Json};
+    use nomos_contracts::RuleId;
+    use nomos_rules::COMPLETENESS_MIRROR;
+
+    /// The area every scratch path in this module is named under.
+    const GATE_EXPLAIN_AREA: Area = Area("gate-explain");
+
+    /// The `COMPLETENESS_MIRROR` rule's contract record version, cited in
+    /// `Test_Explaining_A_Real_Trigger_Should_Find_A_Real_Blocking_Finding`'s own assertion
+    /// against `D-134`'s current version -- named so that assertion reads as a citation of a
+    /// specific record version, not an unexplained number.
+    const EXPECTED_CONTRACT_RECORD_VERSION: u32 = 2;
+
+    /// A query naming a rule and location no finding carries is [`GateExplainResponse::
+    /// NotFound`], not a panic or a default -- over a real walked directory, the same "an
+    /// absent answer is a typed state, not a shorter one" discipline `crates/orchestration/
+    /// nomos-gate-orchestration/src/tests.rs`'s own `Test_Explain_Should_Report_Not_Found_
+    /// For_A_Query_Nothing_Answers` already proves at the orchestration layer.
+    #[test]
+    fn Test_Handle_Gate_Explain_Should_Report_Not_Found_For_A_Query_Nothing_Answers()
+    {
+        let directory =
+            Scratch_Source_Tree("not-found", SourceFile { name: "a.rs", content: "pub fn Ok() {}\n" });
+        let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "nowhere.rs".to_owned() };
+
+        let response = Handle_Gate_Explain(&directory, &query);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+
+        assert!(matches!(response, GateExplainResponse::NotFound), "{response:?}");
+    }
+
+    /// A real query naming the one blocking finding a real trigger produces answers `Found`,
+    /// with `would_block` true and no calibration, suppression or baseline -- the same
+    /// trigger content `crates/orchestration/nomos-gate-orchestration/src/tests.rs`'s own
+    /// `Test_Explain_Should_Find_A_Real_Blocking_Finding` fixture uses, walked from a real
+    /// directory by this crate's own `sources::Walked_Sources` rather than handed to `Explain_Gate`
+    /// as a synthetic `SourceFile` list.
+    #[test]
+    fn Test_From_Should_Map_A_Real_Blocking_Finding_Into_A_Found_Explanation()
+    {
+        let response = Explained_Trigger("found");
+
+        Assert_A_Real_Blocking_Finding(response);
+    }
+
+    /// `response` asserted to be the `Found` a real blocking finding reaches when nothing
+    /// calibrates, suppresses or baselines it, citing `D-134`'s current version.
+    fn Assert_A_Real_Blocking_Finding(response: GateExplainResponse)
+    {
+        let GateExplainResponse::Found {
+            would_block,
+            calibrated_by,
+            suppressed_by,
+            baselined_by,
+            contract_record,
+            contract_record_version,
+            ..
+        } = response
+        else
+        {
+            // This fixture's trigger content is the same one the orchestration layer's own
+            // test proves produces a real blocking finding, so landing on `NotFound` here
+            // means the fixture itself regressed, not a condition this test should recover
+            // from silently.
+            panic!("this fixture must produce the finding the query names");
+        };
+
+        assert!(would_block);
+        assert!(calibrated_by.is_none());
+        assert!(suppressed_by.is_none());
+        assert!(baselined_by.is_none());
+        assert_eq!(contract_record.as_deref(), Some("D-134"));
+        assert_eq!(contract_record_version, Some(EXPECTED_CONTRACT_RECORD_VERSION));
+    }
+
+    /// The response a real `Found` explanation produces is valid JSON, and its outcome
+    /// round-trips through `serde_json` under the field name a wire caller would actually
+    /// read.
+    #[test]
+    fn Test_Unique_Scratch_Directory_Should_Let_A_Real_Explanation_Round_Trip_As_Json()
+    {
+        let response = Explained_Trigger("json");
+
+        Assert_Round_Trips_As_Json(&response, "found")
+            .expect("a found explanation serializes and parses back as a tagged object");
+    }
+
+    /// The explanation `label`'s own fresh tree produces for the one trigger `Test_Nowhere`'s
+    /// stale mirror is, walked from a real directory rather than handed to `Explain_Gate` as a
+    /// synthetic `SourceFile` list. The tree is removed again before this returns.
+    fn Explained_Trigger(label: &str) -> GateExplainResponse
+    {
+        let directory = Scratch_Source_Tree(
+            label,
+            SourceFile { name: "a.rs", content: "/// Mirrored by `Test_Nowhere`.\npub const T: &[&str] = &[];\n" },
+        );
+        let query = FindingQuery { rule: RuleId::New(COMPLETENESS_MIRROR), location: "a.rs".to_owned() };
+
+        let response = Handle_Gate_Explain(&directory, &query);
+
+        let _ignored = std::fs::remove_dir_all(&directory);
+        return response;
+    }
+
+    /// The one source file a scratch tree should hold: the name to write it under and the
+    /// exact text to write.
+    ///
+    /// Named fields rather than two adjacent `&str` positions, which is what a call reading
+    /// `Scratch_Source_Tree("not-found", "a.rs", content)` could transpose without the
+    /// compiler objecting.
+    struct SourceFile<'text>
+    {
+        /// The file's name within the scratch tree.
+        name: &'text str,
+        /// The file's exact content.
+        content: &'text str,
+    }
+
+    /// A real, freshly walkable scratch tree of this test's own -- never the real repository
+    /// tree, which live sessions write to concurrently. Several tests above build a tree
+    /// holding the same trigger content, so this delegates its own uniqueness to
+    /// [`crate::test_support::Unique_Scratch_Directory`] rather than keeping a second counter.
+    fn Scratch_Source_Tree(label: &str, file: SourceFile<'_>) -> std::path::PathBuf
+    {
+        let directory = crate::test_support::Unique_Scratch_Directory(GATE_EXPLAIN_AREA, label)
+            .expect("the temp directory is writable and this call's own name is fresh");
+        std::fs::write(directory.join(file.name), file.content).expect("writes a real source file");
+
+        return directory;
+    }
+}

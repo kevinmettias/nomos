@@ -1,0 +1,70 @@
+pub const fn nomos_cap_syntax::Ceiling() -> Guarantee
+pub const fn nomos_cap_syntax::PayloadRefusal::At(line: usize, kind: PayloadRefusalKind) -> Self
+pub const fn nomos_cap_syntax::PayloadRefusal::Whole(kind: PayloadRefusalKind) -> Self
+pub const nomos_cap_syntax::CAPABILITY: &str
+pub const nomos_cap_syntax::CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_syntax::FUNCTION: &str
+pub const nomos_cap_syntax::IMPLEMENTATION: &str
+pub const nomos_cap_syntax::INHERENT: &str
+pub const nomos_cap_syntax::NOT_APPLICABLE: &str
+pub const nomos_cap_syntax::PUBLIC: &str
+pub const nomos_cap_syntax::SCHEMA: &str
+pub const nomos_cap_syntax::SLICE: &str
+pub const nomos_cap_syntax::TRAIT: &str
+pub const nomos_cap_syntax::VALUE: &str
+pub enum nomos_cap_syntax::ImplLabel
+pub enum nomos_cap_syntax::Observation
+pub enum nomos_cap_syntax::PayloadRefusalKind
+pub enum variant nomos_cap_syntax::ImplLabel::Inherent
+pub enum variant nomos_cap_syntax::ImplLabel::Trait
+pub enum variant nomos_cap_syntax::Observation::Absent
+pub enum variant nomos_cap_syntax::Observation::NotObserved
+pub enum variant nomos_cap_syntax::Observation::Present(String)
+pub enum variant nomos_cap_syntax::PayloadRefusalKind::NoHeader
+pub enum variant nomos_cap_syntax::PayloadRefusalKind::NotUtf8
+pub enum variant nomos_cap_syntax::PayloadRefusalKind::RepeatedHeader
+pub enum variant nomos_cap_syntax::PayloadRefusalKind::UnknownRecord { tag: String, }
+pub enum variant nomos_cap_syntax::PayloadRefusalKind::UnreadableNumber { field: &'static str, value: String, cause: String, }
+pub enum variant nomos_cap_syntax::PayloadRefusalKind::UnreadableObservation { field: &'static str, value: String, }
+pub enum variant nomos_cap_syntax::PayloadRefusalKind::WrongFieldCount { tag: String, expected: usize, found: usize, }
+pub fn nomos_cap_syntax::Capability() -> CapabilityId
+pub fn nomos_cap_syntax::Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_syntax::Escape_Text(value: &str) -> String
+pub fn nomos_cap_syntax::Function_Arity(shape: &Observation) -> Option<u32>
+pub fn nomos_cap_syntax::Function_Shape(arity: usize) -> String
+pub fn nomos_cap_syntax::ImplLabel::Label(self) -> &'static str
+pub fn nomos_cap_syntax::Impl_Generics(shape: &Observation) -> Option<Vec<String>>
+pub fn nomos_cap_syntax::Impl_Serves_A_Trait(shape: &Observation) -> Option<bool>
+pub fn nomos_cap_syntax::Impl_Shape(label: ImplLabel, generics: &[String]) -> String
+pub fn nomos_cap_syntax::Language::As_Str(&self) -> &str
+pub fn nomos_cap_syntax::Language::New(value: impl Into<String>) -> Self
+pub fn nomos_cap_syntax::Language::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_cap_syntax::Observation::Encode(&self) -> String
+pub fn nomos_cap_syntax::Observation::Value(&self) -> Option<&str>
+pub fn nomos_cap_syntax::Observation::Was_Observed(&self) -> bool
+pub fn nomos_cap_syntax::Parse_Payload(bytes: &[u8]) -> Result<SyntaxPayload, PayloadRefusal>
+pub fn nomos_cap_syntax::PayloadItem::Declares_No_Visibility(&self) -> bool
+pub fn nomos_cap_syntax::PayloadItem::Is_Public(&self) -> bool
+pub fn nomos_cap_syntax::PayloadItem::Own_Name(&self) -> &str
+pub fn nomos_cap_syntax::PayloadRefusal::Describe(&self) -> String
+pub fn nomos_cap_syntax::PayloadRefusalKind::Describe(&self) -> String
+pub fn nomos_cap_syntax::Payload_Schema() -> SchemaId
+pub fn nomos_cap_syntax::Render_Payload(payload: &SyntaxPayload) -> Vec<u8>
+pub fn nomos_cap_syntax::Struct_Fields(shape: &Observation) -> Option<Vec<(String, String)>>
+pub fn nomos_cap_syntax::Struct_Shape(fields: &[(String, String)]) -> Option<String>
+pub fn nomos_cap_syntax::SyntaxPayload::Enclosing(&self, ordinal: usize) -> Option<&PayloadItem>
+pub impl nomos_cap_syntax::Language implements core::fmt::Display
+pub struct field nomos_cap_syntax::PayloadItem::documentation: Observation
+pub struct field nomos_cap_syntax::PayloadItem::kind: String
+pub struct field nomos_cap_syntax::PayloadItem::ordinal: u32
+pub struct field nomos_cap_syntax::PayloadItem::qualified_name: String
+pub struct field nomos_cap_syntax::PayloadItem::shape: Observation
+pub struct field nomos_cap_syntax::PayloadItem::visibility: String
+pub struct field nomos_cap_syntax::PayloadRefusal::kind: PayloadRefusalKind
+pub struct field nomos_cap_syntax::PayloadRefusal::line: Option<usize>
+pub struct field nomos_cap_syntax::SyntaxPayload::items: Vec<PayloadItem>
+pub struct field nomos_cap_syntax::SyntaxPayload::unexpanded: u32
+pub struct nomos_cap_syntax::Language(String)
+pub struct nomos_cap_syntax::PayloadItem
+pub struct nomos_cap_syntax::PayloadRefusal
+pub struct nomos_cap_syntax::SyntaxPayload

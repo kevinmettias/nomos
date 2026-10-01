@@ -1,0 +1,27 @@
+# The assessment of MODEL-ROUTE-016 against this build. The requirement identifier is
+# this file's stem and appears nowhere inside it, because a second place to spell the
+# identity is a second place for it to be wrong -- the rule OD-SPEC-007 chose for a
+# record registration, and CHK-003.assessment states for this registry.
+#
+# MODEL-ROUTE-016: "Context assembly shall be separately observable and attributable.
+# Retrieval, filtering, authority resolution, deduplication, compression, prompt or
+# task-envelope projection, request construction, model inference, and post-response
+# validation shall emit separate causally linked TelemetryJunctions with resource,
+# latency, cache, usage, and evidence status where available."
+#
+# PipelineStage and TelemetryJunction carry the nine named stages and five named
+# observability fields, plus a caused_by link making a chain of junctions causally linked.
+# Nothing emits one, and P40-MODEL-ROUTING-DISPATCH-WIRING did not change that: it decided
+# which backend answers a task, not how a task is assembled.
+#
+# The gap moves anyway, because the old one cited a site that now has real consumers. One
+# of the nine stages does exist in this workspace, which is what makes the rest measurable:
+# Bare_Task is task-envelope projection -- it builds a TaskEnvelope from a goal and an
+# effort, and emits no junction, records no resource or latency, and has nothing to be
+# caused_by. The other eight stages have no implementation at all. There is no retrieval,
+# no filtering, no authority resolution, no deduplication, no compression, no separate
+# request-construction step, and no post-response validation; a dispatch hands the envelope
+# to a backend and reads what comes back.
+verdict: Partial
+site: crates/packages/nomos-model-package/src/telemetry_junction.rs#TelemetryJunction
+gap: crates/orchestration/nomos-agent-orchestration/src/run.rs#Bare_Task

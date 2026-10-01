@@ -1,0 +1,314 @@
+//! Composing an already-walked tree into a real `nomos gate run`, apart from choosing a
+//! platform, walking a tree or rendering the answer.
+
+mod occurrence_history;
+mod provenance;
+mod reduction;
+
+#[cfg(test)]
+mod continuity_tests;
+#[cfg(test)]
+mod reason_recording_tests;
+#[cfg(test)]
+mod tests;
+
+use nomos_check_orchestration::{CheckOutcome, ComposedProviders};
+use nomos_contracts::{RuleId, RunId};
+use nomos_platform::{Environment, FileSystem, ProgramLauncher, Timestamp};
+use nomos_rules::SourceFile;
+use nomos_workspace::BuildVariant;
+use std::path::Path;
+
+use crate::policy::{GatePolicyFile, PolicyRefusal, Resolve_Gate_Policy, Resolved_Gate_Policy};
+use crate::{Evaluated_Phases, GateCommand, GateRunOutcome, GateRunProvenance, GateRunResult, Phased_Disposition};
+use occurrence_history::{
+    ObservedRun, OccurrenceHistory, Record_Occurrence_History, Recorded_Census, Resolve_Occurrence_History,
+};
+use reduction::{DispositionPolicies, Reduction, Reduced_Findings, Scoped_Findings};
+
+/// Judges `walked` exactly as `nomos check` would.
+///
+/// `walked` is the walk, already done and already decided by the composition root, the same
+/// reason `nomos_check_orchestration::Run` takes `sources` rather than a root to read:
+/// `None` for a root that was not a directory, `Some(sources)` otherwise -- including the
+/// empty case, so the no-source-found decision stays visible to a caller rather than
+/// collapsing into `Some` versus `None`. `context.variant` and `launcher` cross to
+/// [`nomos_check_orchestration::Run`] unchanged; see its own documentation for why each is a
+/// composition-root value this crate cannot compute for itself.
+///
+/// Shared by [`Run_Gate`] (over a `command.scope`-narrowed walk, and `command.rules`-selected
+/// per `OD-GATE-017`) and [`crate::Explain_Gate`] (over the whole one and every rule, since
+/// explain answers a question about one named finding, not a scope- or rule-narrowed
+/// disposition) — factored out so the two do not duplicate this match.
+///
+/// `context.selected` names which rules [`nomos_check_orchestration::Run`] should compute
+/// at all -- empty for every rule, the same default `RuleSelector::include` already has. A
+/// caller that must see every rule's findings regardless of `command.rules` (`Explain_Gate`)
+/// passes an empty slice here rather than `command.rules.include`.
+pub(crate) fn Judged_Sources<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+    walked: Option<Vec<SourceFile>>,
+    context: JudgeContext<'_, Launcher, Fs, Env>,
+) -> CheckOutcome
+{
+    return match walked
+    {
+        None => CheckOutcome::Unreadable,
+        Some(sources) if sources.is_empty() => CheckOutcome::NoSource,
+        Some(sources) => nomos_check_orchestration::Run(
+            &sources,
+            nomos_check_orchestration::RunContext {
+                variant: context.variant,
+                root: context.root,
+                launcher: context.launcher,
+                filesystem: context.filesystem,
+                environment: context.environment,
+                workspace: &mut None,
+                store: &mut nomos_analysis::MemoryFactStore::New(),
+                providers: context.providers,
+            },
+            context.selected,
+        ),
+    };
+}
+
+/// The build variant, process launcher and filesystem [`Run_Gate`] and [`crate::Explain_Gate`]
+/// both need but neither computes -- grouped into one value so each stays within this crate's
+/// own parameter-count limit. `command` and `walked`/`query`/`run` stay separate parameters:
+/// this groups only the three values every gate entry point shares.
+pub struct GateEnvironment<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
+{
+    pub variant: BuildVariant,
+    pub launcher: &'a Launcher,
+    pub filesystem: &'a Fs,
+    /// Where a provider reads `CARGO` and the working directory from, rather than from this
+    /// process's own ambient state. `OD-HOST-001`: the composition root chooses it.
+    pub environment: &'a Env,
+    /// The moment this run is judged against.
+    ///
+    /// Supplied by whoever composed the run rather than read from a clock inside policy
+    /// logic, so a replay of a past run answers as that run did instead of as today would.
+    /// It rides here for the reason `variant` does: the composing function is already at this
+    /// workspace's own parameter-count limit, and an execution fact belongs with the other
+    /// execution facts rather than in the caller-authored `GateCommand`, which is policy.
+    pub now: Timestamp,
+    /// The provider set the gate's judgments run through, supplied by the host that composed
+    /// this run. `OD-HOST-020` section 3: this crate receives the set and passes it on, and never
+    /// selects it -- it does not name `nomos-composer-providers`.
+    pub providers: &'a ComposedProviders<Launcher, Fs, Env>,
+}
+
+/// What [`Judged_Sources`] judges a walked tree against, apart from the walk itself and the
+/// platform used to run it -- grouped into one value so [`Judged_Sources`] stays within this
+/// crate's own parameter-count limit.
+pub(crate) struct JudgeContext<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
+{
+    /// The process launcher a provider's subprocess runs through.
+    pub(crate) launcher: &'a Launcher,
+    /// The filesystem a provider reads through.
+    pub(crate) filesystem: &'a Fs,
+    /// Where a provider reads `CARGO` and the working directory from.
+    pub(crate) environment: &'a Env,
+    /// Which [`BuildVariant`] to judge as.
+    pub(crate) variant: BuildVariant,
+    /// The tree this judgment is over.
+    pub(crate) root: &'a Path,
+    /// Which rules [`nomos_check_orchestration::Run`] should compute at all -- empty for
+    /// every rule.
+    pub(crate) selected: &'a [RuleId],
+    /// The provider set, carried through from [`GateEnvironment::providers`] unchanged.
+    pub(crate) providers: &'a ComposedProviders<Launcher, Fs, Env>,
+}
+
+/// Judges `walked` exactly as `nomos check` would, and reduces the result to a
+/// [`GateRunResult`].
+///
+/// Each step is one named function, because each answers a question the others do not: which
+/// policy the command is judged under, what judged it, what was judged, which findings still
+/// block, and what disposition those leave. Read in that order this is the whole verb.
+///
+/// `run` identifies this execution and is not computed here -- `OD-WORKFLOW-001`'s amendment
+/// decided a `RunId` identifies one execution, not one configuration, so this function must
+/// not derive it from `command` or `variant` the way everything else it composes is derived.
+/// The composition root supplies one, typically [`crate::Fresh_Run_Id`] over a real clock
+/// reading.
+///
+/// # It writes, but only into a tree that asked it to
+///
+/// A tree holding `nomos-gate-history.json` under `command.root` gets that file advanced by
+/// what this run observed, through the same `FileSystem` port the policy file is read by. That
+/// record is what lets a baselined finding be told from one reintroduced (`OD-GATE-030`), and
+/// `gate_environment::occurrence_history`'s own doc carries what goes in it and the three
+/// conditions a run must meet before it may write one. A tree without the file is never given
+/// one and is unchanged in every respect, which is every caller that predates the record.
+#[must_use]
+pub fn Run_Gate<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+    walked: Option<Vec<SourceFile>>,
+    environment: GateEnvironment<'_, Launcher, Fs, Env>,
+    command: &GateCommand,
+    run: RunId,
+) -> GateRunResult
+{
+    let GateEnvironment { variant, launcher, filesystem, environment, now, providers } = environment;
+    let declared = Resolve_Gate_Policy(&command.root, filesystem);
+    let resolved = Resolved_Gate_Policy(declared.as_ref().ok().and_then(Option::as_ref), command);
+    let effective = Effective_Policy(&resolved);
+    let provenance = GateRunProvenance {
+        source: provenance::Source_Digest(walked.as_deref()),
+        policy: provenance::Policy_Digest(&effective),
+        selection: provenance::Selection_Digest(command),
+        instrument: provenance::Instrument_Digest(&variant),
+        at: now,
+    };
+    let read = Resolve_Occurrence_History(&command.root, filesystem);
+    let context = JudgeContext { launcher, filesystem, environment, variant, root: &command.root, selected: &command.rules.include, providers };
+    let outcome = Scoped_Judgment(walked, command, context);
+    let observed = ObservedRun { history: read.as_ref(), outcome: &outcome, command, baseline: &effective.baseline };
+    let history = Recorded_History(&observed, filesystem);
+    let policies = DispositionPolicies_Of(&effective, now, history.as_ref());
+    let reduced = Reduced_Findings(&outcome, &command.rules, policies, effective.coverage);
+    let disposition = Phased_Outcome(&effective, &reduced);
+    let unusable_policy = declared.as_ref().err().map(|error| return error.As_No_Verdict()).or_else(|| return Refused_Policy(&resolved));
+
+    return GateRunResult {
+        root: command.root.clone(),
+        run,
+        check_outcome: outcome,
+        findings: reduced.findings,
+        unmatched_policy: reduced.unmatched_policy,
+        // The policy failure wins when both could apply. It cannot: an unreadable file falls
+        // back to a default policy whose coverage is Unset, so Reduced_With_Coverage never
+        // downgrades under one. Written as a preference anyway rather than as an assumption,
+        // because the fallback is in a different function than this line.
+        disposition: if unusable_policy.is_some() { GateRunOutcome::Indeterminate } else { disposition },
+        no_verdict: unusable_policy.or(reduced.no_verdict),
+        provenance: Some(provenance),
+        // The resolution itself, so a host can be told what decided each field rather than
+        // only what the fields came out as. A refused one is `None` and `no_verdict` above
+        // carries the refusal's own sentence; there is no half-resolution to report.
+        policy: resolved.ok().map(Box::new),
+    };
+}
+
+/// The values `resolved` decided, or every default when the resolution refused.
+///
+/// A file that resolved to a policy contributes at the `Repository` layer and the command's
+/// own contributes at `CommandLine` above it; no file at all, or one that could not be read,
+/// leaves the command's contribution standing alone -- which for every caller that states none
+/// is today's behavior exactly. `OD-POLICY-001` re-homed that precedence into
+/// `crate::policy::Resolved_Gate_Policy`, which [`crate::Explain_Gate`] now reaches through the
+/// same function rather than through a second copy of the rule.
+///
+/// A refused resolution judges under every default rather than under half a policy, and
+/// [`Refused_Policy`] is what withholds the verdict beside it: a run that passed under a policy
+/// this resolver could not accept would be passing under policy nobody authored, which is the
+/// same argument `Resolve_Gate_Policy`'s own doc makes one level down.
+fn Effective_Policy(resolved: &Result<crate::policy::EffectivePolicy, PolicyRefusal>) -> GatePolicyFile
+{
+    return match resolved
+    {
+        Ok(effective) => effective.values.clone(),
+        Err(_) => GatePolicyFile::default(),
+    };
+}
+
+/// Why a resolution refused, as the reason a run reached no verdict.
+///
+/// [`crate::NoVerdict::MalformedPolicy`] rather than a variant of its own: the declared sources
+/// are policy a caller or a file authored, and a statement the resolver cannot accept is
+/// malformed policy in exactly the sense that vocabulary already carries. A refusal naming a
+/// layer no host labels yet would need a rendering this item does not build.
+fn Refused_Policy(resolved: &Result<crate::policy::EffectivePolicy, PolicyRefusal>) -> Option<crate::NoVerdict>
+{
+    return resolved.as_ref().err().map(|refusal| return crate::NoVerdict::MalformedPolicy(refusal.Sentence()));
+}
+
+/// `walked` judged, then narrowed to what `command.scope` admits.
+///
+/// `OD-GATE-025`: the scope never reaches the judging. Every walked file is judged, and the
+/// scope narrows the findings afterwards -- a rule answering a cross-file question must see
+/// the whole world or it answers a different question and labels it the same.
+///
+/// A scope admitting no walked source at all is still `NoSource`, which is what it was before
+/// the scope moved. The judging happened and is simply discarded: what a caller is told is that
+/// nothing it asked about was there, and a mistyped `--include` must not read as a repository
+/// with nothing to say.
+fn Scoped_Judgment<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+    walked: Option<Vec<SourceFile>>,
+    command: &GateCommand,
+    context: JudgeContext<'_, Launcher, Fs, Env>,
+) -> CheckOutcome
+{
+    let admits_a_source = walked
+        .as_ref()
+        .is_none_or(|sources| return sources.iter().any(|source| return command.scope.Is_In_Scope(&source.path)));
+    let judged = Judged_Sources(walked, context);
+
+    if !admits_a_source
+    {
+        return CheckOutcome::NoSource;
+    }
+
+    return Scoped_Findings(judged, &command.scope);
+}
+
+/// What `policy` resolved to for each still-blockable finding, read against `now` -- the
+/// evidence floor first, then the three per-finding overrides, then what `history` established
+/// about the occurrences the baseline among them tolerates.
+fn DispositionPolicies_Of<'a>(policy: &'a GatePolicyFile, now: Timestamp, history: Option<&'a OccurrenceHistory>)
+    -> DispositionPolicies<'a>
+{
+    return DispositionPolicies {
+        evidence_floor: policy.evidence_floor,
+        adoption: &policy.adoption,
+        suppressions: &policy.suppressions,
+        baseline: &policy.baseline,
+        history,
+        now,
+    };
+}
+
+/// The record this run judges its baselined findings against: the one it read, advanced by the
+/// state it just observed, and written back.
+///
+/// The advance happens *before* the reduction reads it, which is the one ordering under which
+/// the record's own report and the decision made from it can never disagree. A run that judged
+/// against the record as it found it and then advanced it would be deciding from one set of
+/// counters and publishing another, and a reader recomputing the verdict from the file would get
+/// a third answer.
+///
+/// It is sound because a census is an *observation* and not a verdict: what this run saw is
+/// already settled by the time `Scoped_Judgment` has returned, and no disposition the reduction
+/// goes on to apply changes whether a violation was there. `OccurrenceTally` is what keeps the
+/// ordering honest at the other end — a record whose only state is this run's own establishes
+/// nothing, so a first run reports undetermined rather than reporting itself as continuity.
+///
+/// Falls back to the record as read when this run may not census one; `Recorded_Census` owns
+/// every reason for that, and answering `None` leaves the file on disk untouched.
+fn Recorded_History<Fs: FileSystem>(run: &ObservedRun<'_>, filesystem: &Fs) -> Option<OccurrenceHistory>
+{
+    let Some(census) = Recorded_Census(run)
+    else
+    {
+        return run.history.cloned();
+    };
+
+    Record_Occurrence_History(&run.command.root, filesystem, &census);
+
+    return Some(census);
+}
+
+/// `reduced`'s disposition once `policy`'s phases have been evaluated over it.
+///
+/// A phase approval is the one thing that can turn a blocking finding into a passing run, so
+/// it is read here rather than by [`Reduced_Findings`]: that function decides what blocks, and
+/// this one decides what a repository has agreed to live with.
+///
+/// `policy` is the resolved policy rather than the command, so a repository that declared its
+/// stages in `nomos-gate.json` reaches this the same way one that built them in code does --
+/// the single reader `OD-GATE-011` asks for, rather than a second path for the declared form.
+fn Phased_Outcome(policy: &GatePolicyFile, reduced: &Reduction) -> GateRunOutcome
+{
+    let phase_outcomes = Evaluated_Phases(&policy.phases, &reduced.findings.blocking_findings, &policy.approvals);
+
+    return Phased_Disposition(reduced.disposition, &policy.phases, &phase_outcomes, &reduced.findings.blocking_findings);
+}

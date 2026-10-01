@@ -1,0 +1,309 @@
+//! The policies a repository declares for itself: the four `standards.json` sections and the
+//! `nomos-limits.json` file `Run` materializes, each proven to reach the rule that reads it.
+
+use nomos_analysis::MemoryFactStore;
+use nomos_contracts::{Finding, RuleId};
+use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
+use nomos_rules::SourceFile;
+use std::path::Path;
+
+use crate::{CheckOutcome, Run, RunContext};
+
+use super::{Bounded_Providers, Scratch_Directory, Source_File, SourceText, Test_Variant};
+
+/// One declared goal nothing serves and one declared part serving no goal: the two findings
+/// the goal audit returns, one per direction it checks.
+const GOAL_AUDIT_DIRECTIONS: usize = 2;
+
+/// The shared file four of the five families read their section from.
+const STANDARDS_JSON: &str = "standards.json";
+
+/// The limits family's own file, which `OD-RULES-035` moved it to because code-standards
+/// decodes `standards.json` strictly and names no `limits` block.
+const LIMITS_JSON: &str = "nomos-limits.json";
+
+/// A repository declaration a fixture writes: the scratch-root name it is written under, the
+/// file it is written to, and the body itself. One value, so the three cannot drift apart at a
+/// call site.
+struct Standards<'a>
+{
+    name: &'a str,
+    file: &'a str,
+    declaration: &'a str,
+}
+
+/// The two halves of a repository-declared policy: the findings the same sources answer under
+/// a scratch root declaring nothing, and under one declaring the test's own policy file.
+struct PolicyAnswers
+{
+    unconfigured: Vec<Finding>,
+    declared: Vec<Finding>,
+}
+
+/// What a policy test expects of the comparison above.
+struct ExpectedAnswers<'a>
+{
+    /// The claim under test, quoted into every failure message.
+    context: &'a str,
+    /// How many findings the shipped default must answer.
+    unconfigured: usize,
+    /// How many findings the repository's own declaration must leave.
+    declared: usize,
+    /// A substring each declared finding's summary must carry, when the declaration makes a
+    /// rule speak about something specific rather than merely more.
+    declared_summaries: &'a [&'a str],
+}
+
+/// Judges `sources` under `selected` twice: once over a scratch root declaring nothing, once
+/// over one declaring `standards`. The first is the shipped default a repository has to opt
+/// out of; the second is the answer its own declaration produced.
+fn Answers_With_And_Without(sources: &[SourceFile], selected: &[RuleId], standards: Standards<'_>) -> PolicyAnswers
+{
+    let unconfigured_root = Scratch_Directory(&format!("{}-unconfigured", standards.name));
+    let declared_root = Scratch_Directory(standards.name);
+    std::fs::write(declared_root.join(standards.file), standards.declaration).expect("a scratch policy file");
+
+    return PolicyAnswers {
+        unconfigured: Findings_Under(sources, &unconfigured_root, selected),
+        declared: Findings_Under(sources, &declared_root, selected),
+    };
+}
+
+/// Asserts both halves of the comparison, so a test cannot prove the declaration changed the
+/// answer by asserting only one of them.
+fn Assert_Answers(answers: &PolicyAnswers, expected: ExpectedAnswers<'_>)
+{
+    assert_eq!(
+        answers.unconfigured.len(),
+        expected.unconfigured,
+        "{}: the shipped default must answer {} finding(s): {:?}",
+        expected.context,
+        expected.unconfigured,
+        answers.unconfigured
+    );
+    assert_eq!(
+        answers.declared.len(),
+        expected.declared,
+        "{}: the repository's own declaration must answer {} finding(s): {:?}",
+        expected.context,
+        expected.declared,
+        answers.declared
+    );
+    Assert_Summaries_Carried(&answers.declared, expected.declared_summaries, expected.context);
+}
+
+/// Asserts every named substring is carried by some declared finding's summary.
+fn Assert_Summaries_Carried(findings: &[Finding], summaries: &[&str], context: &str)
+{
+    for summary in summaries
+    {
+        assert!(
+            findings.iter().any(|finding| return finding.summary.contains(*summary)),
+            "{context}: no declared finding carries `{summary}`: {findings:?}"
+        );
+    }
+}
+
+/// One `Run` over `root` with `sources`, reduced to the findings it answered. Panics rather
+/// than returning a non-judged outcome: every fixture here reads a real, valid source, so the
+/// run reaches a judgment whatever that root's own `standards.json` declares.
+fn Findings_Under(sources: &[SourceFile], root: &Path, selected: &[RuleId]) -> Vec<Finding>
+{
+    let providers = Bounded_Providers();
+    let outcome = Run(
+        sources,
+        RunContext { variant: Test_Variant(), root, launcher: &StdProgramLauncher, filesystem: &StdFileSystem, environment: &StdEnvironment, workspace: &mut None, store: &mut MemoryFactStore::New(), providers: &providers },
+        selected,
+    );
+
+    let CheckOutcome::Judged { findings, .. } = outcome
+    else
+    {
+        panic!("a tree with a readable source must be judged, whatever its standards.json declares");
+    };
+
+    return findings;
+}
+
+/// `RunContext`'s own `filesystem` reaching a real repository-declared policy fact: without a
+/// real `standards.json` under `root`, `NAMING_CONVENTION` judged every function name against
+/// its own hardcoded `UpperSnake` default, so an all-lowercase name is one finding; a root
+/// declaring `lower-snake` is the only thing that makes it none.
+#[test]
+fn Test_Run_Should_Honor_A_Real_Standards_Json_Naming_Override()
+{
+    let answers = Answers_With_And_Without(
+        &[Source_File("a.rs", SourceText("pub fn lower_snake_name() {}\n"))],
+        &[RuleId::New(nomos_rules::NAMING_CONVENTION)],
+        Standards { name: "naming-overridden", file: STANDARDS_JSON, declaration: r#"{"naming":{"function":"lower-snake"}}"# },
+    );
+
+    Assert_Answers(&answers, ExpectedAnswers {
+        context: "naming.function = \"lower-snake\" must accept a lower_snake function name",
+        unconfigured: 1,
+        declared: 0,
+        declared_summaries: &[],
+    });
+}
+
+/// The limits-policy materialization reaching `nomos_rules`' own `Resolve_Limit`, proven the
+/// only way it can be proven on this repository: by declaring a threshold this workspace does
+/// not.
+///
+/// `nomos-limits.json` here declares a hard limit of three lines, so the same five-line source
+/// is far under the shipped 1500-line default and far over the declared one -- which is the
+/// smallest thing that tells "the materialization ran" from "the fallback answered".
+#[test]
+fn Test_Run_Should_Honor_A_Real_Nomos_Limits_Json_File_Size_Limit()
+{
+    let answers = Answers_With_And_Without(
+        &[Source_File("a.rs", SourceText("fn one() {}\nfn two() {}\nfn three() {}\nfn four() {}\nfn five() {}\n"))],
+        &[RuleId::New(nomos_rules::FILE_SIZE_JUSTIFICATION_TRIGGER)],
+        Standards { name: "limits-overridden", file: LIMITS_JSON, declaration: r#"{"file-size-hard-lines":3}"# },
+    );
+
+    Assert_Answers(&answers, ExpectedAnswers {
+        context: "nomos-limits.json's file-size-hard-lines = 3 must judge a five-line file against 3, not 1500",
+        unconfigured: 0,
+        declared: 1,
+        declared_summaries: &[],
+    });
+}
+
+/// The scripting-policy materialization reaching
+/// `nomos_rules::Check_Declared_Tooling_Language_For_Scripts`.
+///
+/// This is the one policy capability whose absence is not a fallback: the rule resolves an
+/// unreadable policy to no findings at all, because it never had a prior default to keep. So
+/// the undeclared half of this comparison is not a control against a hardcoded value the way
+/// the two above are -- it is the exact state every real check ran in before this wiring
+/// existed, with the rule composed, selected, and structurally unable to fire.
+///
+/// A Rust file rides along because no syntax provider recognizes a `.sh` path, and a run whose
+/// every source produced no fact reports `NoFacts` rather than `Judged` -- it would never
+/// reach the rule at all. The script is still what is being judged; `a.rs` is only what makes
+/// the run a judgment.
+#[test]
+fn Test_Run_Should_Honor_A_Real_Standards_Json_Forbidden_Script_Extension()
+{
+    let answers = Answers_With_And_Without(
+        &[
+            Source_File("a.rs", SourceText("pub fn Anything() {}\n")),
+            Source_File("deploy.sh", SourceText("#!/usr/bin/env bash\necho deploying\n")),
+        ],
+        &[RuleId::New(nomos_rules::DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS)],
+        Standards { name: "scripting-overridden", file: STANDARDS_JSON, declaration: r#"{"scripting":{"tooling_language":"rust","forbidden_extensions":[".sh"]}}"# },
+    );
+
+    Assert_Answers(&answers, ExpectedAnswers {
+        context: "a repository declaring rust tooling and .sh forbidden must report deploy.sh",
+        unconfigured: 0,
+        declared: 1,
+        declared_summaries: &[],
+    });
+}
+
+/// The goals-policy materialization reaching `Check_Goals_And_Parts_Line_Up`, the one composed
+/// rule whose subject is not source at all.
+///
+/// Both halves of this comparison are load-bearing in a way the limits and scripting pairs are
+/// not. The undeclared half is what this repository itself looks like -- `standards.json`
+/// declares no goals -- so it is the state the rule runs in on every real check here, and
+/// silence is the correct answer rather than a fallback. The declared half is the only place
+/// anything proves the rule can speak at all through `Run`, and it declares the smallest
+/// thing that exercises both directions of the audit: one goal nothing serves, and one part
+/// serving no goal.
+#[test]
+fn Test_Run_Should_Honor_A_Real_Standards_Json_Goal_Declaration()
+{
+    let answers = Answers_With_And_Without(
+        &[Source_File("a.rs", SourceText("pub fn Anything() {}\n"))],
+        &[RuleId::New(nomos_rules::GOALS_AND_PARTS_LINE_UP)],
+        Standards { name: "goals-declared", file: STANDARDS_JSON, declaration: r#"{"goals":["render"],"subsystems":[{"subsystem":"utils","paths":["src/utils"]}]}"# },
+    );
+
+    Assert_Answers(&answers, ExpectedAnswers {
+        context: "a declared goal nothing serves and a part serving no goal are two findings",
+        unconfigured: 0,
+        declared: GOAL_AUDIT_DIRECTIONS,
+        declared_summaries: &["nothing was built for", "serves no declared goal"],
+    });
+}
+
+/// The words-policy materialization reaching `Check_Abbreviations`, and the only one of the
+/// five whose declaration makes a rule report *less* rather than more.
+///
+/// The other four policy capabilities either replace a threshold or let a silent rule speak.
+/// This one extends a vocabulary the rule already ships, so the proof runs the other way
+/// round: the same name is judged twice, and the finding disappears once the repository says
+/// the word is one it uses on purpose.
+///
+/// `ctx` rather than one of this repository's own real additions, deliberately -- a fixture
+/// asserting `std` would pass the moment `standards.json` declares it and stop proving the
+/// materialization ran at all.
+#[test]
+fn Test_Run_Should_Honor_A_Real_Standards_Json_Approved_Abbreviation()
+{
+    let answers = Answers_With_And_Without(
+        &[Source_File("a.rs", SourceText("pub fn Read_Ctx() {}\n"))],
+        &[RuleId::New(nomos_rules::ABBREVIATIONS)],
+        Standards { name: "words-approved", file: STANDARDS_JSON, declaration: r#"{"words":{"approved_abbreviations":["ctx"]}}"# },
+    );
+
+    Assert_Answers(&answers, ExpectedAnswers {
+        context: "ctx has no vowel, so only declaring it approved may silence the shipped vocabulary",
+        unconfigured: 1,
+        declared: 0,
+        declared_summaries: &[],
+    });
+}
+
+/// The limits axis whose undeclared meaning is to be reported, through the real complexity
+/// provider and the real limits file: with nothing declared the rule judges nothing and says the
+/// limit is undeclared; with a limit of three the same four-path function is a breach.
+#[test]
+fn Test_Run_Should_Report_An_Undeclared_Complexity_Limit_And_Judge_A_Declared_One()
+{
+    let answers = Answers_With_And_Without(
+        &[Source_File("a.rs", SourceText("pub fn Branchy(a: u8)\n{\n    if a > 1 {}\n    if a > 2 {}\n    if a > 3 {}\n}\n"))],
+        &[RuleId::New(nomos_rules::CYCLOMATIC_COMPLEXITY)],
+        Standards { name: "complexity-declared", file: LIMITS_JSON, declaration: r#"{"cyclomatic-complexity-max":3}"# },
+    );
+
+    Assert_Answers(&answers, ExpectedAnswers {
+        context: "cyclomatic-complexity-max is reported as undeclared until declared, then judged",
+        unconfigured: 1,
+        declared: 1,
+        declared_summaries: &["`Branchy` at a.rs:1 has cyclomatic complexity 4", "past the declared limit of 3"],
+    });
+    Assert_Summaries_Carried(
+        &answers.unconfigured,
+        &["declares no `cyclomatic-complexity-max`", "the most complex `Branchy` at a.rs:1 with 4"],
+        "an undeclared limit judges nothing and says what it measured",
+    );
+}
+
+/// Neither size judgment subsumes the other, shown on one run over two files: a short function
+/// with thirteen paths passes the composed line-count rule, `1500-lines`, and fails a complexity
+/// limit of ten, and a 1,600-line function with one path fails the line count and passes the
+/// limit. So a line count does
+/// not reach this verdict, which is the trigger `OD-ROADMAP-004` named for a metric capability.
+#[test]
+fn Test_Complexity_And_The_Line_Count_Should_Each_Report_The_File_The_Other_Passes()
+{
+    let branches: String = (1..=12).map(|value| return format!("    if a == {value} {{}}\n")).collect();
+    let short_branchy = format!("pub fn Short_Branchy(a: u8)\n{{\n{branches}}}\n");
+    let lets: String = (0..1600).map(|value| return format!("    let _unused = {value};\n")).collect();
+    let long_flat = format!("pub fn Long_Flat()\n{{\n{lets}}}\n");
+    let answers = Answers_With_And_Without(
+        &[Source_File("short_branchy.rs", SourceText(&short_branchy)), Source_File("long_flat.rs", SourceText(&long_flat))],
+        &[RuleId::New(nomos_rules::CYCLOMATIC_COMPLEXITY), RuleId::New(nomos_rules::FILE_SIZE_JUSTIFICATION_TRIGGER)],
+        Standards { name: "complexity-against-lines", file: LIMITS_JSON, declaration: r#"{"cyclomatic-complexity-max":10}"# },
+    );
+
+    let reported = |rule: &str| -> Vec<&str> {
+        return answers.declared.iter().filter(|finding| return finding.rule == RuleId::New(rule)).map(|finding| return finding.subject_name.as_str()).collect();
+    };
+    assert_eq!(reported(nomos_rules::CYCLOMATIC_COMPLEXITY), ["short_branchy.rs:1"], "{:?}", answers.declared);
+    assert_eq!(reported(nomos_rules::FILE_SIZE_JUSTIFICATION_TRIGGER), ["long_flat.rs"], "{:?}", answers.declared);
+}

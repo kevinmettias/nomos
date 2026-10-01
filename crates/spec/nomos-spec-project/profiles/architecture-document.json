@@ -1,0 +1,23 @@
+{
+  "id": "architecture-document",
+  "title": "Architecture",
+  "format": "markdown",
+  "output": "spec/architecture.md",
+  "sections": [
+    {
+      "title": "Decisions",
+      "content": "nodes",
+      "filter": {
+        "kind": "decision"
+      }
+    },
+    {
+      "title": "Normative statements",
+      "content": "statements"
+    },
+    {
+      "title": "Relations",
+      "content": "relations"
+    }
+  ]
+}

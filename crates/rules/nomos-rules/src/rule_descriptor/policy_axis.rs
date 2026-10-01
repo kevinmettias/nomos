@@ -1,0 +1,236 @@
+//! Every value a rule reads from a row-shaped policy family, declared once.
+//!
+//! `OD-RULES-035` decided that a preference axis is a key, declared in this crate beside the
+//! rules that read it and read through the one resolver its family has. Before this file the
+//! same key and its default were written wherever a rule read it: `checks::structure` and
+//! `checks::function_shape` each carried a private `Resolve_Limit`, every call site spelled its
+//! key as a literal, and [`super::DeclaredParameter`] paired a key with a default a third time.
+//! Now a rule names an axis, and the axis's family, key and undeclared meaning are written here
+//! and nowhere else.
+//!
+//! # Only the row-shaped families
+//!
+//! The naming and limits contracts carry rows of scope, key and value, and neither interprets
+//! its keys, so what a key means has to live with the rules that read it. A struct-shaped family
+//! -- scripting, words, goals, test material -- already names its axes as the fields of its
+//! payload type, and needs nothing here.
+
+mod undeclared;
+
+pub(crate) use undeclared::Undeclared;
+
+use super::RequiredFact;
+use nomos_cap_naming_policy::Case;
+
+/// One value a rule reads from a row-shaped policy family.
+///
+/// The kind of value it takes is `Value` -- a count for limits, a [`Case`] for naming -- which is
+/// what keeps a limits axis from being handed to the naming resolver.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) struct PolicyAxis<Value: 'static>
+{
+    /// The family a repository declares this axis in, and the capability its resolver reads.
+    pub(crate) family: RequiredFact,
+    /// The key a repository declares this axis's value under.
+    pub(crate) key: &'static str,
+    /// What a rule reading this axis does when the repository declares nothing for it.
+    pub(crate) undeclared: Undeclared<Value>,
+}
+
+impl<Value: Copy> PolicyAxis<Value>
+{
+    /// The value a rule reading this axis for `language` is judged against when the repository
+    /// declares nothing: that language's own default where the axis states one, and the
+    /// repository-wide default otherwise -- or `None` when the axis is reported as undeclared,
+    /// because then there is no value to judge against.
+    pub(crate) fn Undeclared_Value(&self, language: Option<&str>) -> Option<Value>
+    {
+        return match self.undeclared
+        {
+            Undeclared::JudgedAgainstDefault { repository, languages } => Some(
+                language
+                    .and_then(|language| return languages.iter().find(|(named, _)| return *named == language))
+                    .map_or(repository, |(_, value)| return *value),
+            ),
+            Undeclared::ReportedAsUndeclared => None,
+        };
+    }
+}
+
+/// The line count past which a file is a review candidate for splitting. code-standards' 500,
+/// which Go shares, so Go states no default of its own.
+pub(crate) const FILE_SIZE_REVIEW_LINES: PolicyAxis<u32> = PolicyAxis {
+    family: RequiredFact::LimitsPolicy,
+    key: "file-size-review-lines",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: 500, languages: &[] },
+};
+
+/// The line count past which a file must carry an explicit splitting justification.
+/// code-standards' 1500, and Go's own lower 1000.
+pub(crate) const FILE_SIZE_HARD_LINES: PolicyAxis<u32> = PolicyAxis {
+    family: RequiredFact::LimitsPolicy,
+    key: "file-size-hard-lines",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: 1500, languages: &[("go", 1000)] },
+};
+
+/// The value-parameter cap a function may declare. code-standards' four, which Go shares.
+pub(crate) const PARAMETER_COUNT_MAX: PolicyAxis<u32> = PolicyAxis {
+    family: RequiredFact::LimitsPolicy,
+    key: "parameter-count-max",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: 4, languages: &[] },
+};
+
+/// The deepest control-flow nesting a function may reach. code-standards' three.
+pub(crate) const NESTING_DEPTH_MAX: PolicyAxis<u32> = PolicyAxis {
+    family: RequiredFact::LimitsPolicy,
+    key: "nesting-depth-max",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: 3, languages: &[] },
+};
+
+/// The largest cyclomatic complexity a function may reach and not pass.
+///
+/// Reported as undeclared, the first axis to take that meaning. The other four limits are
+/// code-standards' own numbers, carried as defaults because a repository running both tools is
+/// already held to them. Nothing holds this one: code-standards judges no complexity, and the
+/// figures in circulation -- ten, fifteen, twenty -- are conventions of particular tools rather
+/// than a number this workspace could say a repository chose. `OD-RULES-035` section 3.
+pub(crate) const CYCLOMATIC_COMPLEXITY_MAX: PolicyAxis<u32> = PolicyAxis {
+    family: RequiredFact::LimitsPolicy,
+    key: "cyclomatic-complexity-max",
+    undeclared: Undeclared::ReportedAsUndeclared,
+};
+
+/// The case a function name takes.
+pub(crate) const FUNCTION_CASE: PolicyAxis<Case> = PolicyAxis {
+    family: RequiredFact::NamingPolicy,
+    key: "function",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: Case::UpperSnake, languages: &[] },
+};
+
+/// The case a module name takes.
+pub(crate) const MODULE_CASE: PolicyAxis<Case> = PolicyAxis {
+    family: RequiredFact::NamingPolicy,
+    key: "module",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: Case::LowerSnake, languages: &[] },
+};
+
+/// The case a field name takes.
+pub(crate) const FIELD_CASE: PolicyAxis<Case> = PolicyAxis {
+    family: RequiredFact::NamingPolicy,
+    key: "field",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: Case::LowerSnake, languages: &[] },
+};
+
+/// The case an exported function name takes. Read for Go.
+pub(crate) const EXPORTED_FUNCTION_CASE: PolicyAxis<Case> = PolicyAxis {
+    family: RequiredFact::NamingPolicy,
+    key: "function.exported",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: Case::UpperSnake, languages: &[] },
+};
+
+/// The case an unexported function name takes. Read for Go.
+pub(crate) const UNEXPORTED_FUNCTION_CASE: PolicyAxis<Case> = PolicyAxis {
+    family: RequiredFact::NamingPolicy,
+    key: "function.unexported",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: Case::MixedSnake, languages: &[] },
+};
+
+/// The case an exported type name takes. Read for Go.
+pub(crate) const EXPORTED_TYPE_CASE: PolicyAxis<Case> = PolicyAxis {
+    family: RequiredFact::NamingPolicy,
+    key: "type.exported",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: Case::UpperCamel, languages: &[] },
+};
+
+/// The case an unexported type name takes. Read for Go.
+pub(crate) const UNEXPORTED_TYPE_CASE: PolicyAxis<Case> = PolicyAxis {
+    family: RequiredFact::NamingPolicy,
+    key: "type.unexported",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: Case::LowerCamel, languages: &[] },
+};
+
+/// Every limits axis above, which is every key a repository's `nomos-limits.json` may declare
+/// and have a rule read.
+///
+/// `checks::undeclared_policy_key` reports any other key that file declares, so an axis added
+/// above and left out of this list is reported as undeclared the first time a repository
+/// writes it -- loud rather than silent, which is the direction `OD-RULES-035` decided a
+/// mistake here should fail in. Naming has no list: its keys are read from `standards.json`, a
+/// file another tool owns, and a key this workspace does not read there may be one that tool
+/// does.
+pub(crate) const LIMITS_AXES: &[&PolicyAxis<u32>] =
+    &[&FILE_SIZE_REVIEW_LINES, &FILE_SIZE_HARD_LINES, &PARAMETER_COUNT_MAX, &NESTING_DEPTH_MAX, &CYCLOMATIC_COMPLEXITY_MAX];
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    const LIMITS: &[&PolicyAxis<u32>] = LIMITS_AXES;
+
+    const NAMING: [PolicyAxis<Case>; 7] = [
+        FUNCTION_CASE,
+        MODULE_CASE,
+        FIELD_CASE,
+        EXPORTED_FUNCTION_CASE,
+        UNEXPORTED_FUNCTION_CASE,
+        EXPORTED_TYPE_CASE,
+        UNEXPORTED_TYPE_CASE,
+    ];
+
+    /// The resolver reads the capability an axis's `family` names, so an axis declared in the
+    /// wrong family would be read from the wrong fact and fall back to its default in silence.
+    #[test]
+    fn Test_Every_Axis_Should_Be_Declared_In_The_Family_Its_Value_Kind_Is_Read_From()
+    {
+        assert!(LIMITS.iter().all(|axis| return axis.family == RequiredFact::LimitsPolicy), "{LIMITS:?}");
+        assert!(NAMING.iter().all(|axis| return axis.family == RequiredFact::NamingPolicy), "{NAMING:?}");
+    }
+
+    /// Two axes under one key in one family would be two answers to one declaration.
+    #[test]
+    fn Test_No_Two_Axes_In_A_Family_Should_Share_A_Key()
+    {
+        let mut limits: Vec<&str> = LIMITS.iter().map(|axis| return axis.key).collect();
+        let mut naming: Vec<&str> = NAMING.iter().map(|axis| return axis.key).collect();
+        limits.sort_unstable();
+        limits.dedup();
+        naming.sort_unstable();
+        naming.dedup();
+
+        assert_eq!(limits.len(), LIMITS.len(), "{limits:?}");
+        assert_eq!(naming.len(), NAMING.len(), "{naming:?}");
+    }
+
+    /// A language's own default applies to that language only: Go's hard trigger is 1000, and a
+    /// rule reading the axis repository-wide, or for a language the axis lists nothing for, gets
+    /// the repository-wide 1500.
+    #[test]
+    fn Test_Undeclared_Value_Should_Take_A_Languages_Own_Default_For_That_Language_Only()
+    {
+        assert_eq!(FILE_SIZE_HARD_LINES.Undeclared_Value(Some("go")), Some(1000));
+        assert_eq!(FILE_SIZE_HARD_LINES.Undeclared_Value(None), Some(1500));
+        assert_eq!(FILE_SIZE_HARD_LINES.Undeclared_Value(Some("rust")), Some(1500));
+    }
+
+    /// An axis reported as undeclared has no value to judge against, for any language.
+    #[test]
+    fn Test_Undeclared_Value_Should_Be_None_For_An_Axis_Reported_As_Undeclared()
+    {
+        assert_eq!(CYCLOMATIC_COMPLEXITY_MAX.Undeclared_Value(None), None);
+        assert_eq!(CYCLOMATIC_COMPLEXITY_MAX.Undeclared_Value(Some("rust")), None);
+    }
+
+    /// The limits resolver reports an undeclared axis for whichever rule reads it; the naming
+    /// resolver has no such path, because no naming axis has needed one. A naming axis declared
+    /// reported-as-undeclared would reach a resolver with nothing to judge by, so this holds every
+    /// naming axis to a default until the axis that needs otherwise brings the report path with it.
+    #[test]
+    fn Test_No_Naming_Axis_Should_Be_Reported_As_Undeclared_While_Its_Resolver_Cannot_Report()
+    {
+        let reported: Vec<&str> =
+            NAMING.iter().filter(|axis| return axis.undeclared == Undeclared::ReportedAsUndeclared).map(|axis| return axis.key).collect();
+
+        assert!(reported.is_empty(), "{reported:?}");
+    }
+}

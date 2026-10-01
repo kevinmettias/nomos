@@ -1,0 +1,542 @@
+//! The rules this crate implements, one module per rule or per family of rules that share a
+//! reading. `lib.rs`'s own module doc walks why each one exists and in what order it was
+//! built; this file only gathers them so the crate root is not itself the ninth thing that
+//! grows one module per rule forever.
+//!
+//! A module holds several rules when they judge one thing several ways, and its own doc
+//! says why: `dependency` holds [`Check_Dependency_Direction`],
+//! [`Check_Every_Member_Declares_A_Band`] and [`Check_Write_Authority`] because each judges
+//! the same declared architecture against the same observed `nomos.cap.dependency.edges`
+//! fact, and `goals`, `requirement_trace` and `standards_corpus` each hold a rule whose
+//! subject is not source at all. Those are examples of the grouping, not an inventory of it.
+//!
+//! # Which population a count of these rules would mean
+//!
+//! Every rule declares its identifier as a `pub const` string beside its judgment, and those
+//! constants are the rules this crate *implements*. [`crate::DESCRIPTORS`] is the rules a
+//! run *composes*, and holds only those. Every constant outside that table names a rule of
+//! its own that is written and exported here but composed into no run, for a reason
+//! `tests/contract/tests/rule_composition.rs` states and fails without. The nearest thing
+//! among them to one rule carrying two identifiers is
+//! [`Check_Project_Owned_Function_Names_Use_Upper_Snake_Case`], which judges exactly what
+//! [`Check_Naming_Convention`] judges and relabels the findings with code-standards' own
+//! rule id; it is held out so that one violation is not reported twice.
+//!
+//! Neither size is written here, because neither needs a copy. The descriptor table's length
+//! is the composed count, and `tests/contract/tests/rule_descriptors.rs` holds that table
+//! equal to the run's own; the constants are counted by reading them. A number in this doc
+//! would be a third statement of one of those two sizes, and nothing would compare it
+//! against either.
+//!
+//! [`Relay_Findings`], [`test_support`], [`finding_shape`] and [`declaration_scan`] are the
+//! pieces of shared plumbing more than one rule needed by hand before they existed:
+//! [`lint`], [`policy`] and [`review`] each relay a tool's own verdict 1:1 rather than
+//! judging it a second time, every rule's test module was separately rebuilding the
+//! registry/store/fact scaffolding [`test_support`] now states once, and the shape a rule's
+//! own verdict takes and the line predicates a brace-delimited declaration scan is driven
+//! with were each written out once per rule that needed them. `review` holds
+//! [`Check_Review_Findings`], the identical relay shape extended from a same-process
+//! `ToolProvider` (`lint`, `policy`) to a connector under `ARC-CONNECTOR-001`.
+
+mod borrowed_container;
+mod closure_bounds;
+mod code_prefix;
+mod concurrency_text;
+mod constant_scope;
+mod copy_clones;
+mod crosslang;
+mod cyclomatic_complexity;
+mod declaration_scan;
+mod dependency;
+mod domain_type_alias;
+mod enum_shape;
+mod error_text;
+mod facade;
+mod finding_shape;
+mod flakiness_text;
+mod formatting;
+mod goals;
+mod function_shape;
+mod lifetime_discipline;
+mod go_text;
+mod lint;
+mod mirror;
+mod guarantee_exerciser;
+mod naming;
+mod nested_locks;
+mod nesting_depth;
+mod orphan_modules;
+mod placement;
+mod policy;
+mod procedural_macro;
+mod reachability;
+mod requirement_trace;
+mod review;
+mod role_surface_pair;
+mod rust_text;
+mod scalar_range;
+mod script_discipline;
+mod security_text;
+mod standards_corpus;
+mod structure;
+mod uncompiled_conditional_branch;
+mod undeclared_policy_key;
+#[cfg(test)]
+mod test_support;
+
+use crate::SourceFile;
+use nomos_analysis::{FactReader, InputDigest};
+use nomos_contracts::Finding;
+
+pub use borrowed_container::{Check_Parameters_Borrow_Unless_Ownership_Is_Taken, PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN};
+pub use closure_bounds::{
+    Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths, Check_Closure_Bounds_Are_Minimal,
+    BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, CLOSURE_BOUNDS_ARE_MINIMAL,
+};
+pub use concurrency_text::{
+    Check_Atomic_Ordering_Choices_Are_Justified, Check_Relaxed_Not_Used_When_Ordering_Matters,
+    Check_Seqcst_Justified_Explicitly, ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, RELAXED_NOT_USED_WHEN_ORDERING_MATTERS,
+    SEQCST_JUSTIFIED_EXPLICITLY,
+};
+pub use constant_scope::{Check_Constants_Are_The_Exception_To_Function_Scope_Use, CONSTANTS_ARE_THE_EXCEPTION_TO_FUNCTION_SCOPE_USE};
+pub use copy_clones::{Check_Copy_Clones, COPY_CLONES, COPY_CLONES_CONTRACT_RECORD, COPY_CLONES_CONTRACT_RECORD_VERSION};
+pub use crosslang::{
+    Check_Cross_Language_Correspondence, CROSS_LANGUAGE_CONTRACT_RECORD, CROSS_LANGUAGE_CONTRACT_RECORD_VERSION,
+    CROSS_LANGUAGE_CORRESPONDENCE,
+};
+pub use dependency::{
+    Check_Dependency_Direction, Check_Every_Member_Declares_A_Band, Check_Write_Authority,
+    DEPENDENCY_COMPLETENESS, DEPENDENCY_CONTRACT_RECORD, DEPENDENCY_CONTRACT_RECORD_VERSION, DEPENDENCY_DIRECTION,
+    WRITE_AUTHORITY, WRITE_AUTHORITY_CONTRACT_RECORD, WRITE_AUTHORITY_CONTRACT_RECORD_VERSION,
+};
+pub use domain_type_alias::{Check_Domain_Values_Are_Distinct_Types, DOMAIN_VALUES_ARE_DISTINCT_TYPES};
+pub use enum_shape::{Check_Named_Fields_Over_Positional_Variant_Payloads, NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS};
+pub use error_text::{
+    Check_Eager_Vs_Lazy_Context, Check_Error_Message_Has_No_Trailing_Punctuation, Check_Error_Message_Starts_Lowercase,
+    EAGER_VS_LAZY_CONTEXT, LOWERCASE_FIRST_LETTER, NO_TRAILING_PUNCTUATION,
+};
+pub use facade::{
+    Check_A_Consumer_Imports_Through_The_Facade, Check_A_Facade_Publishes_A_Child_One_Way,
+    Check_A_Renamed_Facade_Re_Export_Names_The_Contract, FACADE_ALIASES_NAME_THE_CONTRACT,
+    FACADE_CHOOSES_FLATTENING_OR_NAMESPACE, FACADE_CONSUMERS_USE_THE_FACADE_PATH,
+};
+pub use flakiness_text::{
+    Check_A_Test_Does_Not_Retry_Until_Green, Check_Sleep_Is_Not_Synchronization, SLEEP_BASED_SYNCHRONIZATION, ZERO_FLAKE_POLICY,
+};
+pub use formatting::{
+    Check_Deprecation_Carries_A_Reason, Check_No_Decorative_Section_Dividers, Check_No_Single_Line_Function_Bodies,
+    Check_No_Trailing_Whitespace, Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS,
+    NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_WHITESPACE, TODO_FORMAT,
+};
+pub use function_shape::{
+    Check_Function_Arity_Policy, Check_Go_Parameter_Count, Check_Parameter_Count, FunctionArityPolicy,
+    FunctionAritySource, ReceiverAllowance, GO_PARAMETER_COUNT, PARAMETER_COUNT,
+};
+pub use go_text::{
+    Check_A_Discarded_Error_Is_Explained, Check_A_Skipped_Test_States_Why, Check_An_Excluded_File_Says_Why,
+    Check_Suppression_Directives_Carry_A_Reason, Check_Workspace_Markers_Carry_A_Reason,
+    A_DISCARDED_ERROR_IS_EXPLAINED, A_SKIPPED_TEST_STATES_WHY, AN_EXCLUDED_FILE_SAYS_WHY,
+    SUPPRESSION_DIRECTIVES_CARRY_A_REASON, WORKSPACE_MARKERS_CARRY_A_REASON,
+};
+pub use goals::{Check_Goals_And_Parts_Line_Up, GOALS_AND_PARTS_LINE_UP};
+pub use lint::{Check_Lint_Diagnostics, LINT_CONTRACT_RECORD, LINT_CONTRACT_RECORD_VERSION, LINT_DIAGNOSTICS};
+pub use mirror::{Check_Completeness_Mirrors, COMPLETENESS_MIRROR, CONTRACT_RECORD, CONTRACT_RECORD_VERSION};
+pub use guarantee_exerciser::{
+    Check_Guarantee_Declares_Its_Exerciser, GUARANTEE_DECLARES_ITS_EXERCISER, GUARANTEE_EXERCISER_CONTRACT_RECORD,
+    GUARANTEE_EXERCISER_CONTRACT_RECORD_VERSION,
+};
+pub use naming::{
+    Check_Abbreviations, Check_Boolean_Predicates, Check_File_Name_Matches_Declared_Type,
+    Check_Exported_Go_Functions_Use_Upper_Snake_Case, Check_Go_Constants_Split_By_Export, Check_Go_Type_Names_Use_Camel_Case,
+    Check_Go_Variables_Use_Lower_Snake_Case, Check_Module_And_Field_Names_Stay_Lower_Snake,
+    Check_Naming_Clarity, Check_Naming_Convention, Check_One_Public_Type_Per_File,
+    Check_Project_Owned_Function_Names_Use_Upper_Snake_Case,
+    Check_Single_Letter_Names, Check_Test_Names_Describe_Behavior, Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter,
+    ABBREVIATIONS, BOOLEAN_PREDICATES, CONSTANTS_SPLIT_BY_EXPORT,
+    EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, FILE_NAME_MATCHES_DECLARED_TYPE, GO_VARIABLES_USE_LOWER_SNAKE_CASE,
+    MODULE_AND_FIELD_NAMES_STAY_LOWER_SNAKE, NAMING_CLARITY, NAMING_CONVENTION,
+    ONE_PUBLIC_TYPE_PER_FILE, PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE, SINGLE_LETTER_NAMES,
+    TEST_NAME_DESCRIBES_BEHAVIOR, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
+    UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,
+};
+pub use lifetime_discipline::{
+    Check_Lifetimes_Follow_The_Descriptive_Naming_Rule, Check_Static_Bounds_Are_Justified,
+    LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, STATIC_BOUNDS_ARE_JUSTIFIED,
+};
+pub use nested_locks::{Check_Nested_Locks, NESTED_LOCKS, NESTED_LOCKS_CONTRACT_RECORD, NESTED_LOCKS_CONTRACT_RECORD_VERSION};
+pub use nesting_depth::{Check_Nesting_Depth, NESTING_DEPTH};
+pub use cyclomatic_complexity::{
+    Check_Cyclomatic_Complexity, CYCLOMATIC_COMPLEXITY, CYCLOMATIC_COMPLEXITY_CONTRACT_RECORD, CYCLOMATIC_COMPLEXITY_CONTRACT_RECORD_VERSION,
+};
+pub use orphan_modules::{Check_No_Orphan_Modules, NO_ORPHAN_MODULES};
+pub use procedural_macro::{Check_Prefer_Macro_Rules_Over_Procedural_Macros, PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS};
+pub use placement::{
+    Check_A_Package_Is_Named_After_Its_Directory, Check_No_Wildcard_Imports, A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY,
+    NO_WILDCARD_IMPORTS,
+};
+pub use policy::{
+    Check_Dependency_Policy, DEPENDENCY_POLICY, DEPENDENCY_POLICY_CONTRACT_RECORD,
+    DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION,
+};
+pub use reachability::{
+    Check_Unread_Reaches_A_Finding, UNREAD_REACHES_FINDING, UNREAD_REACHES_FINDING_CONTRACT_RECORD,
+    UNREAD_REACHES_FINDING_CONTRACT_RECORD_VERSION,
+};
+pub use requirement_trace::{
+    Check_Requirement_Trace_Staleness, REQUIREMENT_TRACE_STALENESS, REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD,
+    REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD_VERSION,
+};
+pub use review::{Check_Review_Findings, REVIEW_CONTRACT_RECORD, REVIEW_CONTRACT_RECORD_VERSION, REVIEW_FINDING};
+pub use role_surface_pair::{Check_Declared_Role_Matches_Surface, RoleSurfacePair, DECLARED_ROLE_MATCHES_SURFACE};
+pub use standards_corpus::{
+    Check_Standards_Corpus, STANDARDS_CORPUS, STANDARDS_CORPUS_CONTRACT_RECORD, STANDARDS_CORPUS_CONTRACT_RECORD_VERSION,
+};
+pub use uncompiled_conditional_branch::{
+    Check_Uncompiled_Conditional_Branch, UNCOMPILED_CONDITIONAL_BRANCH, UNCOMPILED_CONDITIONAL_BRANCH_CONTRACT_RECORD,
+    UNCOMPILED_CONDITIONAL_BRANCH_CONTRACT_RECORD_VERSION,
+};
+pub use undeclared_policy_key::{
+    Check_Undeclared_Policy_Key, UNDECLARED_POLICY_KEY, UNDECLARED_POLICY_KEY_CONTRACT_RECORD,
+    UNDECLARED_POLICY_KEY_CONTRACT_RECORD_VERSION,
+};
+pub use rust_text::{
+    Check_A_Disabled_Test_States_Why, Check_A_Rust_Path_Stays_Within_Its_Own_Subtree,
+    Check_Every_Allow_Carries_A_Justification, Check_Inline_Always_Justification,
+    Check_Panics_Are_Justified_Documented_And_Validated, Check_Shared_Interior_Mutability_Says_Why,
+    Check_Unsafe_Justification, Check_Unwrap_Expect_Discipline,
+    A_DISABLED_TEST_STATES_WHY, A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, EVERY_ALLOW_CARRIES_A_JUSTIFICATION,
+    INLINE_ALWAYS_JUSTIFICATION, PANICS_ARE_JUSTIFIED_DOCUMENTED_AND_VALIDATED, SHARED_INTERIOR_MUTABILITY_SAYS_WHY,
+    UNSAFE_JUSTIFICATION, UNWRAP_EXPECT_DISCIPLINE,
+};
+/// `OD-RULES-034`'s declared form, reachable from the one table and from the vocabulary that
+/// resolves a declaration's names.
+///
+/// `pub(crate)` and not `pub`: a declaration is authored in this crate, beside the readings
+/// it may name, and exporting any of this would offer a second authoring path to a caller
+/// with no vocabulary to name — the accretion the one descriptor table exists to prevent.
+pub(crate) use rust_text::{
+    Judged_By_Declaration, A_DISABLED_TEST_DECLARATION, EVERY_ALLOW_DECLARATION, INLINE_ALWAYS_DECLARATION,
+};
+pub(crate) use rust_text::{
+    Has_Allow_Attribute, Has_An_Adjacent_Non_Empty_Comment, Has_Bare_Ignore_Attribute, Has_Inline_Always_Attribute,
+};
+pub use scalar_range::{
+    Check_A_Known_Range_Picks_Its_Type, Check_Nonnegative_Storage_Is_Unsigned, A_KNOWN_RANGE_PICKS_ITS_TYPE, NONNEGATIVE_STORAGE_IS_UNSIGNED,
+};
+pub use script_discipline::{
+    Check_A_Script_Declares_Its_Purpose, Check_Declared_Tooling_Language_For_Scripts, Check_Executed_Scripts_Set_Nounset,
+    Check_Scripts_Use_A_Portable_Shebang,
+    A_SCRIPT_DECLARES_ITS_PURPOSE, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, EXECUTED_SCRIPTS_SET_NOUNSET,
+    SCRIPTS_USE_A_PORTABLE_SHEBANG,
+};
+pub use security_text::{
+    Check_A_Credential_Is_Not_Hardcoded_In_Source, Check_A_Secret_Does_Not_Travel_In_A_Url,
+    Check_Certificate_Verification_Is_Not_Disabled, A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE,
+    A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, CERTIFICATE_VERIFICATION_IS_NOT_DISABLED,
+};
+pub use structure::{
+    Check_File_Size_Justification_Trigger, Check_File_Size_Review_Trigger, Check_Go_File_Size_Hard_Trigger,
+    Check_Go_File_Size_Review_Trigger, Check_No_Mod_Rs_Files,
+    FILE_SIZE_JUSTIFICATION_TRIGGER, FILE_SIZE_REVIEW_TRIGGER, FIVE_HUNDRED_LINE_REVIEW_TRIGGER,
+    NO_MOD_RS_FILES, ONE_THOUSAND_LINE_HARD_TRIGGER,
+};
+
+/// Requires and judges one payload per source, the identical "read the fact, judge the
+/// payload, sort by subject then summary" shape [`lint`] and [`policy`] each rebuilt by
+/// hand for their own payload type: since a `ToolProvider`'s own verdict is already a
+/// judgment, both rules relay it 1:1 rather than reaching a second opinion, and the only
+/// thing that differs between them is how a payload is read and how it becomes findings —
+/// exactly the two functions this takes rather than reimplements.
+pub(crate) fn Relay_Findings<Payload>(
+    sources: &[SourceFile],
+    facts: &mut dyn FactReader,
+    mut payload_of: impl FnMut(&SourceFile, &mut dyn FactReader) -> Result<Payload, Finding>,
+    mut findings_of: impl FnMut(&SourceFile, &Payload) -> Vec<Finding>,
+) -> Vec<Finding>
+{
+    let mut findings = Vec::new();
+
+    for source in sources
+    {
+        match payload_of(source, &mut *facts)
+        {
+            Ok(payload) =>
+            {
+                let source_findings = findings_of(source, &payload);
+                findings.extend(source_findings);
+            }
+            Err(finding) => findings.push(finding),
+        }
+    }
+
+    findings.sort_by(|left, right| return (&left.subject_name, &left.summary).cmp(&(&right.subject_name, &right.summary)));
+    return findings;
+}
+
+/// Whether a source sits in the part of a repository that holds tests and examples rather
+/// than the code they exercise.
+///
+/// A repository-layout convention, not a language or provider fact: it answers where a file
+/// sits, never what it is written in, which is why `OD-RULES-014` measured the two verbatim
+/// copies this replaces and refused to fold them into the carried-language question it was
+/// deciding. Housed here for the reason [`Relay_Findings`] is — plumbing more than one rule
+/// needed by hand — rather than in either module that used to hold a copy: a leaf reaching
+/// into a sibling leaf for it would make the borrower structurally downstream of the lender
+/// over a fact neither one owns.
+///
+/// The prefixes match a workspace-relative path, the infixes a crate-relative one, and the
+/// suffixes the in-file convention; slashes are normalized first so a Windows path answers
+/// the same as a POSIX one. A bare `tests.rs` and a bare `test_support.rs` are matched by
+/// their whole names rather than by a wider rule: `_tests.rs` will not catch the first,
+/// because this workspace names an inline test module's file plainly and a suffix wide enough
+/// to reach it would also reach `contests.rs`; and a `test_` filename prefix would catch the
+/// second at the cost of also catching `checks/naming/test_names.rs`, which implements the
+/// test-naming rules and is production code that merely talks about tests. Both names are
+/// declared `#[cfg(test)]` at every site in this workspace that declares them, which is the
+/// fact a path predicate cannot read and these two clauses stand in for. `security_text`'s own `Is_Test_Or_Fixture_Source` is
+/// deliberately not folded in: it admits `/testdata/`, `/fixtures/` and `_test.go` besides,
+/// and reads `examples` as an infix rather than a prefix, so it is a different predicate
+/// that resembles this one rather than a third copy of it. The two do share one thing: both
+/// extend their own fixed clauses with the same repository-declared fixture locations,
+/// resolved once by [`Resolve_Declared_Fixture_Locations`] and handed in as `declared`, so
+/// "what counts as test material" is one criterion — fixed clauses plus a repository's own
+/// additions — rather than two independent path lists.
+pub(crate) fn Is_Test_Or_Example_Source(source: &SourceFile, declared: &[String]) -> bool
+{
+    let normalized = source.path.replace('\\', "/");
+    return normalized.starts_with("tests/")
+        || normalized.starts_with("examples/")
+        || normalized.contains("/tests/")
+        || normalized.contains("/test/")
+        || normalized.ends_with("_test.rs")
+        || normalized.ends_with("_tests.rs")
+        || normalized.ends_with("/tests.rs")
+        || normalized == "tests.rs"
+        || normalized.ends_with("/test_support.rs")
+        || normalized == "test_support.rs"
+        || declared.iter().any(|location| return Is_Under_Declared_Location(&normalized, location));
+}
+
+/// A repository's own declared fixture locations, read through the
+/// `nomos.cap.test.material.policy` fact — empty on any `Require` failure, per
+/// `OD-CAPABILITY-004`/`OD-RULES-011`'s settled optional-read pattern: this capability is
+/// optional, and its absence must never surface as a `Finding` or this capability's own
+/// `Applicability`.
+///
+/// Shared by [`Is_Test_Or_Example_Source`] here and `security_text`'s own
+/// `Is_Test_Or_Fixture_Source`, so the two predicates extend their distinct fixed clause
+/// lists with the same declared set rather than each re-reading the same fact.
+pub(crate) fn Resolve_Declared_Fixture_Locations(facts: &mut dyn FactReader) -> Vec<String>
+{
+    let subject = nomos_model::Subject_Of_Path("");
+    let Ok(fact) = facts.Require(
+        &nomos_cap_test_material_policy::Capability(),
+        &subject,
+        InputDigest::Of(&[]),
+        &Test_Material_Policy_Requirement(),
+    )
+    else
+    {
+        return Vec::new();
+    };
+
+    let Ok(payload) = nomos_cap_test_material_policy::Parse_Payload(&fact.payload.bytes) else { return Vec::new() };
+
+    return payload.locations;
+}
+
+/// This crate's own floor for `nomos.cap.test.material.policy` — stated at the capability's
+/// own ceiling since there is only one real provider today and no weaker answer this crate
+/// could honestly still act on. Mirrors `checks::naming::Naming_Policy_Requirement` and
+/// `checks::structure::Limits_Policy_Requirement` exactly, for the sixth sibling capability.
+fn Test_Material_Policy_Requirement() -> nomos_capability::Requirement
+{
+    return nomos_capability::Requirement::New(
+        nomos_cap_test_material_policy::Capability(),
+        nomos_cap_test_material_policy::CONTRACT_VERSION,
+        nomos_cap_test_material_policy::Ceiling(),
+    );
+}
+
+/// Whether `normalized_path` is a repository's own declared fixture location, or sits under
+/// one — a location is a repository-relative directory prefix, so an exact match or a
+/// `location/` prefix both count, and a sibling directory that merely shares the spelling
+/// (`samples2/`) does not.
+pub(crate) fn Is_Under_Declared_Location(normalized_path: &str, location: &str) -> bool
+{
+    let location = location.trim_matches('/');
+    return normalized_path == location || normalized_path.starts_with(&format!("{location}/"));
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+    use nomos_analysis::{MemoryFactStore, Reader};
+    use nomos_capability::Registry;
+
+    /// One finding pushed for the source whose payload thunk failed, plus one per source
+    /// whose thunk succeeded — the two the fixture below is built to produce.
+    const EXPECTED_PUSHED_PLUS_RELAYED_FINDINGS: usize = 3;
+
+    /// How many of the two sources the fixture's payload thunk yields a payload for.
+    const EXPECTED_RELAYED_FINDINGS: usize = 2;
+
+    /// The payload `Payload_Of_Two_Or_None` returns for every source except `a.rs`. Nothing
+    /// asserts the value itself; it only has to be a payload the relay can carry.
+    const PAYLOAD_OF_TWO: u32 = 2;
+
+    fn Source_File(path: &str) -> SourceFile
+    {
+        use nomos_contracts::SubjectId;
+        use nomos_model::Content_Digest;
+
+        return SourceFile::New(path, SubjectId::From_Digest(Content_Digest(path.as_bytes())), String::new());
+    }
+
+    /// One case per clause, plus the shapes that must stay out: a production path that merely
+    /// contains the word, and `protests.rs`, which a plain `tests.rs` suffix would swallow and
+    /// the separator-anchored clause does not. A Windows-separated path appears twice, which
+    /// is the reason the predicate normalizes before it compares rather than after, and a bare
+    /// `tests.rs` covers the spelling that has no separator to anchor on at all.
+    /// `test_names.rs` is the case that keeps the `test_support.rs` clause an exact name: it
+    /// is a rule implementation, and the obvious `test_` prefix would exempt it.
+    #[test]
+    fn Test_Is_Test_Or_Example_Source_Should_Judge_Prefixes_Infixes_And_Suffixes()
+    {
+        let inside = [
+            "tests/contract/main.rs",
+            "examples/one.rs",
+            "crates/rules/nomos-rules/tests/fixtures.rs",
+            "crates/rules/nomos-rules/test/fixtures.rs",
+            "crates/rules/nomos-rules/src/thing_test.rs",
+            "crates/rules/nomos-rules/src/thing_tests.rs",
+            "crates/languages/nomos-lang-go-modules/src/discovery/tests.rs",
+            "crates/rules/nomos-rules/src/checks/test_support.rs",
+            "tests.rs",
+            "test_support.rs",
+            "crates\\rules\\nomos-rules\\src\\discovery\\tests.rs",
+            "crates\\rules\\nomos-rules\\tests\\fixtures.rs",
+        ];
+        let outside = [
+            "crates/rules/nomos-rules/src/checks.rs",
+            "crates/latest/src/contests.rs",
+            "crates/rules/src/testing.rs",
+            "crates/rules/nomos-rules/src/protests.rs",
+            "crates/rules/nomos-rules/src/checks/naming/test_names.rs",
+        ];
+
+        for path in inside
+        {
+            assert!(Is_Test_Or_Example_Source(&Source_File(path), &[]), "should be exempt: {path}");
+        }
+        for path in outside
+        {
+            assert!(!Is_Test_Or_Example_Source(&Source_File(path), &[]), "should be judged: {path}");
+        }
+    }
+
+    /// A repository-declared fixture location exempts a source under it, exactly the way a
+    /// fixed clause would, and a sibling that merely shares the spelling does not.
+    #[test]
+    fn Test_Is_Test_Or_Example_Source_Should_Exempt_A_Declared_Fixture_Location()
+    {
+        let declared = ["samples".to_owned()];
+
+        assert!(Is_Test_Or_Example_Source(&Source_File("samples/one.rs"), &declared), "declared prefix exempts");
+        assert!(Is_Test_Or_Example_Source(&Source_File("samples"), &declared), "the bare location exempts itself");
+        assert!(!Is_Test_Or_Example_Source(&Source_File("samples2/one.rs"), &declared), "a sibling sharing the spelling is judged");
+        assert!(!Is_Test_Or_Example_Source(&Source_File("src/one.rs"), &declared), "an undeclared path is judged");
+    }
+
+    #[test]
+    fn Test_Relay_Findings_Should_Push_The_Payload_Error_And_Extend_The_Findings_Of_Success()
+    {
+        let sources = vec![Source_File("a.rs"), Source_File("b.rs")];
+        let IdleReader { registry, store } = Idle_Reader();
+        let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
+
+        let findings = Relay_Findings(&sources, &mut facts, Payload_Of_Two_Or_None, Relay_Each_Of_Two);
+
+        assert_eq!(findings.len(), EXPECTED_PUSHED_PLUS_RELAYED_FINDINGS, "one pushed error plus two relayed findings: {findings:?}");
+        assert!(findings.iter().any(|finding| return finding.summary == "no fact for a.rs"));
+        assert_eq!(findings.iter().filter(|finding| return finding.summary == "relayed").count(), EXPECTED_RELAYED_FINDINGS);
+    }
+
+    /// An admitted registry and an empty store — named so a call site reads
+    /// `reader.registry`, not a position it has to count.
+    struct IdleReader
+    {
+        registry: Registry,
+        store: MemoryFactStore,
+    }
+
+    /// An admitted registry and an empty store — `Relay_Findings` never actually calls
+    /// `Require` itself (its closures do), so what this reader offers is beside the
+    /// point; it only has to be a real `FactReader`, the same view every real caller has.
+    fn Idle_Reader() -> IdleReader
+    {
+        return IdleReader { registry: Registry::New(), store: MemoryFactStore::New() };
+    }
+
+    /// The payload thunk `Relay_Findings` is handed above: a source named `a.rs` has no fact
+    /// and yields the error, and every other source yields a payload of two.
+    fn Payload_Of_Two_Or_None(source: &SourceFile, _facts: &mut dyn FactReader) -> Result<u32, Finding>
+    {
+        if source.path == "a.rs"
+        {
+            return Err(No_Fact_Finding(source));
+        }
+
+        return Ok(PAYLOAD_OF_TWO);
+    }
+
+    /// A dependency-unavailable finding naming `source`'s own path — what a rule reports when
+    /// the fact it needs was never materialized.
+    fn No_Fact_Finding(source: &SourceFile) -> Finding
+    {
+        return Finding {
+            address: None,
+            rule: nomos_contracts::RuleId::New("example"),
+            subject: source.subject,
+            subject_name: source.path.clone(),
+            applicability: nomos_contracts::Applicability::DependencyUnavailable,
+            evidence: nomos_contracts::EvidenceClass::Derived,
+            gate: nomos_contracts::GateCategory::Advisory,
+            summary: "no fact for a.rs".to_owned(),
+            locations: vec![source.path.clone()],
+        };
+    }
+
+    /// The relay thunk beside it: one relaying finding per unit of `payload`, each named for
+    /// its own index so two of them from one source are distinguishable.
+    fn Relay_Each_Of_Two(source: &SourceFile, payload: &u32) -> Vec<Finding>
+    {
+        let mut findings = Vec::new();
+
+        for index in 0..*payload
+        {
+            let finding = Relayed_Finding(source, index);
+            findings.push(finding);
+        }
+
+        return findings;
+    }
+
+    /// The `index`-th finding a relay yields for `source` — a supported, derived finding named
+    /// `source#index`.
+    fn Relayed_Finding(source: &SourceFile, index: u32) -> Finding
+    {
+        return Finding {
+            address: None,
+            rule: nomos_contracts::RuleId::New("example"),
+            subject: source.subject,
+            subject_name: format!("{}#{index}", source.path),
+            applicability: nomos_contracts::Applicability::Supported,
+            evidence: nomos_contracts::EvidenceClass::Derived,
+            gate: nomos_contracts::GateCategory::Advisory,
+            summary: "relayed".to_owned(),
+            locations: vec![source.path.clone()],
+        };
+    }
+}

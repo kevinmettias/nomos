@@ -1,0 +1,713 @@
+[workspace]
+members = [
+    # Zone: Protocol — contracts. What earns a place here is OD-CONTRACTS-001 and the zone
+    # table is README.md; neither is restated in this file, which nothing reads back.
+    # Depends on serde and nothing else; `contracts_names_nothing` asserts it.
+    "crates/contracts/nomos-contracts",
+
+    # Zone: Substrate — kernel. Canonical identity and the content-addressed document store.
+    "crates/kernel/nomos-model",
+    "crates/kernel/nomos-store",
+
+    # Platform port. Traits in `nomos-platform`, implementations beside it. Two zones, not
+    # one: the port is Substrate and `nomos-platform-std` is Backend, which is what lets
+    # `Permits` keep a host away from an implementation of every port (`OD-RULES-028`).
+    # `nomos-platform-xvpe` arrived 2026-09-10, when the agent dispatch this
+    # workspace had built moved down into XVPE: nomos is an application over that
+    # engine, and a general capability sitting up here was unreachable by
+    # everything down there. It is one adapter, not a replacement for the port.
+    "crates/platform/nomos-platform",
+    "crates/platform/nomos-platform-std",
+    "crates/platform/nomos-platform-xvpe",
+
+    # Zone: Substrate - composer. Which backend set a composition root runs on, named once so a
+    # host expresses a platform rather than an implementation of each port. Above the
+    # platform tier because it selects from it; below every host because it decides
+    # nothing a host has not asked for, and orchestrates nothing at all. `P88`.
+    "crates/composer/nomos-composer-std",
+
+    # Zone: Composer. The standard provider set, selected once: the table
+    # nomos-check-orchestration runs through and the registry offers of the same providers,
+    # built together. A different zone from its sibling above, which selects a platform and
+    # fits in Substrate: this one names providers and the service's own port types, so it
+    # needs Provider and Application Service, and only Host may reach it. OD-HOST-020.
+    "crates/composer/nomos-composer-providers",
+
+    # Zone: Substrate — substrate. The generic materializer OD-PACKAGE-003 routed to, and the
+    # vocabulary a declaring package and that mechanism both name: an intent, OD-PACKAGE-004's
+    # ownership class and OD-PACKAGE-005's publication scope. Below every package kind that
+    # declares a placement and below the mechanism that performs one, so neither owns the
+    # words both use; nomos-integration-package re-exports all three unchanged. Named as
+    # Nomos's own rather than under a platform prefix, per `D-138`.
+    # `OD-PACKAGE-003`, `OD-PACKAGE-004`, `OD-PACKAGE-005`, `OD-CAPABILITY-002`, `D-138`.
+    "crates/substrate/nomos-materialization",
+
+    # Zone: Substrate — substrate. Territory and VerificationPredicate, the two ledger-agnostic
+    # primitives `OD-LEDGER-037` found underneath nomos-agent-contracts' reuse of
+    # nomos-ledger. Below the ledger and below nomos-agent-contracts, so both may depend
+    # on it; nomos-ledger re-exports both, unchanged, for its own claim/overlap and
+    # finish logic. `OD-LEDGER-037`.
+    "crates/substrate/nomos-scope-verification",
+
+    # Substrate by directory, two zones by ownership: `nomos-ledger` is Repo Tooling, the
+    # other three are Substrate. `OD-PROJECT-004` is why the ledger is not a product crate.
+    "crates/substrate/nomos-ledger",
+    "crates/substrate/nomos-capability",
+    "crates/substrate/nomos-workspace",
+    "crates/substrate/nomos-analysis",
+
+    # Zone: Substrate — the counting semaphore a test suite admits its compiler databases
+    # through. Test-only: a dev-dependency of nomos-gate-orchestration and
+    # nomos-check-orchestration and of nothing else, which Application Service may name because
+    # it may name Substrate. It holds the mechanism and not a bound: each consumer keeps its own
+    # value and the measurement it was derived from.
+    "crates/substrate/nomos-test-permits",
+
+    # Zone: Capability Contract — capability contracts. What providers agree a question means, above the
+    # registry that resolves it and below everything that offers against it. A contract
+    # gets a home here once more than one party names it; until then it may live beside
+    # its only provider.
+    "crates/capabilities/nomos-cap-syntax",
+
+    # Zone: Provider — the language-agnostic manifest core. PackageId, PackageKind and PKG-007's
+    # four version domains, minus any typed version-domain abstraction or provider
+    # allowlist a specific language would supply -- those are a language-specific
+    # package crate's own job. Below the language providers: it names none of them.
+    # `OD-PACKAGE-007`.
+    "crates/packages/nomos-package",
+
+    # Zone: Provider — language providers. The first crates that read code this workspace did
+    # not write. Each one offers a capability through the registry and is named by
+    # nothing below it, so a language can be added or dropped without a recompile
+    # anywhere else.
+    "crates/languages/nomos-lang-rust",
+    "crates/languages/nomos-lang-rust-scan",
+    # The first real second-language provider: what Go source says on its face, offered
+    # against the same `nomos.cap.syntax.items` contract over `tree-sitter-go` in place of
+    # `syn`. `P14-LANG-GO-SYNTAX-PROVIDER`.
+    "crates/languages/nomos-lang-go",
+    # The third language, and the one that tests whether the second was a special case: what C#
+    # source says on its face, offered against the same `nomos.cap.syntax.items` contract over
+    # `tree-sitter-c-sharp`. Weaker than its Go peer on exactly one axis -- a `#if` region is a
+    # place declarations exist that it declines to read -- so it declares Sound soundness and
+    # Unknown completeness, and counts the regions into the payload header.
+    # `P123-CSHARP-SYNTAX-PROVIDER-AND-PACKAGE`.
+    "crates/languages/nomos-lang-csharp",
+
+    # Zone: Provider — nomos.cap.dependency.edges' one provider. Different shape from its two
+    # siblings above: it runs `cargo metadata` and reads the filesystem for itself, the
+    # only I/O any provider in this workspace performs. `OD-RULES-003`.
+    "crates/languages/nomos-lang-rust-cargo",
+
+    # Zone: Provider — nomos.cap.lint.diagnostics' one provider. The first real ToolProvider
+    # `OD-RULES-010` decided the shape of: runs `cargo clippy --message-format=json` and
+    # reads the filesystem, the same shape as its `nomos-lang-rust-cargo` sibling above,
+    # never naming it -- same band.
+    "crates/languages/nomos-lang-rust-clippy",
+
+    # Zone: Provider — nomos.cap.dependency.policy's one provider. `OD-RULES-010`'s second real
+    # ToolProvider: runs `cargo deny --format json check bans licenses sources` and reads
+    # the filesystem, the same subprocess-backed shape as its siblings above, never naming
+    # any of them -- same band.
+    "crates/languages/nomos-lang-rust-deny",
+
+    # Zone: Provider — nomos.cap.rust.copy_clones's one provider, and this workspace's first
+    # provider backed by a real compiler semantic API rather than a syntax tree (its
+    # siblings above) or another tool's own report (nomos-lang-rust-deny,
+    # nomos-lang-rust-clippy). Loads a crate through `ra_ap_hir` -- the rust-analyzer
+    # project's own semantic-analysis engine, published as a library -- and asks it to
+    # resolve method calls and trait implementations, questions `syn`'s parse tree has no
+    # answer to. `P40-COMPILER-BACKED-PROVIDER`.
+    "crates/languages/nomos-lang-rust-compiler",
+
+    # Zone: Provider — nomos.cap.metric.complexity's one provider: each function's cyclomatic
+    # complexity counted over a `syn` parse, with a guarantee saying a macro hides branches. Names
+    # none of its siblings above, though it parses with the same library as nomos-lang-rust.
+    "crates/languages/nomos-lang-rust-complexity",
+
+    # Zone: Provider — nomos.cap.csharp.conditional_compilation's one provider. Asks MSBuild,
+    # through the .NET SDK's own `dotnet msbuild`, for the preprocessor symbols a build defines,
+    # then judges every #if branch of a file against them. The first C# provider that answers
+    # something the parse tree in nomos-lang-csharp cannot, and it names neither that crate nor
+    # any other sibling.
+    "crates/languages/nomos-lang-csharp-compiler",
+
+    # Zone: Provider — a second provider of nomos.cap.dependency.edges, for a Go workspace rather
+    # than a Cargo one. Reads go.work/go.mod text directly rather than running a subprocess
+    # -- its own module doc says why -- so it names neither of its three siblings above and
+    # none of them may name it. `OD-CAPABILITY-009`.
+    "crates/languages/nomos-lang-go-modules",
+
+    # Zone: Provider — the second provider of nomos.cap.lint.diagnostics: go vet's own analyzers
+    # over each Go module the walk found, read from -json. Names no sibling; OD-RULES-010's shape,
+    # and nomos-lang-rust-clippy's, for Go.
+    "crates/languages/nomos-lang-go-lint",
+
+    # Zone: Provider — the provider of nomos.cap.go.discarded_values: every value a Go file assigns
+    # to `_`, typed by go/types through a standard-library helper the host's toolchain runs with
+    # `go run`. Names no sibling. P178-GO-HAS-NO-PROVIDER-THAT-ANSWERS-WHICH-TYPE-AN-EXPRESSION-HAS.
+    "crates/languages/nomos-lang-go-types",
+
+    # Zone: Provider — the five nomos.cap.*.policy providers (naming, limits, scripting, words,
+    # goals), consolidated from six crates into one after OD-PACKAGE-015 found none of them
+    # earned an independent crate boundary: no independent versioning, no enforced
+    # isolation, and their two real consumers (nomos-check-orchestration and
+    # tests/integration) already depended on all five together, every time. Each provider
+    # keeps its own module, its own capability contract, and its own ProviderId; the shared
+    # standards.json read/parse step OD-RULES-019 decided the five owe is a private module
+    # beneath them. `OD-RULES-011`, `OD-RULES-019`, `OD-PACKAGE-015`.
+    "crates/repository/nomos-repo-policy",
+
+    # Zone: Capability Contract — the nomos.cap.dependency.edges contract, alongside nomos-cap-syntax. Not
+    # left beside its provider the way nomos.cap.module.index is: nomos-rules is a real
+    # second party to it from the day it was written. `OD-CAPABILITY-002`.
+    "crates/capabilities/nomos-cap-dependency",
+
+    # Zone: Capability Contract — the nomos.cap.controlflow.reachability contract, alongside its two
+    # siblings above, for the same reason: nomos-rules is a real second party to it from
+    # the day it was written. `OD-RULES-008`, `P13-CONTROLFLOW-REACHABILITY-CAPABILITY`.
+    "crates/capabilities/nomos-cap-controlflow",
+
+    # Zone: Capability Contract — the nomos.cap.metric.complexity contract, the first of the metric
+    # family `OD-ROADMAP-004` placed near-term, and the first payload here to carry the descriptor
+    # `MET-006` requires. nomos-rules reads it from the day it was written.
+    # `P125-A-RULE-THAT-NEEDS-A-METRIC-FACT-3`.
+    "crates/capabilities/nomos-cap-complexity",
+
+    # Zone: Capability Contract — the nomos.cap.csharp.conditional_compilation contract: which
+    # branches of a C# file's #if chains a named build compiles. Below its provider
+    # (nomos-lang-csharp-compiler) and named by neither it nor the rule that will read it, the
+    # shape OD-ANALYSIS-007 version 2 decided for a compiler-backed contract.
+    # `P128-C-SHARP-IS-READ-ON-ITS-FACE-AND-NO-COMPILER-ANSWERS-FOR-IT`.
+    "crates/capabilities/nomos-cap-csharp-semantics",
+    # Zone: Capability Contract -- every value a Go file assigns to `_`, with its resolved type;
+    # below its provider (nomos-lang-go-types) and the rule that reads it (nomos-rules).
+    "crates/capabilities/nomos-cap-go-types",
+
+    # Zone: Capability Contract — the nomos.cap.lint.diagnostics contract, alongside its three siblings
+    # above, for the same reason: nomos-rules is a real second party to it from the day
+    # it was written. `OD-RULES-010`.
+    "crates/capabilities/nomos-cap-lint",
+
+    # Zone: Capability Contract — the nomos.cap.dependency.policy contract, alongside its four siblings
+    # above, for the same reason: nomos-rules is a real second party to it from the day
+    # it was written. OD-RULES-010's second real ToolProvider capability, over `cargo
+    # deny check bans licenses sources` rather than `cargo clippy`.
+    "crates/capabilities/nomos-cap-dependency-policy",
+
+    # Zone: Capability Contract — the nomos.cap.naming.policy contract, alongside its five siblings above,
+    # for the same reason: nomos-rules' casing rules are a real second party to it from
+    # the day it was written. OD-RULES-011's first capability: a repository's own
+    # declared naming convention, read as data rather than compiled as a constant.
+    "crates/capabilities/nomos-cap-naming-policy",
+
+    # Zone: Capability Contract — the nomos.cap.limits.policy contract, alongside its six siblings above,
+    # for the same reason: nomos-rules' threshold rules (file-size triggers, parameter-
+    # count caps) are a real second party to it from the day it was written. OD-RULES-011
+    # named this threshold family as its own future instance of the naming decision; a
+    # repository's own declared numeric thresholds, read as data rather than compiled as
+    # a constant.
+    "crates/capabilities/nomos-cap-limits-policy",
+
+    # Zone: Capability Contract — the nomos.cap.scripting.policy contract, alongside its seven siblings
+    # above, for the same reason: nomos-rules' declared-tooling-language-for-scripts rule
+    # is a real second party to it from the day it was written. A third OD-RULES-011
+    # instance: a repository's own declared tooling language and forbidden script
+    # extensions, read as data rather than compiled as a constant.
+    "crates/capabilities/nomos-cap-scripting-policy",
+
+    # Zone: Capability Contract — the nomos.cap.words.policy contract, alongside its eight siblings above,
+    # for the same reason: nomos-rules' abbreviations rule is a real second party to it
+    # from the day it was written. A fourth OD-RULES-011 instance: a repository's own
+    # additions to code-standards' default approved-abbreviation vocabulary, read as data
+    # rather than compiled as a constant. A bare list rather than scope-qualified rows: a
+    # vocabulary addition has no scope to qualify.
+    "crates/capabilities/nomos-cap-words-policy",
+
+    # Zone: Capability Contract — the nomos.cap.goals.policy contract, alongside its nine siblings above, for
+    # the same reason: the rule that holds a repository's declared purposes to its declared
+    # parts is a real second party to it from the day it was written. A fifth OD-RULES-011
+    # instance, and the clearest case for that decision yet: code-standards' own
+    # check-goal-traceability reads nothing but the declaration, so there is no version of
+    # the rule that could have compiled its parameters in and still meant anything. A small
+    # graph rather than rows, a scalar or a list: goals, parts, and the edges between them.
+    "crates/capabilities/nomos-cap-goals-policy",
+
+    # Zone: Capability Contract — the nomos.cap.test.material.policy contract, alongside its ten siblings
+    # above, for the same reason: the three security checks and the shared test-or-example
+    # exemption are a real second party to it from the day it was written. A sixth
+    # OD-RULES-011 instance: a repository's own fixture locations, read as data rather than
+    # compiled as a constant. A bare list rather than rows, a scalar or a graph: a fixture
+    # location has no scope to qualify and no value to carry.
+    "crates/capabilities/nomos-cap-test-material-policy",
+
+    # Zone: Capability Contract — the nomos.cap.standards.corpus contract, alongside its eleven
+    # siblings above, for the same reason: the reader walks a corpus this workspace does not
+    # own and the rule that reports over it lives three zones above the provider, so the one
+    # thing they agree on is a real second party from the day it was written. Not a seventh
+    # OD-RULES-011 instance: a policy family is a repository's own parameters, and this is the
+    # corpus those parameters are about. What it carries is what each document declares for
+    # itself -- its kind, and for a rule its severity, gate and named owners -- with no
+    # judgment about any of them.
+    "crates/capabilities/nomos-cap-standards-corpus",
+
+    # Zone: Capability Contract — the nomos.cap.architecture.declaration contract. Beside the
+    # five OD-RULES-011 families above it and deliberately not one of them: OD-RULES-029
+    # decided that a family is a repository's policy parameters and this is the description a
+    # rule judges against, a triple of components, an order over them and the named exceptions
+    # that order cannot express. Earns a crate on OD-CAPABILITY-002's contention criterion
+    # several times over -- nomos-rules' three dependency checks, nomos-gate-orchestration's
+    # prospective `admits` answer, and nomos-lsp's architectural component all read it.
+    "crates/capabilities/nomos-cap-architecture",
+
+    # Capability Contract zone — nomos.cap.review.finding's contract on its own: identity,
+    # version, ceiling, schema, codec and payload types, with no provider beside them.
+    # OD-CAPABILITY-002's criterion is provider contention and it has not fired — this
+    # capability still has one provider. OD-ROADMAP-005's fifth decision required the split
+    # on a different ground: a generic rule layer should not have to name a vendor crate to
+    # obtain a generic capability. OD-CAPABILITY-017's own measurements stand.
+    "crates/capabilities/nomos-cap-review-finding",
+
+    # Provider zone — the one provider of nomos.cap.review.finding, offering against the
+    # contract one entry above. A connector under ARC-CONNECTOR-001: reads an already-posted
+    # CodeRabbit review comment through gh api, never writes (OD-CONNECTOR-001, held by
+    # omission), and carries one recorded fixture plus one opt-in live test
+    # (OD-CONNECTOR-002). Provider rather than Capability Contract because
+    # OD-CAPABILITY-015's criterion is what a crate declares, and this one declares no
+    # contract any more — which is what lets Permits() keep Rules away from it outright.
+    "crates/connectors/nomos-connector-coderabbit",
+
+    # Capability Contract zone — nomos.cap.requirement.trace's contract, bundled with its
+    # one provider in the same crate for the identical OD-CAPABILITY-002 reason
+    # nomos-connector-coderabbit is: exactly one provider, over this repository's own
+    # committed requirement assessments under tests/contract/requirements/ rather than
+    # standards.json. Promotes tests/contract/tests/requirement_trace's already-correct
+    # parsing and comparison logic into a real, gate-composed rule. OD-TRACE-001.
+    "crates/capabilities/nomos-cap-requirement-trace",
+
+    # Capability Contract zone — nomos.cap.rust.copy_clones' contract, on its own. It sat
+    # inside nomos-lang-rust-compiler while that provider was its only party;
+    # OD-ANALYSIS-007 version 2 decided the second party that moves it out is a nomos-rules
+    # descriptor, because the provider is zoned Provider and Permits forbids Rules from
+    # naming Provider. One crate per capability and never one for the family: what this
+    # shares with nested_locks is provider mechanics, not contract shape.
+    "crates/capabilities/nomos-cap-rust-copy-clones",
+
+    # Capability Contract zone — nomos.cap.rust.nested_locks' contract, on its own, for the
+    # identical reason its sibling one row above is on its own. OD-ANALYSIS-007 version 2.
+    "crates/capabilities/nomos-cap-rust-nested-locks",
+
+    # Zone: Provider — package manifests. The Rust installable-unit manifest format: PackageId,
+    # PackageKind and PKG-007's four version domains, given a real reader that refuses
+    # what it cannot resolve. Wraps nomos-package's generic core with RustEdition
+    # resolution and this workspace's two Rust providers. Above the language providers it
+    # registers, since it names them; below rules, which it does not touch.
+    # `OD-PACKAGE-001`, `OD-PACKAGE-007`.
+    "crates/packages/nomos-lang-rust-package",
+
+    # Zone: Provider — package manifests. The first ModelBackendPackage/AgentExecutorPackage
+    # manifest maturity: identity, PackageKind, PKG-007's first two version domains
+    # reused from nomos-package unchanged, and ModelSelection replacing the fourth. A
+    # peer of nomos-lang-rust-package, not a dependent of it -- neither names the other.
+    # `OD-PACKAGE-010`.
+    "crates/packages/nomos-model-package",
+
+    # Zone: Provider — package manifests. The first RulePackage manifest maturity, measured
+    # field by field against four real shipped rules rather than invented. A third peer
+    # of nomos-lang-rust-package and nomos-model-package -- none of the three names another.
+    # `OD-PACKAGE-008`, `OD-ROADMAP-001`.
+    "crates/packages/nomos-rule-package",
+
+    # Zone: Provider — package manifests. The first real second consumer of nomos-package's
+    # generic core: the Go LanguagePackage manifest format, wrapping it with GoVersion
+    # resolution and nomos-lang-go's own syntax provider in place of RustEdition and
+    # Rust's two. A fourth peer of the three above -- none of the four names another.
+    # `OD-PACKAGE-006`, `OD-PACKAGE-007`.
+    "crates/packages/nomos-lang-go-package",
+
+    # Zone: Provider — package manifests. The first ToolProvider manifest maturity: identity,
+    # PackageKind (restricted to ToolProvider), PKG-007's first two version domains reused
+    # from nomos-package unchanged, and OD-CAPABILITY-013's closed twelve-name FAMILY
+    # vocabulary in place of the fourth. Admits this workspace's two real ToolProviders,
+    # nomos-lang-rust-clippy and nomos-lang-rust-deny, by their own provider identities. A
+    # fifth peer of the four above -- none of the five names another.
+    # `OD-CAPABILITY-013`, `P47-TOOLPROVIDER-HAS-NO-PACKAGE-2`.
+    "crates/packages/nomos-tool-package",
+
+    # Zone: Provider — package manifests. The first IntegrationPackage manifest maturity:
+    # identity, PackageKind (restricted to IntegrationPackage), PKG-007's first two version
+    # domains reused from nomos-package unchanged, and a list of materialization intents in
+    # place of the third and fourth -- each a source, a repository-relative target,
+    # OD-PACKAGE-004's ownership class and OD-PACKAGE-005's publication scope, with each
+    # record's own default for an undeclared one. Declares placements and performs no write;
+    # nomos-materialization below it is the mechanism that does, and owns the four types the
+    # vocabulary is spelled in, re-exported here unchanged. A sixth peer of the five above
+    # -- none of the six names another.
+    # `OD-PACKAGE-003`, `OD-PACKAGE-004`, `OD-PACKAGE-005`.
+    "crates/packages/nomos-integration-package",
+
+    # Zone: Provider — package manifests. The third consumer of nomos-package's generic core,
+    # and the first whose language-version domain a {major, minor} pair could not have carried:
+    # C#'s LangVersion is a major with an optional minor (7.3 and 12 are both whole versions),
+    # so CsharpVersion is the case the generic unresolved language_versions field exists for. A
+    # seventh peer of the six above -- none of the seven names another.
+    # `OD-PACKAGE-006`, `OD-PACKAGE-007`, `P123-CSHARP-SYNTAX-PROVIDER-AND-PACKAGE`.
+    "crates/packages/nomos-lang-csharp-package",
+
+    # Zone: Rules — rules. The first thing here that judges code rather than paperwork. A
+    # rule is a pure function from source text to findings: it names no language
+    # provider and opens no file, so the caller decides what tree is being judged and a
+    # test can hand it code that no longer exists anywhere.
+    "crates/rules/nomos-rules",
+
+    # Zone: Agent — corrections. The step that applies what a rule found. Above rules
+    # deliberately, with room between: a correction candidate may one day need to name
+    # a finding a rule produced, and a band below rules would have forbidden that edge.
+    "crates/corrections/nomos-corrections",
+
+    # Zone: Agent — agent contracts. AGT-001's TaskEnvelope and AGT-002's WorkResult, the
+    # typed input and output shape an agent-assisted operation carries. Depends
+    # downward on nomos-scope-verification, nomos-contracts and nomos-corrections; names
+    # none of nomos-model-package, nomos-rule-package or nomos-lang-rust-package, which are
+    # peers at a different band, not dependents of this one. `OD-ROADMAP-001`,
+    # `OD-LEDGER-037`.
+    "crates/agent/nomos-agent-contracts",
+
+    # Zone: Agent. The Claude Code AgentExecutor adapter: dispatches a TaskEnvelope's goal to
+    # Claude Code as a subprocess through nomos-platform's ProcessLauncher, bounded by
+    # `OD-EXECUTOR-001`'s structural capability boundary. Above nomos-agent-contracts,
+    # whose TaskEnvelope/WorkResult it depends on; does not assemble a WorkResult. Renamed
+    # from nomos-agent-executor by `OD-EXECUTOR-001`'s own amendment: one concrete adapter
+    # does not get to keep the name a class of them would need.
+    "crates/agent/nomos-agent-executor-claude-code",
+
+    # Zone: Agent. The first real ModelBackend adapter (OD-PACKAGE-013), not a second
+    # AgentExecutor: dispatches a TaskEnvelope's goal to a local Ollama model as a subprocess
+    # through nomos-platform's ProcessLauncher, bounded by `OD-EXECUTOR-004`'s structural
+    # capability boundary -- measured against its own mechanism, not inherited from
+    # `OD-EXECUTOR-001` by analogy. Same band as nomos-agent-executor-claude-code; neither
+    # may name the other, and there is no dispatch trait generic over both.
+    "crates/agent/nomos-model-backend-ollama",
+
+    # Zone: Repo Tooling — orchestration. Running a `nomos work` verb against a caller-chosen
+    # platform, apart from choosing that platform and apart from rendering the answer.
+    # Above the ledger it dispatches to and the platform port it is generic over, below
+    # every composition root that could call it. `OD-HOST-001`.
+    "crates/orchestration/nomos-work-orchestration",
+
+    # Zone: Application Service — orchestration. Composing the capability registry, ingesting
+    # already-walked source into facts and judging it, apart from choosing a platform,
+    # walking a tree or rendering the answer. `OD-HOST-002`.
+    "crates/orchestration/nomos-check-orchestration",
+
+    # Zone: Specification — orchestration. Assembling the specification store from the embedded
+    # governing records and a caller-named corpus, and answering what it holds, apart
+    # from choosing a platform or rendering the answer. `OD-HOST-002`.
+    "crates/orchestration/nomos-spec-orchestration",
+
+    # Zone: Application Service — orchestration. The seam for the first-class Gate object
+    # `ARC-ROADMAP-001` names, starting with `Plan`: a real rule registry, reported
+    # back whole, apart from selecting scope, choosing a platform or rendering the
+    # answer.
+    "crates/orchestration/nomos-gate-orchestration",
+
+    # Application Service — the one walk every composition root shares: recognizes source
+    # by registered language package, not a hand-typed literal, apart from choosing a
+    # platform, judging the result or rendering an answer. Four hosts each carried their
+    # own copy of the identical walk before this; `OD-HOST-008`.
+    "crates/orchestration/nomos-workspace-discovery",
+
+    # Application Service — refuses a commit or push that would carry material a named party
+    # could claim, judged against a policy the user keeps outside every repository and reading
+    # git only through the ProgramLauncher port; `OD-POLICY-002`.
+    "crates/orchestration/nomos-transition-guard",
+
+    # Zone: Application Service — orchestration. The seam for correction planning and lifecycle both hosts
+    # call: Run_Correction composes nomos-check-orchestration and nomos-corrections into
+    # a judged, staged, validated (and optionally committed) outcome, apart from choosing
+    # a platform, walking a tree or rendering the answer. Reaches nomos-check-orchestration
+    # through a named same-zone edge and nomos-corrections across a boundary Permits
+    # grants, the same shape nomos-gate-orchestration has.
+    # `P40-CORRECTIONS-CANONICAL-SEAM`.
+    "crates/orchestration/nomos-correction-orchestration",
+
+    # Zone: Application Service — orchestration. The workflow tier's first real execution increment:
+    # running an ordered sequence of `WorkflowStep` declarations, each dispatched to
+    # one of this workspace's four real dispatch targets, apart from choosing a
+    # platform or rendering the answer. Reaches nomos-check-orchestration and
+    # nomos-correction-orchestration through named same-zone edges, the identical reason
+    # each of those declares one for what it depends on. `OD-WORKFLOW-005`,
+    # `P40-WORKFLOW-CHECK-BODY`, `P40-WORKFLOW-CORRECTION-BODY`.
+    "crates/orchestration/nomos-workflow-orchestration",
+
+    # Application Service — the seam for dispatching one TaskEnvelope to a chosen
+    # backend both hosts call: Run_Agent_Execute and Run_Agent_Judgment compose
+    # nomos-agent-executor-claude-code and nomos-model-backend-ollama into a real
+    # AgentDispatchOutcome, apart from choosing a platform or rendering the answer.
+    # `P43-AGENT-CANONICAL-SEAM-2`.
+    "crates/orchestration/nomos-agent-orchestration",
+
+    # Zone: Specification — the specification system. Reaches the product only through a
+    # KnowledgeCapability, never directly.
+    "crates/spec/nomos-spec-model",
+    "crates/spec/nomos-spec-store",
+    "crates/spec/nomos-spec-bundle",
+    "crates/spec/nomos-spec-ingest",
+    "crates/spec/nomos-spec-validate",
+    "crates/spec/nomos-spec-project",
+
+    # Zone: Host — host. Composition roots and binaries.
+    "crates/host/nomos-cli",
+
+    # Zone: Host — host. A second real caller of nomos_gate_orchestration::Run_Gate,
+    # proving the seam P13-GATE-RUN-SEAM-CRATE built is reachable from a composition
+    # root other than nomos-cli. A library crate, not a binary: Handle_Gate_Run walks a
+    # tree and hands back a JSON-serializable response, with no transport (stdio, HTTP,
+    # MCP framing) wired over it yet. `P13-GATE-API-ADAPTER-FIRST-INCREMENT`.
+    "crates/host/nomos-api",
+
+    # Zone: Repo Tooling. A report over this repository's own git history, run by a human on
+    # demand and invoked from nowhere else in this workspace: OD-STORE-002's Worked
+    # Case join between a crate's tests/contract/surface/ snapshot and docs/records/,
+    # for a caller-given commit range. Bin-only, like nomos-cli.
+    "crates/host/nomos-surface-provenance",
+
+    # Zone: Host — host. The transport nomos-api deliberately does not wire: JSON-RPC 2.0
+    # over a TCP socket, one object per line. Above nomos-api because it depends on it,
+    # and a crate may depend only on a crate in a strictly lower band. Serves the three
+    # Gate verbs OD-HOST-007 admits and none of the twenty-one repo-tooling handlers that
+    # record excludes. `P40-API-TRANSPORT-2`.
+    "crates/host/nomos-api-transport",
+
+    # Zone: Host — host. An MCP server over stdio, projecting nomos-api-transport's own
+    # three Gate verbs as MCP tools through that crate's own dispatch rather than a
+    # second one. Above nomos-api-transport because it depends on it. `P40-MCP-SURFACE-4`.
+    "crates/host/nomos-mcp",
+
+    # Zone: Host — host. A language server over stdio, projecting nomos-check-orchestration's
+    # own real `Run` as `textDocument/publishDiagnostics`: a thin translation from
+    # `nomos_contracts::Finding` to `lsp_types::Diagnostic`, with no rule judgment of its
+    # own. `P42-LSP-PROJECTION`.
+    "crates/host/nomos-lsp",
+
+    # Zone: Host — host. The process that outlives an invocation: one root's workspace, fact
+    # store and reassessment cache held across requests, so a second request files only what
+    # moved. A library crate, not a binary, and for a sharper reason than nomos-api's: what
+    # this workspace serves over a wire is nomos-api-transport's by OD-HOST-013, and a Host
+    # may not name another Host, so a transport host composes a Resident rather than this
+    # crate growing one. `P128-EVERY-INVOCATION-STARTS-COLD-BECAUSE-NOTHING-OUTLIVES-A-PROCESS`.
+    "crates/host/nomos-daemon",
+
+    # Assertions about the workspace itself: dependency bands, the contracts
+    # allowlist, and module reachability.
+    "tests/contract",
+
+    # The vertical slice. A peer of tests/contract rather than a layer over it: that
+    # crate watches the workspace's shape from outside and compiles against almost
+    # nothing, this one drives the product through every seam. Neither may name the
+    # other.
+    "tests/integration",
+]
+
+resolver = "3"
+
+[workspace.package]
+edition = "2024"
+# 1.88 is not a policy choice, it is what this workspace compiles on -- measured directly rather
+# than read from a changelog. `cargo check --workspace --all-targets` under `RUSTUP_TOOLCHAIN=1.85`
+# and `=1.87` both refuse today's nine `&& let` chains with `error[E0658]: let expressions in this
+# position are unstable` (let chains stabilized under edition 2024 in Rust 1.88); the same command
+# under `=1.88.0` exits 0. See `OD-GATE-008`. The `Compatibility floor` lane in
+# `.github/workflows/gate.yml` exercises this number on every run, so the next feature that raises
+# it is reported by CI rather than discovered the way this one was.
+rust-version = "1.88"
+license = "UNLICENSED"
+publish = false
+
+[workspace.dependencies]
+nomos-contracts = { path = "crates/contracts/nomos-contracts" }
+nomos-model = { path = "crates/kernel/nomos-model" }
+nomos-store = { path = "crates/kernel/nomos-store" }
+nomos-platform = { path = "crates/platform/nomos-platform" }
+nomos-platform-std = { path = "crates/platform/nomos-platform-std" }
+nomos-platform-xvpe = { path = "crates/platform/nomos-platform-xvpe" }
+nomos-composer-std = { path = "crates/composer/nomos-composer-std" }
+nomos-composer-providers = { path = "crates/composer/nomos-composer-providers" }
+nomos-materialization = { path = "crates/substrate/nomos-materialization" }
+nomos-scope-verification = { path = "crates/substrate/nomos-scope-verification" }
+nomos-ledger = { path = "crates/substrate/nomos-ledger" }
+nomos-capability = { path = "crates/substrate/nomos-capability" }
+nomos-workspace = { path = "crates/substrate/nomos-workspace" }
+nomos-analysis = { path = "crates/substrate/nomos-analysis" }
+nomos-test-permits = { path = "crates/substrate/nomos-test-permits" }
+nomos-cap-syntax = { path = "crates/capabilities/nomos-cap-syntax" }
+nomos-cap-dependency = { path = "crates/capabilities/nomos-cap-dependency" }
+nomos-cap-controlflow = { path = "crates/capabilities/nomos-cap-controlflow" }
+nomos-cap-complexity = { path = "crates/capabilities/nomos-cap-complexity" }
+nomos-cap-csharp-semantics = { path = "crates/capabilities/nomos-cap-csharp-semantics" }
+nomos-cap-go-types = { path = "crates/capabilities/nomos-cap-go-types" }
+nomos-cap-lint = { path = "crates/capabilities/nomos-cap-lint" }
+nomos-cap-dependency-policy = { path = "crates/capabilities/nomos-cap-dependency-policy" }
+nomos-cap-naming-policy = { path = "crates/capabilities/nomos-cap-naming-policy" }
+nomos-cap-limits-policy = { path = "crates/capabilities/nomos-cap-limits-policy" }
+nomos-cap-scripting-policy = { path = "crates/capabilities/nomos-cap-scripting-policy" }
+nomos-cap-words-policy = { path = "crates/capabilities/nomos-cap-words-policy" }
+nomos-cap-goals-policy = { path = "crates/capabilities/nomos-cap-goals-policy" }
+nomos-cap-architecture = { path = "crates/capabilities/nomos-cap-architecture" }
+nomos-cap-test-material-policy = { path = "crates/capabilities/nomos-cap-test-material-policy" }
+nomos-cap-standards-corpus = { path = "crates/capabilities/nomos-cap-standards-corpus" }
+nomos-cap-review-finding = { path = "crates/capabilities/nomos-cap-review-finding" }
+nomos-connector-coderabbit = { path = "crates/connectors/nomos-connector-coderabbit" }
+nomos-cap-requirement-trace = { path = "crates/capabilities/nomos-cap-requirement-trace" }
+nomos-cap-rust-copy-clones = { path = "crates/capabilities/nomos-cap-rust-copy-clones" }
+nomos-cap-rust-nested-locks = { path = "crates/capabilities/nomos-cap-rust-nested-locks" }
+nomos-lang-rust = { path = "crates/languages/nomos-lang-rust" }
+nomos-lang-go = { path = "crates/languages/nomos-lang-go" }
+nomos-lang-csharp = { path = "crates/languages/nomos-lang-csharp" }
+nomos-lang-rust-scan = { path = "crates/languages/nomos-lang-rust-scan" }
+nomos-lang-rust-cargo = { path = "crates/languages/nomos-lang-rust-cargo" }
+nomos-lang-rust-clippy = { path = "crates/languages/nomos-lang-rust-clippy" }
+nomos-lang-rust-deny = { path = "crates/languages/nomos-lang-rust-deny" }
+nomos-lang-rust-compiler = { path = "crates/languages/nomos-lang-rust-compiler" }
+nomos-lang-rust-complexity = { path = "crates/languages/nomos-lang-rust-complexity" }
+nomos-lang-csharp-compiler = { path = "crates/languages/nomos-lang-csharp-compiler" }
+nomos-lang-go-modules = { path = "crates/languages/nomos-lang-go-modules" }
+nomos-lang-go-lint = { path = "crates/languages/nomos-lang-go-lint" }
+nomos-lang-go-types = { path = "crates/languages/nomos-lang-go-types" }
+nomos-repo-policy = { path = "crates/repository/nomos-repo-policy" }
+nomos-package = { path = "crates/packages/nomos-package" }
+nomos-lang-rust-package = { path = "crates/packages/nomos-lang-rust-package" }
+nomos-model-package = { path = "crates/packages/nomos-model-package" }
+nomos-rule-package = { path = "crates/packages/nomos-rule-package" }
+nomos-lang-go-package = { path = "crates/packages/nomos-lang-go-package" }
+nomos-lang-csharp-package = { path = "crates/packages/nomos-lang-csharp-package" }
+nomos-tool-package = { path = "crates/packages/nomos-tool-package" }
+nomos-integration-package = { path = "crates/packages/nomos-integration-package" }
+nomos-rules = { path = "crates/rules/nomos-rules" }
+nomos-corrections = { path = "crates/corrections/nomos-corrections" }
+nomos-agent-contracts = { path = "crates/agent/nomos-agent-contracts" }
+nomos-agent-executor-claude-code = { path = "crates/agent/nomos-agent-executor-claude-code" }
+nomos-model-backend-ollama = { path = "crates/agent/nomos-model-backend-ollama" }
+nomos-work-orchestration = { path = "crates/orchestration/nomos-work-orchestration" }
+nomos-check-orchestration = { path = "crates/orchestration/nomos-check-orchestration" }
+nomos-spec-orchestration = { path = "crates/orchestration/nomos-spec-orchestration" }
+nomos-workflow-orchestration = { path = "crates/orchestration/nomos-workflow-orchestration" }
+nomos-gate-orchestration = { path = "crates/orchestration/nomos-gate-orchestration" }
+nomos-correction-orchestration = { path = "crates/orchestration/nomos-correction-orchestration" }
+nomos-agent-orchestration = { path = "crates/orchestration/nomos-agent-orchestration" }
+nomos-workspace-discovery = { path = "crates/orchestration/nomos-workspace-discovery" }
+nomos-transition-guard = { path = "crates/orchestration/nomos-transition-guard" }
+nomos-api = { path = "crates/host/nomos-api" }
+nomos-api-transport = { path = "crates/host/nomos-api-transport" }
+nomos-lsp = { path = "crates/host/nomos-lsp" }
+nomos-daemon = { path = "crates/host/nomos-daemon" }
+nomos-integration-tests = { path = "tests/integration" }
+nomos-spec-model = { path = "crates/spec/nomos-spec-model" }
+nomos-spec-store = { path = "crates/spec/nomos-spec-store" }
+nomos-spec-bundle = { path = "crates/spec/nomos-spec-bundle" }
+nomos-spec-ingest = { path = "crates/spec/nomos-spec-ingest" }
+nomos-spec-validate = { path = "crates/spec/nomos-spec-validate" }
+nomos-spec-project = { path = "crates/spec/nomos-spec-project" }
+
+# The XVPE crossing, declared once. `D-130`'s surviving clause requires it be adopted by
+# git reference and commit, and `OD-PLATFORM-004` denies a local substitution any
+# authority; neither says where the reference is spelled. It was spelled fifteen times
+# across seven member manifests until a revision bump became fifteen edits that had to
+# agree, caught only afterwards and only by
+# `tests/contract/tests/boundaries/lock_pinning.rs`. Here it is one edit, and that guard
+# reads this table as the declaring site while still reading every member, so a member
+# that re-pins locally is still a second revision and still fails.
+xvpe-agent-backend-claude-code = { git = "https://github.com/kevinmettias/xvpe.git", rev = "726aa3feecefd928677d26f68d235894b3228a0b" }
+xvpe-agent-backend-ollama = { git = "https://github.com/kevinmettias/xvpe.git", rev = "726aa3feecefd928677d26f68d235894b3228a0b" }
+xvpe-agent-execution = { git = "https://github.com/kevinmettias/xvpe.git", rev = "726aa3feecefd928677d26f68d235894b3228a0b" }
+xvpe-clock = { git = "https://github.com/kevinmettias/xvpe.git", rev = "726aa3feecefd928677d26f68d235894b3228a0b" }
+xvpe-diagnostics = { git = "https://github.com/kevinmettias/xvpe.git", rev = "726aa3feecefd928677d26f68d235894b3228a0b" }
+xvpe-language-server-backend-lsp = { git = "https://github.com/kevinmettias/xvpe.git", rev = "726aa3feecefd928677d26f68d235894b3228a0b" }
+xvpe-primitives = { git = "https://github.com/kevinmettias/xvpe.git", rev = "726aa3feecefd928677d26f68d235894b3228a0b" }
+xvpe-remote-call = { git = "https://github.com/kevinmettias/xvpe.git", rev = "726aa3feecefd928677d26f68d235894b3228a0b" }
+xvpe-remote-call-backend-json = { git = "https://github.com/kevinmettias/xvpe.git", rev = "726aa3feecefd928677d26f68d235894b3228a0b" }
+xvpe-subprocess-execution = { git = "https://github.com/kevinmettias/xvpe.git", rev = "726aa3feecefd928677d26f68d235894b3228a0b" }
+
+serde = { version = "1", default-features = false, features = ["derive", "std"] }
+serde_json = "1"
+# The LSP transport and wire types used to be pinned here. They moved to
+# `xvpe-language-server-backend-lsp` on 2026-09-10 with the server itself: `nomos-lsp` now
+# supplies only the thing that judges, and names no protocol library at all.
+base64 = "0.22"
+blake3 = "1"
+sha2 = "0.10"
+rusqlite = { version = "0.32", features = ["bundled"] }
+serde_yaml_ng = "0.10"
+# Deflate only. The archives are ordinary zips, and the other backends are
+# compression formats this corpus does not contain.
+zip = { version = "4", default-features = false, features = ["deflate"] }
+
+# rust-analyzer's own semantic-analysis engine, published as a library rather than
+# vendored, for `nomos-lang-rust-compiler`'s real compiler-backed provider. Pinned to an
+# exact version rather than a caret range, and to `=0.0.293` specifically rather than a
+# newer one: the rust-analyzer project bumps this whole family's transitive floor ahead
+# of releasing it, so the newest release compatible with `rust-version = "1.88"` (this
+# workspace's own floor, `OD-GATE-008`) is several releases behind the newest one
+# published, not the newest one available. A caret range would let a routine `cargo
+# update` silently raise this workspace's real compile floor past what it declares.
+ra_ap_hir = "=0.0.293"
+ra_ap_ide_db = "=0.0.293"
+ra_ap_load-cargo = "=0.0.293"
+ra_ap_project_model = "=0.0.293"
+ra_ap_syntax = "=0.0.293"
+# Already part of `ra_ap_hir`'s own dependency graph; a direct dependency here so
+# `nomos-lang-rust-compiler` can turn a resolved text offset into a line and column
+# without re-deriving what its own transitive dependency already computes.
+line-index = "=0.1.2"
+
+# Workspace-wide lint policy, mirrored from F:\repos\xvpe\Cargo.toml. Crates inherit
+# it by declaring `lints.workspace = true`. The severity choices are XVPE's and the
+# reasoning is recorded there; the two that matter most here are `unwrap_used` and
+# `indexing_slicing`, because a panic inside the analysis kernel is a determinism
+# defect (a replay must reach the same panic at the same step) and not merely a bug.
+[workspace.lints.rust]
+# Project-owned function names use command-style `Pascal_Snake_Case` instead of
+# Rust's lower-snake convention. This is the workspace convention, not an oversight.
+non_snake_case = "allow"
+unsafe_code = "warn"
+private_interfaces = "deny"
+private_bounds = "deny"
+missing_docs = "allow"
+
+[workspace.lints.clippy]
+# This table is the one place that states what severity every clippy lint in this workspace
+# runs at, for a contributor's own machine and for the gate alike. `.github/workflows/gate.yml`'s
+# `Lint` step runs `cargo clippy --workspace --all-targets` with no promotion flag of its own,
+# so what fails there is exactly what fails a bare `cargo clippy` run here. It did not always:
+# the step used to add `-- -D warnings`, which silently promoted `clippy::all` and
+# `clippy::pedantic` (`warn` below) to hard failures in CI only, and nothing here said so.
+# `OD-GATE-007` is why the flag was removed rather than mirrored into this table as `deny`.
+#
+# `priority = -1` lets the specific lints below override these group levels.
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+float_cmp = "deny"
+# Explicit `return` is the workspace convention — a deliberate departure from Rust's
+# tail-expression idiom — so this lint is silenced.
+needless_return = "allow"
+# `unwrap()` is forbidden outside tests; `expect("<invariant>")` is the sanctioned
+# form, so `expect_used` is intentionally NOT enabled. Tests are exempted via
+# `allow-unwrap-in-tests` in clippy.toml.
+unwrap_used = "deny"
+arithmetic_side_effects = "deny"
+indexing_slicing = "deny"
+
+[profile.dev]
+debug = 1
+
+# Every package this workspace depends on, and none of its own members, is built at opt-level 2
+# in the dev profile, and the test profile inherits it. Only the optimization level moves:
+# debug-assertions and overflow-checks stay the dev profile's, so a test proves what it proved
+# before. `OD-GATE-035` is why, which packages this covers and why that set, what it costs a
+# cold build, and what would reopen it.
+[profile.dev.package."*"]
+opt-level = 2
+
+[profile.release]
+codegen-units = 1
+lto = "thin"

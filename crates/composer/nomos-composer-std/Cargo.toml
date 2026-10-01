@@ -1,0 +1,15 @@
+[package]
+name = "nomos-composer-std"
+version = "0.1.0"
+description = "The std backend set, assembled once, so a composition root names a platform without naming an implementation of one. Selects from nomos-platform-std and re-exports nomos-platform's own port vocabulary alongside it."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-platform = { workspace = true }
+nomos-platform-std = { workspace = true }
+
+[lints]
+workspace = true

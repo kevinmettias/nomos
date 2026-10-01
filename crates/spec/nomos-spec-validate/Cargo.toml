@@ -1,0 +1,17 @@
+[package]
+name = "nomos-spec-validate"
+version = "0.1.0"
+description = "Preservation rules over the specification store."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-spec-ingest = { workspace = true }
+nomos-spec-model = { workspace = true }
+nomos-spec-store = { workspace = true }
+rusqlite = { workspace = true }
+
+[lints]
+workspace = true

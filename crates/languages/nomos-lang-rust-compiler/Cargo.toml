@@ -1,0 +1,34 @@
+[package]
+name = "nomos-lang-rust-compiler"
+version = "0.1.0"
+description = "The nomos.cap.rust.copy_clones capability's one provider: loads a crate through ra_ap_hir, rust-analyzer's own semantic-analysis engine, and resolves which .clone() calls copy a type that already implements Copy. This workspace's first provider backed by a real compiler semantic API rather than a syntax tree or another tool's report. P40-COMPILER-BACKED-PROVIDER."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-model = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-analysis = { workspace = true }
+# The two contracts this provider offers against. They used to be modules in this crate,
+# which OD-CAPABILITY-002 licensed while this provider was each capability's only party;
+# OD-ANALYSIS-007 version 2 moved them out the moment a nomos-rules descriptor named either.
+nomos-cap-rust-copy-clones = { workspace = true }
+nomos-cap-rust-nested-locks = { workspace = true }
+# `OD-PLATFORM-002`/`OD-HOST-001`: a relative root resolves against an environment the
+# composition root chose, never against this process's own current directory.
+nomos-platform = { workspace = true }
+ra_ap_hir = { workspace = true }
+ra_ap_ide_db = { workspace = true }
+ra_ap_load-cargo = { workspace = true }
+ra_ap_project_model = { workspace = true }
+ra_ap_syntax = { workspace = true }
+line-index = { workspace = true }
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+nomos-platform-std = { workspace = true }

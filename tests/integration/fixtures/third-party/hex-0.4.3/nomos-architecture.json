@@ -1,0 +1,8 @@
+{
+  "components": [
+    "Library"
+  ],
+  "members": {
+    "hex-fixture": "Library"
+  }
+}

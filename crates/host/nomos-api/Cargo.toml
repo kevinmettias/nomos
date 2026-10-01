@@ -1,0 +1,47 @@
+[package]
+name = "nomos-api"
+version = "0.1.0"
+description = "A second real caller of orchestration seams nomos-cli otherwise has to itself: nomos_gate_orchestration::Run_Gate, nomos_work_orchestration::Run and nomos_spec_orchestration::Profiles, each producing a JSON-serializable response -- apart from choosing a platform or wiring an actual transport over it."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+# The two agent ports, and the DeclaredTarget this crate's composition root builds from
+# them. Moved out of `[dev-dependencies]` by the port item: it was test-only while this
+# crate's production surface named no contract type, and `agent.rs` names one now.
+nomos-agent-contracts = { workspace = true }
+nomos-agent-executor-claude-code = { workspace = true }
+nomos-agent-orchestration = { workspace = true }
+nomos-analysis = { workspace = true }
+nomos-check-orchestration = { workspace = true }
+nomos-contracts = { workspace = true }
+nomos-correction-orchestration = { workspace = true }
+nomos-gate-orchestration = { workspace = true }
+nomos-ledger = { workspace = true }
+nomos-model = { workspace = true }
+nomos-model-backend-ollama = { workspace = true }
+nomos-model-package = { workspace = true }
+nomos-platform = { workspace = true }
+nomos-composer-std = { workspace = true }
+nomos-composer-providers = { workspace = true }
+nomos-rules = { workspace = true }
+nomos-spec-model = { workspace = true }
+nomos-spec-orchestration = { workspace = true }
+nomos-spec-project = { workspace = true }
+nomos-spec-store = { workspace = true }
+nomos-work-orchestration = { workspace = true }
+nomos-workflow-orchestration = { workspace = true }
+nomos-workspace = { workspace = true }
+nomos-workspace-discovery = { workspace = true }
+serde = { workspace = true }
+
+[dev-dependencies]
+# The counting semaphore `src/test_support.rs` admits every gate judgment this crate's tests
+# make through. The bound's value and its derivation stay in that file.
+nomos-test-permits = { workspace = true }
+serde_json = { workspace = true }
+
+[lints]
+workspace = true

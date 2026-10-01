@@ -1,0 +1,19 @@
+{
+  "id": "diagram-set",
+  "title": "Relation diagram",
+  "format": "mermaid",
+  "output": "diagrams/relations.mmd",
+  "sections": [
+    {
+      "title": "Relations",
+      "content": "relations"
+    },
+    {
+      "title": "Decisions",
+      "content": "nodes",
+      "filter": {
+        "kind": "decision"
+      }
+    }
+  ]
+}

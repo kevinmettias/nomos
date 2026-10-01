@@ -1,0 +1,32 @@
+# Not part of `hex` 0.4.3's own published sources -- this fixture's own `cargo deny`
+# configuration, minimal and permissive since the fixture crate has no dependencies of its
+# own to check bans/sources/advisories against.
+#
+# Load-bearing for calibration.rs's own `dependency-policy` verdict: `cargo deny`'s config
+# discovery walks upward from its own working directory looking for the nearest `deny.toml`
+# independently of cargo's workspace-root resolution (`Cargo.toml`'s own `[workspace]` table
+# next door stops *cargo*'s upward search, but does not stop *cargo-deny*'s). Without this
+# file present, `cargo deny check bans licenses sources` -- run by
+# `nomos_lang_rust_deny::Materialize_Workspace` with this directory as `root`, per
+# `nomos_check_orchestration::facts::dependency_materialization::Materialize_Policy` -- walks
+# up past this directory and finds this workspace's own real `deny.toml` two levels up
+# instead, judging *this repository's* dependency-license diversity against a fixture crate
+# that does not depend on any of it. Measured directly: removing this file reproduces eight
+# `license-not-encountered` advisories, one per licence this repository's own `deny.toml`
+# allows, none of which this fixture's own (dependency-free) graph could ever "encounter".
+[graph]
+all-features = false
+
+[advisories]
+version = 2
+
+[licenses]
+version = 2
+# Matches this fixture's own declared `license = "MIT OR Apache-2.0"` (Cargo.toml), which
+# is `hex` 0.4.3's own real, dual licence -- see ../PROVENANCE.md.
+allow = ["MIT", "Apache-2.0"]
+
+[bans]
+multiple-versions = "warn"
+
+[sources]

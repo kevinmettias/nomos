@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "package_id": "nomos.tool.csharp",
+  "package_kind": "ToolProvider",
+  "package_version": { "major": 1, "minor": 0, "patch": 0 },
+  "protocol_range": {
+    "minimum": { "major": 1, "minor": 0 },
+    "maximum": { "major": 1, "minor": 0 }
+  },
+  "providers": [
+    {
+      "provider_id": "nomos.lang.csharp.msbuild",
+      "tool_version": { "major": 0, "minor": 1, "patch": 0 },
+      "family": "SEMANTIC_MODEL"
+    }
+  ]
+}

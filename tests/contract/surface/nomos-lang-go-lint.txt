@@ -1,0 +1,34 @@
+pub const fn nomos_lang_go_lint::Declared_Guarantee() -> Guarantee
+pub const fn nomos_lang_go_lint::VetFailure::Applicability(self) -> Applicability
+pub const nomos_lang_go_lint::LintFactProduction::SCOPE: ReproducibilityScope
+pub const nomos_lang_go_lint::LintFactProduction::STRENGTH: DeterminismStrength
+pub const nomos_lang_go_lint::LintFactProduction::TRACE: TraceEquivalence
+pub const nomos_lang_go_lint::PROVIDER: &str
+pub enum nomos_lang_go_lint::Unlinted
+pub enum nomos_lang_go_lint::VetFailure
+pub enum variant nomos_lang_go_lint::Unlinted::Module { path: String, failure: VetFailure, reason: String, }
+pub enum variant nomos_lang_go_lint::Unlinted::Outside { files: Vec<String>, }
+pub enum variant nomos_lang_go_lint::VetFailure::DidNotFinish
+pub enum variant nomos_lang_go_lint::VetFailure::Failed
+pub enum variant nomos_lang_go_lint::VetFailure::GoUnavailable
+pub enum variant nomos_lang_go_lint::VetFailure::Unreadable
+pub fn nomos_lang_go_lint::Materialize_Modules<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( root: &Path, files: &[&str], context: FactContext, ports: &LintPorts<'_, Launcher, Fs, Env>, ) -> LintAnswer
+pub fn nomos_lang_go_lint::Provider_Offer() -> ProviderOffer
+pub impl nomos_lang_go_lint::LintFactProduction implements Strategy
+pub struct field nomos_lang_go_lint::FactContext::configuration: ConfigurationId
+pub struct field nomos_lang_go_lint::FactContext::generation: GenerationId
+pub struct field nomos_lang_go_lint::FactContext::snapshot: SnapshotId
+pub struct field nomos_lang_go_lint::FactContext::variant: BuildVariantId
+pub struct field nomos_lang_go_lint::LintAnswer::facts: Vec<ModuleFact>
+pub struct field nomos_lang_go_lint::LintAnswer::unlinted: Vec<Unlinted>
+pub struct field nomos_lang_go_lint::LintPorts::environment: &'ports Env
+pub struct field nomos_lang_go_lint::LintPorts::filesystem: &'ports Fs
+pub struct field nomos_lang_go_lint::LintPorts::launcher: &'ports Launcher
+pub struct field nomos_lang_go_lint::ModuleFact::fact: MaterializedFact
+pub struct field nomos_lang_go_lint::ModuleFact::path: String
+pub struct field nomos_lang_go_lint::ModuleFact::subject: SubjectId
+pub struct nomos_lang_go_lint::FactContext
+pub struct nomos_lang_go_lint::LintAnswer
+pub struct nomos_lang_go_lint::LintFactProduction
+pub struct nomos_lang_go_lint::LintPorts<'ports, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
+pub struct nomos_lang_go_lint::ModuleFact

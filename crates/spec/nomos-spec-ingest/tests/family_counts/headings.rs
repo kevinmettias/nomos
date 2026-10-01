@@ -1,0 +1,226 @@
+//! Sections, addressed the way the documents number them.
+//!
+//! A heading is read as the segmenter sees it, which is what keeps a `###` inside a fenced
+//! block from being counted as a section. Everything here is a different way of asking which
+//! headings a figure covers: by prefix, by an appendix letter and depth of numbering, by
+//! ancestor, or by walking a section until the next one at its level.
+
+#![allow(dead_code)]
+
+use crate::volumes::Volume_Markdown_For_Stem;
+use nomos_spec_model::{BlockKind, Segment};
+use std::path::Path;
+
+/// Section 6's own heading, spelled as volume 02 titles it.
+const SECTION_SIX: &str = "6. Systems and subsystem responsibilities";
+
+/// The depth an appendix's own sections sit at: `## G. …`.
+const APPENDIX_DEPTH: usize = 3;
+
+/// The depth section 6's own heading sits at. The walk below stops at the next heading at
+/// this level or above, because that is where section 6 ends.
+const SECTION_SIX_DEPTH: usize = 2;
+
+/// The depth of a leaf: the deepest level a numbered section reaches.
+const LEAF_DEPTH: usize = 4;
+
+pub(crate) struct Heading
+{
+    pub(crate) depth: usize,
+    pub(crate) title: String,
+    pub(crate) path: Vec<String>,
+}
+
+/// Headings as the segmenter sees them, which is what keeps a `###` inside a fenced block
+/// from being counted as a section.
+fn Headings_Of_Markdown(markdown: &str) -> Vec<Heading>
+{
+    return Segment(markdown)
+        .into_iter()
+        .filter(|block| return block.kind == BlockKind::Heading)
+        .map(|block| {
+            return Heading {
+                depth: block.text.chars().take_while(|character| return *character == '#').count(),
+                title: block.text.trim_start_matches('#').trim().to_owned(),
+                path: block.heading_path,
+            };
+        })
+        .collect();
+}
+
+pub(crate) fn Headings_Matching(corpus: &Path, stem: &str, depth: usize, prefixes: &[&str]) -> u32
+{
+    let markdown = Volume_Markdown_For_Stem(corpus, stem);
+    let matched = Headings_Of_Markdown(&markdown)
+        .iter()
+        .filter(|heading| return heading.depth == depth)
+        .filter(|heading| {
+            return prefixes.iter().any(|prefix| {
+                return heading
+                    .title
+                    .strip_prefix(*prefix)
+                    .is_some_and(|rest| return rest.starts_with(|character: char| return character.is_ascii_digit()));
+            });
+        })
+        .count();
+
+    return u32::try_from(matched).unwrap_or(u32::MAX);
+}
+
+/// How an appendix numbers its sections: a letter, then that many dotted numbers.
+#[derive(Clone, Copy)]
+pub(crate) struct Appendix
+{
+    pub(crate) letter: char,
+    pub(crate) parts: usize,
+}
+
+/// Appendix sections, addressed the way the documents number them: a letter, then
+/// `parts` dotted numbers, then a space.
+pub(crate) fn Count_Of_Lettered_Sections(corpus: &Path, stem: &str, depth: usize, address: Appendix) -> u32
+{
+    let Appendix { letter, parts } = address;
+    let markdown = Volume_Markdown_For_Stem(corpus, stem);
+    let matched = Headings_Of_Markdown(&markdown)
+        .iter()
+        .filter(|heading| return heading.depth == depth)
+        .filter(|heading| return Is_Lettered(&heading.title, letter, parts))
+        .count();
+
+    return u32::try_from(matched).unwrap_or(u32::MAX);
+}
+
+fn Is_Lettered(title: &str, letter: char, parts: usize) -> bool
+{
+    let Some(rest) = title.strip_prefix(letter)
+    else
+    {
+        return false;
+    };
+    let Some((numbering, _)) = rest.split_once(' ')
+    else
+    {
+        return false;
+    };
+
+    let segments: Vec<&str> = numbering.split('.').collect();
+    if segments.len() != parts.saturating_add(1)
+    {
+        return false;
+    }
+
+    return segments.first() == Some(&"")
+        && segments
+            .iter()
+            .skip(1)
+            .all(|segment| return !segment.is_empty() && segment.chars().all(|character| return character.is_ascii_digit()));
+}
+
+pub(crate) fn Count_Of_Prefixed_Sections(corpus: &Path, stem: &str, depth: usize, prefix: &str) -> u32
+{
+    let markdown = Volume_Markdown_For_Stem(corpus, stem);
+    let matched = Headings_Of_Markdown(&markdown)
+        .iter()
+        .filter(|heading| return heading.depth == depth)
+        .filter(|heading| {
+            return heading
+                .title
+                .strip_prefix(prefix)
+                .is_some_and(|rest| return rest.starts_with(|character: char| return character.is_ascii_digit()));
+        })
+        .count();
+
+    return u32::try_from(matched).unwrap_or(u32::MAX);
+}
+
+pub(crate) fn Under_Path(corpus: &Path, stem: &str, depth: usize, ancestor: &str) -> u32
+{
+    let markdown = Volume_Markdown_For_Stem(corpus, stem);
+    let matched = Headings_Of_Markdown(&markdown)
+        .iter()
+        .filter(|heading| return heading.depth == depth)
+        .filter(|heading| return heading.path.iter().any(|step| return step == ancestor))
+        .count();
+
+    return u32::try_from(matched).unwrap_or(u32::MAX);
+}
+
+pub(crate) fn End_To_End(corpus: &Path) -> u32
+{
+    let markdown = Volume_Markdown_For_Stem(corpus, "09-reference");
+    let matched = Headings_Of_Markdown(&markdown)
+        .iter()
+        .filter(|heading| return heading.depth == APPENDIX_DEPTH)
+        .filter(|heading| {
+            return Is_Lettered(&heading.title, 'G', 1)
+                && heading.title.contains("End-to-end scenario:");
+        })
+        .count();
+
+    return u32::try_from(matched).unwrap_or(u32::MAX);
+}
+
+/// Every heading of section 6, its leaves, and the leaves naming a service.
+pub(crate) fn Section_Six(corpus: &Path) -> SectionCounts
+{
+    let markdown = Volume_Markdown_For_Stem(corpus, "02-core");
+    let headings = Headings_Of_Markdown(&markdown);
+    let counted = Counted_Under_Section_Six(&headings);
+
+    assert!(counted.all > 0, "section 6 is no longer in volume 02 under that title");
+
+    return counted;
+}
+
+/// The walk itself: everything from section 6's own heading until the next section at its
+/// level or above.
+fn Counted_Under_Section_Six(headings: &[Heading]) -> SectionCounts
+{
+    let mut inside = false;
+    let (mut all, mut leaves, mut systems) = (0_u32, 0_u32, 0_u32);
+    for heading in headings
+    {
+        if heading.title == SECTION_SIX
+        {
+            inside = true;
+        }
+        else if inside && heading.depth <= SECTION_SIX_DEPTH
+        {
+            break;
+        }
+        if inside
+        {
+            all = all.saturating_add(1);
+            leaves = leaves.saturating_add(u32::from(heading.depth == LEAF_DEPTH));
+            systems = systems.saturating_add(u32::from(Is_A_System_Leaf(heading)));
+        }
+    }
+
+    return SectionCounts {
+        all,
+        leaves,
+        systems,
+    };
+}
+
+/// Whether a leaf heading names a service, which is the count the register quotes.
+fn Is_A_System_Leaf(heading: &Heading) -> bool
+{
+    if heading.depth != LEAF_DEPTH
+    {
+        return false;
+    }
+
+    return heading.title.split_whitespace().any(|word| return word == "Service");
+}
+
+/// What section 6 amounts to: every heading, the leaves, and the leaves naming a service.
+///
+/// Named rather than a triple of `u32`. At three members of one type a caller is counting
+/// positions and the compiler is helping with none of it.
+pub(crate) struct SectionCounts
+{
+    pub(crate) all: u32,
+    pub(crate) leaves: u32,
+    pub(crate) systems: u32,
+}

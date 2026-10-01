@@ -1,0 +1,26 @@
+[package]
+name = "nomos-lang-csharp-compiler"
+version = "0.1.0"
+description = "Which branches of a C# file's #if chains a named build compiles: the build's preprocessor symbols and compiled files asked of MSBuild itself, each file's directives judged against them, offered against nomos.cap.csharp.conditional_compilation."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# No nomos-lang-csharp: a provider names no sibling in its band, and this one reads the file's
+# directives itself rather than through that crate's parse tree, which carries every branch of a
+# conditional at once and is the reason this crate exists.
+[dependencies]
+nomos-contracts = { workspace = true }
+nomos-capability = { workspace = true }
+nomos-analysis = { workspace = true }
+nomos-cap-csharp-semantics = { workspace = true }
+nomos-model = { workspace = true }
+nomos-platform = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+nomos-platform-std = { workspace = true }
+
+[lints]
+workspace = true

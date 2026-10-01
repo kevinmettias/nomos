@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "package_id": "nomos.integration.self",
+  "package_kind": "IntegrationPackage",
+  "package_version": { "major": 0, "minor": 1, "patch": 0 },
+  "protocol_range": {
+    "minimum": { "major": 1, "minor": 0 },
+    "maximum": { "major": 1, "minor": 0 }
+  },
+  "intents": [
+    {
+      "surface": "agent contract file",
+      "source": "AGENTS.md",
+      "target": "AGENTS.md",
+      "publication_scope": "Shared"
+    },
+    {
+      "surface": "per-agent adapter",
+      "source": "CLAUDE.md",
+      "target": "CLAUDE.md",
+      "publication_scope": "Shared"
+    },
+    {
+      "surface": "procedural skills",
+      "source": ".claude/skills",
+      "target": ".claude/skills",
+      "publication_scope": "Shared"
+    },
+    {
+      "surface": "CI projection",
+      "source": ".github/workflows/gate.yml",
+      "target": ".github/workflows/gate.yml",
+      "publication_scope": "Shared"
+    }
+  ]
+}

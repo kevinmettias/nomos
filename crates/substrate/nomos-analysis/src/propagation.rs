@@ -1,0 +1,230 @@
+//! Reachability over an opaque dependency graph.
+//!
+//! [`DependencyPropagation`] is the mechanism `docs/records/D-130` names as an XVPE
+//! candidate — dirty propagation over a dependents adjacency map — kept free of
+//! fact-identity vocabulary per `docs/records/D-135` and `docs/records/D-138`: its own
+//! signatures name no identity type at all, only a node a caller chooses, never `FactKey`,
+//! `FactIdentity`, `Component`, `GenerationCause`, `Broadening`, `Supersession` or
+//! `GuaranteeDigest`. The node used to be spelled `Digest128`, which was already
+//! domain-neutral but was still *this* workspace's digest; a caller's own type parameter
+//! says the same thing while letting the store address a node however it addresses one.
+//! `D-138` is why this is a module rather than a crate — Nomos needs it before XVPE can
+//! hold it — and why the boundary is drawn here anyway: the later rename-and-move is
+//! mechanical only if the thing being moved never learned the vocabulary of what called
+//! it.
+//!
+//! The trait exists so `MemoryFactStore` holds the walk behind a replaceable seam rather
+//! than calling one hard-coded implementation: `D-130`'s deferred adoption is only cheap
+//! later if something today already proves the mechanism can be swapped without touching
+//! `FactStore` or its consumers, not merely that its code reads as generic.
+
+use std::collections::BTreeMap;
+use std::collections::BTreeSet;
+
+/// Something that can spread an invalidation outward through a dependency graph.
+///
+/// `roots` are not passed to `on_reach`; the caller has already decided they belong.
+/// Every other node an implementation discovers by following `dependents` edges is
+/// offered to `on_reach` exactly once, in the order first discovered. Declining a node
+/// (`on_reach` returns `false`) stops the walk at that node: nothing reachable only
+/// through it is visited. An implementation revisiting an already-seen node, or offering
+/// a root to `on_reach`, is a defect in that implementation, not a case a caller must
+/// guard against — this module's own tests check `LocalGraphPropagation` against exactly
+/// those three properties.
+///
+/// `Node` is whatever the caller addresses a graph node by: this module never learns what
+/// one is, which is the whole of what makes it liftable.
+pub(crate) trait DependencyPropagation<Node>
+where
+    Node: Copy + Ord,
+{
+    fn Spread(
+        &self,
+        dependents: &BTreeMap<Node, BTreeSet<Node>>,
+        roots: Vec<Node>,
+        on_reach: &mut dyn FnMut(Node) -> bool,
+    );
+}
+
+/// The one implementation this crate has today: an in-process walk over an owned
+/// adjacency snapshot, using a stack so a long chain does not recurse.
+///
+/// `docs/records/D-122` and `docs/records/D-130` are why there is no second
+/// implementation yet — moving this to XVPE needs a second product's materially
+/// identical slice as evidence, and XVPE's own package and dependency state has not
+/// opened Phase 5 — not a property of this type.
+pub(crate) struct LocalGraphPropagation;
+
+impl<Node> DependencyPropagation<Node> for LocalGraphPropagation
+where
+    Node: Copy + Ord,
+{
+    fn Spread(
+        &self,
+        dependents: &BTreeMap<Node, BTreeSet<Node>>,
+        roots: Vec<Node>,
+        on_reach: &mut dyn FnMut(Node) -> bool,
+    )
+    {
+        let mut seen: BTreeSet<Node> = roots.iter().copied().collect();
+        let mut frontier = roots;
+
+        while let Some(node) = frontier.pop()
+        {
+            let Some(downstream) = dependents.get(&node)
+            else
+            {
+                continue;
+            };
+
+            for consumer in downstream.iter().copied().collect::<Vec<_>>()
+            {
+                if seen.insert(consumer) && on_reach(consumer)
+                {
+                    frontier.push(consumer);
+                }
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::DependencyPropagation;
+    use super::LocalGraphPropagation;
+    use nomos_contracts::Digest128;
+    use std::collections::BTreeMap;
+    use std::collections::BTreeSet;
+
+    const SOURCE: &str = include_str!("propagation.rs");
+
+    /// The seed of the node immediately downstream of the root in every walk below.
+    const DOWNSTREAM_SEED: u8 = 2;
+
+    /// The seed of the node one step beyond [`DOWNSTREAM_SEED`], which only a walk that
+    /// actually followed the chain can have reached.
+    const SECOND_DOWNSTREAM_SEED: u8 = 3;
+
+    #[test]
+    fn Test_This_Modules_Code_Should_Carry_No_Fact_Identity_Vocabulary()
+    {
+        let code = SOURCE.split("#[cfg(test)]").next().unwrap_or(SOURCE);
+        let code: String = code
+            .lines()
+            .filter(|line| return !line.trim_start().starts_with("//"))
+            .collect::<Vec<_>>()
+            .join("\n");
+
+        for forbidden in Forbidden_Fact_Identity_Vocabulary()
+        {
+            assert!(
+                !code.contains(forbidden),
+                "propagation.rs's code named {forbidden}, which is fact-identity or \
+                 invalidation-policy vocabulary this module must stay free of per D-135 \
+                 and D-138"
+            );
+        }
+    }
+
+    /// `D-138`'s cost claim — a later rename is mechanical rather than a rewrite — only
+    /// holds while this module's actual code never learns what a fact, a key, a
+    /// generation, a broadening or a supersession is. The module doc comment above names
+    /// those types by way of explaining the rule, so this checks code only: comment
+    /// lines, and everything from `#[cfg(test)]` on (this very assertion would otherwise
+    /// quote itself into a failure), are excluded before the search.
+    ///
+    /// The negative control the reviewed correction asked for: a provider-broadening or
+    /// supersession rule must not migrate in here merely because it participates in
+    /// invalidation, so `Broadening`, `Supersession` and `GuaranteeDigest` are forbidden
+    /// alongside the fact-identity types the first version of this test already covered.
+    /// Fact-identity and invalidation-policy vocabulary this module must stay free of, per
+    /// `D-135` and `D-138`.
+    fn Forbidden_Fact_Identity_Vocabulary() -> [&'static str; 7]
+    {
+        return [
+            "FactIdentity",
+            "FactKey",
+            "GenerationCause",
+            "Component",
+            "Broadening",
+            "Supersession",
+            "GuaranteeDigest",
+        ];
+    }
+
+    #[test]
+    fn Test_Spread_Should_Reach_Every_Downstream_Node_Once()
+    {
+        let a = Digest_From_Byte(1);
+        let b = Digest_From_Byte(DOWNSTREAM_SEED);
+        let c = Digest_From_Byte(SECOND_DOWNSTREAM_SEED);
+
+        let dependents = Graph_From_Edges(&[(a, b), (b, c)]);
+
+        let reached = Spread_Collecting_Reached(&dependents, vec![a], |_| return true);
+
+        assert_eq!(reached, vec![b, c]);
+    }
+
+    #[test]
+    fn Test_Spread_Should_Terminate_On_A_Cycle()
+    {
+        let a = Digest_From_Byte(1);
+        let b = Digest_From_Byte(DOWNSTREAM_SEED);
+
+        let dependents = Graph_From_Edges(&[(a, b), (b, a)]);
+
+        let reached = Spread_Collecting_Reached(&dependents, vec![a], |_| return true);
+
+        assert_eq!(reached, vec![b]);
+    }
+
+    #[test]
+    fn Test_Declining_A_Node_Should_Stop_The_Walk_There()
+    {
+        let a = Digest_From_Byte(1);
+        let b = Digest_From_Byte(DOWNSTREAM_SEED);
+        let c = Digest_From_Byte(SECOND_DOWNSTREAM_SEED);
+
+        let dependents = Graph_From_Edges(&[(a, b), (b, c)]);
+
+        let reached = Spread_Collecting_Reached(&dependents, vec![a], |digest| return digest != b);
+
+        assert_eq!(reached, vec![b]);
+    }
+
+    fn Digest_From_Byte(byte: u8) -> Digest128
+    {
+        return Digest128::From_Bytes([byte; Digest128::BYTE_LENGTH]);
+    }
+
+    /// A dependents adjacency map built from `(from, to)` edges, one insertion per edge.
+    fn Graph_From_Edges(edges: &[(Digest128, Digest128)]) -> BTreeMap<Digest128, BTreeSet<Digest128>>
+    {
+        let mut dependents: BTreeMap<Digest128, BTreeSet<Digest128>> = BTreeMap::new();
+        for (from, to) in edges.iter().copied()
+        {
+            dependents.entry(from).or_default().insert(to);
+        }
+
+        return dependents;
+    }
+
+    fn Spread_Collecting_Reached(
+        dependents: &BTreeMap<Digest128, BTreeSet<Digest128>>,
+        roots: Vec<Digest128>,
+        mut on_reach: impl FnMut(Digest128) -> bool,
+    ) -> Vec<Digest128>
+    {
+        let mut reached: Vec<Digest128> = Vec::new();
+        LocalGraphPropagation.Spread(dependents, roots, &mut |digest| {
+            let keep_going = on_reach(digest);
+            reached.push(digest);
+
+            return keep_going;
+        });
+
+        return reached;
+    }
+}

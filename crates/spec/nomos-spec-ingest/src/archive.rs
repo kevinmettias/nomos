@@ -1,0 +1,436 @@
+pub(crate) mod artifact;
+pub(crate) mod catalog_entity;
+pub(crate) mod catalog_report;
+pub(crate) mod error;
+pub(crate) mod error_kind;
+pub(crate) mod listing;
+pub(crate) mod member;
+pub(crate) mod template;
+
+use crate::Error as ArchiveError;
+use crate::ErrorKind as ArchiveErrorKind;
+use crate::Listing;
+use std::io::Read as _;
+use std::path::{Path, PathBuf};
+
+/// A zip file's index, read without unpacking anything.
+///
+/// Both failures answer with the archive path rather than the underlying message alone,
+/// because a caller walking twenty archives cannot tell from "invalid zip" which one it was.
+fn Opened_Zip(path: &Path) -> Result<zip::ZipArchive<std::io::BufReader<std::fs::File>>, ArchiveError>
+{
+    let file = std::fs::File::open(path).map_err(|error| ArchiveError {
+        archive: path.to_path_buf(),
+        kind: ArchiveErrorKind::Unreadable {
+            cause: error.to_string(),
+        },
+    })?;
+
+    return zip::ZipArchive::new(std::io::BufReader::new(file)).map_err(|error| {
+        return ArchiveError {
+            archive: path.to_path_buf(),
+            kind: ArchiveErrorKind::Unreadable {
+                cause: error.to_string(),
+            },
+        };
+    });
+}
+
+/// The files an archive holds, sorted so an iteration order never depends on how the
+/// archive was written.
+fn Entries_Of(inner: &zip::ZipArchive<std::io::BufReader<std::fs::File>>) -> Vec<String>
+{
+    let mut paths: Vec<String> = inner
+        .file_names()
+        .filter(|name| !name.ends_with('/'))
+        .map(str::to_owned)
+        .collect();
+    paths.sort();
+
+    return paths;
+}
+
+/// One versioned archive, read in place.
+///
+/// Nothing is unpacked. Keeping the revisions inside their archives is the same barrier
+/// that stops generated output becoming source: an extracted tree sitting in the working
+/// directory is a thing a later ingest can mistake for authored input.
+pub struct Archive
+{
+    path: PathBuf,
+    inner: zip::ZipArchive<std::io::BufReader<std::fs::File>>,
+    listing: Listing,
+}
+
+impl Archive
+{
+    /// # Errors
+    ///
+    /// Returns [`ArchiveErrorKind::Unreadable`] if the file is absent or is not a zip, and
+    /// [`ArchiveErrorKind::Empty`] if it holds no files.
+    pub fn Open(path: &Path) -> Result<Self, ArchiveError>
+    {
+        let inner = Opened_Zip(path)?;
+        let paths = Entries_Of(&inner);
+
+        if paths.is_empty()
+        {
+            return Err(ArchiveError {
+                archive: path.to_path_buf(),
+                kind: ArchiveErrorKind::Empty,
+            });
+        }
+
+        return Ok(Self {
+            path: path.to_path_buf(),
+            inner,
+            listing: Listing::Of(paths),
+        });
+    }
+
+    #[must_use]
+    pub fn Path(&self) -> &Path
+    {
+        return &self.path;
+    }
+
+    /// What the archive holds, without opening any of it.
+    #[must_use]
+    pub const fn Listing(&self) -> &Listing
+    {
+        return &self.listing;
+    }
+
+    /// # Errors
+    ///
+    /// Returns [`ArchiveErrorKind::NoSuchEntry`] if the archive has no such file, and
+    /// [`ArchiveErrorKind::Unreadable`] carrying the cause if the lookup failed for any other
+    /// reason — a corrupt central directory answers "no such entry" otherwise, which sends the
+    /// reader looking for a name that was never the problem.
+    pub fn Read(&mut self, entry: &str) -> Result<Vec<u8>, ArchiveError>
+    {
+        let mut file = self.inner.by_name(entry).map_err(|cause| {
+            return ArchiveError {
+                archive: self.path.clone(),
+                kind: Why_Not_Read(entry, &cause),
+            };
+        })?;
+        let mut bytes = Vec::new();
+        file.read_to_end(&mut bytes)
+            .map_err(|error| ArchiveError {
+                archive: self.path.clone(),
+                kind: ArchiveErrorKind::Unreadable {
+                    cause: format!("{entry}: {error}"),
+                },
+            })?;
+
+        return Ok(bytes);
+    }
+
+    /// The bytes as UTF-8, left exactly as authored.
+    ///
+    /// A byte order mark is not stripped here. `Segment` consumes one as part of the
+    /// front matter fence (D-131), and stripping it twice in two places is how the two
+    /// come to disagree about what a document's first bytes were.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`ArchiveErrorKind::NoSuchEntry`] or [`ArchiveErrorKind::NotText`].
+    pub fn Read_Text(&mut self, entry: &str) -> Result<String, ArchiveError>
+    {
+        let bytes = self.Read(entry)?;
+
+        return String::from_utf8(bytes).map_err(|error| ArchiveError {
+            archive: self.path.clone(),
+            kind: ArchiveErrorKind::NotText {
+                entry: entry.to_owned(),
+                cause: error.to_string(),
+            },
+        });
+    }
+}
+
+/// Whether an entry is missing or the archive itself would not open.
+///
+/// Told apart rather than folded together: a corrupt central directory answers "no such
+/// entry" otherwise, which sends the reader looking for a name that was never the problem.
+fn Why_Not_Read(entry: &str, cause: &zip::result::ZipError) -> ArchiveErrorKind
+{
+    if matches!(cause, zip::result::ZipError::FileNotFound)
+    {
+        return ArchiveErrorKind::NoSuchEntry {
+            entry: entry.to_owned(),
+        };
+    }
+
+    return ArchiveErrorKind::Unreadable {
+        cause: format!("{entry}: {cause}"),
+    };
+}
+
+/// Every archive in a directory, sorted by path.
+///
+/// # Errors
+///
+/// Returns [`ArchiveErrorKind::Unreadable`] if the directory cannot be listed. A directory
+/// holding no archives is an error for the same reason an empty archive is.
+pub fn Archives_In(directory: &Path) -> Result<Vec<PathBuf>, ArchiveError>
+{
+    let entries = std::fs::read_dir(directory).map_err(|error| ArchiveError {
+        archive: directory.to_path_buf(),
+        kind: ArchiveErrorKind::Unreadable {
+            cause: error.to_string(),
+        },
+    })?;
+    let mut archives: Vec<PathBuf> = entries
+        .flatten()
+        .map(|entry| return entry.path())
+        .filter(|path| path.extension().and_then(std::ffi::OsStr::to_str) == Some("zip"))
+        .collect();
+
+    archives.sort();
+    if archives.is_empty()
+    {
+        return Err(ArchiveError {
+            archive: directory.to_path_buf(),
+            kind: ArchiveErrorKind::Empty,
+        });
+    }
+
+    return Ok(archives);
+}
+
+/// The entry a corpus carries its own declaration of repeated text in.
+///
+/// Named by convention rather than discovered: a declaration this reader has to hunt for is
+/// a declaration a later reader can miss, and an absent one is `NoSuchEntry`, which a corpus
+/// that has not taken the declaration on reads as rather than an error to work around.
+pub const REPEATED_TEXT_DECLARATIONS: &str = "repeated-text-declarations.json";
+
+/// One declaration a corpus makes about the text its own layout repeats.
+///
+/// `OD-SPEC-004` version 3 decided this is corpus-side data that names structural roles
+/// rather than the literal strings: a row here is the normalized hash of the repeated block,
+/// the role the block plays, and the multiplicity the role implies. The text itself is never
+/// carried — the store already holds it, and carrying it again would be the second list the
+/// amendment refused.
+#[derive(Clone, Debug, PartialEq, Eq, serde::Deserialize)]
+pub struct RepeatedTextDeclaration
+{
+    pub normalized_hash: String,
+    pub role: String,
+    pub multiplicity: i64,
+}
+
+/// Reads and parses a corpus's own declaration of the text its layout repeats.
+///
+/// The rows this returns are what the ingest turns into `repeated_text_declarations` rows in
+/// the store, so a rule can consult them. A corpus that carries no such entry is a corpus
+/// that has not declared any repeated text, which is a real answer and not this reader's
+/// failure.
+///
+/// # Errors
+///
+/// Returns [`ArchiveErrorKind::NoSuchEntry`] if the archive has no declaration entry, and
+/// [`ArchiveErrorKind::Unreadable`] if it is present but not the JSON this reader expects.
+pub fn Read_Repeated_Text_Declarations(archive: &mut Archive) -> Result<Vec<RepeatedTextDeclaration>, ArchiveError>
+{
+    let text = archive.Read_Text(REPEATED_TEXT_DECLARATIONS)?;
+
+    return serde_json::from_str(&text).map_err(|error| ArchiveError {
+        archive: archive.Path().to_path_buf(),
+        kind: ArchiveErrorKind::Unreadable {
+            cause: format!("{REPEATED_TEXT_DECLARATIONS} is not a declaration: {error}"),
+        },
+    });
+}
+
+#[cfg(test)]
+pub(crate) mod tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Open_Should_Name_The_Archive_When_It_Is_Missing()
+    {
+        let refusal = Refusal_For("no-such-file.zip");
+
+        assert!(matches!(refusal.kind, ArchiveErrorKind::Unreadable { .. }), "{refusal}");
+        assert!(
+            refusal.to_string().contains("no-such-file.zip"),
+            "the error does not say which archive: {refusal}"
+        );
+    }
+
+    #[test]
+    fn Test_A_File_That_Is_Not_An_Archive_Should_Be_Refused()
+    {
+        let refusal = Refusal_For("Cargo.toml");
+
+        assert!(matches!(refusal.kind, ArchiveErrorKind::Unreadable { .. }), "{refusal}");
+    }
+
+    #[test]
+    fn Test_Archives_In_Should_Refuse_A_Directory_With_No_Archives()
+    {
+        let refusal = Archives_In(Path::new("src")).expect_err("must refuse");
+
+        assert!(matches!(refusal.kind, ArchiveErrorKind::Empty), "{refusal}");
+    }
+
+    #[test]
+    fn Test_A_Missing_Directory_Should_Be_Refused()
+    {
+        let refusal = Archives_In(Path::new("no-such-directory")).expect_err("must refuse");
+
+        assert!(matches!(refusal.kind, ArchiveErrorKind::Unreadable { .. }), "{refusal}");
+    }
+
+    #[test]
+    fn Test_Path_Should_Return_The_Path_It_Was_Opened_From()
+    {
+        let archive = Archive_Fixture("path", &[("a.md", "one")]);
+        let expected = std::env::temp_dir().join("nomos-spec-ingest-archive-path.zip");
+
+        assert_eq!(archive.Path(), expected);
+    }
+
+    #[test]
+    fn Test_Listing_Should_Report_Every_Entry_The_Fixture_Wrote()
+    {
+        let archive = Archive_Fixture("listing", &[("a.md", "one"), ("b.md", "two")]);
+
+        assert_eq!(archive.Listing().Paths(), ["a.md".to_owned(), "b.md".to_owned()]);
+    }
+
+    #[test]
+    fn Test_Read_Should_Return_The_Bytes_Of_The_Named_Entry()
+    {
+        let mut archive = Archive_Fixture("read", &[("a.md", "hello")]);
+
+        let bytes = archive
+            .Read("a.md")
+            .expect("the fixture wrote a.md, so the archive carries that entry");
+
+        assert_eq!(bytes, b"hello");
+    }
+
+    #[test]
+    fn Test_Read_Text_Should_Decode_The_Entry_As_Utf8()
+    {
+        let mut archive = Archive_Fixture("read-text", &[("a.md", "caf\u{e9}")]);
+
+        let text = archive
+            .Read_Text("a.md")
+            .expect("the fixture wrote a.md as UTF-8, so Read_Text decodes rather than refuses");
+
+        assert_eq!(text, "caf\u{e9}");
+    }
+
+    /// A fixture archive's temp-file prefix, kept a distinct type from the fixture's own
+    /// `&str` name directly beside it in `Zip_Fixture`.
+    ///
+    /// Both are strings and adjacent, so with one shared type a caller could swap them and
+    /// get a zip at a temp path no other test in the suite expects, with the compiler
+    /// raising nothing. The prefix names the suite; the name names the fixture within it.
+    pub(crate) struct FixturePrefix<'a>(pub(crate) &'a str);
+
+    /// A zip built for one test, prefixed so two files' test suites never collide on the
+    /// same temp path when they run concurrently. Shared here because `Archive` is this
+    /// file's own type, and every other file that needs to build one for a test needs
+    /// exactly this and nothing more.
+    pub(crate) fn Zip_Fixture(prefix: FixturePrefix<'_>, name: &str, entries: &[(&str, &str)]) -> Archive
+    {
+        use std::io::Write as _;
+
+        let path = std::env::temp_dir().join(format!("{}-{name}.zip", prefix.0));
+        let file = std::fs::File::create(&path).expect("creates the fixture");
+        let mut writer = zip::ZipWriter::new(file);
+        let options: zip::write::FileOptions<'_, ()> = zip::write::FileOptions::default();
+
+        for (entry, text) in entries
+        {
+            writer
+                .start_file(*entry, options)
+                .expect("the fixture opened this writer and has not finished it yet");
+            writer
+                .write_all(text.as_bytes())
+                .expect("start_file accepted this entry, so the writer is mid-archive on it");
+        }
+        writer.finish().expect("every entry was written before the archive was finished");
+
+        return Archive::Open(&path).expect("the fixture finished writing this zip at that path");
+    }
+
+    /// Discards the archive so a refusal can be asserted on. `Archive` is not `Debug`,
+    /// and deriving it purely for `expect_err` would put a zip reader's internals into a
+    /// public trait impl.
+    fn Refusal_For(path: &str) -> ArchiveError
+    {
+        return match Archive::Open(Path::new(path))
+        {
+            // Every caller hands this a path built to be unopenable, so the `Ok` arm is
+            // unreachable while `Archive::Open` still refuses what it should. Reaching it is
+            // the assertion failing, and there is no `ArchiveError` to return in its place.
+            Ok(_) => panic!("{path} should have been refused"),
+            Err(error) => error,
+        };
+    }
+
+    /// A zip written for one test, so no two concurrently running tests collide on the
+    /// same temp path.
+    fn Archive_Fixture(name: &str, entries: &[(&str, &str)]) -> Archive
+    {
+        return Zip_Fixture(FixturePrefix("nomos-spec-ingest-archive"), name, entries);
+    }
+
+    #[test]
+    fn Test_Read_Repeated_Text_Declarations_Should_Parse_The_Declared_Rows()
+    {
+        let mut archive = Zip_Fixture(
+            FixturePrefix("nomos-spec-ingest-declaration"),
+            "parses",
+            &[(
+                REPEATED_TEXT_DECLARATIONS,
+                r#"[{"normalized_hash":"sha256:front","role":"edition-line","multiplicity":10}]"#,
+            )],
+        );
+
+        let declarations = Read_Repeated_Text_Declarations(&mut archive)
+            .expect("the fixture wrote the declaration entry, so the reader parses it");
+
+        assert_eq!(
+            declarations,
+            vec![RepeatedTextDeclaration {
+                normalized_hash: "sha256:front".to_owned(),
+                role: "edition-line".to_owned(),
+                multiplicity: 10,
+            }]
+        );
+    }
+
+    #[test]
+    fn Test_Read_Repeated_Text_Declarations_Should_Refuse_An_Entry_That_Is_Not_Json()
+    {
+        let mut archive = Zip_Fixture(
+            FixturePrefix("nomos-spec-ingest-declaration"),
+            "not-json",
+            &[(REPEATED_TEXT_DECLARATIONS, "not json at all")],
+        );
+
+        let refusal = Read_Repeated_Text_Declarations(&mut archive).expect_err("must refuse");
+
+        assert!(matches!(refusal.kind, ArchiveErrorKind::Unreadable { .. }), "{refusal}");
+        assert!(refusal.to_string().contains(REPEATED_TEXT_DECLARATIONS), "{refusal}");
+    }
+
+    #[test]
+    fn Test_Read_Repeated_Text_Declarations_Should_Refuse_A_Missing_Entry()
+    {
+        let mut archive = Archive_Fixture("no-declaration", &[("a.md", "one")]);
+
+        let refusal = Read_Repeated_Text_Declarations(&mut archive).expect_err("must refuse");
+
+        assert!(matches!(refusal.kind, ArchiveErrorKind::NoSuchEntry { .. }), "{refusal}");
+    }
+}

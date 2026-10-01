@@ -1,0 +1,336 @@
+//! Running one [`WorkCommand`] against a ledger, generic over the platform it was built
+//! with.
+
+use nomos_ledger::{
+    ExclusionLedger, FileLedger, Finish_Item, Finishing, ItemId, LedgerDocument, LedgerError,
+    LedgerItem, ReleaseOutcome, Territory, Validate_Document,
+};
+use nomos_platform::{Clock, FilesystemLock, FileSystem, ProgramLauncher};
+
+use crate::board_view::{BoardView, ShowView, WorkOutcome};
+use crate::{ClaimRequest, EndingRequest, WorkCommand};
+
+/// Runs one command against `ledger` and hands back what happened, choosing nothing about
+/// the platform and rendering nothing about the answer.
+///
+/// Generic over the traits [`nomos_platform`] declares and never over a concrete
+/// implementation of them: a composition root builds `ledger` and `launcher` from whatever
+/// it has — `nomos-cli` from `nomos-platform-std` today — and this function runs the same
+/// way regardless. That is the seam `OD-HOST-001` asked for: a second composition root can
+/// depend on this crate, build its own `Filesystem`, `ClockSource`, `Lock` and `Launcher`,
+/// and call [`Run`] without also taking on how `nomos-cli` chooses those four or how it
+/// prints an answer.
+///
+/// `published` is asked for lazily and only reached by [`WorkCommand::Add`]. The territory
+/// this repository's own records already occupy is not answerable through [`FileSystem`] —
+/// that port is read, atomically-replace and exists, not a directory walk — so a
+/// composition root computes it however its own tree is reached and handed over as a
+/// value, the same division `nomos-ledger::FileLedger::Add`'s own documentation already
+/// draws around this exact question.
+///
+/// The body is one `match` on `command`. `List`, `Show`, `Validate` and `Audit` need
+/// nothing but `ledger`, so each wraps its helper's result in the [`WorkOutcome`] variant of
+/// the same name right there. The other seven need `launcher`, `published`, or more than one
+/// field off `command`, so each hands off to a per-command function below that owns both the
+/// single ledger call and the [`WorkOutcome`] wrap -- naming what that arm already was,
+/// rather than leaving `Run` itself carry every arm's own ledger call inline.
+pub fn Run<Filesystem, ClockSource, Lock, Launcher>(
+    command: &WorkCommand,
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
+    launcher: &Launcher,
+    published: impl FnOnce() -> Territory,
+) -> WorkOutcome
+where
+    Filesystem: FileSystem,
+    ClockSource: Clock,
+    Lock: FilesystemLock,
+    Launcher: ProgramLauncher,
+{
+    return match command
+    {
+        WorkCommand::List { .. } => WorkOutcome::List(Board_View(ledger)),
+        WorkCommand::Show { .. } => WorkOutcome::Show(Show_View(ledger)),
+        WorkCommand::Add { item, amending } => Add_Outcome(ledger, item, amending, published),
+        WorkCommand::Finish { item, holder } => Finish_Outcome(ledger, launcher, item, holder),
+        WorkCommand::Claim(request) => Claim_Outcome(ledger, request),
+        WorkCommand::Renew(request) => Renew_Outcome(ledger, request),
+        WorkCommand::TakeOver(request) => TakeOver_Outcome(ledger, request),
+        WorkCommand::Abandon(request) => Abandon_Outcome(ledger, request),
+        WorkCommand::Decline(request) => Decline_Outcome(ledger, request),
+        WorkCommand::Widen { item, holder, adding } => Widen_Outcome(ledger, item, holder, adding),
+        WorkCommand::Validate => WorkOutcome::Validate(Validated_Board(ledger)),
+        WorkCommand::Audit => WorkOutcome::Audit(Board_View(ledger)),
+    };
+}
+
+/// The board and the moment it was read, for `list` and `audit` alike.
+fn Board_View<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
+    ledger: &FileLedger<Filesystem, ClockSource, Lock>,
+) -> Result<BoardView, LedgerError>
+{
+    let document = ledger.Load()?;
+    let now = ledger.Now();
+
+    return Ok(BoardView { document, now });
+}
+
+/// The board, the moment, and this tree's revision, for `show`.
+fn Show_View<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
+    ledger: &FileLedger<Filesystem, ClockSource, Lock>,
+) -> Result<ShowView, LedgerError>
+{
+    let document = ledger.Load()?;
+    let now = ledger.Now();
+    let current_revision = Current_Revision(ledger);
+
+    return Ok(ShowView {
+        document,
+        now,
+        current_revision,
+    });
+}
+
+/// This tree's revision right now, read the same way [`nomos_ledger::Finish_Item`] reads it when
+/// it stamps a [`nomos_ledger::VerificationRecord`] — `.git/HEAD`, following one loose ref.
+///
+/// A second reading rather than a shared one: the resolution `nomos_ledger::Finish_Item` uses to
+/// stamp a record is private to that crate's `finish` module. `docs/records/OD-LEDGER-027-
+/// ...md` says so, for the reading this moved from.
+///
+/// `None` on any failure — no `.git` here, a packed ref this build does not chase, or any
+/// other read error. `show`'s staleness line treats that as its own case rather than as
+/// agreement with a recorded revision.
+fn Current_Revision<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
+    ledger: &FileLedger<Filesystem, ClockSource, Lock>,
+) -> Option<String>
+{
+    use std::path::Path;
+
+    let head = ledger.Read_File(Path::new(".git/HEAD")).ok()?;
+    let head = head.trim();
+
+    if let Some(ref_path) = head.strip_prefix("ref: ")
+    {
+        return ledger
+            .Read_File(&Path::new(".git").join(ref_path))
+            .ok()
+            .map(|contents| return contents.trim().to_owned());
+    }
+
+    return Some(head.to_owned());
+}
+
+/// The outcome of adding `item` to the board under `amending`, for [`WorkCommand::Add`].
+fn Add_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
+    item: &LedgerItem,
+    amending: &Territory,
+    published: impl FnOnce() -> Territory,
+) -> WorkOutcome
+{
+    let added = ledger.Add(item, "nomos work add", &published(), amending);
+
+    return WorkOutcome::Add(added);
+}
+
+/// The outcome of running `item`'s verification predicate as `holder` claims it, for
+/// [`WorkCommand::Finish`].
+fn Finish_Outcome<
+    Filesystem: FileSystem,
+    ClockSource: Clock,
+    Lock: FilesystemLock,
+    Launcher: ProgramLauncher,
+>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
+    launcher: &Launcher,
+    item: &ItemId,
+    holder: &str,
+) -> WorkOutcome
+{
+    let finishing = Finishing { item, holder };
+    let finished = Finish_Item(ledger, launcher, &finishing, None);
+    let board = Board_After(ledger, &finished);
+
+    return WorkOutcome::Finish { finished, board };
+}
+
+/// The outcome of granting `request`, for [`WorkCommand::Claim`].
+fn Claim_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
+    request: &ClaimRequest,
+) -> WorkOutcome
+{
+    let claimed = ledger.Claim(&request.item, &request.holder, request.lease);
+
+    return WorkOutcome::Claim(claimed);
+}
+
+/// The outcome of extending `request`'s lease, for [`WorkCommand::Renew`].
+fn Renew_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
+    request: &ClaimRequest,
+) -> WorkOutcome
+{
+    let renewed = ledger.Renew(&request.item, &request.holder, request.lease);
+
+    return WorkOutcome::Renew(renewed);
+}
+
+/// The outcome of taking over `request`'s lapsed claim, for [`WorkCommand::TakeOver`].
+fn TakeOver_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
+    request: &ClaimRequest,
+) -> WorkOutcome
+{
+    let taken_over = ledger.Take_Over(&request.item, &request.holder, request.lease);
+
+    return WorkOutcome::TakeOver(taken_over);
+}
+
+/// The outcome of giving up `request`'s claim without finishing it, for
+/// [`WorkCommand::Abandon`].
+fn Abandon_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
+    request: &EndingRequest,
+) -> WorkOutcome
+{
+    let abandoned = ReleaseOutcome::Abandoned {
+        reason: request.reason.clone(),
+    };
+    let released = ledger.Release(&request.item, &request.holder, abandoned);
+
+    return WorkOutcome::Abandon(released);
+}
+
+/// The outcome of ending `request`'s item as not being work, for [`WorkCommand::Decline`].
+fn Decline_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
+    request: &EndingRequest,
+) -> WorkOutcome
+{
+    let declined = ledger.Decline(&request.item, &request.holder, &request.reason);
+    let board = Board_After(ledger, &declined);
+
+    return WorkOutcome::Decline { declined, board };
+}
+
+/// `widen`: enlarge a held territory, and say what the enlargement added.
+fn Widen_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
+    ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
+    item: &ItemId,
+    holder: &str,
+    adding: &[String],
+) -> WorkOutcome
+{
+    let widened = ledger.Widen(item, holder.into(), adding);
+
+    return WorkOutcome::Widen(widened);
+}
+
+/// The board, once it is known to satisfy its own invariants.
+fn Validated_Board<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
+    ledger: &FileLedger<Filesystem, ClockSource, Lock>,
+) -> Result<LedgerDocument, LedgerError>
+{
+    let document = ledger.Load()?;
+    let violations = Validate_Document(&document, ledger.Now());
+    if !violations.is_empty()
+    {
+        return Err(LedgerError::Invalid { violations });
+    }
+
+    return Ok(document);
+}
+
+/// The board as it stands after a transition, for the caller that has to say what the
+/// transition just made reachable or unreachable.
+///
+/// A second read rather than a value the transition returns: `Finish_Item` and `Decline`
+/// each answer what they did, not what the board looks like afterwards, and widening either
+/// to carry a document would make every caller pay for a report only one of them writes.
+///
+/// The transition's own outcome is the parameter rather than a bare `bool` derived from it,
+/// so a call site hands over the value that already says which of the two states it is in.
+///
+/// `None` when nothing was ended, and `None` when the re-read failed. The second is
+/// deliberate: the transition is already committed by this point, and failing the verb over
+/// a report it could not assemble would turn a succeeded ending into a reported failure.
+fn Board_After<
+    Filesystem: FileSystem,
+    ClockSource: Clock,
+    Lock: FilesystemLock,
+    Attempt,
+    Refusal,
+>(
+    ledger: &FileLedger<Filesystem, ClockSource, Lock>,
+    transition: &Result<Attempt, Refusal>,
+) -> Option<LedgerDocument>
+{
+    if transition.is_err()
+    {
+        return None;
+    }
+
+    return ledger.Load().ok();
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::Run;
+    use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
+    use crate::{ListingScope, WorkCommand};
+    use nomos_ledger::{FileLedger, Territory};
+    use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
+
+    /// No process is ever actually launched by `list`, so any launcher would do; one that
+    /// panics if called also proves it.
+    struct Unreached;
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for Unreached
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
+
+    impl nomos_platform::ProgramLauncher for Unreached
+    {
+        fn Run(&self, _command: &nomos_platform::Command) -> Result<nomos_platform::ProgramOutput, String>
+        {
+            // this test never dispatches a command, so this must never run; reaching it is
+            // a bug in the code under test, not a condition this fixture needs to handle.
+            panic!("no command dispatched by this test should run a process");
+        }
+    }
+
+    #[test]
+    fn Test_Run_Should_Dispatch_List_To_An_Empty_Board()
+    {
+        let mut ledger = Scratch_Ledger();
+
+        let outcome = Run(&WorkCommand::List { state: None, scope: ListingScope::Live }, &mut ledger, &Unreached, Territory::Empty);
+
+        let super::WorkOutcome::List(Ok(view)) = outcome
+        else
+        {
+            // an unwritten ledger is a valid, empty board by contract; any other outcome
+            // here is a bug in Run's own list dispatch, not a caller-facing failure.
+            panic!("an unwritten ledger loads as an empty, valid board");
+        };
+        assert!(view.document.items.is_empty());
+    }
+
+    /// A ledger under a directory unique to this process and this test -- the same colocated
+    /// shape [`crate::tests`]'s own `Scratch_Ledger` builds, re-homed here so this check's own
+    /// companion rule (the test must sit beside `Run`'s own file) can find it.
+    fn Scratch_Ledger() -> FileLedger<StdFileSystem, SystemClock, FileLock>
+    {
+        let root = std::env::temp_dir().join(format!("nomos-work-orchestration-run-colocated-{}", std::process::id()));
+        let _ignored = std::fs::remove_dir_all(&root);
+        std::fs::create_dir_all(&root).expect("a scratch directory");
+
+        return FileLedger::At(root.join("ledger.json"), StdFileSystem, SystemClock, FileLock::At(root.join("ledger.lock")));
+    }
+}

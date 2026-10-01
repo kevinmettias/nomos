@@ -1,0 +1,51 @@
+//! Every normative statement names where it came from.
+
+use crate::RuleOutcome;
+use crate::Rule;
+use nomos_spec_store::{SpecificationStore, Table};
+/// Statements with no preserved lineage row reaching any source block.
+///
+/// The disposition has to be one of the two preserving ones. A statement whose only lineage
+/// row says it was rewritten does not trace to the text it came from.
+const UNTRACED: &str = "SELECT s.statement_id
+     FROM normative_statements s
+     WHERE NOT EXISTS (
+         SELECT 1 FROM lineage l
+         WHERE l.target_statement = s.uid
+           AND l.source_block_uid IS NOT NULL
+           AND l.disposition IN ('preserved-verbatim', 'preserved-normalized')
+     )
+     ORDER BY s.statement_id";
+
+/// Every statement traces back to a source block that was preserved.
+///
+/// v15.0 shipped exactly this violation for all 363 requirements: the statements existed
+/// and nothing connected them to the text they came from.
+pub(crate) struct EveryStatementTracesToSource;
+
+impl Rule for EveryStatementTracesToSource
+{
+    fn Id(&self) -> &'static str
+    {
+        return "NSV-PRESERVE-006";
+    }
+
+    fn Describe(&self) -> &'static str
+    {
+        return "every normative statement traces to a preserved source block";
+    }
+
+    fn Evaluate(&self, store: &SpecificationStore) -> RuleOutcome
+    {
+        use crate::offending::Offending_Outcome;
+        use crate::Violation;
+
+        return Offending_Outcome(store, Table::NormativeStatements, UNTRACED, |row| {
+            let id: String = row.get(0)?;
+            return Ok(Violation {
+                subject: id,
+                detail: "no preserved lineage row to any source block".to_owned(),
+            });
+        });
+    }
+}

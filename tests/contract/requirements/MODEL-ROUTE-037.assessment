@@ -1,0 +1,25 @@
+# The assessment of MODEL-ROUTE-037 against this build. The requirement identifier is this
+# file's stem and appears nowhere inside it, because a second place to spell the identity is
+# a second place for it to be wrong — the rule OD-SPEC-007 chose for a record registration,
+# and CHK-003.assessment states for this registry.
+#
+# MODEL-ROUTE-037 has two sentences. The first: every ModelBackendPackage and
+# AgentExecutorPackage shall expose a versioned discovered model catalog or explicitly
+# declare that model selection is opaque or executor-controlled. `ModelSelection` names
+# exactly those three states, and `Model_Selection_Field` refuses a manifest that names
+# none of them — every well-formed `ModelRoutePackage` this build can produce or read
+# satisfies this sentence.
+#
+# The second: catalog entries shall distinguish configured identity, discovered identity,
+# exact revision, mutable alias, deprecation, temporary unavailability, removal, entitlement
+# availability, and executor-selected identity. `Catalog` carries raw, unresolved strings,
+# not that nine-state shape. OD-PACKAGE-010 decided this deliberately, as a first manifest
+# maturity, and OD-PACKAGE-011 confirms no real second case has appeared yet to check a
+# typed shape against — but neither record makes the gap a permanent one, so this is
+# unfinished rather than a decision this build has made not to reach. That is what OD-
+# TRACE-003 built the Partial verdict for.
+verdict: Partial
+record: OD-PACKAGE-010
+site: crates/packages/nomos-model-package/src/model_selection.rs#ModelSelection
+site: crates/packages/nomos-model-package/src/reader.rs#Model_Selection_Field
+gap: crates/packages/nomos-model-package/src/model_selection.rs#Catalog

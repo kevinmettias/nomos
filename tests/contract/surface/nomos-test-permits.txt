@@ -1,0 +1,3 @@
+pub const fn nomos_test_permits::JudgmentPermits::New(limit: usize) -> Self
+pub fn nomos_test_permits::JudgmentPermits::Holding<Answer>(&self, judge: impl FnOnce() -> Answer) -> Answer
+pub struct nomos_test_permits::JudgmentPermits

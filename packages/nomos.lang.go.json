@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "package_id": "nomos.lang.go",
+  "package_kind": "LanguagePackage",
+  "package_version": { "major": 1, "minor": 0, "patch": 0 },
+  "protocol_range": {
+    "minimum": { "major": 1, "minor": 0 },
+    "maximum": { "major": 1, "minor": 0 }
+  },
+  "language_versions": ["1.18", "1.21", "1.23"],
+  "providers": [
+    {
+      "provider_id": "nomos.lang.go.tree-sitter",
+      "tool_version": { "major": 0, "minor": 1, "patch": 0 }
+    }
+  ]
+}

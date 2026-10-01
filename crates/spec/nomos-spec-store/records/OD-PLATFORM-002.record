@@ -1,0 +1,3 @@
+# The registration for OD-PLATFORM-002. Writing the record file does not make a record
+# governing; this file does.
+path: docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md

@@ -1,0 +1,22 @@
+{
+  "id": "requirement-catalog",
+  "title": "Requirement catalog",
+  "format": "markdown",
+  "output": "spec/requirements.md",
+  "sections": [
+    {
+      "title": "Requirements",
+      "content": "nodes",
+      "filter": {
+        "kind": "requirement"
+      }
+    },
+    {
+      "title": "Statements",
+      "content": "statements",
+      "filter": {
+        "kind": "requirement"
+      }
+    }
+  ]
+}

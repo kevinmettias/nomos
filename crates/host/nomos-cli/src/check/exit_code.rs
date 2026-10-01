@@ -1,0 +1,76 @@
+//! What `nomos check` tells the shell.
+
+/// What the process exits with.
+///
+/// The numbers are shared with every other group on this binary: an exit code means one
+/// thing per binary rather than one thing per group. `3` and `4` are `work`'s claim
+/// codes and are not reused here, and `5` and `6` carry the meanings `spec` gave them —
+/// "could not be read at all" and "the answer is empty because something expected was
+/// not there".
+///
+/// [`ExitCode::Vacuous`] is the one that earns its own code rather than folding into
+/// `Ok`. A run that judged nothing and a run that judged everything and approved are the
+/// two states this binary must never render the same.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum ExitCode
+{
+    /// The rules ran and nothing they found can fail a build.
+    Ok = 0,
+    /// At least one finding can fail a build.
+    Violations = 1,
+    /// The command line was wrong.
+    Usage = 2,
+    /// The tree could not be read at all.
+    Unreadable = 5,
+    /// Nothing was judged: the walk found no source, or no fact was materialized for any
+    /// of the source it found. Either way a clean result would mean nothing.
+    Vacuous = 6,
+}
+
+impl ExitCode
+{
+    /// The numeric code.
+    #[must_use]
+    pub const fn Value(self) -> i32
+    {
+        return self as i32;
+    }
+
+    /// Every code this group can leave the process with.
+    ///
+    /// Mirrored by `Test_Every_ExitCode_Should_Be_Matched_Exhaustively`, an exhaustive match
+    /// over every variant with no wildcard arm, in `crates/host/nomos-cli/src/check/tests.rs`.
+    /// It fails to compile, not merely to pass, if a variant is added here without being added
+    /// there. It is also what `Test_Only_Ok_Should_Carry_The_Passing_Exit_Code` and
+    /// `Test_All_Should_Match_The_Documented_Exit_Codes` iterate in
+    /// that same file — the gate step's whole exit-code policy rests on this list.
+    #[cfg(test)]
+    #[must_use]
+    pub const fn All() -> &'static [Self]
+    {
+        return &[
+            Self::Ok,
+            Self::Violations,
+            Self::Usage,
+            Self::Unreadable,
+            Self::Vacuous,
+        ];
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// `All`'s own count and order, independent of `check/tests.rs`'s exhaustiveness match
+    /// over it (a different file, so a different Unit for coverage purposes).
+    #[test]
+    fn Test_All_Should_Name_Every_Declared_Variant_In_Declaration_Order()
+    {
+        assert_eq!(
+            ExitCode::All(),
+            &[ExitCode::Ok, ExitCode::Violations, ExitCode::Usage, ExitCode::Unreadable, ExitCode::Vacuous]
+        );
+    }
+}

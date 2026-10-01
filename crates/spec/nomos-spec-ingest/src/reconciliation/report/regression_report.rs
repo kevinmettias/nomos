@@ -1,0 +1,250 @@
+//! What one revision lost against the one before it.
+
+use core::fmt::Write as _;
+use crate::Fate;
+
+/// How many losses a summary line names before it falls back to the count alone.
+const NAMED_IN_A_SUMMARY: usize = 3;
+
+/// How much of the widest undeclared text the filler line quotes. Enough to recognise the
+/// boilerplate on sight, short enough that the line stays one line.
+const EXCERPT_CHARACTERS: usize = 72;
+
+use crate::Tally;
+use crate::Restored;
+use crate::FillerCensus;
+use crate::MemberFate;
+use crate::DocumentFate;
+#[derive(Clone, Debug, Default)]
+pub struct RegressionReport
+{
+    pub from: String,
+    pub to: String,
+    pub documents: DocumentFate,
+    pub members: Vec<MemberFate>,
+    pub filler: FillerCensus,
+}
+
+impl RegressionReport
+{
+    #[must_use]
+    pub fn In(&self, family: Restored) -> Vec<&MemberFate>
+    {
+        return self
+            .members
+            .iter()
+            .filter(|member| return member.family == family)
+            .collect();
+    }
+
+    #[must_use]
+    pub fn Tally(&self, family: Restored) -> Tally
+    {
+        let mut tally = Tally::default();
+
+        for member in self.In(family)
+        {
+            let counter = match member.fate
+            {
+                Fate::Preserved { .. } => &mut tally.preserved,
+                Fate::Hollowed { .. } => &mut tally.hollowed,
+                Fate::Mentioned { .. } => &mut tally.mentioned,
+                Fate::Gone => &mut tally.gone,
+            };
+            *counter = counter.saturating_add(1);
+        }
+
+        return tally;
+    }
+
+    #[must_use]
+    pub fn Named(&self, name: &str) -> Option<&MemberFate>
+    {
+        return self
+            .members
+            .iter()
+            .find(|member| return member.name == name || member.id == name);
+    }
+
+    #[must_use]
+    pub fn Summary(&self) -> String
+    {
+        let documents = self.Documents_Line();
+        let mut lines = vec![format!("{} -> {}", self.from, self.to), documents];
+
+        for family in Restored::All()
+        {
+            if let Some(line) = self.Family_Line(*family)
+            {
+                lines.push(line);
+            }
+        }
+
+        let filler = self.Filler_Line();
+        lines.push(filler);
+
+        return lines.join("\n");
+    }
+
+    /// What moved between the two revisions, at the level of whole documents.
+    fn Documents_Line(&self) -> String
+    {
+        return format!(
+            "  documents: {} appeared, {} disappeared, {} changed in place, {} relocated",
+            self.documents.appeared.len(),
+            self.documents.disappeared.len(),
+            self.documents.changed.len(),
+            self.documents.relocated.len()
+        );
+    }
+
+    /// One family's tallies, or nothing at all when the revision carried no member of it.
+    ///
+    /// A family with a zero total is left out rather than printed as four zeroes, because a
+    /// summary that lists every family the build knows about buries the one that moved.
+    fn Family_Line(&self, family: Restored) -> Option<String>
+    {
+        let tally = self.Tally(family);
+        if tally.Total() == 0
+        {
+            return None;
+        }
+
+        let named = self.Named_Losses(family);
+        let mut line = format!(
+            "  {}: {} preserved, {} hollowed, {} mentioned, {} gone",
+            family.Label(),
+            tally.preserved,
+            tally.hollowed,
+            tally.mentioned,
+            tally.gone
+        );
+        if !named.is_empty()
+        {
+            let _ = write!(line, " ({})", named.join(", "));
+        }
+
+        return Some(line);
+    }
+
+    /// Up to three members of a family that did not survive.
+    ///
+    /// Naming a few is what makes a tally actionable; naming all of them would make the
+    /// summary the report it is supposed to introduce.
+    fn Named_Losses(&self, family: Restored) -> Vec<&str>
+    {
+        return self
+            .In(family)
+            .iter()
+            .filter(|member| return !matches!(member.fate, Fate::Preserved { .. }))
+            .take(NAMED_IN_A_SUMMARY)
+            .map(|member| return member.name.as_str())
+            .collect();
+    }
+
+    /// What the blocklist matched, and the widest thing standing on filler that it did not.
+    fn Filler_Line(&self) -> String
+    {
+        let mut filler = format!(
+            "  filler: {} documents the blocklist matches, {} carrying nothing but filler",
+            self.filler.declared.len(),
+            self.filler.stubs.len()
+        );
+        if let Some(widest) = self.filler.Widest_Undeclared()
+        {
+            let _ = write!(
+                filler,
+                "\n  undeclared: {} sections across {} documents stand on \"{}\"",
+                widest.sections,
+                widest.documents.len(),
+                widest.text.chars().take(EXCERPT_CHARACTERS).collect::<String>()
+            );
+        }
+
+        return filler;
+    }
+}
+
+#[cfg(test)]
+mod tests
+{
+    use super::*;
+
+    /// The members the `Tally` fixture below lists. One is preserved and one is gone, so the
+    /// total is this count and not either bucket's own count of one.
+    const MEMBERS_TALLIED: u32 = 2;
+
+    fn Member_Fate_Of(id: &str, family: Restored, name: &str, fate: Fate) -> MemberFate
+    {
+        return MemberFate { id: id.to_owned(), family, name: name.to_owned(), was: String::new(), fate };
+    }
+
+    #[test]
+    fn Test_In_Should_Filter_Members_To_One_Family()
+    {
+        let report = RegressionReport {
+            members: vec![
+                Member_Fate_Of("RMAP-001", Restored::RoadmapMilestone, "Milestone One", Fate::Gone),
+                Member_Fate_Of("SCEN-001", Restored::Scenario, "Scenario One", Fate::Gone),
+            ],
+            ..RegressionReport::default()
+        };
+
+        let roadmap = report.In(Restored::RoadmapMilestone);
+
+        assert_eq!(roadmap.len(), 1);
+        assert_eq!(roadmap.first().map(|member| member.id.as_str()), Some("RMAP-001"));
+    }
+
+    #[test]
+    fn Test_Tally_Should_Count_Fates_For_One_Family()
+    {
+        let report = RegressionReport {
+            members: vec![
+                Member_Fate_Of(
+                    "RMAP-001",
+                    Restored::RoadmapMilestone,
+                    "One",
+                    Fate::Preserved { document: "d.md".to_owned() },
+                ),
+                Member_Fate_Of("RMAP-002", Restored::RoadmapMilestone, "Two", Fate::Gone),
+            ],
+            ..RegressionReport::default()
+        };
+
+        let tally = report.Tally(Restored::RoadmapMilestone);
+
+        assert_eq!(tally.preserved, 1);
+        assert_eq!(tally.gone, 1);
+        assert_eq!(tally.Total(), MEMBERS_TALLIED);
+    }
+
+    #[test]
+    fn Test_Named_Should_Find_A_Member_By_Name_Or_Id()
+    {
+        let report = RegressionReport {
+            members: vec![Member_Fate_Of("RMAP-001", Restored::RoadmapMilestone, "Milestone One", Fate::Gone)],
+            ..RegressionReport::default()
+        };
+
+        assert_eq!(report.Named("Milestone One").map(|member| member.id.as_str()), Some("RMAP-001"));
+        assert_eq!(report.Named("RMAP-001").map(|member| member.id.as_str()), Some("RMAP-001"));
+        assert!(report.Named("Nothing").is_none());
+    }
+
+    #[test]
+    fn Test_Summary_Should_Compose_The_Header_Then_Family_And_Filler_Sections()
+    {
+        let report = RegressionReport {
+            from: "v14.35".to_owned(),
+            to: "v14.36".to_owned(),
+            members: vec![Member_Fate_Of("RMAP-001", Restored::RoadmapMilestone, "One", Fate::Gone)],
+            ..RegressionReport::default()
+        };
+
+        let summary = report.Summary();
+
+        assert!(summary.starts_with("v14.35 -> v14.36"));
+        assert!(summary.contains("roadmap_milestone: 0 preserved, 0 hollowed, 0 mentioned, 1 gone"));
+    }
+}

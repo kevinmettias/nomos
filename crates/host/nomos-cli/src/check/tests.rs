@@ -1,0 +1,575 @@
+//! What this module promises, exercised.
+//!
+//! What used to compose the registry, ingest a walk and judge it by hand
+//! (`Composed::Over(sources).Findings(sources)`) moved with that composition to
+//! `nomos-check-orchestration`'s own test suite -- it is a statement about that crate's
+//! seam now, not about this one. What is left here is black-box: every test below drives
+//! `Run` end to end, over a real temporary tree, the way the shipped binary is actually
+//! called.
+
+use super::*;
+use crate::gate::SarifDestination;
+use super::parsing::USAGE;
+
+/// The position each [`ExitCode`] holds in [`ExitCode::All`], one name per code, so the
+/// exhaustive mirror below claims a named position rather than leaving four numerals to be
+/// read against the universe by eye.
+const OK_ORDINAL: usize = 0;
+const VIOLATIONS_ORDINAL: usize = 1;
+const USAGE_ORDINAL: usize = 2;
+const UNREADABLE_ORDINAL: usize = 3;
+const VACUOUS_ORDINAL: usize = 4;
+
+/// A code's name, as an exhaustive match, so that adding one stops the build here.
+fn Labelled(code: ExitCode) -> &'static str
+{
+    return match code
+    {
+        ExitCode::Ok => "Ok",
+        ExitCode::Violations => "Violations",
+        ExitCode::Usage => "Usage",
+        ExitCode::Unreadable => "Unreadable",
+        ExitCode::Vacuous => "Vacuous",
+    };
+}
+
+/// `ExitCode::All()`'s own mirror, named in its doc comment.
+///
+/// The match has no wildcard arm. A variant added to [`ExitCode`] without a matching arm
+/// added here fails this file to *compile*, not merely to pass — the property `D-134` asks
+/// a closed enum's mirror to have, and the shape `DocumentKind::All` and `Component::All`
+/// already close it with. This used to be a private census array in this file
+/// (`Every_Exit_Code`), kept private because promoting it to `ExitCode::All()` needed a row
+/// in `tests/contract/tests/completeness_universes/table.rs`, a file outside the item that
+/// wired the gate step's territory; that row now exists.
+#[test]
+fn Test_Every_ExitCode_Should_Be_Matched_Exhaustively()
+{
+    fn Ordinal(code: ExitCode) -> usize
+    {
+        return match code
+        {
+            ExitCode::Ok => OK_ORDINAL,
+            ExitCode::Violations => VIOLATIONS_ORDINAL,
+            ExitCode::Usage => USAGE_ORDINAL,
+            ExitCode::Unreadable => UNREADABLE_ORDINAL,
+            ExitCode::Vacuous => VACUOUS_ORDINAL,
+        };
+    }
+
+    for (index, code) in ExitCode::All().iter().enumerate()
+    {
+        assert_eq!(
+            Ordinal(*code),
+            index,
+            "{} is not matched at the position ExitCode::All() puts it, so the exhaustive \
+             match and the universe have drifted apart",
+            Labelled(*code)
+        );
+    }
+}
+
+/// The whole exit-code policy as one assertion, and the reason the workflow needs no
+/// branch.
+///
+/// `OD-GATE-004` decided that zero is the only success and implemented it by writing no
+/// policy: Actions fails a step on any non-zero exit. So this is the only place in the
+/// tree where the policy is checkable. If [`ExitCode::Vacuous`] were renumbered to `0`
+/// "because there is nothing to report", CI would start passing runs that judged nothing
+/// and nothing else would notice.
+#[test]
+fn Test_Only_Ok_Should_Carry_The_Passing_Exit_Code()
+{
+    for code in ExitCode::All().iter().copied()
+    {
+        assert_eq!(
+            code.Value() == 0,
+            code == ExitCode::Ok,
+            "{} exits {}, and the gate reads zero and only zero as success",
+            Labelled(code),
+            code.Value()
+        );
+    }
+}
+
+/// The numeric codes `check`'s own usage text documents (see [`USAGE`]'s "exit codes"
+/// line): 0 nothing blocking, 1 findings that can fail a build, 2 usage, 5 unreadable
+/// tree, 6 nothing was judged. Named one per code, so the assertions below state what each
+/// code must return rather than restating four numerals beside it.
+const DOCUMENTED_OK: i32 = 0;
+const DOCUMENTED_VIOLATIONS: i32 = 1;
+const DOCUMENTED_USAGE: i32 = 2;
+const DOCUMENTED_UNREADABLE: i32 = 5;
+const DOCUMENTED_VACUOUS: i32 = 6;
+
+#[test]
+fn Test_Value_Should_Return_The_Documented_Exit_Code_Number()
+{
+    assert_eq!(ExitCode::Ok.Value(), DOCUMENTED_OK);
+    assert_eq!(ExitCode::Violations.Value(), DOCUMENTED_VIOLATIONS);
+    assert_eq!(ExitCode::Usage.Value(), DOCUMENTED_USAGE);
+    assert_eq!(ExitCode::Unreadable.Value(), DOCUMENTED_UNREADABLE);
+    assert_eq!(ExitCode::Vacuous.Value(), DOCUMENTED_VACUOUS);
+}
+
+/// The codes this file documents are the codes this group can exit with.
+///
+/// `P10-CHECK-GATE`'s `done_when` asks that the codes the gate rests on be "the ones
+/// crates/host/nomos-cli/src/check.rs documents, read from there rather than restated".
+/// The workflow honours the second half by restating nothing. This is what makes the
+/// first half true of *this* file: [`USAGE`] is prose a person reads and [`ExitCode`] is
+/// what the process returns, the two were written separately, and a code added or
+/// renumbered in one of them and not the other is the failure that actually happens.
+#[test]
+fn Test_All_Should_Match_The_Documented_Exit_Codes()
+{
+    let (_, spelled) = USAGE
+        .split_once("exit codes:")
+        .expect("the usage text documents the exit codes");
+    let documented = Sorted(spelled.split_whitespace().filter_map(|word| word.parse().ok()));
+    let implemented = Sorted(ExitCode::All().iter().map(|code| code.Value()));
+
+    assert!(
+        !documented.is_empty(),
+        "no exit code was parsed out of the usage text, so this compared nothing: \
+         {spelled}"
+    );
+    assert_eq!(
+        documented, implemented,
+        "the usage text and ExitCode disagree about what this command can exit with, \
+         and the gate step reads its policy off the latter"
+    );
+}
+
+/// The help text routes to the rule set rather than naming any of it.
+///
+/// [`USAGE`] used to promise "runs every rule" and then open a `rules:` section listing
+/// exactly one of them, `completeness-mirror`, while `DESCRIPTORS` held seventy. A prose
+/// list inside a string constant is outside every completeness mechanism this repository
+/// has -- `Declared_Universes` recognises `pub const NAME: &[...]`, not a sentence -- so
+/// nothing noticed for as long as it took to compose sixty-nine more rules.
+///
+/// `OD-AGENT-004`'s amendment states the condition this asserts: a help text may enumerate
+/// a compiled vocabulary only where a test compares that enumeration against its authority,
+/// and otherwise routes to the verb that prints it. `check` routes, so what is checkable
+/// here is that it still routes and still names nothing -- hand-pasting the list back would
+/// recreate the same unguarded copy one rule later, and this is what refuses it.
+#[test]
+fn Test_The_Usage_Text_Should_Route_To_The_Rule_Set_Rather_Than_Name_Any_Of_It()
+{
+    assert!(
+        USAGE.contains("nomos gate plan"),
+        "the usage text names no rule and must say where the rules are: {USAGE}"
+    );
+
+    let named = Rules_Named_By_Usage();
+
+    assert!(
+        !nomos_rules::DESCRIPTORS.is_empty(),
+        "no rule was described, so this compared nothing"
+    );
+    assert!(
+        named.is_empty(),
+        "the usage text names {} of the {} composed rules ({named:?}); a list written here \
+         is wrong the next time one is composed, which is how it came to be wrong by \
+         sixty-nine",
+        named.len(),
+        nomos_rules::DESCRIPTORS.len()
+    );
+}
+
+/// Every composed rule's own identifier that [`USAGE`] names -- the enumeration the test
+/// above compares against its authority, which is the whole condition `OD-AGENT-004`'s
+/// amendment puts on a help text that lists anything.
+fn Rules_Named_By_Usage() -> Vec<&'static str>
+{
+    return nomos_rules::DESCRIPTORS
+        .iter()
+        .map(|descriptor| return descriptor.id)
+        .filter(|identifier| return USAGE.contains(identifier))
+        .collect();
+}
+
+#[test]
+fn Test_A_Root_Should_Default_To_Here()
+{
+    assert_eq!(Check_Command_From_String_Arguments(&[]).expect("no arguments is valid").command.root, PathBuf::from("."));
+}
+
+#[test]
+fn Test_A_Given_Root_Should_Win()
+{
+    let arguments = vec!["--root".to_owned(), "somewhere".to_owned()];
+
+    assert_eq!(
+        Check_Command_From_String_Arguments(&arguments).expect("--root is valid").command.root,
+        PathBuf::from("somewhere")
+    );
+}
+
+/// A mistyped flag must not be silently ignored into a default. `nomos check --rooot x`
+/// walking the current directory instead would report on the wrong tree and say
+/// nothing about it.
+#[test]
+fn Test_Check_Command_From_String_Arguments_Should_Refuse_An_Unknown_Flag()
+{
+    let arguments = vec!["--rooot".to_owned(), "x".to_owned()];
+
+    let error = Check_Command_From_String_Arguments(&arguments).expect_err("must refuse");
+
+    assert!(error.contains("--rooot"), "{error}");
+    assert!(error.contains("usage"), "{error}");
+}
+
+/// A tree that is not there is not a clean tree.
+#[test]
+fn Test_Run_Should_Report_Unreadable_For_A_Missing_Root()
+{
+    let command = CheckCommand {
+        root: PathBuf::from("no-such-directory-anywhere"),
+    };
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+
+    assert_eq!(Run(&CheckInvocation::from(command), &mut stdout, &mut stderr), ExitCode::Unreadable);
+}
+
+/// A list of codes in ascending order, so that two of them can be compared as sets.
+fn Sorted(codes: impl Iterator<Item = i32>) -> Vec<i32>
+{
+    let mut sorted: Vec<i32> = codes.collect();
+    sorted.sort_unstable();
+
+    return sorted;
+}
+
+/// A run that materialized nothing must not print a clean tree.
+///
+/// Every file the walk found is one the provider refuses, so the store is empty. That
+/// is `Vacuous` — the answer is empty because something expected was not there — and
+/// not `Ok`.
+#[test]
+fn Test_A_Run_That_Materialized_No_Facts_Should_Not_Report_Clean()
+{
+    let root = Fresh_Tree("nomos-check-no-facts");
+    std::fs::write(root.join("broken.rs"), "pub const ??? = ;").expect("the temporary root was created just above, so a new fixture file lands inside it");
+
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let code = Run(&CheckInvocation::from(CheckCommand { root: root.clone() }), &mut stdout, &mut stderr);
+
+    let _ignored = std::fs::remove_dir_all(&root);
+
+    assert_eq!(code, ExitCode::Vacuous);
+    assert!(
+        String::from_utf8_lossy(&stderr).contains("no syntax fact was materialized"),
+        "{}",
+        String::from_utf8_lossy(&stderr)
+    );
+}
+
+/// And the control for it: a tree the provider *can* read exits on what the rule found
+/// rather than on vacuity. Without this the test above is satisfied by a command that
+/// always reports `Vacuous`.
+#[test]
+fn Test_A_Run_That_Materialized_Facts_Should_Judge_Rather_Than_Refuse()
+{
+    let root = Fresh_Tree("nomos-check-with-facts");
+    std::fs::write(
+        root.join("a.rs"),
+        "/// Mirrored by `Test_Renamed_Away`.\npub const TABLE: &[&str] = &[];\n",
+    )
+    .expect("the temporary root was created just above, so a new fixture file lands inside it");
+
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let code = Run(&CheckInvocation::from(CheckCommand { root: root.clone() }), &mut stdout, &mut stderr);
+
+    let _ignored = std::fs::remove_dir_all(&root);
+
+    assert_eq!(
+        code,
+        ExitCode::Violations,
+        "{}",
+        String::from_utf8_lossy(&stdout)
+    );
+}
+
+/// ---- one unreadable file does not silence the rest of the tree ----
+///
+/// The measurement `OD-RULES-002` was opened against, reproduced as a directory. Two
+/// files: one the real parser reads, declaring a mirror that resolves to nothing, and
+/// one the real parser refuses. Before that record this run exited `0` and printed the
+/// phantom as `[Advisory]`, because `broken.rs` set one incompleteness flag over the
+/// whole run — and this workspace always holds such a file, so the guard could never
+/// block on anything.
+///
+/// Asserted through `Run` and not through the rule, because the thing that was wrong
+/// was the exit code of the shipped binary. The provider here is the registered one, so
+/// the refusal is a real refusal rather than a withheld fixture.
+#[test]
+fn Test_A_Phantom_Should_Block_Though_The_Tree_Holds_A_File_The_Parser_Refuses()
+{
+    let root = A_Tree_With_A_Phantom_Beside_A_Refusal();
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let code = Run(&CheckInvocation::from(CheckCommand { root: root.clone() }), &mut stdout, &mut stderr);
+    let rendered = String::from_utf8_lossy(&stdout).into_owned();
+    let _ignored = std::fs::remove_dir_all(&root);
+
+    assert_eq!(code, ExitCode::Violations, "{rendered}");
+    assert_ne!(code.Value(), ExitCode::Ok.Value(), "{rendered}");
+    assert!(
+        rendered.contains("2 file(s) examined, 1 with a syntax fact"),
+        "the run must still report what it could not read: {rendered}"
+    );
+    assert!(
+        rendered.contains("1 of which can fail a build"),
+        "the phantom is the finding that blocks: {rendered}"
+    );
+    assert!(
+        rendered.contains("[Blocking]") && rendered.contains("Test_Renamed_Away"),
+        "{rendered}"
+    );
+}
+
+/// ---- `OD-COMPLETENESS-004`'s negative control ----
+///
+/// A tree where the real parser refuses one file and no universe claims anything, so the
+/// run exits `Ok` — nothing blocks. Before `OD-COMPLETENESS-004` that exit code was the
+/// whole story, and it is the same code a tree with no unreadable file at all would exit
+/// with. This is the case `done_when` names: a subject the run could not judge must not
+/// render the same as a subject that was judged clean, even though neither one fails the
+/// build.
+#[test]
+fn Test_A_Provider_Refusal_Must_Not_Render_The_Same_As_A_Clean_Run()
+{
+    let broken = Broken_Provider_Run();
+    let clean = Clean_Run();
+
+    // Neither run fails the build: nothing declares a mirror, so there is nothing to be a
+    // phantom about, and the refusal is advisory. The exit code alone cannot tell them apart.
+    assert_eq!(broken.code, ExitCode::Ok, "{}", broken.rendered);
+    assert_eq!(clean.code, ExitCode::Ok, "{}", clean.rendered);
+    assert_eq!(broken.code, clean.code, "the exit code is not where this distinction lives");
+
+    assert_ne!(
+        broken.rendered, clean.rendered,
+        "a run carrying a real provider refusal rendered identically to a clean run"
+    );
+    assert!(broken.rendered.contains("claim: incomplete"), "{}", broken.rendered);
+    assert!(clean.rendered.contains("claim: complete"), "{}", clean.rendered);
+    assert!(
+        !clean.rendered.contains("DependencyUnavailable") && !clean.rendered.contains("Unparseable"),
+        "{}",
+        clean.rendered
+    );
+}
+
+/// One run of `check` over a fixture tree: the code the process would leave with, and the
+/// stdout it rendered. Named fields rather than a pair, so an assertion below says which
+/// half of the result it is reading.
+struct RunOutcome
+{
+    code: ExitCode,
+    rendered: String,
+}
+
+/// A fresh, empty temporary root named `case`, with whatever an earlier run left behind
+/// removed first, so every run starts from the same tree.
+fn Fresh_Tree(case: &str) -> PathBuf
+{
+    let root = std::env::temp_dir().join(case);
+    let _ignored = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(&root).expect("the temporary root is creatable");
+    return root;
+}
+
+/// Runs `check` over `root` and answers with what the run produced. The tree is left exactly
+/// as the run left it -- the caller owns it and decides when it goes.
+fn Run_Over(root: &Path) -> RunOutcome
+{
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let code = Run(&CheckInvocation::from(CheckCommand { root: root.to_path_buf() }), &mut stdout, &mut stderr);
+
+    return RunOutcome { code, rendered: String::from_utf8_lossy(&stdout).into_owned() };
+}
+
+/// Runs `check` over `root`, removes the tree, and answers with what the run produced.
+fn Run_Then_Clean_Up(root: PathBuf) -> RunOutcome
+{
+    let outcome = Run_Over(&root);
+    let _ignored = std::fs::remove_dir_all(&root);
+
+    return outcome;
+}
+
+/// A tree with one clean file and one the parser genuinely refuses to read -- the run and
+/// its rendered stdout.
+fn Broken_Provider_Run() -> RunOutcome
+{
+    return Run_Then_Clean_Up(A_Broken_Tree());
+}
+
+/// A tree with nothing for the parser to refuse -- the run and its rendered stdout.
+fn Clean_Run() -> RunOutcome
+{
+    return Run_Then_Clean_Up(A_Clean_Tree());
+}
+
+/// One file that parses, beside one the real parser refuses.
+fn A_Broken_Tree() -> PathBuf
+{
+    let root = Fresh_Tree("nomos-check-coverage-debt-beside-clean");
+    std::fs::write(root.join("a.rs"), "pub fn ok()\n{\n}\n").expect("the temporary root was created just above, so a new fixture file lands inside it");
+    std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("the temporary root was created just above, so a new fixture file lands inside it");
+
+    return root;
+}
+
+/// The tree nothing in this file finds a finding in: one source file that parses and no
+/// universe claiming anything.
+///
+/// A real, if minimal, Cargo.toml is required: without one, `cargo metadata` cannot find a
+/// workspace here at all, and the dependency-edges provider reports `ProviderUnavailable`
+/// for a reason that has nothing to do with what this test means by "clean": a tree with no
+/// findings, not a tree the provider cannot even see. A real, if minimal, `deny.toml` is
+/// required for the identical reason since `P68-SUBPROCESS-PROVIDERS-ESCAPE-A-NESTED-ROOT`:
+/// `nomos_lang_rust_deny::Discover_Workspace` now refuses before ever launching `cargo deny`
+/// over a root with no `deny.toml` of its own, rather than letting it silently walk upward
+/// (this fixture's temp-directory ancestry happens to have no `deny.toml` to escape into, but
+/// the fix does not special-case that -- refusing when it cannot confirm is the whole point).
+/// The `Cargo.toml`'s own `license` field is declared to match the `deny.toml`'s own
+/// `licenses.allow` list, so the fixture is genuinely clean under `dependency-policy` too,
+/// not merely unlicensed in a way this reader happens not to flag.
+fn A_Clean_Tree() -> PathBuf
+{
+    let root = Fresh_Tree("nomos-check-clean-only");
+    std::fs::write(root.join("a.rs"), "pub fn ok()\n{\n}\n").expect("the temporary root was created just above, so a new fixture file lands inside it");
+    std::fs::write(
+        root.join("Cargo.toml"),
+        "[package]\nname = \"nomos-check-clean-only-fixture\"\nversion = \"0.0.0\"\nedition = \"2021\"\nlicense = \"MIT\"\n",
+    )
+    .expect("the temporary root was created just above, so a new fixture file lands inside it");
+    std::fs::write(
+        root.join("deny.toml"),
+        "[graph]\nall-features = false\n\n[advisories]\nversion = 2\n\n[licenses]\nversion = 2\nallow = [\"MIT\"]\n\n[bans]\nmultiple-versions = \"warn\"\n\n[sources]\n",
+    )
+    .expect("the temporary root was created just above, so a new fixture file lands inside it");
+    std::fs::create_dir_all(root.join("src")).expect("the src directory is creatable");
+    std::fs::write(root.join("src").join("lib.rs"), "").expect("the temporary root was created just above, so a new fixture file lands inside it");
+
+    return root;
+}
+
+/// One file claiming a mirror nothing declares, beside one the parser genuinely refuses.
+fn A_Tree_With_A_Phantom_Beside_A_Refusal() -> PathBuf
+{
+    let root = Fresh_Tree("nomos-check-phantom-beside-broken");
+    std::fs::write(
+        root.join("a.rs"),
+        "/// Mirrored by `Test_Renamed_Away`.\npub const TABLE: &[&str] = &[];\n",
+    )
+    .expect("the temporary root was created just above, so a new fixture file lands inside it");
+    std::fs::write(root.join("broken.rs"), "pub const ??? = ;\n").expect("the temporary root was created just above, so a new fixture file lands inside it");
+
+    return root;
+}
+
+/// A file whose one declared list names a mirror that does not exist -- a real blocking
+/// finding, so the log below has something to carry and the run a code worth comparing.
+const STALE_MIRROR: &str = "/// A list.\n/// Mirrored by `Test_Sarif_Ghost`.\npub const TABLES: &[&str] = &[];\n";
+
+/// A tree named `case` holding one file with [`STALE_MIRROR`] in it.
+fn Tree_With_A_Stale_Mirror(case: &str) -> PathBuf
+{
+    let root = Fresh_Tree(case);
+    std::fs::write(root.join("a.rs"), STALE_MIRROR).expect("the temporary root was created just above, so a new fixture file lands inside it");
+    return root;
+}
+
+/// Runs `check` over `root` with its log sent to `sarif`, answering with the code and both
+/// streams.
+fn Run_With_Log(root: &Path, sarif: SarifDestination) -> (ExitCode, Vec<u8>, Vec<u8>)
+{
+    let mut stdout = Vec::new();
+    let mut stderr = Vec::new();
+    let code = Run(&CheckInvocation { command: CheckCommand { root: root.to_path_buf() }, sarif: Some(sarif) }, &mut stdout, &mut stderr);
+    return (code, stdout, stderr);
+}
+
+/// `--sarif` is accepted with a path and without one, and absent means no log.
+#[test]
+fn Test_The_Sarif_Flag_Should_Be_Accepted_With_And_Without_A_Path()
+{
+    let with_path = Check_Command_From_String_Arguments(&["--sarif".to_owned(), "out.sarif".to_owned()]).expect("--sarif is a flag the parser accepts");
+    let without = Check_Command_From_String_Arguments(&["--sarif".to_owned()]).expect("--sarif's path is optional");
+
+    assert_eq!(with_path.sarif, Some(SarifDestination::File(PathBuf::from("out.sarif"))));
+    assert_eq!(without.sarif, Some(SarifDestination::StandardOutput));
+    assert_eq!(Check_Command_From_String_Arguments(&[]).expect("no argument is present for the parser to refuse").sarif, None);
+}
+
+/// With no path, standard output is the log and nothing else: it parses as one SARIF 2.1.0
+/// document whose results name the file the check judged, the human report moved to standard
+/// error whole, and the exit code is the one the same check earns without the flag.
+#[test]
+fn Test_A_Log_On_Standard_Output_Should_Parse_As_One_Document_Naming_The_Judged_File()
+{
+    let root = Tree_With_A_Stale_Mirror("nomos-check-sarif-stdout");
+
+    let plain = Run_Over(&root);
+    let (code, stdout, stderr) = Run_With_Log(&root, SarifDestination::StandardOutput);
+    let _ignored = std::fs::remove_dir_all(&root);
+
+    let log: serde_json::Value = serde_json::from_slice(&stdout).expect("standard output carries one SARIF document and nothing else");
+    assert_eq!(log.pointer("/version").and_then(serde_json::Value::as_str), Some("2.1.0"), "{log}");
+    let results = log.pointer("/runs/0/results").and_then(serde_json::Value::as_array).cloned().unwrap_or_default();
+    assert!(
+        results.iter().any(|result| return result.pointer("/locations/0/physicalLocation/artifactLocation/uri").and_then(serde_json::Value::as_str) == Some("a.rs")),
+        "{log}"
+    );
+    assert_eq!(code, plain.code, "the flag changes no exit code");
+    assert!(String::from_utf8_lossy(&stderr).contains(plain.rendered.trim_end()), "the report moved to standard error whole: {}", String::from_utf8_lossy(&stderr));
+}
+
+/// With a path, the log goes to that file and standard output carries exactly the report it
+/// carries without the flag.
+#[test]
+fn Test_A_Log_To_A_File_Should_Parse_And_Leave_Standard_Output_Unchanged()
+{
+    let root = Tree_With_A_Stale_Mirror("nomos-check-sarif-file");
+    let logs = Fresh_Tree("nomos-check-sarif-file-log");
+    let path = logs.join("check.sarif");
+
+    let plain = Run_Over(&root);
+    let (code, stdout, _stderr) = Run_With_Log(&root, SarifDestination::File(path.clone()));
+    let written = std::fs::read_to_string(&path);
+    let _ignored = std::fs::remove_dir_all(&root);
+    let _ignored = std::fs::remove_dir_all(&logs);
+
+    let log: serde_json::Value = serde_json::from_str(&written.expect("the log was written where --sarif named")).expect("the file holds one SARIF document");
+    assert_eq!(log.pointer("/runs/0/tool/driver/name").and_then(serde_json::Value::as_str), Some("nomos"), "{log}");
+    assert_eq!(code, plain.code, "the flag changes no exit code");
+    assert_eq!(String::from_utf8_lossy(&stdout), plain.rendered, "the human report is unchanged when the log has a file of its own");
+}
+
+/// A path the log cannot be written to is refused on standard error with the path named, and
+/// the run's own exit code survives the refusal.
+#[test]
+fn Test_An_Unwritable_Log_Path_Should_Be_Named_And_Leave_The_Checks_Own_Code()
+{
+    let root = Tree_With_A_Stale_Mirror("nomos-check-sarif-unwritable");
+    // Under a file rather than under a missing directory: the filesystem port creates a missing
+    // parent, and a parent that is already a file is one no platform can create.
+    let unwritable = root.join("a.rs").join("check.sarif");
+
+    let plain = Run_Over(&root);
+    let (code, _stdout, stderr) = Run_With_Log(&root, SarifDestination::File(unwritable.clone()));
+    let _ignored = std::fs::remove_dir_all(&root);
+
+    let diagnostics = String::from_utf8_lossy(&stderr);
+    assert!(diagnostics.contains(&unwritable.display().to_string()), "the refusal names the path: {diagnostics}");
+    assert_eq!(code, plain.code, "an unwritable log leaves the run's own code");
+}

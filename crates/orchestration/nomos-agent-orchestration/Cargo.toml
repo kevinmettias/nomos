@@ -1,0 +1,25 @@
+[package]
+name = "nomos-agent-orchestration"
+version = "0.1.0"
+description = "The seam for dispatching one TaskEnvelope to a resolved target both hosts call: Run_Agent_Execute and Run_Agent_Judgment resolve a declared execution profile against a caller-supplied package set and dispatch through whichever of nomos-agent-contracts' two ports that target carries, naming no backend crate itself (OD-ROADMAP-005). Run_Validated_Correction is the separate seam that carries a WorkResult's own plan through nomos-corrections' Preview/Stage/Validate/Commit lifecycle."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-agent-contracts = { workspace = true }
+nomos-contracts = { workspace = true }
+nomos-corrections = { workspace = true }
+nomos-model = { workspace = true }
+nomos-model-package = { workspace = true }
+nomos-platform = { workspace = true }
+nomos-rules = { workspace = true }
+nomos-scope-verification = { workspace = true }
+nomos-workspace = { workspace = true }
+
+[dev-dependencies]
+nomos-platform-std = { workspace = true }
+
+[lints]
+workspace = true

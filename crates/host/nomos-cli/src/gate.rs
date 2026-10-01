@@ -1,0 +1,316 @@
+//! `nomos gate` — the composition root and renderer for `nomos-gate-orchestration`, and for
+//! the real judgment `run` now performs.
+//!
+//! `P13-GATE-ORCHESTRATION-1` gave `Gate` its own crate and a real, already-implemented
+//! `Run(&GateCommand) -> GateOutcome` -- but that crate cannot read argv, choose a platform
+//! or write to a terminal, and until this module existed nothing called it. This is the
+//! same seam `OD-HOST-002` already built for `check`/`work`/`spec`: `Gate_Invocation_From_String_Arguments` turns argv into
+//! a typed [`Invocation`], [`Run`] below dispatches to either the orchestration crate's
+//! own `Run` (`plan`) or `Run_Gate` (`run`), and [`report`] turns what came back into text
+//! and an [`ExitCode`].
+//!
+//! # What `run` still does here, after `P13-GATE-RUN-SEAM-CRATE`
+//!
+//! `nomos_gate_orchestration::Run_Gate` now owns the walk-judge-reduce composition itself --
+//! this module used to duplicate it (`crates/host/nomos-cli/src/gate/run.rs`, deleted by
+//! `P13-GATE-RUN-SEAM-CLI`) because `nomos-gate-orchestration` and `nomos-check-orchestration`
+//! were both band 40 and a band may not depend on its own band
+//! (`tests/contract/tests/boundaries/graph.rs`); `nomos-gate-orchestration` moved to band 41
+//! to depend on it instead. What stays here is exactly what `check.rs` also keeps for the
+//! same reason: the directory walk ([`sources::Walked_Sources`] -- recursive, where
+//! `OD-PLATFORM-002`'s `Read_Directory` is one level) and the host build variant
+//! ([`composition::Host_Variant`] -- `env!` resolves against the crate that calls it). Both
+//! cross into `Run_Gate` as arguments; nothing about judging or reducing lives in this crate
+//! any more.
+//!
+//! # `--include` / `--exclude` / `--rule`, after `P13-GATE-014-SCOPE-RULE-SELECTORS`
+//!
+//! [`parsing::Gate_Invocation_From_String_Arguments`] reads these repeatable flags into [`GateCommand::scope`] and
+//! [`GateCommand::rules`] for every verb; `Run_Gate` is what actually consults them for
+//! `run`, and `nomos_gate_orchestration::Run` (`plan`) still does not, the same asymmetry
+//! `root` already had. See `nomos_gate_orchestration`'s own `lib.rs` doc for what
+//! selection here does and does not mean.
+//!
+//! # `explain`, after `P13-GATE-EXPLAIN-FIRST-INCREMENT`
+//!
+//! [`Invocation::Explain`] carries a [`GateCommand`] and a
+//! `nomos_gate_orchestration::FindingQuery` -- `--rule <id> --location <path>` --
+//! [`parsing::Gate_Invocation_From_String_Arguments`] now recognizes as a third verb. `Explain_Gate` is what actually
+//! answers it; this module still owns only the walk and the host build variant, the same
+//! division `run` already has.
+//!
+//! # `compare`, after `P73-GATE-COMPARE-HAS-NO-CALLER`
+//!
+//! [`Invocation::Compare`] carries two whole [`GateCommand`]s, and [`Compare_Verb`] below
+//! walks and judges each exactly as `run` does before handing both to
+//! `nomos_gate_orchestration::Compare_Gate_Runs`. Two same-process walks under two
+//! `RunId`s, which is the shape `OD-GATE-022`'s own Status named for a first caller: it
+//! needs no store, because nothing has to outlive the process that produced it, and no new
+//! serializable type, because the two `GateRunResult`s it compares already exist in memory.
+//!
+//! This is what closes the last of the four verbs `ARC-ROADMAP-001` names. It was refused
+//! as usage until now on the "no invented shape ahead of a real body" discipline; that
+//! discipline is unchanged, and the body is what arrived.
+
+mod composition;
+mod invocation;
+mod parsing;
+mod report;
+mod sarif_output;
+mod sources;
+
+#[cfg(test)]
+mod tests;
+
+pub use invocation::Invocation;
+pub use parsing::Gate_Invocation_From_String_Arguments;
+use report::{Render_Admits, Render_Compare, Render_Explain, Render_Plan, Render_Policy, Render_Run, Render_Steps};
+
+mod exit_code;
+
+pub(crate) use exit_code::ExitCode;
+pub(crate) use sarif_output::{Emit_Log, Rendered_Beside_Log, SarifDestination, Sarif_Destination_From_Arguments, SARIF_FLAG};
+pub(crate) use nomos_gate_orchestration::{FindingQuery, GateCommand};
+use nomos_platform::{Clock, FileSystem};
+use nomos_composer_std::{CLOCK, ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
+
+use crate::arguments::Named_Value_From_String_Arguments;
+use nomos_rules::SourceFile;
+use nomos_workspace::BuildVariant;
+use std::io::Write;
+use std::path::{Path, PathBuf};
+
+/// Runs the requested verb and renders what it says.
+/// Executes the canonical gate's own step set on this host and reports every step.
+///
+/// The workflow is read through the same [`FileSystem`] port every other verb uses, and the
+/// steps run through the same [`LAUNCHER`] that `work finish` already runs the lint step
+/// with, so this is a second executor of one model rather than a second definition of it --
+/// `OD-GATE-033`'s decision 1, in the one place it has to hold.
+///
+/// A workflow that cannot be read is `Contradictory`, not an empty run: the thing this verb
+/// needed in order to answer was never assembled, which is exactly what that code already
+/// means for every other verb in this group.
+fn Steps_Verb(root: &Path, host: &str, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+{
+    let path = nomos_ledger::Workflow_Path(root);
+
+    let Ok(workflow) = FILE_SYSTEM.Read_To_String(&path)
+    else
+    {
+        writeln!(stderr, "{} could not be read, so the gate's step set is unknown", path.display()).ok();
+        return ExitCode::Contradictory;
+    };
+
+    let steps = nomos_ledger::Derive_Steps(workflow.as_str());
+    let run = nomos_ledger::Run_Gate_Locally(&steps, host, &LAUNCHER, Some(root));
+
+    return Render_Steps(&run, host, stdout);
+}
+
+pub fn Run(invocation: &Invocation, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+{
+    return match invocation
+    {
+        Invocation::Plan(command) =>
+        {
+            let outcome = nomos_gate_orchestration::Run(command);
+            Render_Plan(&outcome, stdout, stderr)
+        }
+        Invocation::Run(command) => Run_Verb(command, stdout, stderr),
+        Invocation::RunWithLog { command, log } => Run_Verb_With_Log(command, log, stdout, stderr),
+        Invocation::Policy(command) => Policy_Verb(command, stdout, stderr),
+        Invocation::Steps { root, host } => Steps_Verb(root, host, stdout, stderr),
+        Invocation::Compare { baseline, candidate } =>
+        {
+            Compare_Verb(baseline, candidate, stdout, stderr)
+        }
+        Invocation::Explain { command, query } =>
+        {
+            let walked = sources::Walked_Sources(&command.root);
+            let providers = nomos_composer_providers::Standard_Providers();
+            let result = nomos_gate_orchestration::Explain_Gate(
+                walked,
+                nomos_gate_orchestration::GateEnvironment {
+                    variant: composition::Host_Variant(),
+                    launcher: &LAUNCHER,
+                    filesystem: &FILE_SYSTEM,
+                    environment: &ENVIRONMENT,
+                    now: CLOCK.Now(),
+                    providers: &providers,
+                },
+                command,
+                query,
+            );
+            Render_Explain(&result, stdout, stderr)
+        }
+        Invocation::Admits { depending, depended } => Admits_Verb(
+            nomos_gate_orchestration::DependingCrate(depending),
+            nomos_gate_orchestration::DependedCrate(depended),
+            stdout,
+        ),
+    };
+}
+
+/// Walks `command.root`, runs `Run_Gate` over it under a freshly minted `RunId`, and
+/// renders what came back -- the self-contained unit `Invocation::Run`'s own arm was.
+fn Run_Verb(command: &GateCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+{
+    return Render_Run(&Judged_Command(command), stdout, stderr);
+}
+
+/// [`Run_Verb`], with the same judgment also written as a SARIF log to `log`.
+///
+/// One judgment, rendered twice by two owners: the human report by this binary, as it always
+/// was, and the log by `nomos_gate_orchestration::SarifLog`, which reads the same
+/// `GateRunResult` rather than anything this binary printed. The exit code is the report's,
+/// so the flag changes none.
+fn Run_Verb_With_Log(command: &GateCommand, log: &SarifDestination, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+{
+    let result = Judged_Command(command);
+    let code = Rendered_Beside_Log(log, stdout, stderr, |mut report, mut errors| return Render_Run(&result, &mut report, &mut errors));
+    Emit_Log(&nomos_gate_orchestration::SarifLog::Of_Gate_Run(&result), log, stdout, stderr);
+
+    return code;
+}
+
+/// Judges `command` exactly as `run` does and reports what decided its policy.
+///
+/// Through the same [`Judged_Command`] rather than through a resolution of its own, which is
+/// the whole claim this verb makes: the policy it reports is the one that judged the run, so
+/// a reader cannot be shown a resolution a real run never used. `OD-POLICY-001` puts the
+/// resolution on the result for exactly that reason.
+fn Policy_Verb(command: &GateCommand, stdout: &mut impl Write, stderr: &mut impl Write) -> ExitCode
+{
+    return Render_Policy(&Judged_Command(command), stdout, stderr);
+}
+
+/// Judges both commands the same way `run` judges one, and renders what moved.
+///
+/// Each side gets its own `RunId` from the same clock: two walks in one process are still
+/// two executions, which is exactly what `GateRunResult::run`'s own doc says a `RunId`
+/// distinguishes. Sequential rather than concurrent -- `Run_Gate` is the expensive part and
+/// nothing here is waiting on I/O it could overlap.
+fn Compare_Verb(
+    baseline: &GateCommand,
+    candidate: &GateCommand,
+    stdout: &mut impl Write,
+    stderr: &mut impl Write,
+) -> ExitCode
+{
+    return Render_Compare(&Judged_Command(baseline), &Judged_Command(candidate), stdout, stderr);
+}
+
+/// Answers the one verb that walks nothing, and renders the verdict.
+///
+/// `OD-GATE-026` decided the subject is a crate pair, so there is no environment to compose
+/// and no source to gather -- which is the whole reason the answer is available before the
+/// edge is. It does read one file now, because the architecture it answers from is the
+/// repository's own declaration rather than a table compiled into a rules crate. Reading it
+/// is `nomos-gate-orchestration`'s own, through the same `FileSystem` port it already
+/// resolves `nomos-gate.json` over: a declaration it cannot read is an empty one, and the
+/// answer is then `NotJudged` rather than a guess -- the same answer any crate a declaration
+/// does not place already gets.
+///
+/// The two ends arrive as the orchestration crate's own named types rather than bare strings,
+/// because the edge is directed: passing them positionally would let a caller ask the question
+/// backwards, which `DependedCrate`'s own doc says must not be possible.
+fn Admits_Verb(
+    depending: nomos_gate_orchestration::DependingCrate<'_>,
+    depended: nomos_gate_orchestration::DependedCrate<'_>,
+    stdout: &mut impl Write,
+) -> ExitCode
+{
+    let pair = (depending.0, depended.0);
+    let answer = nomos_gate_orchestration::Admits_Under(
+        &Declaring_Root(),
+        &FILE_SYSTEM,
+        depending,
+        depended,
+    );
+    return Render_Admits(answer, pair, stdout);
+}
+
+/// The nearest enclosing directory that declares an architecture, or the working directory
+/// when none does.
+///
+/// Every other gate verb takes a `--root` because it walks one. `OD-GATE-026` made `admits`
+/// the one that does not, on the ground that a crate pair needs no tree -- which was true
+/// while the architecture was a table compiled into `nomos-rules` and is not any more. Rather
+/// than give the verb a flag it had no reason to want, this composition root answers the
+/// question a developer is actually asking: the architecture of the repository I am standing
+/// in. Searching upward for the file that declares it is what `cargo` does for `Cargo.toml`
+/// and `git` does for `.git`, and it makes `nomos gate admits` work from a subdirectory, which
+/// reading the working directory alone would not.
+///
+/// This is the composition root choosing where a value comes from, which `OD-HOST-001`
+/// reserves to it, rather than a library reaching for ambient state.
+fn Declaring_Root() -> PathBuf
+{
+    let working = PathBuf::from(".");
+    let Ok(absolute) = std::fs::canonicalize(&working)
+    else
+    {
+        return working;
+    };
+
+    for ancestor in absolute.ancestors()
+    {
+        if FILE_SYSTEM.Exists(&ancestor.join(nomos_gate_orchestration::ARCHITECTURE_DECLARATION_FILE))
+        {
+            return ancestor.to_path_buf();
+        }
+    }
+
+    return working;
+}
+
+/// One walk-and-judge of `command.root`, under a freshly minted `RunId`.
+///
+/// Shared by `run` and both sides of `compare` so the two verbs cannot drift about what
+/// judging a tree means: a compare whose sides were composed differently from a run would
+/// report differences that only exist between the two code paths.
+fn Judged_Command(command: &GateCommand) -> nomos_gate_orchestration::GateRunResult
+{
+    let walked = sources::Walked_Sources(&command.root);
+    let now = CLOCK.Now();
+    let run = nomos_gate_orchestration::Fresh_Run_Id(now);
+
+    let providers = nomos_composer_providers::Standard_Providers();
+    return nomos_gate_orchestration::Run_Gate(
+        walked,
+        nomos_gate_orchestration::GateEnvironment {
+            variant: composition::Host_Variant(),
+            launcher: &LAUNCHER,
+            filesystem: &FILE_SYSTEM,
+            environment: &ENVIRONMENT,
+            now,
+            providers: &providers,
+        },
+        command,
+        run,
+    );
+}
+
+#[cfg(test)]
+mod run_coverage
+{
+    use super::*;
+
+    /// `Run` dispatched through its `Plan` arm, driving the real top-level function end to
+    /// end. `Plan` composes and reports this gate's own rule registry -- it never walks
+    /// `command.root` -- so this is the fast, side-effect-free arm; `Run_Verb` (the `run`
+    /// arm) and `Explain_Gate` (the `explain` arm) are exercised through `gate/tests.rs`'s
+    /// own broader coverage.
+    #[test]
+    fn Test_Run_Should_Dispatch_A_Plan_Invocation_And_Report_Ok()
+    {
+        let invocation = Invocation::Plan(GateCommand::default());
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+
+        let code = Run(&invocation, &mut stdout, &mut stderr);
+
+        assert_eq!(code, ExitCode::Ok);
+    }
+}

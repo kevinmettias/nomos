@@ -1,0 +1,15 @@
+[package]
+name = "nomos-cap-standards-corpus"
+version = "0.1.0"
+description = "The nomos.cap.standards.corpus contract: a repository's declared standards corpus, read where it is declared rather than copied. ARC-CONFORMANCE-003."
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+nomos-capability = { workspace = true }
+nomos-contracts = { workspace = true }
+
+[lints]
+workspace = true

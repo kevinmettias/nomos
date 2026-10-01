@@ -1,0 +1,43 @@
+/target/
+**/*.rs.bk
+*.pdb
+
+# The fresh-build-and-recopy step AGENTS.md's own loop calls for leaves a binary here; it
+# is a build artifact of that workflow, never a source the workflow reads.
+/nomos.exe
+
+# Scratch build roots for generated projections. A projection is a rebuild artifact and
+# most of them stay one: nothing here is a canonical source, and a registration may only
+# name a record under docs/records, so a generated file cannot become one by accident.
+#
+# The exception is deliberate and narrow. A projection this repository *promises to ship*
+# is committed together with its .nomos-projection.json stamp, and the gate re-derives it
+# and fails if the pair has drifted -- `nomos spec freshness --require <profile>`. Which
+# outputs those are is repository publication policy, named at the gate step rather than
+# here, because a profile describes how a projection is built and not whether anybody
+# ships it.
+/build/
+/release-artifacts/
+.nomos/
+
+# Local coordination state. Claims, leases and heartbeats are ephemeral and must not
+# become high-frequency git changes; `work/ledger.json` itself IS committed, because
+# its readability under `git diff` is load-bearing for the multi-agent workflow.
+/work/*.lock
+/work/*.tmp
+
+# Local Cargo configuration, including the opt-in sibling-development override
+# `.cargo/xvpe-local.toml` that redirects the pinned XVPE crossing to a local checkout.
+# `OD-PLATFORM-004` records its status: the pinned git dependency in each manifest is the
+# only governing form, and nothing here carries any authority. Excluded mechanically rather
+# than by care, because this working tree is shared with live sessions and an untracked
+# file in it is one scoped `git add` away from being published as though it were the
+# decided form.
+#
+# The whole directory, not one filename. `config.toml` is the name Cargo discovers on its
+# own, so a file left there substitutes the sibling checkout into every command any session
+# in this tree runs. Ignoring only the override's own name would leave that name free to be
+# recreated, which is the shape this refinement exists to remove. A build resolved through
+# any of it is development-resolved rather than reproducible.
+/.cargo/
+.claude/settings.local.json
