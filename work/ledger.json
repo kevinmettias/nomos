@@ -101431,6 +101431,87 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P193-OD-RULES-035-STILL-SAYS-NO-RECORD-DECIDES-WHAT-OD-RULES-011-VERSION-3-NOW-DECIDES",
+      "title": "OD-RULES-035 still says no record decides a question OD-RULES-011 version 3 now decides",
+      "why": "OD-RULES-035 version 2 (c131760d) says in its What This Does Not Do bullet, its Version 2 amendment and its Status that no governing record yet decides whether a verdict reached against a value the repository never declared says so, and names P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO as the item that would. That item landed at 457f1e2d: OD-RULES-011 version 3 now decides it, family by family, and boarded the builds as P190-A-RUN-NAMES-EVERY-VALUE-ITS-RULES-READ-THAT-THE-REPOSITORY-NEVER-DECLARED-BESIDE-ITS-CLAIM and its two companions. So a reader following OD-RULES-035 is told the question is open and sent to an item that is Done, which is the defect class this board has spent a week removing: prose that outlived the state it described.",
+      "done_when": "OD-RULES-035 says where the question is decided, OD-RULES-011 version 3, in every place it said no record decides it yet, without restating OD-RULES-011's decision. It cites items by full id. The amendment carries a version bump. Any code constant that pins OD-RULES-035's version, which rule_contract_citation catches, is bumped with a doc note that the rule's own decision did not move, as c131760d did. No behaviour changes. Both projections are re-rendered from the tree the commit publishes, and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/undeclared_policy_key.rs",
+          "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P194-THE-RUST-FUNCTION-NAMING-RULE-NEVER-READS-THE-KEYS-XVPE-DECLARES-ITS-FUNCTION-CASE-UNDER",
+      "title": "The Rust function-naming rule never reads the keys xvpe declares its function case under, so a declared convention is invisible",
+      "why": "Found by P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO's claimant and measured on 2026-10-03. nomos-rules' policy axis table (rule_descriptor/policy_axis.rs) has FUNCTION_CASE, key function, judged against the repository default UpperSnake, which the Rust function-naming rule in checks/naming.rs reads. It also has EXPORTED_FUNCTION_CASE and UNEXPORTED_FUNCTION_CASE, keys function.exported and function.unexported, documented as Read for Go. xvpe's standards.json declares its Rust function case only as languages.rust.naming.function.exported and .unexported, both upper-snake, and never the plain function key. So the Rust rule never reads the convention xvpe wrote down, and judges xvpe against the default instead. Today the default happens to equal xvpe's declaration, so no finding is wrong and nothing shows. But the declaration is invisible: if xvpe changed it, nomos would keep judging the old convention with every test green. And once P190-A-RUN-NAMES-EVERY-VALUE-ITS-RULES-READ-THAT-THE-REPOSITORY-NEVER-DECLARED-BESIDE-ITS-CLAIM lands, the run will name xvpe's function case as a value the repository never declared, which is false. Rust has the same exported/unexported split Go does (pub versus private), so the keys xvpe used are not obviously wrong for Rust; which keys the Rust rule reads is a decision, not a typo.",
+      "done_when": "The Rust function-naming rule reads the case a repository declares for Rust functions under the keys repositories actually use, decided by measurement. The claimant counts which Rust function keys each declaring repository in reach writes (xvpe, kwb, this workspace, the hex calibration fixture, and the code-standards corpus if available) and decides whether the rule reads the plain key, the exported/unexported split by item visibility, or both with a stated precedence. The decision is stated where OD-RULES-035 says axes are declared, by amending that record or by naming the record that already decides it, not left in a comment. The axis table's Read for Go notes say what is true afterwards. A test shows the rule judging against a declared function.exported (or whichever key is chosen) that differs from the default, and it is shown able to fail by a mutation restored byte-identically. The findings this repository's own nomos check produces before and after are compared and any change is explained; the same goes for the hex calibration's. No other naming axis changes. The predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming.rs",
+          "crates/rules/nomos-rules/src/checks/naming",
+          "crates/rules/nomos-rules/src/rule_descriptor/policy_axis.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
