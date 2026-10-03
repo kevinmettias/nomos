@@ -55,7 +55,12 @@ pub const UNDECLARED_POLICY_KEY_CONTRACT_RECORD: &str = "OD-RULES-035";
 ///
 /// Version 3 points that question at `OD-RULES-011` version 3, the record that now decides it;
 /// decision 5 did not move again, so the citation follows the record for the same reason.
-pub const UNDECLARED_POLICY_KEY_CONTRACT_RECORD_VERSION: u32 = 3;
+///
+/// Version 4 adds decision 7, which has a value read through a refinement of its key read the
+/// refinement first. It is about the naming keys a rule reads from `standards.json`, a block
+/// decision 5 keeps this rule away from, and decision 5 did not move, so the citation follows the
+/// record once more.
+pub const UNDECLARED_POLICY_KEY_CONTRACT_RECORD_VERSION: u32 = 4;
 
 /// Reports every key a repository declares in `nomos-limits.json`, repository-wide or under a
 /// language, that no limits axis names -- one `Blocking` finding per key.

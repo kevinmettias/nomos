@@ -3,7 +3,7 @@ id: OD-RULES-035
 type: decision
 title: A preference axis is a key a repository can write, declared once beside the rules that read it
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - rules
@@ -276,6 +276,96 @@ so what an undeclared axis means is still declared on the axis.
 **What this changes in the decision.** Nothing. Decisions 1 to 6 and the bound stand as
 accepted.
 
+## Amendment, Version 4: A Value Read Through A Refinement Of Its Key Reads The Refinement First
+
+**What was wrong.** The axis table declares three function axes: `function`, and its two
+refinements by visibility, `function.exported` and `function.unexported`.
+`function-naming-convention` read the first alone, repository-wide, for every language it judges.
+The two refinements were read only by the two Go function rules, for Go. xvpe declares its Rust
+function case only under the refinements, in `languages.rust.naming`, so the rule never read what
+xvpe wrote and judged xvpe's Rust against the substituted upper-snake. That agreed with xvpe's
+declaration by coincidence. Had xvpe changed it, every Rust function would have been held to the
+old convention with every test green, and the list of values a repository never declared, which
+`OD-RULES-011` version 3 decides a run prints, would name xvpe's function case, which is false. No
+record decided which keys a rule reads for one value: `OD-RULES-011` version 3 names the question
+and leaves it, and decision 2 above declares axes one key at a time.
+`P194-THE-RUST-FUNCTION-NAMING-RULE-NEVER-READS-THE-KEYS-XVPE-DECLARES-ITS-FUNCTION-CASE-UNDER`
+asked for it to be decided by measurement.
+
+**What was measured.** The keys each repository in reach writes for a Rust function's case, read
+from its committed `standards.json` on 2026-10-03:
+
+| Repository | Revision | Keys | Where |
+|---|---|---|---|
+| this repository | `5f6d395b` | `function`, upper-snake | `naming` and `languages.rust.naming` |
+| kwb | `1b197ee8` | `function`, upper-snake | `naming` |
+| hex's calibration fixture | `5f6d395b` | `function`, lower-snake | `naming` |
+| xvpe | `ea0d401d` | `function.exported` and `function.unexported`, both upper-snake | `languages.rust.naming` |
+| code-standards | `f0d82072` | none for Rust; `function.exported` and `function.unexported` for Go | `languages.go.naming` |
+
+The code-standards corpus under `docs/standards` states rules and declares no naming key: no
+document in it names `function.exported` or `function.unexported`. So of the four repositories that
+declare a Rust function case, three write only the plain key, one writes only the refinements, and
+none writes both. A rule that reads the plain key alone misses xvpe, which is the defect. One that
+read the refinements alone would miss the other three, hex's `lower-snake` among them, and hex's
+calibration would gain a finding for every function it declares, judged against a case hex never
+chose.
+
+code-standards, the other tool that reads this block, already reads both. Its `Override_Case`
+(`rules/general/style/shared/naming/overrides.go`) takes the key refined by the symbol's visibility
+and falls back to the plain key. It looks them up in a block where a language's key has already
+replaced the repository's key of the same name (`merged_Naming`, in
+`kernel/config/limits/overrides.go`). For a Rust symbol, exported means a visibility of exactly
+`pub` (`is_Symbol_Public`, in `language-kernels/programming/rust/rustlang/rust_symbols.go`), so
+`pub(crate)`, `pub(super)` and `pub(in path)` are not exported, and neither is a member of a trait
+declaration, which writes no visibility of its own. The syntax fact this workspace's rules read
+draws the same line: only an item it labels `Public` is public, and a restricted visibility carries
+a label of its own.
+
+**7. A value read through a refinement of its key reads the refinement first.** A key may be
+refined by visibility, as `function.exported` and `function.unexported` refine `function`. A rule
+that reads one value through a refinement and the key it refines names both axes in the table, the
+refinement first. The value is the first of them the repository declares, in this order: the
+refinement for the language, the refinement repository-wide, the plain key for the language, the
+plain key repository-wide. When neither key is declared anywhere, the plain axis's undeclared
+meaning applies and the refinement's own does not. That is code-standards' order, and decision 5
+already reads a block another tool owns in the shape that tool declares, so a declaration in that
+block now resolves to one value in both tools. For the report `OD-RULES-011` version 3 decides, such
+a value counts as declared when either of its keys is declared at either scope, and a value declared
+under neither is named under the plain key, whose meaning was the one applied. That record decides
+what is reported; this says only when a value read through two keys is one the repository declared.
+
+`function-naming-convention` reads a Rust function this way. A function declared exactly `pub` is
+judged against the first of `function.exported` and `function` the repository declares, and every
+other Rust function against the first of `function.unexported` and `function`. With neither
+declared, both are judged against upper-snake, as before. The rule now also reads `function` under
+`languages.rust.naming`, which it did not. Read from the declarations above, nothing it reports
+changes in any of the five repositories: this repository declares one case at both scopes, kwb and
+hex declare no refinement and no language-scoped key, and xvpe's refinements declare the case the
+rule already substituted.
+
+**What this does not decide.**
+
+- **The rule's other languages.** It judges every source with a syntax fact, and a function in any
+  other language still reads `function` repository-wide and nothing else. Whether it should read
+  that language's own keys, which would change what it reports for xvpe's and code-standards' Go,
+  is not decided here.
+- **The two Go function rules.** They read their refinement alone, for Go, against Go's own
+  defaults, and do not fall back to `function`. code-standards does fall back, so for a repository
+  that declares `function` and no Go refinement, as this one and kwb do, the two tools judge an
+  unexported Go function against different cases. Making them agree changes what those rules read,
+  and no other axis changes here.
+- **`method`.** This repository, kwb and xvpe each declare a method case beside their function
+  case, as `method` or as its refinements, and no rule reads either. A Rust method is judged under
+  the function keys.
+- **What a finding says.** `OD-RULES-011` version 3 decision 4 decides it, and this amendment
+  changes no finding's text.
+
+**What this changes in the decision.** Decision 7 is added. Decisions 1 to 6 and the bound stand.
+The change that builds decision 7 is inside the bound: it edits the axis table and the rule that
+reads it, under `crates/rules/nomos-rules/src/`, and no contract crate, provider or composition
+site.
+
 ## Status
 
 Accepted. `ARC-CONFORMANCE-003`'s M2 is re-stated by this record, and the amendment to that
@@ -290,3 +380,8 @@ Amended at version 3 by
 `P193-OD-RULES-035-STILL-SAYS-NO-RECORD-DECIDES-WHAT-OD-RULES-011-VERSION-3-NOW-DECIDES`, which
 points that question at `OD-RULES-011` version 3, the record that decides it. Nothing the record
 decided changed at either version.
+
+Amended at version 4 by
+`P194-THE-RUST-FUNCTION-NAMING-RULE-NEVER-READS-THE-KEYS-XVPE-DECLARES-ITS-FUNCTION-CASE-UNDER`,
+which adds decision 7: a value read through a refinement of its key reads the refinement first, and
+the key it refines supplies its undeclared meaning. Decisions 1 to 6 did not change.

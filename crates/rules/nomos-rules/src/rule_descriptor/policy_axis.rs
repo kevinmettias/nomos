@@ -101,6 +101,10 @@ pub(crate) const CYCLOMATIC_COMPLEXITY_MAX: PolicyAxis<u32> = PolicyAxis {
 };
 
 /// The case a function name takes.
+///
+/// Read for a Rust function behind the refinement its visibility selects, whose undeclared
+/// meaning this axis supplies, and alone and repository-wide for a function in any other language
+/// `function-naming-convention` judges.
 pub(crate) const FUNCTION_CASE: PolicyAxis<Case> = PolicyAxis {
     family: RequiredFact::NamingPolicy,
     key: "function",
@@ -121,19 +125,42 @@ pub(crate) const FIELD_CASE: PolicyAxis<Case> = PolicyAxis {
     undeclared: Undeclared::JudgedAgainstDefault { repository: Case::LowerSnake, languages: &[] },
 };
 
-/// The case an exported function name takes. Read for Go.
+/// The case an exported function name takes.
+///
+/// Read for Go alone, against the default below when nothing declares it. Read for Rust ahead
+/// of [`FUNCTION_CASE`], through [`RUST_EXPORTED_FUNCTION_CASE`], where the default below is
+/// never the one a Rust function is judged against.
 pub(crate) const EXPORTED_FUNCTION_CASE: PolicyAxis<Case> = PolicyAxis {
     family: RequiredFact::NamingPolicy,
     key: "function.exported",
     undeclared: Undeclared::JudgedAgainstDefault { repository: Case::UpperSnake, languages: &[] },
 };
 
-/// The case an unexported function name takes. Read for Go.
+/// The case an unexported function name takes.
+///
+/// Read for Go alone, against the default below when nothing declares it. Read for Rust ahead
+/// of [`FUNCTION_CASE`], through [`RUST_UNEXPORTED_FUNCTION_CASE`], where the default below --
+/// Go's mixed-snake -- is never the one a Rust function is judged against.
 pub(crate) const UNEXPORTED_FUNCTION_CASE: PolicyAxis<Case> = PolicyAxis {
     family: RequiredFact::NamingPolicy,
     key: "function.unexported",
     undeclared: Undeclared::JudgedAgainstDefault { repository: Case::MixedSnake, languages: &[] },
 };
+
+/// The axes a Rust function declared exactly `pub` reads its case through, the refinement first
+/// and the key it refines last.
+///
+/// `OD-RULES-035` decision 7: the first of them a repository declares decides, each looked up for
+/// the language before repository-wide, and with neither declared the last one's undeclared
+/// meaning applies -- [`FUNCTION_CASE`]'s upper-snake, so a repository that declares nothing is
+/// judged as it was before either key was read. That is code-standards' own order for the same
+/// block of the same file, so a declaration there means one thing to both tools that read it.
+pub(crate) const RUST_EXPORTED_FUNCTION_CASE: &[&PolicyAxis<Case>] = &[&EXPORTED_FUNCTION_CASE, &FUNCTION_CASE];
+
+/// The axes every other Rust function reads its case through -- private, `pub(crate)`,
+/// `pub(super)`, `pub(in path)`, or a trait declaration's own member -- in the order
+/// [`RUST_EXPORTED_FUNCTION_CASE`] states.
+pub(crate) const RUST_UNEXPORTED_FUNCTION_CASE: &[&PolicyAxis<Case>] = &[&UNEXPORTED_FUNCTION_CASE, &FUNCTION_CASE];
 
 /// The case an exported type name takes. Read for Go.
 pub(crate) const EXPORTED_TYPE_CASE: PolicyAxis<Case> = PolicyAxis {
@@ -219,6 +246,22 @@ mod tests
     {
         assert_eq!(CYCLOMATIC_COMPLEXITY_MAX.Undeclared_Value(None), None);
         assert_eq!(CYCLOMATIC_COMPLEXITY_MAX.Undeclared_Value(Some("rust")), None);
+    }
+
+    /// A refined read names the refinement first and the key it refines last, in one family, and
+    /// the refinement is that key refined by a visibility: `OD-RULES-035` decision 7 reads them in
+    /// that order and takes the last one's undeclared meaning, so a read listed the other way
+    /// round would judge an undeclared Rust function against Go's mixed-snake.
+    #[test]
+    fn Test_A_Refined_Read_Should_Name_The_Refinement_First_And_The_Key_It_Refines_Last()
+    {
+        for (refined_read, visibility) in [(RUST_EXPORTED_FUNCTION_CASE, "exported"), (RUST_UNEXPORTED_FUNCTION_CASE, "unexported")]
+        {
+            let keys: Vec<&str> = refined_read.iter().map(|axis| return axis.key).collect();
+
+            assert_eq!(keys, vec![format!("{}.{visibility}", FUNCTION_CASE.key).as_str(), FUNCTION_CASE.key], "{refined_read:?}");
+            assert!(refined_read.iter().all(|axis| return axis.family == FUNCTION_CASE.family), "{refined_read:?}");
+        }
     }
 
     /// The limits resolver reports an undeclared axis for whichever rule reads it; the naming

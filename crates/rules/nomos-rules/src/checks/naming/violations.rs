@@ -1,9 +1,11 @@
-//! Judging an already-decoded syntax payload against a resolved naming [`Case`].
+//! Judging an already-decoded syntax payload against the resolved naming [`Case`] of each side
+//! of visibility.
 //!
 //! A pure function of an already-decoded payload, so the naming judgment itself is
 //! testable against hand-written fixture text the way [`crate::facts::Check_Names_In`]
 //! is — no registry, no store, no reader.
 
+use super::function_cases::FunctionCases;
 use crate::checks::finding_shape::{Finding_Shape, Qualified_Name_Finding};
 use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload, FUNCTION, IMPLEMENTATION, Impl_Serves_A_Trait};
@@ -13,9 +15,10 @@ use nomos_contracts::{Finding, GateCategory};
 /// language rather than by this workspace's naming choice.
 const MAIN: &str = "main";
 
-/// Every function `payload` declares that does not conform to `case`, as findings.
+/// Every function `payload` declares that does not conform to the case `cases` gives its side of
+/// visibility, as findings.
 #[must_use]
-pub(super) fn Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> Vec<Finding>
+pub(super) fn Violations_In(payload: &SyntaxPayload, path: &str, cases: FunctionCases) -> Vec<Finding>
 {
     let mut findings = Vec::new();
 
@@ -27,7 +30,7 @@ pub(super) fn Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> 
             continue;
         }
 
-        if !Is_The_Shape_Of(case, item.Own_Name())
+        if !Is_The_Shape_Of(cases.For(item), item.Own_Name())
         {
             let violation = Violation_Finding(path, item);
             findings.push(violation);
@@ -123,8 +126,13 @@ mod tests
 
     mod scanning
     {
-        use super::{GateCategory, SyntaxPayload, Violations_In};
+        use super::{FunctionCases, GateCategory, SyntaxPayload, Violations_In};
         use nomos_cap_naming_policy::Case;
+
+        /// Upper-snake on both sides of visibility: what every test below judged against before
+        /// a Rust function's case split by visibility, and still what it is judged against when
+        /// a repository declares nothing.
+        const UPPER_SNAKE: FunctionCases = FunctionCases::Both(Case::UpperSnake);
 
         #[test]
         fn Test_A_Conforming_Function_Should_Produce_No_Finding()
@@ -133,7 +141,7 @@ mod tests
             {
                 let payload = Payload_From_Text(&format!("unexpanded\t0\nitem\t0\tFunction\tPublic\t{name}\t.\t+fn/0\n"));
 
-                let findings = Violations_In(&payload, "src/lib.rs", Case::UpperSnake);
+                let findings = Violations_In(&payload, "src/lib.rs", UPPER_SNAKE);
 
                 assert!(findings.is_empty(), "{name}: {findings:?}");
             }
@@ -155,7 +163,7 @@ mod tests
                  item\t0\tFunction\tPublic\tbad_name\t.\t+fn/0\n",
             );
 
-            let findings = Violations_In(&payload, "src/lib.rs", Case::UpperSnake);
+            let findings = Violations_In(&payload, "src/lib.rs", UPPER_SNAKE);
 
             assert_eq!(findings.len(), 1, "{findings:?}");
             let found = findings.first().expect("asserted len 1 above");
@@ -170,7 +178,7 @@ mod tests
             {
                 let payload = Payload_From_Text(&format!("unexpanded\t0\nitem\t0\tFunction\t{visibility}\t{qualified_name}\t.\t+fn/0\n"));
 
-                let findings = Violations_In(&payload, "src/main.rs", Case::UpperSnake);
+                let findings = Violations_In(&payload, "src/main.rs", UPPER_SNAKE);
 
                 assert!(findings.is_empty(), "{qualified_name}: {findings:?}");
             }
@@ -197,7 +205,7 @@ mod tests
                     "unexpanded\t0\nitem\t0\tImplementation\tNotApplicable\t{trait_name}\t.\t+trait\nitem\t1\tFunction\tPublic\t{trait_name}::{method}\t.\t+fn/1\n"
                 ));
 
-                let findings = Violations_In(&payload, "src/lib.rs", Case::UpperSnake);
+                let findings = Violations_In(&payload, "src/lib.rs", UPPER_SNAKE);
 
                 assert!(findings.is_empty(), "{trait_name}::{method}: a trait method's fixed name was judged: {findings:?}");
             }
@@ -220,7 +228,7 @@ mod tests
                  item\t1\tFunction\tPublic\tTable::bad_name\t.\t+fn/1\n",
             );
 
-            let findings = Violations_In(&payload, "src/lib.rs", Case::UpperSnake);
+            let findings = Violations_In(&payload, "src/lib.rs", UPPER_SNAKE);
 
             assert_eq!(findings.len(), 1, "an inherent method's own name was exempted: {findings:?}");
         }
@@ -230,7 +238,26 @@ mod tests
         {
             let payload = Payload_From_Text("unexpanded\t0\n");
 
-            assert!(Violations_In(&payload, "src/lib.rs", Case::UpperSnake).is_empty());
+            assert!(Violations_In(&payload, "src/lib.rs", UPPER_SNAKE).is_empty());
+        }
+
+        /// One file, two cases: each function is judged against the case its own side of
+        /// visibility takes, so the same lower-snake shape conforms when it is `pub` and does not
+        /// when it is `pub(crate)`.
+        #[test]
+        fn Test_Violations_In_Should_Judge_Each_Function_Against_Its_Own_Side_Of_Visibility()
+        {
+            let payload = Payload_From_Text(
+                "unexpanded\t0\n\
+                 item\t0\tFunction\tPublic\tas_str\t.\t+fn/1\n\
+                 item\t1\tFunction\tRestricted(crate)\tto_text\t.\t+fn/1\n",
+            );
+            let cases = FunctionCases { exported: Case::LowerSnake, unexported: Case::UpperSnake };
+
+            let findings = Violations_In(&payload, "src/lib.rs", cases);
+
+            let judged: Vec<&str> = findings.iter().map(|finding| return finding.subject_name.as_str()).collect();
+            assert_eq!(judged, vec!["to_text"], "{findings:?}");
         }
 
         /// `OD-CAPABILITY-014` put a variable-length body behind an `impl` block's own
@@ -248,7 +275,7 @@ mod tests
             );
 
             assert!(
-                Violations_In(&payload, "src/lib.rs", Case::UpperSnake).is_empty(),
+                Violations_In(&payload, "src/lib.rs", UPPER_SNAKE).is_empty(),
                 "the trait fixed fmt, whether or not the impl is generic"
             );
         }

@@ -44,21 +44,36 @@
 //! prior hardcoded default when a repository declares none. The convention above is that
 //! default, still real and still what an unconfigured repository gets, not what every
 //! repository is now fixed to.
+//!
+//! # A Rust function reads its case through the refinement its visibility selects
+//!
+//! `OD-RULES-035` decision 7 settled which keys this rule reads for Rust, by counting the keys
+//! the repositories that declare a Rust function case actually write: three write the plain
+//! `function`, and xvpe writes only `function.exported` and `function.unexported`. So a Rust
+//! function declared exactly `pub` is judged against the first of `function.exported` and
+//! `function` the repository declares, and every other Rust function against the first of
+//! `function.unexported` and `function` -- each looked up for `rust` before repository-wide,
+//! code-standards' own order -- and against upper-snake when neither is declared.
+//! [`Resolve_Most_Specific_Case`] is that read, and [`function_cases`] is the split. A function
+//! in any other language this rule judges still reads `function` repository-wide and nothing
+//! else, because the decision is about Rust alone.
 
 mod abbreviations;
 mod boolean_predicates;
 mod clarity;
 mod data_names;
 mod file_names;
+mod function_cases;
 mod go;
 pub(super) mod reading;
 mod single_letter_names;
 mod test_names;
 mod violations;
 
-use crate::rule_descriptor::policy_axis::{PolicyAxis, FUNCTION_CASE};
+use crate::rule_descriptor::policy_axis::{PolicyAxis, FUNCTION_CASE, RUST_EXPORTED_FUNCTION_CASE, RUST_UNEXPORTED_FUNCTION_CASE};
 use crate::rule_descriptor::RequiredFact;
-use crate::SourceFile;
+use crate::{SourceFile, RUST_LANGUAGE};
+use function_cases::FunctionCases;
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_naming_policy::{Case, Scope};
 use nomos_contracts::Finding;
@@ -104,14 +119,40 @@ pub const PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str = "project-own
 /// never this capability's own `Applicability` surfacing anywhere.
 pub(super) fn Resolve_Case(facts: &mut dyn FactReader, language: Option<&str>, axis: &PolicyAxis<Case>) -> Option<Case>
 {
-    let undeclared = axis.Undeclared_Value(language);
-    let Some(payload) = Naming_Policy_Payload(facts, axis.family)
+    return Resolve_Most_Specific_Case(facts, language, &[axis]);
+}
+
+/// Resolves the case a value read through several axes takes, `axes` ordered most specific
+/// first: the first of them the repository declares, each looked up for `language` before
+/// repository-wide, and the last axis's declared default for `language` when it declares none of
+/// them. [`Resolve_Case`] is this over one axis.
+///
+/// `OD-RULES-035` decision 7 is this order. It is code-standards' own for the same block of the
+/// same file -- its `Override_Case` takes the refined key before the plain one, over a block in
+/// which a language's key has already replaced the repository's -- so one declaration in
+/// `standards.json` resolves to one case in both tools.
+pub(super) fn Resolve_Most_Specific_Case(facts: &mut dyn FactReader, language: Option<&str>, axes: &[&PolicyAxis<Case>]) -> Option<Case>
+{
+    let undeclared = axes.last()?.Undeclared_Value(language);
+    let Some(payload) = axes.first().and_then(|axis| return Naming_Policy_Payload(facts, axis.family))
     else
     {
         return undeclared;
     };
 
-    return Case_For_Symbol(&payload, language, axis.key).or(undeclared);
+    return axes.iter().find_map(|axis| return Case_For_Symbol(&payload, language, axis.key)).or(undeclared);
+}
+
+/// The cases a Rust function is judged against, one per side of visibility, each read through the
+/// refinement of `function` that side selects ahead of `function` itself.
+fn Rust_Function_Cases(facts: &mut dyn FactReader) -> Option<FunctionCases>
+{
+    let language = Some(RUST_LANGUAGE);
+
+    return Some(FunctionCases {
+        exported: Resolve_Most_Specific_Case(facts, language, RUST_EXPORTED_FUNCTION_CASE)?,
+        unexported: Resolve_Most_Specific_Case(facts, language, RUST_UNEXPORTED_FUNCTION_CASE)?,
+    });
 }
 
 /// Reads and decodes this repository's own `nomos.cap.naming.policy` fact, folding every
@@ -158,7 +199,8 @@ fn Case_For_Symbol(payload: &nomos_cap_naming_policy::NamingPolicyPayload, langu
     return payload.rows.iter().find(|row| return row.scope == Scope::Repository && row.symbol == symbol).map(|row| return row.case);
 }
 
-/// Judges every function `sources` declares against the workspace's naming convention.
+/// Judges every function `sources` declares against the case the repository declares for it: a
+/// Rust function against the case its visibility reads, and any other against `function`.
 ///
 /// One fact per file, the same shape [`crate::Check_Completeness_Mirrors`] reads — this
 /// rule states the same [`crate::Syntax_Requirement`] floor for the same reason: a name
@@ -173,7 +215,7 @@ pub fn Check_Naming_Convention(
     use reading::Payload_Of;
     use violations::Violations_In;
 
-    let Some(case) = Resolve_Case(facts, None, &FUNCTION_CASE)
+    let (Some(rust), Some(other)) = (Rust_Function_Cases(facts), Resolve_Case(facts, None, &FUNCTION_CASE))
     else
     {
         return Vec::new();
@@ -182,13 +224,10 @@ pub fn Check_Naming_Convention(
 
     for source in sources
     {
+        let cases = if source.Is_Written_In(RUST_LANGUAGE) { rust } else { FunctionCases::Both(other) };
         match Payload_Of(source, facts)
         {
-            Ok(payload) =>
-            {
-                let violations = Violations_In(&payload, &source.path, case);
-                findings.extend(violations);
-            }
+            Ok(payload) => findings.extend(Violations_In(&payload, &source.path, cases)),
             Err(finding) => findings.push(finding),
         }
     }

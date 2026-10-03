@@ -99652,7 +99652,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Re-authored as P176-A-LABELED-JUMP-IS-THE-FIRST-SYNTAX-SITE-AND-THE-FAMILY-THAT-CARRIES-IT-2, reserving the files the change touches: this item reserves crates/rules/nomos-rules whole and README.md, which P194 and P195 hold for hours, while none of the change's files are theirs; the README rows move to P197."
+        }
+      },
       "depends_on": [
         "P174-A-SYNTACTIC-PROJECTION-IS-A-KIND-ONE-FAMILY-CARRIES-2"
       ],
@@ -99687,7 +99691,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "opus-m3-sites",
+        "declined_at": 1791043749
+      },
       "widened": []
     },
     {
@@ -99714,7 +99721,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Stranded by declining P176-A-LABELED-JUMP-IS-THE-FIRST-SYNTAX-SITE-AND-THE-FAMILY-THAT-CARRIES-IT; re-authored as P177-GO-OFFERS-THE-LABELED-JUMP-AND-CSHARP-DECLINES-IT-WITH-ITS-REASON-2, which depends on the -2 item, leaves README.md (held by P195) to P197, and reserves the three files building it ahead measured."
+        }
+      },
       "depends_on": [
         "P176-A-LABELED-JUMP-IS-THE-FIRST-SYNTAX-SITE-AND-THE-FAMILY-THAT-CARRIES-IT"
       ],
@@ -99747,7 +99758,10 @@
       "verified": null,
       "abandoned": [],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "opus-m3-sites",
+        "declined_at": 1791043749
+      },
       "widened": []
     },
     {
@@ -101559,11 +101573,13 @@
         "paths": [
           "crates/rules/nomos-rules/src/checks/naming.rs",
           "crates/rules/nomos-rules/src/checks/naming",
-          "crates/rules/nomos-rules/src/rule_descriptor/policy_axis.rs"
+          "crates/rules/nomos-rules/src/rule_descriptor/policy_axis.rs",
+          "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md",
+          "crates/rules/nomos-rules/src/checks/undeclared_policy_key.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -101583,11 +101599,47 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ors.rs (F:/repos/nomos-p194-target\\debug\\deps\\rule_descriptors-b0eaaf57c3a31217.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/nomos-p194-target\\debug\\deps\\toolchain_floor-f83c22963bb3653d.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p194-target\\debug\\deps\\nomos_integration_tests-d41870b422a07b8b.exe)\n     Running tests\\analysis_slice\\main.rs (F:/repos/nomos-p194-target\\debug\\deps\\analysis_slice-7a8e52e4da48cbd2.exe)\n     Running tests\\calibration.rs (F:/repos/nomos-p194-target\\debug\\deps\\calibration-ecf0938929045c32.exe)\n     Running tests\\determinism\\main.rs (F:/repos/nomos-p194-target\\debug\\deps\\determinism-90312f3974ae38d6.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p194-target\\debug\\deps\\nomos_rules-8f9f4cdb33820fc9.exe)\n     Running tests\\integration_seams.rs (F:/repos/nomos-p194-target\\debug\\deps\\integration_seams-d9394d4149bb615a.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p194-target\\debug\\deps\\nomos_spec_store-06e6aa6a481bd8b1.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/nomos-p194-target\\debug\\deps\\governing_records_are_present-00262ca1fd3972b5.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/nomos-p194-target\\debug\\deps\\round_trip_holds-186543f7685a6a84.exe)\n     Running tests\\store_holds.rs (F:/repos/nomos-p194-target\\debug\\deps\\store_holds-9ca0a8b8a7346719.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/nomos-p194-target\\debug\\deps\\table_rows-8e18e4b8c31c2df5.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_rules\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: 1 warning emitted\n\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1791043867,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5f6d395b7f4622a86c0427b5190bb3f02f209cd8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "opus-p194-fn-keys",
+          "added": [
+            "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md",
+            "crates/rules/nomos-rules/src/checks/undeclared_policy_key.rs"
+          ],
+          "widened_at": 1791042303
+        }
+      ]
     },
     {
       "id": "P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP",
@@ -101620,7 +101672,7 @@
       "claim": {
         "holder": "opus-p195-rules-step",
         "acquired_at": 1791026034,
-        "lease_expires_at": 1791044034
+        "lease_expires_at": 1791060230
       },
       "verification": {
         "argv": [
@@ -101694,6 +101746,189 @@
           "nomos-contract-tests"
         ],
         "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P176-A-LABELED-JUMP-IS-THE-FIRST-SYNTAX-SITE-AND-THE-FAMILY-THAT-CARRIES-IT-2",
+      "title": "A labeled jump is the first syntax site, and the family that carries it is paid for once",
+      "why": "Re-authored from P176-A-LABELED-JUMP-IS-THE-FIRST-SYNTAX-SITE-AND-THE-FAMILY-THAT-CARRIES-IT. That item reserved crates/rules/nomos-rules whole and README.md, and P194-THE-RUST-FUNCTION-NAMING-RULE-NEVER-READS-THE-KEYS-XVPE-DECLARES-ITS-FUNCTION-CASE-UNDER holds files inside the first while P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP holds the second, each for hours. The change was built and verified in a private worktree first, and it touches none of P194's files; its only README edit is two rows' descriptions, which P197-THE-SYNTAX-SITES-FAMILY-IS-DESCRIBED-IN-THE-README-ROWS-OF-ITS-CONTRACT-AND-PROVIDERS carries once README.md is free. So this item reserves the files the change touches and nothing wider. Its purpose is the original's, unchanged:\n\nOD-CAPABILITY-019 decided that a syntactic projection is a kind in one capability, nomos.cap.syntax.sites, declared once in nomos-cap-syntax, and that the family is paid for once so every later kind costs only the syntax contract, its offering providers, its rules and at most a golden. This item pays for the family and proves it with its first kind, in Rust. The first kind is the corpus's labeled jump (rules/general/style/shared/labeledloop at code-standards f0d820729), chosen by measurement: its Rust and Go kernels both extract it from a tree (rust_labeled_loop.go, go_labeled_loop.go) and its C# kernel declines it with a stated reason (csharp_declines.go: C# cannot name a loop), so it exercises an offer, a decline and a gap across the three languages this workspace reads; its record is seven flat fields; its rule reads that one projection and nothing else, and carries no preference a repository would declare, so it needs no policy axis; the corpus's own check reports no findings over this workspace's crates and suppressions.json waives none for it; and no rule here holds its identifier, a-labeled-jump-leaves-one-loop. The corpus's kernel and engine tests for it are the falsifier, because the owner asked that checks be reproduced the way code-standards makes them and those tests are that way written down. Go's offer and C#'s decline are the next item's, so this one stays one language wide.",
+      "done_when": "nomos-cap-syntax declares a second capability, nomos.cap.syntax.sites, beside nomos.cap.syntax.items: its contract, a kind declaration stating a kind's name, its fields and the construct it projects, the labeled-jump kind with the corpus LabeledJump's fields (keyword, label, text, the label's own line, whether an unlabeled jump reaches the same target, whether the jump stands inside a break-capturing construct), and the payload's grammar with its writer and the one reader every consumer uses. A payload states per file which kinds its provider offers and which it declines with the reason, and each record carries its kind, its line and exactly its kind's fields as text, integers, truth values or lists of text. The reader refuses a record of a kind no declaration names, a field its kind does not declare, and a missing declared field, and each refusal is falsified by mutation. A payload stating no stance is every declared kind unanswered, read rather than refused, because it reads as a gap and never as a pass. The list of declared kinds is a declared universe: it names its mirror at its site, the mirror compares it with every kind the crate's source declares, and the completeness universes table carries its row.\n\nnomos-lang-rust offers the family with the labeled-jump kind, extracted by walking syn's tree into function bodies, under a declared Guarantee, through a fact production with its determinism declaration and golden. Check orchestration declares the contract, composes the offer in its provider table, materializes the family per recognized source only when a selected rule requires RequiredFact::SyntaxSites, and nomos-composer-providers composes the same offer.\n\nnomos-rules gains RequiredFact::SyntaxSites and the rule a-labeled-jump-leaves-one-loop, composed as every rule is, citing OD-CAPABILITY-019. Its descriptor declares the population it judges, every source a syntax provider reads, and its body filters by that same value, as OD-ANALYSIS-012 version 2 requires. It reports a label no jump naming it needs -- grouped by the line the label is written on, load-bearing when any jump naming it would be captured on the way out or stands inside a break-capturing construct -- as one finding on the label's line, with the corpus message's substance. It reads its subject's sites only: over a file whose payload declines the kind it reports NotApplicable, and over a file whose payload neither offers nor declines it, it reports MissingCapability, never a clean pass; both are proven with fixture payloads, since no provider here declines it until Go and C# arrive. It does not honour the corpus check's inline marker, which is M5's.\n\nEvery case in the corpus's rust_labeled_loop_test.go is ported with its source and asserted site for site against the Rust provider -- jump, keyword, label, label line and both truth values -- and every case in labeledloop's judgment_test.go, noise_label_test.go and labeled_jump_test.go that the rule can express is ported against the rule, each asserting what the corpus test asserts. A case that cannot be ported is named in the test module with the reason. Over this workspace the rule reports what the corpus check reports, which is nothing, and the number of labeled-jump sites the Rust provider reports over this workspace is stated in the rule's calibration row beside that zero, so the zero is a judgment over a population rather than a family that projected nothing. The cap-syntax, lang-rust, rules and check-orchestration surface snapshots gain exactly the new public items. The README rows describing the syntax contract and the Rust provider are not this item's: they are P197-THE-SYNTAX-SITES-FAMILY-IS-DESCRIBED-IN-THE-README-ROWS-OF-ITS-CONTRACT-AND-PROVIDERS's, because README.md is held.\n\nThe predicate reaches the crates this item changes and the suites that judge a composed-set change: nomos-cap-syntax, nomos-lang-rust, nomos-rules, nomos-check-orchestration, nomos-gate-orchestration, nomos-composer-providers, nomos-cli, nomos-integration-tests and nomos-contract-tests.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-syntax",
+          "tests/contract/surface/nomos-cap-syntax.txt",
+          "crates/languages/nomos-lang-rust",
+          "tests/contract/surface/nomos-lang-rust.txt",
+          "crates/orchestration/nomos-check-orchestration/src/composed_providers.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition/provider_table.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/dependency_materialization.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/dependency_materialization/syntax.rs",
+          "crates/orchestration/nomos-check-orchestration/src/lib.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context/capabilities.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests/syntax_sites.rs",
+          "crates/orchestration/nomos-check-orchestration/tests/capability_composition.rs",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "crates/composer/nomos-composer-providers/src/lib.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/checks/labeled_jump.rs",
+          "crates/rules/nomos-rules/src/checks/labeled_jump",
+          "crates/rules/nomos-rules/src/checks/populations.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor/required_fact.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/tests/completeness_universes/table.rs",
+          "tests/contract/tests/rule_contract_citation.rs",
+          "tests/integration/tests/calibration.rs",
+          "tests/integration/tests/determinism"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "opus-m3-sites",
+        "acquired_at": 1791043750,
+        "lease_expires_at": 1791065350
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-composer-providers",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 14400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P177-GO-OFFERS-THE-LABELED-JUMP-AND-CSHARP-DECLINES-IT-WITH-ITS-REASON-2",
+      "title": "Go offers the labeled jump, and C# declines it with its reason",
+      "why": "Re-authored from P177-GO-OFFERS-THE-LABELED-JUMP-AND-CSHARP-DECLINES-IT-WITH-ITS-REASON, which depended on P176-A-LABELED-JUMP-IS-THE-FIRST-SYNTAX-SITE-AND-THE-FAMILY-THAT-CARRIES-IT -- declined and re-authored as P176-A-LABELED-JUMP-IS-THE-FIRST-SYNTAX-SITE-AND-THE-FAMILY-THAT-CARRIES-IT-2 -- and reserved README.md, which P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP holds. Building it ahead in a private worktree also measured three files the original did not reserve: the end-to-end run module check orchestration's sites tests live in, and tests/integration/Cargo.toml with Cargo.lock, because the determinism harness cannot name nomos-lang-csharp's production until it depends on the crate. Its purpose is the original's, unchanged:\n\nOD-CAPABILITY-019's sixth decision separates three answers a language gives a kind: it offers it, it declines it with a stated reason that the construct does not exist in the language, or it leaves a gap. P176 pays for the family and offers the first kind, the corpus's labeled jump, in Rust only, and proves the decline and the gap with fixture payloads because no provider here declines anything yet. This item makes both real. Go offers the labeled jump: code-standards' Go kernel extracts it from a tree (go_labeled_loop.go at f0d820729) and its 13 kernel tests are the falsifier. C# declines it: code-standards' C# kernel states why in csharp_declines.go -- C#'s break and continue take no loop, and the label C# does have belongs to goto, which names a point rather than a loop -- and that reason is the decline this workspace's C# provider states. A decline is carried in a payload, so C# pays the family's per-provider cost too: an offer, a fact production and a golden, with no records in it.",
+      "done_when": "nomos-lang-go offers nomos.cap.syntax.sites with the labeled-jump kind, extracted from tree-sitter-go's tree, under a declared Guarantee, through a fact production with its determinism declaration and golden. Every case in code-standards' go_labeled_loop_test.go at f0d820729 is ported with its source and asserted site for site -- keyword, label, label line and both truth values -- and a case that cannot be ported is named in the test module with the reason.\n\nnomos-lang-csharp offers the family and declines the labeled-jump kind for every C# file, with a reason stating the substance of the corpus's: C#'s break and continue take no loop argument, and its label belongs to goto, which names a point to jump to rather than a loop to leave. Its payloads carry the decline and no labeled-jump records, through a fact production with its determinism declaration and golden; nomos-integration-tests depends on nomos-lang-csharp so its harness discharges that production.\n\nCheck orchestration's provider table and nomos-composer-providers compose both offers, and the family is materialized for Go and C# sources exactly as it is for Rust. Over a real Go file with a noise label, a-labeled-jump-leaves-one-loop reports the finding the corpus check reports for it; over a real C# file it reports NotApplicable, never a clean pass and never MissingCapability. Removing the C# decline makes that C# case report MissingCapability, and removing the Go offer makes the Go case report MissingCapability, each falsified by mutation and restored byte-identically. The two providers' surface snapshots gain exactly their new public items. The README rows for nomos-lang-go and nomos-lang-csharp are not this item's: they are P197-THE-SYNTAX-SITES-FAMILY-IS-DESCRIBED-IN-THE-README-ROWS-OF-ITS-CONTRACT-AND-PROVIDERS's, because README.md is held.\n\nThe predicate reaches the crates this item changes and the suites that judge a composed-set change: nomos-lang-go, nomos-lang-csharp, nomos-rules, nomos-check-orchestration, nomos-composer-providers, nomos-cli, nomos-integration-tests and nomos-contract-tests.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-go",
+          "tests/contract/surface/nomos-lang-go.txt",
+          "crates/languages/nomos-lang-csharp",
+          "tests/contract/surface/nomos-lang-csharp.txt",
+          "crates/orchestration/nomos-check-orchestration/src/composition",
+          "crates/orchestration/nomos-check-orchestration/src/composed_providers.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests/syntax_sites.rs",
+          "crates/composer/nomos-composer-providers",
+          "tests/contract/surface/nomos-composer-providers.txt",
+          "tests/integration/tests/calibration.rs",
+          "tests/integration/tests/determinism",
+          "tests/integration/Cargo.toml",
+          "Cargo.lock"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P176-A-LABELED-JUMP-IS-THE-FIRST-SYNTAX-SITE-AND-THE-FAMILY-THAT-CARRIES-IT-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-lang-go",
+          "-p",
+          "nomos-lang-csharp",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-composer-providers",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 14400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P197-THE-SYNTAX-SITES-FAMILY-IS-DESCRIBED-IN-THE-README-ROWS-OF-ITS-CONTRACT-AND-PROVIDERS",
+      "title": "The syntax sites family is described in the README rows of its contract and providers",
+      "why": "OD-CAPABILITY-019's seventh decision counts among the family's one-time price the README.md rows that describe the syntax contract and the providers offering any kind. P176-A-LABELED-JUMP-IS-THE-FIRST-SYNTAX-SITE-AND-THE-FAMILY-THAT-CARRIES-IT-2 and P177-GO-OFFERS-THE-LABELED-JUMP-AND-CSHARP-DECLINES-IT-WITH-ITS-REASON-2 build the family and its offers but cannot edit README.md, which P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP holds, so the four rows -- nomos-cap-syntax, nomos-lang-rust, nomos-lang-go and nomos-lang-csharp -- still describe the workspace as it was before the family existed. Prose that no longer says what a crate does is the cheapest defect to leave and the most expensive to find later. The rows' text was drafted when the two items were built, so this item is the edit and its check.",
+      "done_when": "The README.md row for nomos-cap-syntax says it also declares nomos.cap.syntax.sites, the family whose kinds are declared there once with their fields and construct, and that its reader refuses an undeclared kind or field. The rows for nomos-lang-rust and nomos-lang-go say each offers the family with the labeled jump, and Go's says why a switch decides the answer; the row for nomos-lang-csharp says it offers the family and declines the labeled jump with C#'s reason. No other row and no table changes, and the boundaries contract test, which holds README.md's tables against the workspace, passes.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P176-A-LABELED-JUMP-IS-THE-FIRST-SYNTAX-SITE-AND-THE-FAMILY-THAT-CARRIES-IT-2",
+        "P177-GO-OFFERS-THE-LABELED-JUMP-AND-CSHARP-DECLINES-IT-WITH-ITS-REASON-2"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 600
       },
       "verified": null,
       "abandoned": [],

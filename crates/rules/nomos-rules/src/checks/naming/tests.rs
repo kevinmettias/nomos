@@ -1,8 +1,9 @@
 use super::*;
 use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
 use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
+use nomos_cap_naming_policy::{NamingPolicyPayload, PolicyRow};
 use nomos_capability::ProviderOffer;
-use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, SubjectId};
+use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, ProviderId, SubjectId};
 use nomos_model::Content_Digest;
 
 const PARSER: &str = "nomos.test.naming.parses";
@@ -300,6 +301,125 @@ fn Test_Check_Go_Type_Names_Use_Camel_Case_Should_Accept_A_Lower_Camel_Unexporte
     );
 
     assert!(findings.is_empty(), "{findings:?}");
+}
+
+// The tests below read a repository's declared naming policy, which none above does: each one
+// judges a source against a declaration that differs from the default, so a rule that ignored
+// the declaration, or read it through the wrong key or in the wrong order, reports a different
+// set of names. `OD-RULES-035` decision 7 is the order they hold the rule to.
+
+/// A pub `as_str` and a private `to_text`, both lower-snake: the two sides of visibility, each
+/// spelled so that only a declaration can make it conform.
+const PUB_AND_PRIVATE: &str = "unexpanded\t0\n\
+     item\t0\tFunction\tPublic\tas_str\t.\t+fn/1\n\
+     item\t1\tFunction\tPrivate\tto_text\t.\t+fn/1\n";
+
+/// xvpe's own shape -- a case declared for Rust under `function.exported` and nowhere under
+/// `function` -- with a case that differs from the default: a pub function is judged against the
+/// declaration, and a private one, whose own refinement nobody declared, against the default.
+#[test]
+fn Test_Check_Naming_Convention_Should_Judge_A_Pub_Rust_Function_Against_A_Declared_Function_Exported()
+{
+    let rows = vec![Row(Scope::Language(RUST_LANGUAGE.to_owned()), "function.exported", Case::LowerSnake)];
+
+    let findings = Findings_Under_Policy(Path("src/lib.rs"), PUB_AND_PRIVATE, rows);
+
+    assert_eq!(Judged_Names(&findings), vec!["to_text"], "{findings:?}");
+}
+
+/// The other side: `function.unexported` is read for every Rust function that is not exactly
+/// `pub`, a `pub(crate)` one included.
+#[test]
+fn Test_Check_Naming_Convention_Should_Judge_Every_Other_Rust_Function_Against_A_Declared_Function_Unexported()
+{
+    let rows = vec![Row(Scope::Language(RUST_LANGUAGE.to_owned()), "function.unexported", Case::LowerSnake)];
+    let payload = "unexpanded\t0\n\
+                   item\t0\tFunction\tPublic\tas_str\t.\t+fn/1\n\
+                   item\t1\tFunction\tPrivate\tto_text\t.\t+fn/1\n\
+                   item\t2\tFunction\tRestricted(crate)\tfrom_parts\t.\t+fn/2\n";
+
+    let findings = Findings_Under_Policy(Path("src/lib.rs"), payload, rows);
+
+    assert_eq!(Judged_Names(&findings), vec!["as_str"], "{findings:?}");
+}
+
+/// A refinement is read before the key it refines, even across scopes: a repository-wide
+/// `function.exported` decides a pub function ahead of a `function` declared for Rust, which still
+/// decides the private one. code-standards resolves the same declaration the same way.
+#[test]
+fn Test_Check_Naming_Convention_Should_Read_A_Refinement_Ahead_Of_The_Key_It_Refines()
+{
+    let rows = vec![
+        Row(Scope::Language(RUST_LANGUAGE.to_owned()), "function", Case::LowerSnake),
+        Row(Scope::Repository, "function.exported", Case::UpperSnake),
+    ];
+
+    let findings = Findings_Under_Policy(Path("src/lib.rs"), PUB_AND_PRIVATE, rows);
+
+    assert_eq!(Judged_Names(&findings), vec!["as_str"], "{findings:?}");
+}
+
+/// The plain key, which three of the four repositories that declare a Rust function case write,
+/// still decides both sides when no refinement is declared -- for Rust as well as repository-wide.
+#[test]
+fn Test_Check_Naming_Convention_Should_Judge_Both_Sides_Against_A_Declared_Function_When_No_Refinement_Is_Declared()
+{
+    for scope in [Scope::Repository, Scope::Language(RUST_LANGUAGE.to_owned())]
+    {
+        let rows = vec![Row(scope.clone(), "function", Case::LowerSnake)];
+
+        let findings = Findings_Under_Policy(Path("src/lib.rs"), PUB_AND_PRIVATE, rows);
+
+        assert!(findings.is_empty(), "{scope:?}: {findings:?}");
+    }
+}
+
+/// The decision is about Rust alone: a function in another language is still judged against
+/// `function` repository-wide, and a refinement declared for that language is not read here.
+#[test]
+fn Test_Check_Naming_Convention_Should_Not_Read_A_Refinement_For_A_Function_In_Another_Language()
+{
+    let rows = vec![Row(Scope::Language("go".to_owned()), "function.unexported", Case::MixedSnake)];
+    let payload = "unexpanded\t0\nitem\t0\tFunction\tPrivate\trun_With_Backend\t.\t+fn/0\n";
+
+    let findings = Findings_Under_Policy(Path("main.go"), payload, rows);
+
+    assert_eq!(Judged_Names(&findings), vec!["run_With_Backend"], "{findings:?}");
+}
+
+fn Row(scope: Scope, symbol: &str, case: Case) -> PolicyRow
+{
+    return PolicyRow { scope, symbol: symbol.to_owned(), case };
+}
+
+fn Judged_Names(findings: &[Finding]) -> Vec<&str>
+{
+    return findings.iter().map(|finding| return finding.subject_name.as_str()).collect();
+}
+
+/// What [`Check_Naming_Convention`] finds in one source whose syntax fact is `payload`, in a
+/// repository whose `standards.json` declares `rows` -- the naming policy fact filed beside the
+/// syntax fact, under its own provider, the way a real run materializes both.
+fn Findings_Under_Policy(path: Path<'_>, payload: &str, rows: Vec<PolicyRow>) -> Vec<Finding>
+{
+    let source = Source_File(path, Text("// the payload is the fixture"));
+    let TestOffering { mut store, mut registry, offer } = Offering();
+    Materialize_Syntax_Fact(&mut store, &source, &offer, payload);
+    let policy = ProviderOffer {
+        provider: ProviderId::New("nomos.test.naming.policy"),
+        capability: nomos_cap_naming_policy::Capability(),
+        version: nomos_cap_naming_policy::CONTRACT_VERSION,
+        guarantee: nomos_cap_naming_policy::Ceiling(),
+    };
+    registry
+        .Declare_And_Offer(nomos_cap_naming_policy::Capability_Contract(), policy.clone())
+        .expect("the registry holds only the syntax contract and its provider");
+    let bytes = nomos_cap_naming_policy::Encode_Payload(&NamingPolicyPayload { rows });
+    let fact = FactToFile { subject: nomos_model::Subject_Of_Path(""), offer: &policy, semantic_inputs: InputDigest::Of(&[]), schema: nomos_cap_naming_policy::Payload_Schema(), bytes };
+    test_support::Materialize_Fact(&mut store, fact).expect("the fixture's store holds no fact under this key at a newer generation");
+
+    let mut reader = Reader::On(&store, &registry, Test_Context());
+    return Check_Naming_Convention(&[source], &mut reader);
 }
 
 /// Builds `path`/`text` into a source, materializes `payload` as its syntax fact, and
