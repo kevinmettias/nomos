@@ -3,7 +3,7 @@ id: OD-RULES-011
 type: decision
 title: A rule's parameters are a fact a repository declares, not a constant the rule compiles with
 status: accepted
-version: 4
+version: 5
 authority: canonical-normative-record
 tags:
   - rules
@@ -279,16 +279,18 @@ are judged against the substituted upper-snake, which agrees with what xvpe decl
 the rule does not read. code-standards' own resolver reads the visibility-refined key first
 (`rules/general/style/shared/naming/overrides.go`).
 
-**What the findings themselves say.** Nine composed rules write findings that misstate or omit
-the value they were judged against, or say something about it that only one of its sources
-makes true:
+**What the findings themselves say.** The composed rules named here write findings that misstate
+or omit the value they were judged against, or say something about it that only one of its
+sources makes true:
 `function-naming-convention` names `Pascal_Snake_Case` and this workspace's `README.md` and
 `Cargo.toml` whatever case it judged against; `data-names-stay-lower-snake` says "lower snake
 case", and the two Go function rules say `Upper_Snake_Case`, whatever case they judged against;
-`parameter-count` and `go-helpers-package-five-inputs` say "the configured value parameter cap"
-when nothing was configured; `five-hundred-line-review-trigger` and
-`one-thousand-line-hard-trigger` call their number Go's when a repository declared it; and
-`nesting-depth` names the depth it found and not the limit it judged against.
+`types-use-upper-camel-case-lower-camel-case` says `UpperCamelCase` or `lowerCamelCase`, chosen by
+a type's visibility alone, whatever case it judged against; `parameter-count` and
+`go-helpers-package-five-inputs` say "the configured value parameter cap" when nothing was
+configured; `five-hundred-line-review-trigger` and `one-thousand-line-hard-trigger` call their
+number Go's when a repository declared it; and `nesting-depth` names the depth it found and not
+the limit it judged against.
 
 ### What each answer shows a reader, and what it costs
 
@@ -420,7 +422,7 @@ that value that only one of its sources makes true, so its text and both of its 
 the same whether the value was declared or substituted. A rule that judges only a declared value,
 as `cyclomatic-complexity` does, may say it was declared, since nothing else could be true.
 Version 2's rule stands beside this one: an absent read produces, alters and suppresses no
-finding. The nine rules measured above break the first half today.
+finding. The rules measured above break the first half today.
 
 **5. Where the declaration lives.** Which optional values a rule reads is declared on its
 descriptor, as the one statement its body also resolves by. That is the placement
@@ -477,8 +479,8 @@ which builds the population it sits beside and holds most of the files it edits.
 decision 3 on the other three surfaces, after it and after
 `P186-THE-GATE-REPORT-SARIF-AND-THE-API-DO-NOT-SAY-WHICH-RULES-JUDGED-AN-EMPTY-POPULATION`.
 `P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM` builds decision
-4 for the nine rules, after the population item, whose territory holds most of them. Each item's
-territory was grepped at `c131760d`.
+4 for the rules measured above, after the population item, whose territory holds most of them.
+Each item's territory was grepped at `c131760d`.
 
 ## Amendment, Version 4
 
@@ -490,6 +492,21 @@ then decided it for the Rust function rule, as `OD-RULES-035` version 4 decision
 is where any later decision about which naming keys a rule reads is made. The bullet now points
 there. Nothing this record decides changed.
 
+## Amendment, Version 5
+
+Version 3 counted nine composed rules whose findings misstated or omitted the value they were
+judged against, and there were ten. The tenth is `types-use-upper-camel-case-lower-camel-case`. It
+judges each Go type against the case `type.exported` or `type.unexported` resolves to, and its
+finding named `UpperCamelCase` or `lowerCamelCase` by the type's visibility alone, so a repository
+declaring `type.exported` as lower-snake would have been told that an exported `OrderBook` is not
+`UpperCamelCase`. The measurement missed it because that text names the default case, which only a
+declaration of another case could falsify, and no run version 3 measured had one: neither this
+workspace nor hex's calibration fixture declares a type case.
+`P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM` found it while
+building decision 4 and corrected all ten. Version 3's measurement now names the tenth and counts
+none, and decision 4 and the items it boards refer to the rules measured above rather than to a
+number. Nothing this record decides changed.
+
 ## Status
 
 Accepted. `nomos-cap-naming-policy` is this decision's first capability contract,
@@ -499,6 +516,11 @@ Version 2 adds the read-side rule this record's own text needed before the six r
 could be refactored: how a rule reacts to an absent *optional* capability, settled by
 citing `OD-CAPABILITY-004` rather than re-deciding it, once refactoring the first rule
 onto this capability made the gap in version 1 concrete.
+
+Version 5 was amended by
+`P203-OD-RULES-011-COUNTS-NINE-RULES-WHOSE-FINDINGS-MISSTATED-THEIR-VALUE-AND-THERE-WERE-TEN`,
+which names the composed rule version 3's measurement of misstated findings left out, and decides
+nothing.
 
 Version 4 was amended by
 `P199-OD-RULES-011-VERSION-3-SAYS-WHICH-NAMING-KEYS-A-RULE-READS-IS-NOT-DECIDED-HERE-AND-NOT-WHERE`,

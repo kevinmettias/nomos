@@ -103674,16 +103674,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "opus-p203-count",
-        "acquired_at": 1791047179,
-        "lease_expires_at": 1791057979
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -103696,7 +103692,49 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "target\\debug\\deps\\requirement_trace-009de64f7282120e.exe)\n     Running tests\\rule_composition.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/p203-target\\debug\\deps\\rule_composition-25a45331b893b875.exe)\n     Running tests\\rule_contract_citation.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/p203-target\\debug\\deps\\rule_contract_citation-002e0e5a5c7c36ab.exe)\n     Running tests\\rule_descriptors.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/p203-target\\debug\\deps\\rule_descriptors-b0eaaf57c3a31217.exe)\n     Running tests\\toolchain_floor.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/p203-target\\debug\\deps\\toolchain_floor-f83c22963bb3653d.exe)\n     Running unittests src\\lib.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/p203-target\\debug\\deps\\nomos_spec_store-06e6aa6a481bd8b1.exe)\n     Running tests\\governing_records_are_present\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/p203-target\\debug\\deps\\governing_records_are_present-00262ca1fd3972b5.exe)\n     Running tests\\round_trip_holds\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/p203-target\\debug\\deps\\round_trip_holds-186543f7685a6a84.exe)\n     Running tests\\store_holds.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/p203-target\\debug\\deps\\store_holds-9ca0a8b8a7346719.exe)\n     Running tests\\table_rows\\main.rs (C:/Users/kmett/AppData/Local/Temp/claude/f--repos-nomos/cf28f48c-0f02-40a7-ba66-07278fb4b33b/scratchpad/p203-target\\debug\\deps\\table_rows-8e18e4b8c31c2df5.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1791049763,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "4f5f054c0ecd914d13862dd1acdfdb7a43f0cacf"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
