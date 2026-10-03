@@ -104144,6 +104144,77 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P208-NO-VERB-ANSWERS-WHICH-ITEMS-TOUCH-A-PATH-OR-MENTION-A-RECORD-SO-AGENTS-SCRIPT-AGAINST-THE-RAW-LEDGER",
+      "title": "No verb answers which items touch a path or mention a record, and show needs the whole id, so agents script against the raw ledger",
+      "why": "Measured 2026-10-03 over the 67 Claude Code session transcripts this project has kept (C:/Users/kmett/.claude/projects/f--repos-nomos/*.jsonl), by matching each shell tool call against work/ledger.json and summing what its result returned. Sessions of other actors on this tree are not in that population.\n\n1,482 shell calls ran a script against work/ledger.json (python, jq or ConvertFrom-Json), writing 899 KB of script text, about 225,000 output tokens. Classifying every raw read of the file once, scripts returned 2.7 MB of the 3.6 MB that 2,163 raw reads returned. Over the same sessions the built binary's work list ran 927 times and returned 2 KB on average, so the listing OD-LEDGER-041 bounded is not where the cost is; the cost is every question the binary cannot answer.\n\nWhat the scripts asked, over a sample of 386 of them: which items reserve or overlap a path, 128; one item by id, 72; which items cite a record, 55; a state filter, 45; dependencies, 12; other, 74. Of those, only the state filter has a verb. work list filters by state alone, and work show takes only the exact id, which runs past a hundred characters. A P-number does not name an item either: 96 of the 153 numbers in use were shared on 2026-09-26.\n\nA script is also outside OD-LEDGER-008. The ledger moved from schema 6 to 7 while this was being measured; a stale binary refused it, and a script would have read on.\n\nOD-LEDGER-041 version 1 kept terminal items on the board, refused an archive, and named four numbers that would decide it differently. Its fourth is a consumer that must read the board without parsing it whole, which needs a query and not a second file, and its What This Does Not Decide leaves whether the board should ever be queryable to whichever consumer raises it. These scripts are that consumer. The other three, measured the same day at 5f6d395b: work list about 0.2 seconds on a debug build with process start included, against 500 ms; the ledger's 12 versions reachable from dev pack to 1.7 MB of a 10.6 MB pack, 16 per cent against a third; 9 live items against hundreds. So the archive decision stands, and the answer owed is more of the view that record already bounded.\n\nREADME.md's coordination block still documents work list as taking --state alone, and has omitted --all since OD-LEDGER-041's increment landed. It is folded in here because this item edits that line anyway.\n\nP196-A-CHANGE-TO-THE-COMPOSED-SET-NAMES-THE-PACKAGES-THAT-ENUMERATE-IT reserves most of the same paths. That is a coordination fact the claim check answers, not a dependency, so none is declared.\n\nThe predicate's targets were each green at 5018e422 and took about 51 minutes there with other sessions loading the machine, 38 of them nomos-cli's own unit tests and 11 nomos-api's. nomos-cli's unit tests cannot be left out, because its parser and vocabulary tests construct the very request this item extends. The timeout is 90m.",
+      "done_when": "1. nomos work list --touching <path> prints exactly the items whose territory the claim check would treat as overlapping a territory of that one path. It is decided by the territory intersection a claim's exclusion already uses, so containment in either direction counts and a record file folds onto its identifier exactly as it does for a claim. An item whose overlap cannot be decided, by an unexpanded pattern or an incomparable resolution, is printed and marked undecided, never left out. No second overlap rule is written for the listing: not string equality, not a prefix test, not a glob.\n\n2. nomos work list --mentions <text> prints exactly the items whose id, title, why, done_when, or any reason recorded on the item (a decline's, an abandonment's) contains the text as a literal, case-sensitive substring. It does not read territory, which is the question --touching answers.\n\n3. The two filters compose with each other, with --state and with --all by narrowing what that bound admits, and never change the bound: the live board by default, the whole board under --all, the one bucket under --state. The line counting ended items not shown counts only the ended items the filters would have admitted, and stays silent when that is zero. The next: line is not printed on a listing narrowed by either filter, for the reason it is not printed under --state.\n\n4. Both filters are carried in the request a caller hands the work orchestration, beside the state and scope it already carries, rather than known only to the command-line parser.\n\n5. nomos work show --item <text> shows the item whose id equals the text. Failing that, when exactly one id begins with the text followed by a hyphen, it shows that item; when several do, it prints every one of their ids and exits non-zero; when none do, it refuses as it does today. An exact id that also begins a longer id shows itself. P19 never resolves to an item numbered P190. Only show resolves a prefix: claim, renew, takeover, finish, abandon, decline and widen still require the exact id, because a verb that changes the board must not act on a guess, and a test holds that for claim.\n\n6. Each of these is held by a test that fails when it is removed, and the proof is performed rather than assumed: drop each filter and watch its test fail; replace the containment answer with path equality and watch a test fail on a directory reservation matched by a file beneath it; make an undecided overlap omitted rather than printed and watch a test fail; make the prefix match ignore the hyphen boundary and watch the P19 and P190 test fail. Every mutated file is restored byte-identically.\n\n7. nomos work's usage text names --touching and --mentions and says show takes an id prefix, and README.md's coordination block names --all, --touching and --mentions on its work list line.\n\n8. OD-LEDGER-041 version 2 records that its fourth trigger's question arrived through agents scripting against the file, with this item's measurement and its method; decides that it is answered by filters on the listing and an id prefix on show, and not by a second file, a query language or a board served to another process; restates the other three triggers with figures re-measured when version 2 is written rather than copied from this item; and leaves version 1's decision, that terminal items stay on the board, unchanged. The projections that record change stales are re-rendered and published with it, unreserved, as OD-GATE-005 decides.\n\n9. The predicate runs the library and binary unit tests of nomos-cli, nomos-work-orchestration, nomos-api, nomos-spec-store and nomos-contract-tests; nomos-cli's list_tells_the_truth and work_orchestration_seam; both integration_seams; every nomos-spec-store test target; and nomos-contract-tests' public_surface and record_citation. It deliberately reaches no other nomos-contract-tests target, two of which, completeness_universes and rule_contract_citation, were red at 5018e422 for other sessions' work in flight, and none of nomos-cli's seams for other verbs; this item claims none of them. It does not reach nomos-ledger or nomos-scope-verification: this item reuses the territory intersection they publish and edits neither, and a change that needs either is grounds for declining rather than widening.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/src/work",
+          "crates/host/nomos-cli/tests/list_tells_the_truth.rs",
+          "crates/host/nomos-cli/tests/list_tells_the_truth",
+          "crates/host/nomos-cli/tests/scratch_ledger",
+          "crates/orchestration/nomos-work-orchestration",
+          "crates/host/nomos-api/src/work/list_response.rs",
+          "tests/contract/surface/nomos-work-orchestration.txt",
+          "README.md",
+          "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--bins",
+          "--test",
+          "list_tells_the_truth",
+          "--test",
+          "work_orchestration_seam",
+          "--test",
+          "integration_seams",
+          "--test",
+          "governing_records_are_present",
+          "--test",
+          "round_trip_holds",
+          "--test",
+          "store_holds",
+          "--test",
+          "table_rows",
+          "--test",
+          "public_surface",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
