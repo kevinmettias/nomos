@@ -3,7 +3,7 @@ id: OD-RULES-035
 type: decision
 title: A preference axis is a key a repository can write, declared once beside the rules that read it
 status: accepted
-version: 4
+version: 5
 authority: canonical-normative-record
 tags:
   - rules
@@ -349,15 +349,15 @@ rule already substituted.
 - **The rule's other languages.** It judges every source with a syntax fact, and a function in any
   other language still reads `function` repository-wide and nothing else. Whether it should read
   that language's own keys, which would change what it reports for xvpe's and code-standards' Go,
-  is not decided here.
+  is not decided here. Version 5's decision 8 decides it.
 - **The two Go function rules.** They read their refinement alone, for Go, against Go's own
   defaults, and do not fall back to `function`. code-standards does fall back, so for a repository
   that declares `function` and no Go refinement, as this one and kwb do, the two tools judge an
   unexported Go function against different cases. Making them agree changes what those rules read,
-  and no other axis changes here.
+  and no other axis changes here. Version 5's decision 8 decides it.
 - **`method`.** This repository, kwb and xvpe each declare a method case beside their function
   case, as `method` or as its refinements, and no rule reads either. A Rust method is judged under
-  the function keys.
+  the function keys. Version 5's decision 8 decides it.
 - **What a finding says.** `OD-RULES-011` version 3 decision 4 decides it, and this amendment
   changes no finding's text.
 
@@ -365,6 +365,152 @@ rule already substituted.
 The change that builds decision 7 is inside the bound: it edits the axis table and the rule that
 reads it, under `crates/rules/nomos-rules/src/`, and no contract crate, provider or composition
 site.
+
+## Amendment, Version 5: Every Rule That Judges A Function's Name Reads The Keys Declared For Its Language
+
+**What was wrong.** Decision 7 decided which keys `function-naming-convention` reads for a Rust
+function, and named three gaps of the same kind that it left open. The rule judged a function in any
+other language against `function` repository-wide alone, never against a refinement and never against
+a key declared for that language. The two Go function rules read their refinement for Go and never
+fell back to `function`, as code-standards' `Override_Case` does. And this repository, kwb and xvpe
+each declare a method case that no rule read. A declared case nothing reads is invisible: it can be
+changed or mistyped with every test green, and the report `OD-RULES-011` version 3 decides names the
+values a repository never declared while staying silent about values it declared that nothing read.
+`P198-NAMING-KEYS-REPOSITORIES-DECLARE-THAT-NO-RULE-READS-FOR-THE-LANGUAGE-THEY-WROTE-THEM-FOR` asked
+for each gap to be decided by measurement.
+
+**What was measured.** The function and method keys each repository in reach writes, read from its
+committed `standards.json` on 2026-10-03, and the Go sources it tracks:
+
+| Repository | Revision | Go sources | Function keys | Method keys | Where |
+|---|---|---|---|---|---|
+| this repository | `703971c7` | 1 | `function`, upper-snake | `method`, upper-snake | `naming` and `languages.rust.naming` |
+| kwb | `6714d3a` | 0 | `function`, upper-snake | `method`, upper-snake | `naming` |
+| hex's calibration fixture | `703971c7` | 0 | `function`, lower-snake | none | `naming` |
+| xvpe | `eed12d02` | 631 | Go: `function.exported` upper-snake, `function.unexported` mixed-snake. Rust: both upper-snake | `method.exported` and `method.unexported`, the same cases | `languages.go.naming` and `languages.rust.naming` |
+| code-standards | `f0d82072` | 5528 | Go: `function.exported` upper-snake, `function.unexported` mixed-snake | `method.exported` and `method.unexported`, the same cases | `languages.go.naming` |
+
+Three things follow from it. No repository declares a function or method key for any language but
+Rust and Go. Every repository that declares a method case declares the same case for a function, at
+the same scope and on the same side of visibility, so no verdict in any of them turns on whether a
+method key is read. And the code-standards corpus under `docs/standards` still declares no naming
+key: no document in it names `function.exported`, `function.unexported`, `method.exported` or
+`method.unexported`, and none writes a `function` or `method` key.
+
+code-standards, the other tool that reads this block, judges every declaration through
+`Override_Case` (`rules/general/style/shared/naming/overrides.go`). It reads the key refined by the
+declaration's visibility, then the plain key of its kind, over the language-merged block, and then
+the language's own convention for that kind. A function and a method are two kinds there, and a
+method never falls back to a function's keys. A Go method is a function declared on a receiver, or
+an interface's method specification (`go_symbols.go`). A Rust method is a callable with a `self`
+receiver, and an associated function without one is a function (`rust_Callable_Kind`, in
+`rust_symbols.go`). A Rust declaration is exported there only when it is `pub` and sits at the
+file's top level (`rust_Named_Symbol`), so a `pub` function inside an `impl` block is unexported
+there.
+
+What the syntax fact this family reads can tell apart is narrower. A Go function is declared at a
+package's top level and nests under nothing but its receiver, which the fact writes as the qualifier
+of its name (`nomos-lang-go`'s `ItemKind`), so a qualified Go function is a method. An interface's
+method specification is not an item in the fact, so no rule here judges those names at all. A Rust
+function's shape counts its parameters, a receiver among them, and does not say which one is a
+receiver, so `fn new(value: u8)` and `fn get(&self)` are the same record but for their names.
+
+**8. Every rule that judges a function's name reads its case through the same keys, for the
+language the function is written in.**
+
+- **Every language reads as decision 7 reads Rust.** `function-naming-convention` judges a function
+  in any language against the first of two keys the repository declares: the refinement its side of
+  visibility selects, then `function`. Each is looked up for the language the source is written in
+  before repository-wide. A function is exported when the syntax fact labels it public, which in
+  Rust is exactly `pub` and in Go is a name whose first letter is upper case. With neither key
+  declared it is judged against upper-snake, as before. That is the block's own shape, read in the
+  order its owner reads it, and a language-scoped refinement is the only place xvpe and
+  code-standards write their Go function case.
+- **The Go function rules fall back to `function`.** Each reads its refinement and then `function`,
+  in decision 7's order, for Go. With neither declared, each keeps its refinement's own default:
+  upper-snake for an exported function, and mixed-snake for an unexported one. Decision 7 had the
+  plain key supply the undeclared meaning, which for the Rust read is the axis that rule read alone
+  before. The general rule is this: a value read through several keys takes, when none of them is
+  declared, the undeclared meaning of the axis its rule read alone before it read the others. A
+  repository that declares none of them is then judged as it was. For a Go rule that axis is its
+  refinement. Taking `function`'s upper-snake instead would hold every unexported Go function in a
+  repository that declares nothing to a case no unexported Go name can take, because Go exports a
+  name by its first letter.
+- **A Go method reads the method keys first.** In `function-naming-convention` and in both Go rules,
+  a Go function declared on a receiver reads `method.exported` or `method.unexported`, then
+  `method`, ahead of the function keys and in the same order. With no method key declared it reads
+  the function keys. With none of either declared, it takes the same undeclared meaning a function
+  does. code-standards falls back from a method's keys to its language's own method convention, not
+  to a function's keys, and that is not followed here. A method was judged as a function before, and
+  this fallback keeps every verdict where no method key is declared. No repository in reach has a Go
+  method and no method key.
+- **A Rust method's keys are not read.** What code-standards means by a Rust method is a callable
+  with a `self` receiver, and the syntax fact cannot say which Rust function takes one. Reading
+  `method` for every function inside an `impl` block would apply a method's case to associated
+  functions code-standards judges as functions. Wherever the two cases differ, one declaration would
+  then resolve to two values in the two tools, which is what decision 7 exists to prevent. So a Rust
+  function is judged under the function keys, whatever its repository declares for a method. A
+  repository that declares a different Rust method case is judged against its function case here
+  and its method case in code-standards; no repository in reach does that. The key becomes readable
+  when a fact this family requires states a receiver.
+- **The unexported Go rule does not judge `main` or `init` declared without a receiver.** The Go
+  specification gives a function those names, and no declaration can rename it. Without this, the
+  read in the second point would report this repository's own `main` against the upper-snake its
+  `function` declares, and the finding's only remedy would break the program.
+  `function-naming-convention` already exempts `main` in every language for the same reason.
+- **What counts as declared.** For the report `OD-RULES-011` version 3 decides, a value read through
+  several keys counts as declared when any of them is declared at either scope. A value declared
+  under none is named under the axis whose undeclared meaning applied: `function` for
+  `function-naming-convention`, and its refinement for each Go rule. It is never named under a
+  method key.
+
+**What this changes, measured.** Fresh binaries were built from the parent tree and from this one.
+This repository's `nomos check --root .` reported 475 findings both times, and no naming rule's
+finding moved. Three lines changed, and none of them is a verdict. Two clippy findings that predate
+this change, in files it edits, moved down by one line and by 57 lines. The cyclomatic-complexity
+advisory counted 14848 functions where it had counted 14826, which are the functions and tests this
+change adds. hex's calibration fixture reported the same six findings, byte for byte.
+
+This repository's one Go file, `crates/languages/nomos-lang-go-types/helper/main.go`, is judged by
+this repository's own declaration, and its verdict does not change: none of the three function rules
+reports anything in it, before or after. What it is judged against does change. Its one unexported
+function is `main`, which the unexported Go rule held to mixed-snake before. The rule now reads this
+repository's upper-snake `function`, and `main` is the one name it does not judge. Every other
+function in the file is exported and upper-snake. It was judged against upper-snake before and is
+judged against upper-snake now, because this repository declares it.
+
+The other repositories were read from their declarations and not run. kwb and hex track no Go
+source, so nothing changes there. In xvpe and code-standards, `function-naming-convention` now
+judges an unexported Go function against the mixed-snake they declare for Go rather than
+upper-snake, so it stops reporting names their own declaration accepts. The Go rules read their
+refinements there as before, and every method key those repositories declare names the same case as
+the function key.
+
+**What this does not decide.**
+
+- **Methods in any other language.** A function in a language other than Go reads the function keys
+  alone, a C# method among them. No repository in reach declares a key for any such language.
+- **`function-naming-convention`'s undeclared case for an unexported Go function.** It stays
+  upper-snake. In a repository that declares no function case at all, that rule and the unexported
+  Go rule therefore judge an unexported Go function against two cases. No repository in reach that
+  tracks Go source declares nothing.
+- **Which side of visibility a nested `pub` Rust function is on.** Decision 7 described
+  code-standards' Rust test as exactly `pub`, and code-standards also requires the declaration to sit
+  at the file's top level. A `pub` function in an `impl` block or a nested module is exported here
+  and unexported there. No repository in reach declares different Rust cases for the two sides, so
+  no verdict differs. Making the two agree changes which key a Rust function reads, and it is not
+  done here.
+- **A Go `init` under `function-naming-convention`.** That rule exempts `main` alone, in every
+  language.
+- **What a finding says.** `OD-RULES-011` version 3 decision 4 decides it, and this amendment
+  changes no finding's text.
+
+**What this changes in the decision.** Decision 8 is added. Decision 8 states generally decision
+7's rule for which axis supplies an undeclared meaning, and what that rule decides for the Rust
+read does not change. Decisions 1 to 6 and the bound stand. The change that builds decision 8 is
+inside the bound: it edits the axis table and the rules that read it, under
+`crates/rules/nomos-rules/src/`. The table gains the three method axes and every read the three
+rules make. No contract crate, provider or composition site changes.
 
 ## Status
 
@@ -385,3 +531,10 @@ Amended at version 4 by
 `P194-THE-RUST-FUNCTION-NAMING-RULE-NEVER-READS-THE-KEYS-XVPE-DECLARES-ITS-FUNCTION-CASE-UNDER`,
 which adds decision 7: a value read through a refinement of its key reads the refinement first, and
 the key it refines supplies its undeclared meaning. Decisions 1 to 6 did not change.
+
+Amended at version 5 by
+`P198-NAMING-KEYS-REPOSITORIES-DECLARE-THAT-NO-RULE-READS-FOR-THE-LANGUAGE-THEY-WROTE-THEM-FOR`,
+which adds decision 8. Every rule that judges a function's name reads the keys declared for the
+language the function is written in, and a Go method reads the method keys first. A Rust method's
+keys are not read, because the syntax fact cannot tell a Rust method from an associated function.
+With nothing declared, a rule keeps the undeclared meaning it had. Decisions 1 to 7 did not change.

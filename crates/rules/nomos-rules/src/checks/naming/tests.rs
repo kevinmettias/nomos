@@ -1,5 +1,6 @@
 use super::*;
 use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
+use crate::RUST_LANGUAGE;
 use nomos_analysis::{InputDigest, MemoryFactStore, Reader};
 use nomos_cap_naming_policy::{NamingPolicyPayload, PolicyRow};
 use nomos_capability::ProviderOffer;
@@ -374,17 +375,155 @@ fn Test_Check_Naming_Convention_Should_Judge_Both_Sides_Against_A_Declared_Funct
     }
 }
 
-/// The decision is about Rust alone: a function in another language is still judged against
-/// `function` repository-wide, and a refinement declared for that language is not read here.
+// `OD-RULES-035` decision 8 has every language read as decision 7 has Rust read, for the language
+// the source is written in, and a Go method read the method keys first. The tests below each
+// declare what the rule would not otherwise judge against.
+
+/// xvpe's and code-standards' own shape: a Go function case declared only under
+/// `languages.go.naming`, as a refinement. The rule once read `function` repository-wide alone for
+/// any language but Rust, and reported this name against upper-snake.
 #[test]
-fn Test_Check_Naming_Convention_Should_Not_Read_A_Refinement_For_A_Function_In_Another_Language()
+fn Test_Check_Naming_Convention_Should_Read_A_Refinement_Declared_For_The_Language_A_Function_Is_Written_In()
 {
-    let rows = vec![Row(Scope::Language("go".to_owned()), "function.unexported", Case::MixedSnake)];
+    let rows = vec![Row(Scope::Language(GO_LANGUAGE.to_owned()), "function.unexported", Case::MixedSnake)];
     let payload = "unexpanded\t0\nitem\t0\tFunction\tPrivate\trun_With_Backend\t.\t+fn/0\n";
 
     let findings = Findings_Under_Policy(Path("main.go"), payload, rows);
 
-    assert_eq!(Judged_Names(&findings), vec!["run_With_Backend"], "{findings:?}");
+    assert!(findings.is_empty(), "{findings:?}");
+}
+
+/// The plain key declared for one language decides that language's functions and no other's: a Go
+/// function is judged against the lower-snake declared for Go, a Rust function against the
+/// upper-snake nothing declared for it.
+#[test]
+fn Test_Check_Naming_Convention_Should_Read_Function_Declared_For_A_Language_Only_For_That_Language()
+{
+    let rows = vec![Row(Scope::Language(GO_LANGUAGE.to_owned()), "function", Case::LowerSnake)];
+    let payload = "unexpanded\t0\nitem\t0\tFunction\tPrivate\trun_with_backend\t.\t+fn/0\n";
+
+    let go = Findings_Under_Policy(Path("main.go"), payload, rows.clone());
+    let rust = Findings_Under_Policy(Path("src/lib.rs"), payload, rows);
+
+    assert!(go.is_empty(), "{go:?}");
+    assert_eq!(Judged_Names(&rust), vec!["run_with_backend"], "{rust:?}");
+}
+
+/// A Go method is told apart from a free function, and reads `method.unexported` and then `method`
+/// ahead of every function key; the free function beside it reads the function keys alone.
+#[test]
+fn Test_Check_Naming_Convention_Should_Read_The_Method_Keys_Ahead_Of_The_Function_Keys_For_A_Go_Method()
+{
+    let payload = "unexpanded\t0\n\
+                   item\t0\tFunction\tPrivate\trowCount\t.\t+fn/0\n\
+                   item\t1\tFunction\tPrivate\tTable::rowCount\t.\t+fn/1\n";
+    for method_key in ["method.unexported", "method"]
+    {
+        let rows = vec![
+            Row(Scope::Repository, "function.unexported", Case::LowerSnake),
+            Row(Scope::Language(GO_LANGUAGE.to_owned()), method_key, Case::LowerCamel),
+        ];
+
+        let findings = Findings_Under_Policy(Path("table.go"), payload, rows);
+
+        assert_eq!(Judged_Names(&findings), vec!["rowCount"], "{method_key}: {findings:?}");
+    }
+}
+
+/// A Rust function inside an `impl` block reads no method key: the syntax fact cannot say whether
+/// it takes a receiver, which is what code-standards means by a Rust method, so the function keys
+/// still decide it.
+#[test]
+fn Test_Check_Naming_Convention_Should_Not_Read_A_Method_Key_For_A_Rust_Function()
+{
+    let rows = vec![Row(Scope::Repository, "method", Case::LowerSnake), Row(Scope::Language(RUST_LANGUAGE.to_owned()), "method", Case::LowerSnake)];
+    let payload = "unexpanded\t0\n\
+                   item\t0\tImplementation\tNotApplicable\tTable\t.\t+inherent\n\
+                   item\t1\tFunction\tPublic\tTable::as_str\t.\t+fn/1\n";
+
+    let findings = Findings_Under_Policy(Path("src/lib.rs"), payload, rows);
+
+    assert_eq!(Judged_Names(&findings), vec!["Table::as_str"], "{findings:?}");
+}
+
+/// The exported Go rule falls back to `function`, as code-standards does: a declared upper-camel
+/// reports the upper-snake name the rule's own default would accept.
+#[test]
+fn Test_Check_Exported_Go_Functions_Use_Upper_Snake_Case_Should_Read_Function_When_No_Refinement_Is_Declared()
+{
+    let rows = vec![Row(Scope::Repository, "function", Case::UpperCamel)];
+    let payload = "unexpanded\t0\n\
+                   item\t0\tFunction\tPublic\tRun_With_Backend\t.\t+fn/0\n\
+                   item\t1\tFunction\tPublic\tRunWithBackend\t.\t+fn/0\n";
+
+    let findings = Judged_Under_Policy(Check_Exported_Go_Functions_Use_Upper_Snake_Case, Path("main.go"), payload, rows);
+
+    assert_eq!(Summaries(&findings), vec!["exported Go function `Run_With_Backend` is not upper-camel case"], "{findings:?}");
+}
+
+/// This repository's own shape -- `function` upper-snake and no Go key -- read by the unexported
+/// Go rule: a mixed-snake name its default accepts is reported, and `main` is not judged at all.
+#[test]
+fn Test_Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter_Should_Read_Function_When_No_Refinement_Is_Declared()
+{
+    let rows = vec![Row(Scope::Repository, "function", Case::UpperSnake)];
+    let payload = "unexpanded\t0\n\
+                   item\t0\tFunction\tPrivate\tmain\t.\t+fn/0\n\
+                   item\t1\tFunction\tPrivate\trow_Breaches\t.\t+fn/0\n";
+
+    let findings = Judged_Under_Policy(Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter, Path("main.go"), payload, rows);
+
+    assert_eq!(Summaries(&findings), vec!["unexported Go function `row_Breaches` is not upper-snake case"], "{findings:?}");
+}
+
+/// The Go rules read in decision 7's order: `function` declared for Go ahead of `function`
+/// repository-wide, and a refinement ahead of either, wherever each is declared.
+#[test]
+fn Test_Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter_Should_Read_The_Most_Specific_Key_First()
+{
+    let payload = "unexpanded\t0\nitem\t0\tFunction\tPrivate\trow_breaches\t.\t+fn/0\n";
+    let go_function = vec![Row(Scope::Repository, "function", Case::UpperSnake), Row(Scope::Language(GO_LANGUAGE.to_owned()), "function", Case::LowerSnake)];
+    let refinement = vec![Row(Scope::Language(GO_LANGUAGE.to_owned()), "function", Case::UpperSnake), Row(Scope::Repository, "function.unexported", Case::LowerSnake)];
+
+    for rows in [go_function, refinement]
+    {
+        let findings = Judged_Under_Policy(Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter, Path("main.go"), payload, rows.clone());
+
+        assert!(findings.is_empty(), "{rows:?}: {findings:?}");
+    }
+}
+
+/// Each Go rule judges a method against the method keys ahead of the function keys: a declared
+/// `method.unexported` or `method` decides `Table::rowCount`, and the free `rowCount` beside it is
+/// still judged against the rule's mixed-snake default.
+#[test]
+fn Test_Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter_Should_Read_The_Method_Keys_For_A_Method()
+{
+    let payload = "unexpanded\t0\n\
+                   item\t0\tFunction\tPrivate\trowCount\t.\t+fn/0\n\
+                   item\t1\tFunction\tPrivate\tTable::rowCount\t.\t+fn/1\n";
+    for method_key in ["method.unexported", "method"]
+    {
+        let rows = vec![Row(Scope::Language(GO_LANGUAGE.to_owned()), method_key, Case::LowerCamel)];
+
+        let findings = Judged_Under_Policy(Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter, Path("table.go"), payload, rows);
+
+        assert_eq!(Summaries(&findings), vec!["unexported Go function `rowCount` is not mixed-snake case"], "{method_key}: {findings:?}");
+    }
+}
+
+/// The exported side of the same read.
+#[test]
+fn Test_Check_Exported_Go_Functions_Use_Upper_Snake_Case_Should_Read_The_Method_Keys_For_A_Method()
+{
+    let payload = "unexpanded\t0\n\
+                   item\t0\tFunction\tPublic\tRowCount\t.\t+fn/0\n\
+                   item\t1\tFunction\tPublic\tTable::Row_Count\t.\t+fn/1\n";
+    let rows = vec![Row(Scope::Repository, "method.exported", Case::UpperCamel)];
+
+    let findings = Judged_Under_Policy(Check_Exported_Go_Functions_Use_Upper_Snake_Case, Path("table.go"), payload, rows);
+
+    assert_eq!(Summaries(&findings), vec!["exported Go function `Row_Count` is not upper-camel case"], "{findings:?}");
 }
 
 // The tests below hold each casing rule's finding to `OD-RULES-011` version 3 decision 4: it states

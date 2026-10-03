@@ -103313,14 +103313,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "opus-p198-keys",
-        "acquired_at": 1791047077,
-        "lease_expires_at": 1791061477
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -103337,7 +103333,53 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ors.rs (F:/repos/nomos-p198-target\\debug\\deps\\rule_descriptors-b0eaaf57c3a31217.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/nomos-p198-target\\debug\\deps\\toolchain_floor-f83c22963bb3653d.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p198-target\\debug\\deps\\nomos_integration_tests-d41870b422a07b8b.exe)\n     Running tests\\analysis_slice\\main.rs (F:/repos/nomos-p198-target\\debug\\deps\\analysis_slice-7a8e52e4da48cbd2.exe)\n     Running tests\\calibration.rs (F:/repos/nomos-p198-target\\debug\\deps\\calibration-ecf0938929045c32.exe)\n     Running tests\\determinism\\main.rs (F:/repos/nomos-p198-target\\debug\\deps\\determinism-90312f3974ae38d6.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p198-target\\debug\\deps\\nomos_rules-8f9f4cdb33820fc9.exe)\n     Running tests\\integration_seams.rs (F:/repos/nomos-p198-target\\debug\\deps\\integration_seams-d9394d4149bb615a.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p198-target\\debug\\deps\\nomos_spec_store-06e6aa6a481bd8b1.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/nomos-p198-target\\debug\\deps\\governing_records_are_present-00262ca1fd3972b5.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/nomos-p198-target\\debug\\deps\\round_trip_holds-186543f7685a6a84.exe)\n     Running tests\\store_holds.rs (F:/repos/nomos-p198-target\\debug\\deps\\store_holds-9ca0a8b8a7346719.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/nomos-p198-target\\debug\\deps\\table_rows-8e18e4b8c31c2df5.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_rules\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: 1 warning emitted\n\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1791050561,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "5018e422eb5e6a9756799b29a28ce11994d1417e"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,

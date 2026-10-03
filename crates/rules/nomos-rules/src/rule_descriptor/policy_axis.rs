@@ -14,6 +14,14 @@
 //! its keys, so what a key means has to live with the rules that read it. A struct-shaped family
 //! -- scripting, words, goals, test material -- already names its axes as the fields of its
 //! payload type, and needs nothing here.
+//!
+//! # A case read through more than one axis
+//!
+//! A function's case is read under several keys -- the refinement its visibility selects, the
+//! key that refines, and for a Go method the method keys ahead of both -- and which axis's
+//! undeclared meaning applies when none is declared is part of the read, not of any one axis.
+//! [`CaseRead`] carries both, and every such read the naming rules make is declared below, so
+//! `OD-RULES-035` decisions 7 and 8 are stated here once rather than at each call site.
 
 mod undeclared;
 
@@ -102,9 +110,9 @@ pub(crate) const CYCLOMATIC_COMPLEXITY_MAX: PolicyAxis<u32> = PolicyAxis {
 
 /// The case a function name takes.
 ///
-/// Read for a Rust function behind the refinement its visibility selects, whose undeclared
-/// meaning this axis supplies, and alone and repository-wide for a function in any other language
-/// `function-naming-convention` judges.
+/// Read behind the refinement a function's visibility selects, by every rule that judges a
+/// function's name, and for a Go method behind the method keys as well. `function-naming-convention`
+/// takes this axis's undeclared meaning; the two Go function rules take their refinement's.
 pub(crate) const FUNCTION_CASE: PolicyAxis<Case> = PolicyAxis {
     family: RequiredFact::NamingPolicy,
     key: "function",
@@ -127,9 +135,8 @@ pub(crate) const FIELD_CASE: PolicyAxis<Case> = PolicyAxis {
 
 /// The case an exported function name takes.
 ///
-/// Read for Go alone, against the default below when nothing declares it. Read for Rust ahead
-/// of [`FUNCTION_CASE`], through [`RUST_EXPORTED_FUNCTION_CASE`], where the default below is
-/// never the one a Rust function is judged against.
+/// Read ahead of [`FUNCTION_CASE`] for an exported function in any language. Its undeclared
+/// meaning below is Go's, and only the exported Go function rule takes it.
 pub(crate) const EXPORTED_FUNCTION_CASE: PolicyAxis<Case> = PolicyAxis {
     family: RequiredFact::NamingPolicy,
     key: "function.exported",
@@ -138,29 +145,100 @@ pub(crate) const EXPORTED_FUNCTION_CASE: PolicyAxis<Case> = PolicyAxis {
 
 /// The case an unexported function name takes.
 ///
-/// Read for Go alone, against the default below when nothing declares it. Read for Rust ahead
-/// of [`FUNCTION_CASE`], through [`RUST_UNEXPORTED_FUNCTION_CASE`], where the default below --
-/// Go's mixed-snake -- is never the one a Rust function is judged against.
+/// Read ahead of [`FUNCTION_CASE`] for every other function in any language. Its undeclared
+/// meaning below is Go's mixed-snake, and only the unexported Go function rule takes it.
 pub(crate) const UNEXPORTED_FUNCTION_CASE: PolicyAxis<Case> = PolicyAxis {
     family: RequiredFact::NamingPolicy,
     key: "function.unexported",
     undeclared: Undeclared::JudgedAgainstDefault { repository: Case::MixedSnake, languages: &[] },
 };
 
-/// The axes a Rust function declared exactly `pub` reads its case through, the refinement first
-/// and the key it refines last.
+/// The case a method name takes.
 ///
-/// `OD-RULES-035` decision 7: the first of them a repository declares decides, each looked up for
-/// the language before repository-wide, and with neither declared the last one's undeclared
-/// meaning applies -- [`FUNCTION_CASE`]'s upper-snake, so a repository that declares nothing is
-/// judged as it was before either key was read. That is code-standards' own order for the same
-/// block of the same file, so a declaration there means one thing to both tools that read it.
-pub(crate) const RUST_EXPORTED_FUNCTION_CASE: &[&PolicyAxis<Case>] = &[&EXPORTED_FUNCTION_CASE, &FUNCTION_CASE];
+/// Read for a Go method alone, after its refinement and ahead of every function key. Go nests a
+/// function under nothing but the receiver it is declared on, so the syntax fact says which Go
+/// functions are methods; for Rust it cannot, because it does not say which parameter is a
+/// receiver, and `OD-RULES-035` decision 8 reads no method key there. No read takes the undeclared
+/// meaning below: a method whose repository declares no method key is judged as a function is, so
+/// the value is [`FUNCTION_CASE`]'s.
+pub(crate) const METHOD_CASE: PolicyAxis<Case> = PolicyAxis {
+    family: RequiredFact::NamingPolicy,
+    key: "method",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: Case::UpperSnake, languages: &[] },
+};
 
-/// The axes every other Rust function reads its case through -- private, `pub(crate)`,
-/// `pub(super)`, `pub(in path)`, or a trait declaration's own member -- in the order
-/// [`RUST_EXPORTED_FUNCTION_CASE`] states.
-pub(crate) const RUST_UNEXPORTED_FUNCTION_CASE: &[&PolicyAxis<Case>] = &[&UNEXPORTED_FUNCTION_CASE, &FUNCTION_CASE];
+/// The case an exported method name takes. Read for Go, as [`METHOD_CASE`] says; its undeclared
+/// meaning is never taken, and is [`EXPORTED_FUNCTION_CASE`]'s.
+pub(crate) const EXPORTED_METHOD_CASE: PolicyAxis<Case> = PolicyAxis {
+    family: RequiredFact::NamingPolicy,
+    key: "method.exported",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: Case::UpperSnake, languages: &[] },
+};
+
+/// The case an unexported method name takes. Read for Go, as [`METHOD_CASE`] says; its undeclared
+/// meaning is never taken, and is [`UNEXPORTED_FUNCTION_CASE`]'s.
+pub(crate) const UNEXPORTED_METHOD_CASE: PolicyAxis<Case> = PolicyAxis {
+    family: RequiredFact::NamingPolicy,
+    key: "method.unexported",
+    undeclared: Undeclared::JudgedAgainstDefault { repository: Case::MixedSnake, languages: &[] },
+};
+
+/// One case a rule reads through more than one axis.
+///
+/// `OD-RULES-035` decisions 7 and 8. The first of `keys` the repository declares decides, each
+/// looked up for the language before repository-wide, and `keys` name a refinement before the key
+/// it refines and a method's keys before a function's: code-standards' own order for the same block
+/// of the same file, so a declaration there means one thing to both tools that read it. With none
+/// declared, `undeclared`'s undeclared meaning applies. That is the axis the rule read alone before
+/// it read the others, so a repository that declares none of them is judged as it was.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) struct CaseRead<'axes>
+{
+    /// The axes the case is looked up under, most specific first.
+    pub(crate) keys: &'axes [&'axes PolicyAxis<Case>],
+    /// The axis whose undeclared meaning applies when the repository declares none of `keys`.
+    pub(crate) undeclared: &'axes PolicyAxis<Case>,
+}
+
+/// The keys an exported function's case is read under, the refinement first.
+const EXPORTED_FUNCTION_KEYS: &[&PolicyAxis<Case>] = &[&EXPORTED_FUNCTION_CASE, &FUNCTION_CASE];
+
+/// The keys every other function's case is read under, the refinement first.
+const UNEXPORTED_FUNCTION_KEYS: &[&PolicyAxis<Case>] = &[&UNEXPORTED_FUNCTION_CASE, &FUNCTION_CASE];
+
+/// The keys an exported Go method's case is read under: its own, then an exported function's.
+const EXPORTED_METHOD_KEYS: &[&PolicyAxis<Case>] = &[&EXPORTED_METHOD_CASE, &METHOD_CASE, &EXPORTED_FUNCTION_CASE, &FUNCTION_CASE];
+
+/// The keys every other Go method's case is read under: its own, then an unexported function's.
+const UNEXPORTED_METHOD_KEYS: &[&PolicyAxis<Case>] = &[&UNEXPORTED_METHOD_CASE, &METHOD_CASE, &UNEXPORTED_FUNCTION_CASE, &FUNCTION_CASE];
+
+/// How `function-naming-convention` reads the case of a function declared exported -- in Rust,
+/// exactly `pub` -- in whatever language it is written in, and upper-snake when nothing is declared.
+pub(crate) const EXPORTED_FUNCTION_READ: CaseRead<'static> = CaseRead { keys: EXPORTED_FUNCTION_KEYS, undeclared: &FUNCTION_CASE };
+
+/// How `function-naming-convention` reads every other function's case -- in Rust private,
+/// `pub(crate)`, `pub(super)`, `pub(in path)`, or a trait declaration's own member.
+pub(crate) const UNEXPORTED_FUNCTION_READ: CaseRead<'static> = CaseRead { keys: UNEXPORTED_FUNCTION_KEYS, undeclared: &FUNCTION_CASE };
+
+/// How `function-naming-convention` reads an exported Go method's case.
+pub(crate) const EXPORTED_METHOD_READ: CaseRead<'static> = CaseRead { keys: EXPORTED_METHOD_KEYS, undeclared: &FUNCTION_CASE };
+
+/// How `function-naming-convention` reads every other Go method's case.
+pub(crate) const UNEXPORTED_METHOD_READ: CaseRead<'static> = CaseRead { keys: UNEXPORTED_METHOD_KEYS, undeclared: &FUNCTION_CASE };
+
+/// How the exported Go function rule reads an exported Go function's case, and upper-snake when
+/// nothing is declared.
+pub(crate) const GO_EXPORTED_FUNCTION_READ: CaseRead<'static> = CaseRead { keys: EXPORTED_FUNCTION_KEYS, undeclared: &EXPORTED_FUNCTION_CASE };
+
+/// How the unexported Go function rule reads an unexported Go function's case, and Go's
+/// mixed-snake when nothing is declared.
+pub(crate) const GO_UNEXPORTED_FUNCTION_READ: CaseRead<'static> = CaseRead { keys: UNEXPORTED_FUNCTION_KEYS, undeclared: &UNEXPORTED_FUNCTION_CASE };
+
+/// How the exported Go function rule reads an exported Go method's case.
+pub(crate) const GO_EXPORTED_METHOD_READ: CaseRead<'static> = CaseRead { keys: EXPORTED_METHOD_KEYS, undeclared: &EXPORTED_FUNCTION_CASE };
+
+/// How the unexported Go function rule reads an unexported Go method's case.
+pub(crate) const GO_UNEXPORTED_METHOD_READ: CaseRead<'static> = CaseRead { keys: UNEXPORTED_METHOD_KEYS, undeclared: &UNEXPORTED_FUNCTION_CASE };
 
 /// The case an exported type name takes. Read for Go.
 pub(crate) const EXPORTED_TYPE_CASE: PolicyAxis<Case> = PolicyAxis {
@@ -195,14 +273,39 @@ mod tests
 
     const LIMITS: &[&PolicyAxis<u32>] = LIMITS_AXES;
 
-    const NAMING: [PolicyAxis<Case>; 7] = [
+    const NAMING: [PolicyAxis<Case>; 10] = [
         FUNCTION_CASE,
         MODULE_CASE,
         FIELD_CASE,
         EXPORTED_FUNCTION_CASE,
         UNEXPORTED_FUNCTION_CASE,
+        METHOD_CASE,
+        EXPORTED_METHOD_CASE,
+        UNEXPORTED_METHOD_CASE,
         EXPORTED_TYPE_CASE,
         UNEXPORTED_TYPE_CASE,
+    ];
+
+    /// One read a naming rule makes: the side of visibility it reads, whether it reads a method,
+    /// and the key whose undeclared meaning it takes.
+    struct ReadUnderTest
+    {
+        read: CaseRead<'static>,
+        visibility: &'static str,
+        method: bool,
+        undeclared: &'static str,
+    }
+
+    /// Every read `function-naming-convention` and the two Go function rules make.
+    const READS: [ReadUnderTest; 8] = [
+        ReadUnderTest { read: EXPORTED_FUNCTION_READ, visibility: "exported", method: false, undeclared: "function" },
+        ReadUnderTest { read: UNEXPORTED_FUNCTION_READ, visibility: "unexported", method: false, undeclared: "function" },
+        ReadUnderTest { read: EXPORTED_METHOD_READ, visibility: "exported", method: true, undeclared: "function" },
+        ReadUnderTest { read: UNEXPORTED_METHOD_READ, visibility: "unexported", method: true, undeclared: "function" },
+        ReadUnderTest { read: GO_EXPORTED_FUNCTION_READ, visibility: "exported", method: false, undeclared: "function.exported" },
+        ReadUnderTest { read: GO_UNEXPORTED_FUNCTION_READ, visibility: "unexported", method: false, undeclared: "function.unexported" },
+        ReadUnderTest { read: GO_EXPORTED_METHOD_READ, visibility: "exported", method: true, undeclared: "function.exported" },
+        ReadUnderTest { read: GO_UNEXPORTED_METHOD_READ, visibility: "unexported", method: true, undeclared: "function.unexported" },
     ];
 
     /// The resolver reads the capability an axis's `family` names, so an axis declared in the
@@ -248,19 +351,39 @@ mod tests
         assert_eq!(CYCLOMATIC_COMPLEXITY_MAX.Undeclared_Value(Some("rust")), None);
     }
 
-    /// A refined read names the refinement first and the key it refines last, in one family, and
-    /// the refinement is that key refined by a visibility: `OD-RULES-035` decision 7 reads them in
-    /// that order and takes the last one's undeclared meaning, so a read listed the other way
-    /// round would judge an undeclared Rust function against Go's mixed-snake.
+    /// A read names a refinement before the key it refines, and a method's keys before a
+    /// function's, in one family, and the refinement is that key refined by the read's own side of
+    /// visibility: `OD-RULES-035` decisions 7 and 8 read them in that order, which is
+    /// code-standards' own, so a read listed any other way would let a plain key decide what a
+    /// refinement declares differently.
     #[test]
-    fn Test_A_Refined_Read_Should_Name_The_Refinement_First_And_The_Key_It_Refines_Last()
+    fn Test_A_Read_Should_Name_A_Refinement_Before_Its_Key_And_A_Methods_Keys_Before_A_Functions()
     {
-        for (refined_read, visibility) in [(RUST_EXPORTED_FUNCTION_CASE, "exported"), (RUST_UNEXPORTED_FUNCTION_CASE, "unexported")]
+        for tested in &READS
         {
-            let keys: Vec<&str> = refined_read.iter().map(|axis| return axis.key).collect();
+            let keys: Vec<&str> = tested.read.keys.iter().map(|axis| return axis.key).collect();
+            let function = [format!("{}.{}", FUNCTION_CASE.key, tested.visibility), FUNCTION_CASE.key.to_owned()];
+            let method = [format!("{}.{}", METHOD_CASE.key, tested.visibility), METHOD_CASE.key.to_owned()];
+            let expected: Vec<&str> =
+                if tested.method { method.iter().chain(&function).map(String::as_str).collect() } else { function.iter().map(String::as_str).collect() };
 
-            assert_eq!(keys, vec![format!("{}.{visibility}", FUNCTION_CASE.key).as_str(), FUNCTION_CASE.key], "{refined_read:?}");
-            assert!(refined_read.iter().all(|axis| return axis.family == FUNCTION_CASE.family), "{refined_read:?}");
+            assert_eq!(keys, expected, "{:?}", tested.read);
+            assert!(tested.read.keys.iter().all(|axis| return axis.family == FUNCTION_CASE.family), "{:?}", tested.read);
+        }
+    }
+
+    /// A read with nothing declared is judged as its rule judged before it read more than one key:
+    /// `function-naming-convention` against `function`'s upper-snake, and each Go function rule
+    /// against its own refinement's Go default. Never a method axis's, because a method whose
+    /// repository declares no method key is judged as a function is; and always one of the read's
+    /// own keys, so the value the report names as undeclared is one the rule really read.
+    #[test]
+    fn Test_A_Read_Should_Take_The_Undeclared_Meaning_Of_The_Function_Axis_Its_Rule_Read_Before()
+    {
+        for tested in &READS
+        {
+            assert_eq!(tested.read.undeclared.key, tested.undeclared, "{:?}", tested.read);
+            assert!(tested.read.keys.contains(&tested.read.undeclared), "{:?}", tested.read);
         }
     }
 

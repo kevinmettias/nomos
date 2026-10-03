@@ -45,7 +45,7 @@
 //! default, still real and still what an unconfigured repository gets, not what every
 //! repository is now fixed to.
 //!
-//! # A Rust function reads its case through the refinement its visibility selects
+//! # A function reads its case through the refinement its visibility selects
 //!
 //! `OD-RULES-035` decision 7 settled which keys this rule reads for Rust, by counting the keys
 //! the repositories that declare a Rust function case actually write: three write the plain
@@ -54,9 +54,15 @@
 //! `function` the repository declares, and every other Rust function against the first of
 //! `function.unexported` and `function` -- each looked up for `rust` before repository-wide,
 //! code-standards' own order -- and against upper-snake when neither is declared.
-//! [`Resolve_Most_Specific_Case`] is that read, and [`function_cases`] is the split. A function
-//! in any other language this rule judges still reads `function` repository-wide and nothing
-//! else, because the decision is about Rust alone.
+//! [`Resolve_Read`] is that read, and [`function_cases`] is the split.
+//!
+//! Decision 8 reads every other language the same way, each key looked up for the language the
+//! source is written in: xvpe and code-standards declare their Go function case only under
+//! `languages.go.naming`, which this rule never read. It also has a Go method read
+//! `method.exported` or `method.unexported`, then `method`, ahead of the function keys, because
+//! Go's syntax fact says which functions are methods. Rust's does not -- it does not say which
+//! parameter is a receiver, which is what code-standards means by a Rust method -- so a Rust
+//! method's case is still read under the function keys alone.
 //!
 //! # A finding names the case it judged against, and not where that case came from
 //!
@@ -80,12 +86,14 @@ mod single_letter_names;
 mod test_names;
 mod violations;
 
-use crate::rule_descriptor::policy_axis::{PolicyAxis, FUNCTION_CASE, RUST_EXPORTED_FUNCTION_CASE, RUST_UNEXPORTED_FUNCTION_CASE};
+use crate::rule_descriptor::policy_axis::{
+    CaseRead, PolicyAxis, EXPORTED_FUNCTION_READ, EXPORTED_METHOD_READ, FUNCTION_CASE, UNEXPORTED_FUNCTION_READ, UNEXPORTED_METHOD_READ,
+};
 use crate::rule_descriptor::RequiredFact;
-use crate::{SourceFile, RUST_LANGUAGE};
-use function_cases::FunctionCases;
+use crate::{SourceFile, GO_LANGUAGE};
+use function_cases::{FunctionCases, SourceCases};
 use nomos_analysis::{FactReader, InputDigest};
-use nomos_cap_naming_policy::{Case, Scope};
+use nomos_cap_naming_policy::{Case, NamingPolicyPayload, Scope};
 use nomos_contracts::Finding;
 
 pub use abbreviations::{Check_Abbreviations, ABBREVIATIONS};
@@ -129,28 +137,31 @@ pub const PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str = "project-own
 /// never this capability's own `Applicability` surfacing anywhere.
 pub(super) fn Resolve_Case(facts: &mut dyn FactReader, language: Option<&str>, axis: &PolicyAxis<Case>) -> Option<Case>
 {
-    return Resolve_Most_Specific_Case(facts, language, &[axis]);
+    return Resolve_Read(facts, language, &CaseRead { keys: &[axis], undeclared: axis });
 }
 
-/// Resolves the case a value read through several axes takes, `axes` ordered most specific
-/// first: the first of them the repository declares, each looked up for `language` before
-/// repository-wide, and the last axis's declared default for `language` when it declares none of
-/// them. [`Resolve_Case`] is this over one axis.
+/// Resolves the case `read` takes: the first of its keys the repository declares, each looked up
+/// for `language` before repository-wide, and its undeclared axis's default for `language` when it
+/// declares none of them. [`Resolve_Case`] is this over one axis.
 ///
-/// `OD-RULES-035` decision 7 is this order. It is code-standards' own for the same block of the
-/// same file -- its `Override_Case` takes the refined key before the plain one, over a block in
-/// which a language's key has already replaced the repository's -- so one declaration in
+/// `OD-RULES-035` decisions 7 and 8 are this order. It is code-standards' own for the same block
+/// of the same file -- its `Override_Case` takes the refined key before the plain one, over a block
+/// in which a language's key has already replaced the repository's -- so one declaration in
 /// `standards.json` resolves to one case in both tools.
-pub(super) fn Resolve_Most_Specific_Case(facts: &mut dyn FactReader, language: Option<&str>, axes: &[&PolicyAxis<Case>]) -> Option<Case>
+pub(super) fn Resolve_Read(facts: &mut dyn FactReader, language: Option<&str>, read: &CaseRead<'_>) -> Option<Case>
 {
-    let undeclared = axes.last()?.Undeclared_Value(language);
-    let Some(payload) = axes.first().and_then(|axis| return Naming_Policy_Payload(facts, axis.family))
-    else
-    {
-        return undeclared;
-    };
+    let payload = Naming_Policy_Payload(facts, read.undeclared.family);
 
-    return axes.iter().find_map(|axis| return Case_For_Symbol(&payload, language, axis.key)).or(undeclared);
+    return Read_From(payload.as_ref(), language, read);
+}
+
+/// [`Resolve_Read`] over a payload already read, or over none when the repository's naming
+/// policy could not be read.
+fn Read_From(payload: Option<&NamingPolicyPayload>, language: Option<&str>, read: &CaseRead<'_>) -> Option<Case>
+{
+    let declared = payload.and_then(|payload| return read.keys.iter().find_map(|axis| return Case_For_Symbol(payload, language, axis.key)));
+
+    return declared.or_else(|| return read.undeclared.Undeclared_Value(language));
 }
 
 /// How a finding names the case a name was judged against: the spelling a repository writes for
@@ -164,16 +175,18 @@ pub(super) fn Case_Judged_Against(case: Case) -> String
     return format!("{} case", case.Label());
 }
 
-/// The cases a Rust function is judged against, one per side of visibility, each read through the
-/// refinement of `function` that side selects ahead of `function` itself.
-fn Rust_Function_Cases(facts: &mut dyn FactReader) -> Option<FunctionCases>
+/// The cases `source`'s functions are judged against, read for the language it is written in: one
+/// per side of visibility, each through the refinement of `function` that side selects ahead of
+/// `function` itself, and for a Go source a method's as well, through the method keys first.
+fn Source_Cases(payload: Option<&NamingPolicyPayload>, source: &SourceFile) -> Option<SourceCases>
 {
-    let language = Some(RUST_LANGUAGE);
+    let language = source.language.as_ref().map(nomos_cap_syntax::Language::As_Str);
+    let sides = |exported: &CaseRead<'_>, unexported: &CaseRead<'_>| {
+        return Some(FunctionCases { exported: Read_From(payload, language, exported)?, unexported: Read_From(payload, language, unexported)? });
+    };
+    let methods = if source.Is_Written_In(GO_LANGUAGE) { Some(sides(&EXPORTED_METHOD_READ, &UNEXPORTED_METHOD_READ)?) } else { None };
 
-    return Some(FunctionCases {
-        exported: Resolve_Most_Specific_Case(facts, language, RUST_EXPORTED_FUNCTION_CASE)?,
-        unexported: Resolve_Most_Specific_Case(facts, language, RUST_UNEXPORTED_FUNCTION_CASE)?,
-    });
+    return Some(SourceCases { functions: sides(&EXPORTED_FUNCTION_READ, &UNEXPORTED_FUNCTION_READ)?, methods });
 }
 
 /// Reads and decodes this repository's own `nomos.cap.naming.policy` fact, folding every
@@ -182,7 +195,7 @@ fn Rust_Function_Cases(facts: &mut dyn FactReader) -> Option<FunctionCases>
 ///
 /// The capability required is the one `family` names, which for every naming axis is
 /// `nomos.cap.naming.policy`: `rule_descriptor::policy_axis`'s own tests pin that.
-fn Naming_Policy_Payload(facts: &mut dyn FactReader, family: RequiredFact) -> Option<nomos_cap_naming_policy::NamingPolicyPayload>
+fn Naming_Policy_Payload(facts: &mut dyn FactReader, family: RequiredFact) -> Option<NamingPolicyPayload>
 {
     let subject = nomos_model::Subject_Of_Path("");
     let fact = facts
@@ -206,7 +219,7 @@ fn Naming_Policy_Requirement() -> nomos_capability::Requirement
 
 /// The case `payload` declares for `symbol`, most-specific key first (`language`'s own
 /// override, then the repository-wide row), or `None` when neither row exists.
-fn Case_For_Symbol(payload: &nomos_cap_naming_policy::NamingPolicyPayload, language: Option<&str>, symbol: &str) -> Option<Case>
+fn Case_For_Symbol(payload: &NamingPolicyPayload, language: Option<&str>, symbol: &str) -> Option<Case>
 {
     if let Some(language) = language
     {
@@ -220,8 +233,8 @@ fn Case_For_Symbol(payload: &nomos_cap_naming_policy::NamingPolicyPayload, langu
     return payload.rows.iter().find(|row| return row.scope == Scope::Repository && row.symbol == symbol).map(|row| return row.case);
 }
 
-/// Judges every function `sources` declares against the case the repository declares for it: a
-/// Rust function against the case its visibility reads, and any other against `function`.
+/// Judges every function `sources` declares against the case the repository declares for it, in
+/// the language it is written in: on its side of visibility, and for a Go method as a method.
 ///
 /// One fact per file, the same shape [`crate::Check_Completeness_Mirrors`] reads — this
 /// rule states the same [`crate::Syntax_Requirement`] floor for the same reason: a name
@@ -236,16 +249,16 @@ pub fn Check_Naming_Convention(
     use reading::Payload_Of;
     use violations::Violations_In;
 
-    let (Some(rust), Some(other)) = (Rust_Function_Cases(facts), Resolve_Case(facts, None, &FUNCTION_CASE))
-    else
-    {
-        return Vec::new();
-    };
+    let policy = Naming_Policy_Payload(facts, FUNCTION_CASE.family);
     let mut findings = Vec::new();
 
     for source in sources
     {
-        let cases = if source.Is_Written_In(RUST_LANGUAGE) { rust } else { FunctionCases::Both(other) };
+        let Some(cases) = Source_Cases(policy.as_ref(), source)
+        else
+        {
+            continue;
+        };
         match Payload_Of(source, facts)
         {
             Ok(payload) => findings.extend(Violations_In(&payload, &source.path, cases)),

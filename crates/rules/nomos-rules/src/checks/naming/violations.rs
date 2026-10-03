@@ -1,11 +1,11 @@
 //! Judging an already-decoded syntax payload against the resolved naming [`Case`] of each side
-//! of visibility.
+//! of visibility, and in Go of a method apart from a function.
 //!
 //! A pure function of an already-decoded payload, so the naming judgment itself is
 //! testable against hand-written fixture text the way [`crate::facts::Check_Names_In`]
 //! is — no registry, no store, no reader.
 
-use super::function_cases::FunctionCases;
+use super::function_cases::SourceCases;
 use crate::checks::finding_shape::{Finding_Shape, Qualified_Name_Finding};
 use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload, FUNCTION, IMPLEMENTATION, Impl_Serves_A_Trait};
@@ -15,10 +15,10 @@ use nomos_contracts::{Finding, GateCategory};
 /// language rather than by this workspace's naming choice.
 const MAIN: &str = "main";
 
-/// Every function `payload` declares that does not conform to the case `cases` gives its side of
-/// visibility, as findings.
+/// Every function `payload` declares that does not conform to the case `cases` gives it, as
+/// findings.
 #[must_use]
-pub(super) fn Violations_In(payload: &SyntaxPayload, path: &str, cases: FunctionCases) -> Vec<Finding>
+pub(super) fn Violations_In(payload: &SyntaxPayload, path: &str, cases: SourceCases) -> Vec<Finding>
 {
     let mut findings = Vec::new();
 
@@ -126,13 +126,14 @@ mod tests
 
     mod scanning
     {
-        use super::{FunctionCases, GateCategory, SyntaxPayload, Violations_In};
+        use super::{GateCategory, SourceCases, SyntaxPayload, Violations_In};
+        use crate::checks::naming::function_cases::FunctionCases;
         use nomos_cap_naming_policy::Case;
 
         /// Upper-snake on both sides of visibility: what every test below judged against before
         /// a Rust function's case split by visibility, and still what it is judged against when
         /// a repository declares nothing.
-        const UPPER_SNAKE: FunctionCases = FunctionCases::Both(Case::UpperSnake);
+        const UPPER_SNAKE: SourceCases = SourceCases::Functions(FunctionCases::Both(Case::UpperSnake));
 
         #[test]
         fn Test_A_Conforming_Function_Should_Produce_No_Finding()
@@ -252,7 +253,7 @@ mod tests
                  item\t0\tFunction\tPublic\tas_str\t.\t+fn/1\n\
                  item\t1\tFunction\tRestricted(crate)\tto_text\t.\t+fn/1\n",
             );
-            let cases = FunctionCases { exported: Case::LowerSnake, unexported: Case::UpperSnake };
+            let cases = SourceCases::Functions(FunctionCases { exported: Case::LowerSnake, unexported: Case::UpperSnake });
 
             let findings = Violations_In(&payload, "src/lib.rs", cases);
 
@@ -270,7 +271,7 @@ mod tests
                  item\t0\tFunction\tPublic\tAsStr\t.\t+fn/1\n\
                  item\t1\tFunction\tPrivate\tto_text\t.\t+fn/1\n",
             );
-            let cases = FunctionCases { exported: Case::LowerSnake, unexported: Case::UpperSnake };
+            let cases = SourceCases::Functions(FunctionCases { exported: Case::LowerSnake, unexported: Case::UpperSnake });
 
             let findings = Violations_In(&payload, "src/lib.rs", cases);
 

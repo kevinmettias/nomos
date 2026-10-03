@@ -60,7 +60,12 @@ pub const UNDECLARED_POLICY_KEY_CONTRACT_RECORD: &str = "OD-RULES-035";
 /// refinement first. It is about the naming keys a rule reads from `standards.json`, a block
 /// decision 5 keeps this rule away from, and decision 5 did not move, so the citation follows the
 /// record once more.
-pub const UNDECLARED_POLICY_KEY_CONTRACT_RECORD_VERSION: u32 = 4;
+///
+/// Version 5 adds decision 8, which has every rule that judges a function's name read the keys
+/// declared for the language it is written in, and a Go method read the method keys first. Those
+/// keys too are read from `standards.json`, and decision 5 did not move, so the citation follows
+/// the record again.
+pub const UNDECLARED_POLICY_KEY_CONTRACT_RECORD_VERSION: u32 = 5;
 
 /// Reports every key a repository declares in `nomos-limits.json`, repository-wide or under a
 /// language, that no limits axis names -- one `Blocking` finding per key.

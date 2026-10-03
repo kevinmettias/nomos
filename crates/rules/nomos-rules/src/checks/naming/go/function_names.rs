@@ -19,10 +19,28 @@
 //! first word lower, the rest cased normally." Both are corrected to their real defaults
 //! here, the same way every casing rule in this crate now resolves its case from a
 //! repository's own `nomos.cap.naming.policy` rather than a hand-rolled predicate.
+//!
+//! # Which keys a Go function's case is read under
+//!
+//! `OD-RULES-035` decision 8. A Go function reads the refinement its side of visibility selects,
+//! then `function`, each looked up for `go` before repository-wide: code-standards' own order over
+//! the same block, which falls back to `function` where these rules once stopped at the
+//! refinement. A Go method -- a function declared on a receiver -- reads `method.exported` or
+//! `method.unexported`, then `method`, ahead of those. With none of them declared each rule keeps
+//! its refinement's own Go default, which is what it judged against before it read the others.
+//!
+//! Reading `function` holds an unexported Go function to a case that may be one no unexported Go
+//! name can take: this repository declares `function` upper-snake, and Go exports a name by its
+//! first letter. That is the repository's declaration, and code-standards reads it the same way.
+//! What it must not reach is `main` and `init` declared without a receiver, which the Go
+//! specification names and no repository can rename, so the unexported rule judges neither.
 
-use crate::checks::naming::{Case_Judged_Against, Resolve_Case};
-use crate::rule_descriptor::policy_axis::{EXPORTED_FUNCTION_CASE, UNEXPORTED_FUNCTION_CASE};
-use crate::SourceFile;
+use crate::checks::naming::function_cases::Is_Go_Method;
+use crate::checks::naming::{Case_Judged_Against, Resolve_Read};
+use crate::rule_descriptor::policy_axis::{
+    CaseRead, GO_EXPORTED_FUNCTION_READ, GO_EXPORTED_METHOD_READ, GO_UNEXPORTED_FUNCTION_READ, GO_UNEXPORTED_METHOD_READ,
+};
+use crate::{SourceFile, GO_LANGUAGE};
 use nomos_analysis::FactReader;
 use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{FUNCTION, PayloadItem, SyntaxPayload};
@@ -33,16 +51,19 @@ pub const EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE: &str = "exported-functions-us
 /// The code-standards identifier for the unexported half of the same convention.
 pub const UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER: &str = "unexported-functions-lowercase-only-the-first-letter";
 
-/// Judges exported Go function and method names against `Upper_Snake_Case` — a
-/// repository's own `nomos.cap.naming.policy` when it declares `function.exported` for
-/// `go`, this rule's own corrected default otherwise.
+/// The names the Go specification gives a function declared without a receiver: a program's entry
+/// point and a package's initializer. Neither is the author's to choose.
+const NAMED_BY_GO: [&str; 2] = ["main", "init"];
+
+/// Judges exported Go function and method names against the case a repository's own
+/// `nomos.cap.naming.policy` declares for them, `Upper_Snake_Case` when it declares none.
 #[must_use]
 pub fn Check_Exported_Go_Functions_Use_Upper_Snake_Case(
     sources: &[SourceFile],
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    let Some(case) = Resolve_Case(facts, Some("go"), &EXPORTED_FUNCTION_CASE)
+    let Some(cases) = Go_Cases(facts, &GO_EXPORTED_FUNCTION_READ, &GO_EXPORTED_METHOD_READ)
     else
     {
         return Vec::new();
@@ -51,23 +72,23 @@ pub fn Check_Exported_Go_Functions_Use_Upper_Snake_Case(
         sources,
         facts,
         Judgment {
-            case,
+            cases,
             judge: ViolationConstructor(Violations_In),
             unread: UnreadFindingConstructor(Unread_As_This_Rule),
         },
     );
 }
 
-/// Judges unexported Go function and method names against the same convention with only
-/// its first word lowercased — a repository's own `nomos.cap.naming.policy` when it
-/// declares `function.unexported` for `go`, this rule's own corrected default otherwise.
+/// Judges unexported Go function and method names against the case a repository's own
+/// `nomos.cap.naming.policy` declares for them, and against the same convention with only its
+/// first word lowercased when it declares none.
 #[must_use]
 pub fn Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(
     sources: &[SourceFile],
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    let Some(case) = Resolve_Case(facts, Some("go"), &UNEXPORTED_FUNCTION_CASE)
+    let Some(cases) = Go_Cases(facts, &GO_UNEXPORTED_FUNCTION_READ, &GO_UNEXPORTED_METHOD_READ)
     else
     {
         return Vec::new();
@@ -76,23 +97,53 @@ pub fn Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(
         sources,
         facts,
         Judgment {
-            case,
+            cases,
             judge: ViolationConstructor(Unexported_Violations_In),
             unread: UnreadFindingConstructor(Unread_As_Unexported_Rule),
         },
     );
 }
 
-/// The shape both checks above share: skip a non-Go source, read each remaining source's
-/// own syntax fact, and fold either a real reading failure or `judge`'s own findings
-fn Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> Vec<Finding>
+/// The case a Go name on one rule's side of visibility is judged against: a function's, or a
+/// method's.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+struct GoCases
+{
+    function: Case,
+    method: Case,
+}
+
+impl GoCases
+{
+    /// The case `item` is judged against: a method's when it is declared on a receiver.
+    fn For(self, item: &PayloadItem) -> Case
+    {
+        if Is_Go_Method(item)
+        {
+            return self.method;
+        }
+
+        return self.function;
+    }
+}
+
+/// The cases one side of visibility reads for Go, `function` for a function and `method` for a
+/// method.
+fn Go_Cases(facts: &mut dyn FactReader, function: &CaseRead<'_>, method: &CaseRead<'_>) -> Option<GoCases>
+{
+    let language = Some(GO_LANGUAGE);
+
+    return Some(GoCases { function: Resolve_Read(facts, language, function)?, method: Resolve_Read(facts, language, method)? });
+}
+
+fn Violations_In(payload: &SyntaxPayload, path: &str, cases: GoCases) -> Vec<Finding>
 {
     return payload
         .items
         .iter()
         .filter(|item| return Is_Exported_Go_Function(item))
-        .filter(|item| return !case.Is_The_Shape_Of(item.Own_Name()))
-        .map(|item| return Violation_Finding(path, item, case))
+        .filter(|item| return !cases.For(item).Is_The_Shape_Of(item.Own_Name()))
+        .map(|item| return Violation_Finding(path, item, cases.For(item)))
         .collect();
 }
 
@@ -108,20 +159,26 @@ fn Violation_Finding(path: &str, item: &PayloadItem, case: Case) -> Finding
     return Function_Naming_Finding(EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, path, item, summary);
 }
 
-fn Unexported_Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> Vec<Finding>
+fn Unexported_Violations_In(payload: &SyntaxPayload, path: &str, cases: GoCases) -> Vec<Finding>
 {
     return payload
         .items
         .iter()
-        .filter(|item| return Is_Unexported_Go_Function(item))
-        .filter(|item| return !case.Is_The_Shape_Of(item.Own_Name()))
-        .map(|item| return Unexported_Violation_Finding(path, item, case))
+        .filter(|item| return Is_Unexported_Go_Function(item) && !Is_Named_By_Go(item))
+        .filter(|item| return !cases.For(item).Is_The_Shape_Of(item.Own_Name()))
+        .map(|item| return Unexported_Violation_Finding(path, item, cases.For(item)))
         .collect();
 }
 
 fn Is_Unexported_Go_Function(item: &PayloadItem) -> bool
 {
     return item.kind == FUNCTION && !item.Is_Public();
+}
+
+/// Whether `item` is a function declared without a receiver under a name [`NAMED_BY_GO`] holds.
+fn Is_Named_By_Go(item: &PayloadItem) -> bool
+{
+    return !Is_Go_Method(item) && NAMED_BY_GO.contains(&item.qualified_name.as_str());
 }
 
 fn Unexported_Violation_Finding(path: &str, item: &PayloadItem, case: Case) -> Finding
@@ -155,13 +212,13 @@ fn Unread_As_Unexported_Rule(mut finding: Finding) -> Finding
 /// Constructs the violations one payload's function names hold against an already-resolved
 /// case, named so it reads as a collaborator with one documented operation rather than a
 /// bare stored callable.
-struct ViolationConstructor(fn(&SyntaxPayload, &str, Case) -> Vec<Finding>);
+struct ViolationConstructor(fn(&SyntaxPayload, &str, GoCases) -> Vec<Finding>);
 
 impl ViolationConstructor
 {
-    fn Violations(&self, payload: &SyntaxPayload, path: &str, case: Case) -> Vec<Finding>
+    fn Violations(&self, payload: &SyntaxPayload, path: &str, cases: GoCases) -> Vec<Finding>
     {
-        return (self.0)(payload, path, case);
+        return (self.0)(payload, path, cases);
     }
 }
 
@@ -177,13 +234,13 @@ impl UnreadFindingConstructor
     }
 }
 
-/// How to judge one payload's function names: the already-resolved case a name must match,
+/// How to judge one payload's function names: the already-resolved cases a name must match,
 /// the violation constructor, and how to wrap a reading failure into its own finding.
 /// Grouped so the two callers above and this function stay under the parameter-count
 /// ceiling.
 struct Judgment
 {
-    case: Case,
+    cases: GoCases,
     judge: ViolationConstructor,
     unread: UnreadFindingConstructor,
 }
@@ -203,7 +260,7 @@ fn Judged_Go_Function_Sources(sources: &[SourceFile], facts: &mut dyn FactReader
         {
             Ok(payload) =>
             {
-                let violations = judgment.judge.Violations(&payload, &source.path, judgment.case);
+                let violations = judgment.judge.Violations(&payload, &source.path, judgment.cases);
                 findings.extend(violations);
             }
             Err(finding) => findings.push(judgment.unread.Wrap(finding)),
@@ -245,7 +302,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\trun_With_Backend\t.\t+fn/0\n");
 
-        let findings = Violations_In(&payload, "main.go", Case::UpperSnake);
+        let findings = Violations_In(&payload, "main.go", Alike(Case::UpperSnake));
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "run_With_Backend");
@@ -256,7 +313,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tRun_With_Backend\t.\t+fn/0\n");
 
-        let findings = Violations_In(&payload, "main.go", Case::UpperSnake);
+        let findings = Violations_In(&payload, "main.go", Alike(Case::UpperSnake));
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -266,7 +323,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPrivate\trunWithBackend\t.\t+fn/0\n");
 
-        let findings = Violations_In(&payload, "main.go", Case::UpperSnake);
+        let findings = Violations_In(&payload, "main.go", Alike(Case::UpperSnake));
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -277,7 +334,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPrivate\trow_Breaches\t.\t+fn/0\n");
 
-        let findings = Unexported_Violations_In(&payload, "index.go", Case::MixedSnake);
+        let findings = Unexported_Violations_In(&payload, "index.go", Alike(Case::MixedSnake));
 
         assert!(findings.is_empty(), "{findings:?}");
     }
@@ -287,7 +344,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPrivate\trowBreaches\t.\t+fn/0\n");
 
-        let findings = Unexported_Violations_In(&payload, "index.go", Case::MixedSnake);
+        let findings = Unexported_Violations_In(&payload, "index.go", Alike(Case::MixedSnake));
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(
@@ -301,7 +358,7 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPrivate\tRow_Breaches\t.\t+fn/0\n");
 
-        let findings = Unexported_Violations_In(&payload, "index.go", Case::MixedSnake);
+        let findings = Unexported_Violations_In(&payload, "index.go", Alike(Case::MixedSnake));
 
         assert_eq!(findings.len(), 1, "{findings:?}");
     }
@@ -311,9 +368,55 @@ mod tests
     {
         let payload = Payload_From_Text("unexpanded\t0\nitem\t0\tFunction\tPublic\tRow_Breaches\t.\t+fn/0\n");
 
-        let findings = Unexported_Violations_In(&payload, "index.go", Case::MixedSnake);
+        let findings = Unexported_Violations_In(&payload, "index.go", Alike(Case::MixedSnake));
 
         assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// A method is judged against the method's case, a free function against the function's, and
+    /// each finding names the case its own subject was judged against.
+    #[test]
+    fn Test_Violations_In_Should_Judge_A_Method_Against_The_Methods_Case()
+    {
+        let payload = Payload_From_Text(
+            "unexpanded\t0\n\
+             item\t0\tFunction\tPublic\tRowCount\t.\t+fn/0\n\
+             item\t1\tFunction\tPublic\tTable::Row_Count\t.\t+fn/1\n",
+        );
+        let cases = GoCases { function: Case::UpperSnake, method: Case::UpperCamel };
+
+        let findings = Violations_In(&payload, "table.go", cases);
+
+        assert_eq!(Summaries(&findings), vec!["exported Go function `Row_Count` is not upper-camel case"], "{findings:?}");
+    }
+
+    /// `main` and `init` declared without a receiver are the Go specification's, and no declared
+    /// case reaches them; a method that happens to share the name is the author's, and is judged.
+    #[test]
+    fn Test_Unexported_Violations_In_Should_Not_Judge_A_Name_Go_Gives_A_Function()
+    {
+        let payload = Payload_From_Text(
+            "unexpanded\t0\n\
+             item\t0\tFunction\tPrivate\tmain\t.\t+fn/0\n\
+             item\t1\tFunction\tPrivate\tinit\t.\t+fn/0\n\
+             item\t2\tFunction\tPrivate\tTable::init\t.\t+fn/1\n",
+        );
+
+        let findings = Unexported_Violations_In(&payload, "main.go", Alike(Case::UpperSnake));
+
+        assert_eq!(Summaries(&findings), vec!["unexported Go function `init` is not upper-snake case"], "{findings:?}");
+        assert_eq!(findings.first().expect("asserted one finding above").subject_name, "Table::init");
+    }
+
+    /// One case for a function and a method alike: what every test above judges against.
+    fn Alike(case: Case) -> GoCases
+    {
+        return GoCases { function: case, method: case };
+    }
+
+    fn Summaries(findings: &[Finding]) -> Vec<&str>
+    {
+        return findings.iter().map(|finding| return finding.summary.as_str()).collect();
     }
 
     fn Payload_From_Text(text: &str) -> SyntaxPayload
