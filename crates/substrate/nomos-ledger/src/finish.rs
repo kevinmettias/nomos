@@ -31,6 +31,7 @@ mod gate_step;
 mod tests;
 
 pub use refusal::FinishRefusal;
+pub use gate_step::Is_Labelled_Blocking;
 use refusal::Tail_Of;
 use running::{Command_From_Argv, Ran, Ran_To_Completion, Refuse_Nonzero, Runnable_Predicate, Runner};
 

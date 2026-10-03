@@ -47,8 +47,10 @@ nomos-workspace = { workspace = true }
 # derivations `OD-ANALYSIS-011` permits, which needs `Subject_Of_Path` and `Content_Digest`.
 nomos-model = { workspace = true }
 nomos-contracts = { workspace = true }
-# The ledger crate is used only by integration tests that check the agent contract
-# and toolchain-floor workflow derivation.
+# The ledger crate, for the integration tests that read its vocabulary rather than retype it:
+# the agent contract, the README's item kinds and origins, the toolchain-floor workflow
+# derivation, and `tests/blocking_label.rs`, which holds the line the ledger lifts as Blocking
+# to the line `nomos-contracts` above renders for a Blocking finding.
 nomos-ledger = { workspace = true }
 # The canonical Assessment/Verdict/Site vocabulary, the refusing reader and the five
 # predicates `tests/requirement_trace` compares the committed corpus with — named here

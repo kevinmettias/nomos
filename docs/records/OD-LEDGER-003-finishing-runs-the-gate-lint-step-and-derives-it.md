@@ -3,7 +3,7 @@ id: OD-LEDGER-003
 type: decision
 title: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - work-ledger
@@ -65,8 +65,8 @@ predicate that exits zero while the gate's own step does not.
 from the gate rather than written down beside it.**
 
 That is the decision as version 1 made it. Version 2 runs the gate's `Rules` step after the
-lint step and before the predicate, under the same three parts below; the amendment at the end
-of this record says what changed and what did not.
+lint step and before the predicate, under the same three parts below; the version 2 amendment
+near the end of this record says what changed and what did not.
 
 Three parts, each load-bearing.
 
@@ -210,3 +210,24 @@ already did; finishing from a worktree at the commit to be published is the reme
 `cargo --version`, and they declare no `Rules` step, so their finishes record it as not
 declared. The cases that run the step are against fixture workflows that declare it, beside a
 test that this repository's own workflow still yields a `Rules` argv.
+
+## Amendment, Version 3: A Refusal By The Rules Step Now Shows The Finding That Refused It
+
+Added at version 3. Version 2's "What it catches, measured" recorded a gap: a finish refused by
+the `Rules` step carried the report's summary line and not the Blocking finding's own, which fell
+outside the 2,000 bytes a refusal keeps, behind cargo's replayed warnings.
+`P201-A-FINISH-REFUSED-BY-THE-RULES-STEP-DOES-NOT-SHOW-THE-FINDING-THAT-REFUSED-IT` (`96938b90`)
+closed it in `nomos-ledger`'s finish, with `nomos gate run` unchanged: a refused step's refusal
+now leads with every line its report labelled Blocking, wherever in the report that line fell,
+and ends with exactly the tail it carried before. How those lines are found, and why by their
+label, is documented where it is done, in `crates/substrate/nomos-ledger/src/finish/gate_step.rs`.
+
+The label the ledger finds them by is a copy of the one `nomos-contracts` renders, a crate
+`nomos-ledger` does not depend on.
+`P206-THE-LEDGER-LIFTS-BLOCKING-LINES-BY-A-COPIED-LABEL-AND-OD-LEDGER-003-STILL-SAYS-THE-GAP-IS-OPEN`
+holds the two together in `tests/contract/tests/blocking_label.rs`, so a change to either
+spelling fails a test instead of quietly returning the refusal to its old tail.
+
+**What stands.** Everything version 2 decided: what a finish runs, in what order, under what
+bound, and what it records. Version 2's measurement is left as it was taken, at `a370a004`, and
+this version decides nothing new.

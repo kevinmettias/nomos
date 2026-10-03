@@ -127,6 +127,7 @@ pub fn nomos_ledger::Finish_Item<Files: FileSystem, TimeSource: Clock, Lock: Fil
 pub fn nomos_ledger::GateUnknown::Describe(&self) -> String
 pub fn nomos_ledger::Holder::As_Text(&self) -> &'a str
 pub fn nomos_ledger::Holder::from(value: &'a Text) -> Self
+pub fn nomos_ledger::Is_Labelled_Blocking(line: &str) -> bool
 pub fn nomos_ledger::ItemId::As_Text(&self) -> &str
 pub fn nomos_ledger::ItemId::New(value: impl Into<String>) -> Self
 pub fn nomos_ledger::ItemId::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result

@@ -103755,14 +103755,36 @@
           "suppressions.json",
           "crates/rules/nomos-rules/docs/api/lib.md",
           "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md",
-          "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md"
+          "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md",
+          "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md",
+          "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md",
+          "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md",
+          "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md",
+          "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md",
+          "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md",
+          "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md",
+          "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md",
+          "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md",
+          "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md",
+          "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md",
+          "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md",
+          "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md",
+          "crates/rules/nomos-rules/src/checks/copy_clones.rs",
+          "crates/rules/nomos-rules/src/checks/lint.rs",
+          "crates/rules/nomos-rules/src/checks/nested_locks.rs",
+          "crates/rules/nomos-rules/src/checks/policy.rs",
+          "crates/rules/nomos-rules/src/checks/review.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p205-launcher",
+        "acquired_at": 1791047447,
+        "lease_expires_at": 1791065447
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -103779,7 +103801,32 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "opus-p205-launcher",
+          "added": [
+            "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md",
+            "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md",
+            "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md",
+            "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md",
+            "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md",
+            "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md",
+            "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md",
+            "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md",
+            "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md",
+            "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md",
+            "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md",
+            "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md",
+            "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md",
+            "crates/rules/nomos-rules/src/checks/copy_clones.rs",
+            "crates/rules/nomos-rules/src/checks/lint.rs",
+            "crates/rules/nomos-rules/src/checks/nested_locks.rs",
+            "crates/rules/nomos-rules/src/checks/policy.rs",
+            "crates/rules/nomos-rules/src/checks/review.rs"
+          ],
+          "widened_at": 1791048344
+        }
+      ]
     },
     {
       "id": "P206-THE-LEDGER-LIFTS-BLOCKING-LINES-BY-A-COPIED-LABEL-AND-OD-LEDGER-003-STILL-SAYS-THE-GAP-IS-OPEN",
@@ -103795,11 +103842,13 @@
           "tests/contract/tests/blocking_label.rs",
           "tests/contract/Cargo.toml",
           "tests/contract/surface/nomos-ledger.txt",
-          "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md"
+          "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md",
+          "crates/substrate/nomos-ledger/src/lib.rs",
+          "crates/substrate/nomos-ledger/src/finish.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -103817,11 +103866,64 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ug\\deps\\rule_contract_citation-002e0e5a5c7c36ab.exe)\n     Running tests\\rule_descriptors.rs (F:/repos/nomos-p206-target\\debug\\deps\\rule_descriptors-b0eaaf57c3a31217.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/nomos-p206-target\\debug\\deps\\toolchain_floor-f83c22963bb3653d.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p206-target\\debug\\deps\\nomos_ledger-1074efb64b6366e3.exe)\n     Running tests\\declining_ends_an_item\\main.rs (F:/repos/nomos-p206-target\\debug\\deps\\declining_ends_an_item-09b0cf56e4bce0dc.exe)\n     Running tests\\exclusion_holds\\main.rs (F:/repos/nomos-p206-target\\debug\\deps\\exclusion_holds-e6787e7b48459927.exe)\n     Running tests\\gate_covers_finish\\main.rs (F:/repos/nomos-p206-target\\debug\\deps\\gate_covers_finish-1eaa4f6992e3d479.exe)\n     Running tests\\local_gate_execution.rs (F:/repos/nomos-p206-target\\debug\\deps\\local_gate_execution-a634a12dca5ce1fb.exe)\n     Running tests\\records_do_not_serialize\\main.rs (F:/repos/nomos-p206-target\\debug\\deps\\records_do_not_serialize-ce5ebf8ad1d3b10a.exe)\n     Running tests\\scope_verification_integration.rs (F:/repos/nomos-p206-target\\debug\\deps\\scope_verification_integration-35dc10f90f1b75dc.exe)\n     Running tests\\widening_is_recorded\\main.rs (F:/repos/nomos-p206-target\\debug\\deps\\widening_is_recorded-1cb96a4e5c20aef2.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p206-target\\debug\\deps\\nomos_spec_store-06e6aa6a481bd8b1.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/nomos-p206-target\\debug\\deps\\governing_records_are_present-00262ca1fd3972b5.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/nomos-p206-target\\debug\\deps\\round_trip_holds-186543f7685a6a84.exe)\n     Running tests\\store_holds.rs (F:/repos/nomos-p206-target\\debug\\deps\\store_holds-9ca0a8b8a7346719.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/nomos-p206-target\\debug\\deps\\table_rows-8e18e4b8c31c2df5.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1791049058,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "4f5f054c0ecd914d13862dd1acdfdb7a43f0cacf"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "opus-p206-label",
+          "added": [
+            "crates/substrate/nomos-ledger/src/lib.rs",
+            "crates/substrate/nomos-ledger/src/finish.rs"
+          ],
+          "widened_at": 1791047659
+        }
+      ]
     }
   ]
 }

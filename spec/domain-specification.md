@@ -148,7 +148,7 @@ profile: domain-specification
 | docs/records/OD-HOST-020-a-provider-set-is-selected-once-by-a-composer-and-the-service-and-the-crates-that-run-it-receive-it-rather-than-choose-it.md@authored | docs/records/OD-HOST-020-a-provider-set-is-selected-once-by-a-composer-and-the-service-and-the-crates-that-run-it-receive-it-rather-than-choose-it.md | authored | 48 | 16 | sha256:f071db351bb1393debde951b9b77d5bc445a045a28fe8b1119ce64f2d4b38585 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
-| docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 38 | 7 | sha256:1ea9e32513c083e8f2a3aa69000315149c6f3279c6e8ff9aa5fb4b01163b9af6 |
+| docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 42 | 8 | sha256:cfc3bd499991c6bc762d9a9c4bbe967b902d1773bed20b0f5e8339f793a95744 |
 | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md@authored | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md | authored | 40 | 11 | sha256:24377a098af14a7108359fca1224d1d1ef08d6c700415a93b4322713f2624785 |
 | docs/records/OD-LEDGER-005-ready-meant-unheld-and-was-read-as-claimable.md@authored | docs/records/OD-LEDGER-005-ready-meant-unheld-and-was-read-as-claimable.md | authored | 25 | 8 | sha256:d749ba4084b715e35c6f0181a25e7ad2eaa66d828b206ba1aa458129ad7b8bf7 |
 | docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md@authored | docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md | authored | 44 | 10 | sha256:40882902c092c75dd927be661ca5d2fba26f935a63e9f85e052833f8d52c17fa |
@@ -1543,6 +1543,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#19 | authored | 2 | What Stays Weaker, And Why |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#23 | authored | 2 | Consequences |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#27 | authored | 2 | Amendment, Version 2: Finishing Also Runs The Gate's Rules Step |
+| docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#39 | authored | 2 | Amendment, Version 3: A Refusal By The Rules Step Now Shows The Finding That Refused It |
 | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md#1 | authored | 1 | An item reserves the record it will write, not the directory records live in |
 | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md#4 | authored | 2 | The Fourth Instance, Measured |
@@ -46906,11 +46907,11 @@ from the gate rather than written down beside it.**
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#13
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Decision · hash: sha256:f1adb4495efb2b989a2127223961c91a0d244fdc93a91a959e622a0c9fc6b235*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Decision · hash: sha256:0b433c45d641a7dfcde6585db0a737322f5439c2cdaf6f128e73ea6c710a1c25*
 
 That is the decision as version 1 made it. Version 2 runs the gate's `Rules` step after the
-lint step and before the predicate, under the same three parts below; the amendment at the end
-of this record says what changed and what did not.
+lint step and before the predicate, under the same three parts below; the version 2 amendment
+near the end of this record says what changed and what did not.
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#14
 
@@ -47154,6 +47155,43 @@ already did; finishing from a worktree at the commit to be published is the reme
 `cargo --version`, and they declare no `Rules` step, so their finishes record it as not
 declared. The cases that run the step are against fixture workflows that declare it, beside a
 test that this repository's own workflow still yields a `Rules` argv.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#39
+
+*revision: authored · kind: heading · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 3: A Refusal By The Rules Step Now Shows The Finding That Refused It · hash: sha256:c9a045b710a6f9ce179cb717ab221a94d909ce84fe41667afdd11848ba78ce92*
+
+## Amendment, Version 3: A Refusal By The Rules Step Now Shows The Finding That Refused It
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#40
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 3: A Refusal By The Rules Step Now Shows The Finding That Refused It · hash: sha256:25dc3c0cf1fdc6868bec3a0d03477ac067ad60fef69ffda160b4685f7666c87a*
+
+Added at version 3. Version 2's "What it catches, measured" recorded a gap: a finish refused by
+the `Rules` step carried the report's summary line and not the Blocking finding's own, which fell
+outside the 2,000 bytes a refusal keeps, behind cargo's replayed warnings.
+`P201-A-FINISH-REFUSED-BY-THE-RULES-STEP-DOES-NOT-SHOW-THE-FINDING-THAT-REFUSED-IT` (`96938b90`)
+closed it in `nomos-ledger`'s finish, with `nomos gate run` unchanged: a refused step's refusal
+now leads with every line its report labelled Blocking, wherever in the report that line fell,
+and ends with exactly the tail it carried before. How those lines are found, and why by their
+label, is documented where it is done, in `crates/substrate/nomos-ledger/src/finish/gate_step.rs`.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#41
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 3: A Refusal By The Rules Step Now Shows The Finding That Refused It · hash: sha256:4550437af5badd7fe1c8f01dab750ce42ae10c5dd9c71191a10f4e806bd0f4bf*
+
+The label the ledger finds them by is a copy of the one `nomos-contracts` renders, a crate
+`nomos-ledger` does not depend on.
+`P206-THE-LEDGER-LIFTS-BLOCKING-LINES-BY-A-COPIED-LABEL-AND-OD-LEDGER-003-STILL-SAYS-THE-GAP-IS-OPEN`
+holds the two together in `tests/contract/tests/blocking_label.rs`, so a change to either
+spelling fails a test instead of quietly returning the refusal to its old tail.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#42
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 3: A Refusal By The Rules Step Now Shows The Finding That Refused It · hash: sha256:17d320b43ffef3b0cf4bdb82a0127d03b5a1683e80adb9e414c3c84f1b54c93a*
+
+**What stands.** Everything version 2 decided: what a finish runs, in what order, under what
+bound, and what it records. Version 2's measurement is left as it was taken, at `a370a004`, and
+this version decides nothing new.
 
 ### docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md#1
 

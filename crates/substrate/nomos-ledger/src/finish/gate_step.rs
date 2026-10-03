@@ -26,12 +26,28 @@ use nomos_platform::ProgramOutput;
 ///   crate does not depend on the one that owns it, and a finish should not have to, because
 ///   the same ledger serves repositories whose `Rules` step is not `nomos` at all.
 ///
-/// A step that prints no such line, whether because it is not `nomos` or because the spelling
-/// changed, has nothing lifted and refuses with exactly the tail it carried before. The label
-/// names the category and not the disposition, so a Blocking finding a declared policy
+/// A step that prints no such line, a step that is not `nomos` among them, has nothing lifted
+/// and refuses with exactly the tail it carried before. A report whose label had come to be
+/// spelled differently would lose its lifting in the same quiet way, so this copy of the label
+/// is held to the one `nomos-contracts` renders, through [`Is_Labelled_Blocking`], by
+/// `tests/contract/tests/blocking_label.rs`. The
+/// label names the category and not the disposition, so a Blocking finding a declared policy
 /// tolerated still carries it; what is lifted is every line labelled Blocking, which holds every
 /// finding that refused the run, and the refusal says "labelled" for that reason.
 const BLOCKING_LINE_PREFIX: &str = "[Blocking] ";
+
+/// Whether `line`, from a gate step's standard output, is one its report labelled Blocking:
+/// the lines a refused step's refusal lifts ahead of its tail.
+///
+/// Published so that a test able to name both this crate and `nomos-contracts`, which renders
+/// the label and which this crate does not depend on, can render a real Blocking finding and
+/// ask this function about it. The line is judged by its text, and the constant it compares
+/// against says why.
+#[must_use]
+pub fn Is_Labelled_Blocking(line: &str) -> bool
+{
+    return line.starts_with(BLOCKING_LINE_PREFIX);
+}
 
 /// What the gate's own steps answered, before the item's predicate was asked.
 pub(super) struct GateSteps
@@ -194,8 +210,7 @@ fn Run_Derived_Step(
 fn Refused_Step_Output(output: &ProgramOutput) -> String
 {
     let tail = Combined_Tail(output);
-    let labelled: Vec<&str> =
-        output.stdout.lines().filter(|line| return line.starts_with(BLOCKING_LINE_PREFIX)).collect();
+    let labelled: Vec<&str> = output.stdout.lines().filter(|line| return Is_Labelled_Blocking(line)).collect();
     if labelled.is_empty()
     {
         return tail;
