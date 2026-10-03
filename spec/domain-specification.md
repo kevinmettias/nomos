@@ -237,7 +237,7 @@ profile: domain-specification
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 86 | 19 | sha256:820ad2b4fddaf0f7cae2b107793ae31355a0b6dcf4a4d06240ffc768517ec79a |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
-| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 63 | 15 | sha256:0897e21d2dc22b59b806bda736a436896e06a9f9ab216c86f262997a2e85759c |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 66 | 16 | sha256:bbd489cb791f1b3a24396836ea116a555c066b733201f3580898a2b9ed106d35 |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md@authored | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md | authored | 38 | 10 | sha256:740a2ca81a0ba769b2370b32a0b5af4aeb3647f2c9a141f1ebaf058f08f9f6c1 |
 | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md@authored | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md | authored | 23 | 6 | sha256:4b0bd63773267478c66835f887728ff0cedb4892a98e85291ed631e1665b53c8 |
 | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md@authored | docs/records/OD-RULES-016-a-file-naming-one-of-the-types-it-declares-satisfies-the-filename-rule-for-all-of-them.md | authored | 20 | 6 | sha256:04c3221540c1dfff84ceb66e9b1cd588331b0e7df89080dc0d714bc2df75102b |
@@ -2435,7 +2435,8 @@ profile: domain-specification
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#54 | authored | 3 | What this does not decide |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#56 | authored | 3 | What would reopen it |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#58 | authored | 3 | The items this amendment boards |
-| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#60 | authored | 2 | Status |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#60 | authored | 2 | Amendment, Version 4 |
+| docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#62 | authored | 2 | Status |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#1 | authored | 1 | How a text-only rule states a language restriction without naming a provider |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md#5 | authored | 2 | What Was Measured |
@@ -77472,15 +77473,15 @@ reads as is not decided here.
 
 ### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#55
 
-*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Amendment, Version 3: A Value Nobody Declared Is Named Once Per Run, Beside The Claim, And Never In A Finding / What this does not decide · hash: sha256:cb9edddf492d61d023ceb80de856cde2b7edc5184747ef256a2b0b7928ac14e8*
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Amendment, Version 3: A Value Nobody Declared Is Named Once Per Run, Beside The Claim, And Never In A Finding / What this does not decide · hash: sha256:f596a0a3da355a7c2487b30cc69b251b4385bbd913a98a2df10a36c7e75a75ae*
 
 - **No axis's undeclared meaning changes.** Whether `function`'s substituted value should stay
   this workspace's house style, which hex as shipped shows blaming a third-party repository's own
   files, is `OD-RULES-035` decision 3's question for that axis. The list makes it visible and does
   not answer it. code-standards' own resolver says "Which case a name takes is a house style, not
   a property of the language".
-- **Which naming keys a rule reads.** Whether `function-naming-convention` should read the
-  visibility-refined keys code-standards reads first is not decided here.
+- **Which naming keys a rule reads.** `OD-RULES-035` decides it, from its decision 7 on, and
+  this record does not.
 - **Whether a rule parameter's value enters a gate run's provenance**, so that `gate compare` can
   tell a loosened limit from fixed code, which is code-standards' `configidentity`'s own question.
 - **What `requirement-trace-staleness` does with a corpus it cannot read.**
@@ -77533,18 +77534,36 @@ territory was grepped at `c131760d`.
 
 ### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#60
 
+*revision: authored · kind: heading · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Amendment, Version 4 · hash: sha256:2d80714a4f7a1fa513b137dc141d2b52f67f23874e81a91791af9e8ebfb2ef09*
+
+## Amendment, Version 4
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#61
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Amendment, Version 4 · hash: sha256:e35e47666a4b8f6cb329995fe23141918ffa29eb7dbeb581d85b8f4af60506c2*
+
+Version 3 said, among what it does not decide, that whether `function-naming-convention` reads the
+visibility-refined keys code-standards reads first "is not decided here". That was accurate, and it
+named only where the question was not decided.
+`P194-THE-RUST-FUNCTION-NAMING-RULE-NEVER-READS-THE-KEYS-XVPE-DECLARES-ITS-FUNCTION-CASE-UNDER`
+then decided it for the Rust function rule, as `OD-RULES-035` version 4 decision 7, and that record
+is where any later decision about which naming keys a rule reads is made. The bullet now points
+there. Nothing this record decides changed.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#62
+
 *revision: authored · kind: heading · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#61
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#63
 
 *revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Status · hash: sha256:9d0a629091e2cc3723be038f4b1e97c787bdecce710e8ba3a33fe3b1feb78e3d*
 
 Accepted. `nomos-cap-naming-policy` is this decision's first capability contract,
 `nomos-repo-standards` its first provider.
 
-### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#62
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#64
 
 *revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Status · hash: sha256:bd793a0b1c3e7c1bb4adb61502f49b85954ca7d2e1b4c776d2514c60f3e44d77*
 
@@ -77553,7 +77572,15 @@ could be refactored: how a rule reacts to an absent *optional* capability, settl
 citing `OD-CAPABILITY-004` rather than re-deciding it, once refactoring the first rule
 onto this capability made the gap in version 1 concrete.
 
-### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#63
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#65
+
+*revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Status · hash: sha256:df8c0c46cad44d1adbf72ec4b270a2f79bb816ee25b1872a865595ebc5694728*
+
+Version 4 was amended by
+`P199-OD-RULES-011-VERSION-3-SAYS-WHICH-NAMING-KEYS-A-RULE-READS-IS-NOT-DECIDED-HERE-AND-NOT-WHERE`,
+which points the question of which naming keys a rule reads at `OD-RULES-035` and decides nothing.
+
+### docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#66
 
 *revision: authored · kind: prose · heading: A rule's parameters are a fact a repository declares, not a constant the rule compiles with / Status · hash: sha256:446af7a416e05a7052f2072f088be0159d90ba9e2033b7cb160e74c9e0442130*
 

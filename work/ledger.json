@@ -101472,13 +101472,17 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM",
         "P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p192-value",
+        "acquired_at": 1791044099,
+        "lease_expires_at": 1791058499
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -101664,16 +101668,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P188-A-PREDICATE-COVERS-ITS-OWN-PACKAGES-AND-FIVE-LANDINGS-REDDENED-A-DEPENDENT-NOBODY-RAN"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "opus-p195-rules-step",
-        "acquired_at": 1791026034,
-        "lease_expires_at": 1791060230
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -101694,7 +101694,38 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "ittests src\\lib.rs (F:/repos/nomos-p195-target\\debug\\deps\\nomos_ledger-3c821144759cbc68.exe)\n     Running tests\\declining_ends_an_item\\main.rs (F:/repos/nomos-p195-target\\debug\\deps\\declining_ends_an_item-6197c13f7d5135c4.exe)\n     Running tests\\exclusion_holds\\main.rs (F:/repos/nomos-p195-target\\debug\\deps\\exclusion_holds-9ba180c518e489d0.exe)\n     Running tests\\gate_covers_finish\\main.rs (F:/repos/nomos-p195-target\\debug\\deps\\gate_covers_finish-5847af9ef1cba00b.exe)\n     Running tests\\local_gate_execution.rs (F:/repos/nomos-p195-target\\debug\\deps\\local_gate_execution-30f375275a9966a7.exe)\n     Running tests\\records_do_not_serialize\\main.rs (F:/repos/nomos-p195-target\\debug\\deps\\records_do_not_serialize-e11c06cef3e50113.exe)\n     Running tests\\scope_verification_integration.rs (F:/repos/nomos-p195-target\\debug\\deps\\scope_verification_integration-d93034b5e8af4973.exe)\n     Running tests\\widening_is_recorded\\main.rs (F:/repos/nomos-p195-target\\debug\\deps\\widening_is_recorded-6eaf3aba9225609f.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p195-target\\debug\\deps\\nomos_spec_store-99b5d083e16a92d6.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/nomos-p195-target\\debug\\deps\\governing_records_are_present-3020e436fb3bc056.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/nomos-p195-target\\debug\\deps\\round_trip_holds-778bf79b0084b626.exe)\n     Running tests\\store_holds.rs (F:/repos/nomos-p195-target\\debug\\deps\\store_holds-d46f8d0939eabbf3.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/nomos-p195-target\\debug\\deps\\table_rows-371c6f729d35afee.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p195-target\\debug\\deps\\nomos_work_orchestration-3b8048e9088adbe2.exe)\n     Running tests\\integration_seams.rs (F:/repos/nomos-p195-target\\debug\\deps\\integration_seams-b9b0d2bdc302baba.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n   Doc-tests nomos_spec_store\n   Doc-tests nomos_work_orchestration\n",
+        "verified_at": 1791044187,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "5f6d395b7f4622a86c0427b5190bb3f02f209cd8"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -101990,11 +102021,15 @@
       "territory": {
         "resolution": "File",
         "paths": [
-          "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md"
+          "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md",
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -102012,11 +102047,47 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-rules"
+        ],
+        "exit_code": 0,
+        "output_tail": " (F:/repos/p199-render-target\\debug\\deps\\record_citation-e19eef83b69a6f12.exe)\n     Running tests\\requirement_trace\\main.rs (F:/repos/p199-render-target\\debug\\deps\\requirement_trace-009de64f7282120e.exe)\n     Running tests\\rule_composition.rs (F:/repos/p199-render-target\\debug\\deps\\rule_composition-25a45331b893b875.exe)\n     Running tests\\rule_contract_citation.rs (F:/repos/p199-render-target\\debug\\deps\\rule_contract_citation-002e0e5a5c7c36ab.exe)\n     Running tests\\rule_descriptors.rs (F:/repos/p199-render-target\\debug\\deps\\rule_descriptors-b0eaaf57c3a31217.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/p199-render-target\\debug\\deps\\toolchain_floor-f83c22963bb3653d.exe)\n     Running unittests src\\lib.rs (F:/repos/p199-render-target\\debug\\deps\\nomos_rules-8f9f4cdb33820fc9.exe)\n     Running tests\\integration_seams.rs (F:/repos/p199-render-target\\debug\\deps\\integration_seams-d9394d4149bb615a.exe)\n     Running unittests src\\lib.rs (F:/repos/p199-render-target\\debug\\deps\\nomos_spec_store-06e6aa6a481bd8b1.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/p199-render-target\\debug\\deps\\governing_records_are_present-00262ca1fd3972b5.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/p199-render-target\\debug\\deps\\round_trip_holds-186543f7685a6a84.exe)\n     Running tests\\store_holds.rs (F:/repos/p199-render-target\\debug\\deps\\store_holds-9ca0a8b8a7346719.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/p199-render-target\\debug\\deps\\table_rows-8e18e4b8c31c2df5.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: 1 warning emitted\n\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1791044463,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "793117cdf98e2759d3ab09cf3debaa6c4ef1cb4d"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "opus-p199-keys-pointer",
+          "added": [
+            "diagrams/relations.mmd",
+            "diagrams/relations.mmd.nomos-projection.json",
+            "spec/domain-specification.md",
+            "spec/domain-specification.md.nomos-projection.json"
+          ],
+          "widened_at": 1791044130
+        }
+      ]
     }
   ]
 }
