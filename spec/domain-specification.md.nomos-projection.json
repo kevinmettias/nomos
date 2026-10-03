@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:6819c856d596a6562a5ae279195b0c0b0f817f8376f76a74e440431b6cf790db",
-  "inputs_digest": "sha256:0b1b78112aa75b3b9d40d08a0cb937b58e1ec9d3464fc8cfac58d1ebc651c430",
+  "content_digest": "sha256:469e03351a40dd34e615fdd882a67a1e35af485795d5ef7b1af1ede8103ec124",
+  "inputs_digest": "sha256:ee8c1a1c8788b2dbe17b036aef88821142cf10b54b829c06390fb54b09469c78",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2569
+      2578
     ],
     [
       "Source blocks",
-      9429
+      9469
     ]
   ],
   "inputs": [
@@ -1153,7 +1153,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored",
-      "hash": "sha256:b0170320f17965570bf63ff80bf4e70b55c1f37d58dbabd38f7d88d3e78e6375"
+      "hash": "sha256:0897e21d2dc22b59b806bda736a436896e06a9f9ab216c86f262997a2e85759c"
     },
     {
       "content": "documents",
@@ -11968,7 +11968,52 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#21",
-      "hash": "sha256:bbd8bee0e47ae9196f415c7c43625e83c03fe2801a06c611e9213238facc816e"
+      "hash": "sha256:59ff8ef462fafbd8b053622562f1787a5aad0429a2a4970a8a08ddb8304e1ada"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#24",
+      "hash": "sha256:727d02bc3f5f1e559c34314697ae05140071608342b8041b6f60f6c73212b3a7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#28",
+      "hash": "sha256:8b6414f0bd8b14a02000d7b8f0e920916830f19273e9eb474aead4829f26e317"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#34",
+      "hash": "sha256:eee90e0c4d76990a112d2001425f8319707dbc5ef453b55f4197303fe27852a9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#41",
+      "hash": "sha256:1ac93fd0aa1d38af7dcec7b19b44e23d3e98b57fea389768be6f66ab3c0593b2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#47",
+      "hash": "sha256:c9c000d28deaec5b5d3f96dc4fd65470e14acd4f0c53d311f3465fabc585c21f"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#54",
+      "hash": "sha256:a9c03d60b26d92c5f2e8a94e5caf9f88a36048a8ff7a9cb2407e8d22bcf491c0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#56",
+      "hash": "sha256:ac13efd9d364b10ecf73f5cb8edd38a82f06f42de69df608185fd26e6ae10763"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#58",
+      "hash": "sha256:5cc87a8e0e4f7d9a77669b1b3ab82f50175848d5764c70df78834f5547f53858"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#60",
+      "hash": "sha256:219d4854858d8bb90ca4f86f19c34e31aa5adbca0f550afa7312e7009fac2e43"
     },
     {
       "content": "headings",
@@ -53313,17 +53358,217 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#21",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:58d0a21052d46cc47ee806ee6aee1ff17f92d5d69acb8b377dd2d022aeaa8f9d"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#22",
-      "hash": "sha256:9d0a629091e2cc3723be038f4b1e97c787bdecce710e8ba3a33fe3b1feb78e3d"
+      "hash": "sha256:b8c496bbdf09ab34155df464a6db67da9a37eb8b24466f7bdf2167982afe9fff"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#23",
+      "hash": "sha256:7d54b4784926963220345357535280a39bdd6d350a1f9abb86cd427e26a8b643"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#24",
+      "hash": "sha256:eb68fbab317978a534dece3b134e19b9aa39b289597729a0cce52737d7c1a2c8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#25",
+      "hash": "sha256:3d2b98edd6fff9c0915bc1ecd8ea47b8ad50c6f8586caaf55cae3c874cf2e978"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#26",
+      "hash": "sha256:41e4011c1e47728ddabede6b82d31feeb5360791b1adc162da5f4787ff2ed4ea"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#27",
+      "hash": "sha256:0df20b17609a86a4cccb3bacd652221b5672b5b6e3211f60097923b928307aa3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#28",
+      "hash": "sha256:a4e6d59f3fbb34a499ab2c23a56fff5f3da387b9765810356ef8e0ca3cc5daba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#29",
+      "hash": "sha256:93fece2054b031fb4a8ea1a76625475fa875a0537f0afd4b08e5227a828821d6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#30",
+      "hash": "sha256:3208cbd4c0879d040f3dcfe5f2a54203b85d7dc31a068bc958cef46d8c4b661e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#31",
+      "hash": "sha256:00191d0234a0212c80bc83bdb41c924ea01da999609f7e611b67324f04cdf7b1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#32",
+      "hash": "sha256:bf5d6b4157ebbe607c4f4b1cd66b72f4f8395f233e91cd2d4e2dfde0c4967729"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#33",
+      "hash": "sha256:9eb810dd67bd692f86d091f959c53cc58d1d13b3d95f0ac8e652a17e50ef6a11"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#34",
+      "hash": "sha256:07da9680c0e917b8409cec582b571196d5f43a50c81d1d1943c9bcb8de59944e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#35",
+      "hash": "sha256:f52a7ae19ef58dbf5a9a139314326dc6c05bccfd435f2f35872ae170f31fccba"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#36",
+      "hash": "sha256:0d3ddd87c3f803134b9d2f6945609245c7224b3eb85e9b2bdb49d838e9f97328"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#37",
+      "hash": "sha256:9bfe2742d7f4ad5dde8ffd8dff5fac57556220cbd2135511eb5dc7ecf238de06"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#38",
+      "hash": "sha256:2d3a62582f9996b59478171e3e842994769d095051d675c5cdda13544b7090a0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#39",
+      "hash": "sha256:500174ff96ad25151456332a8600e270a55aef3d1b925bac4d6f1f17ed3e3390"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#40",
+      "hash": "sha256:3ac105e8c6cbfa58c35eaad5a538de7a1accd2d164cf389552646625515627bd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#41",
+      "hash": "sha256:59f1fbc6dfef9e7338fa35b7a54e5404c6c41017b52dcbbf8aceaa69b3a26d86"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#42",
+      "hash": "sha256:07a1add3545b2d71f76de506dd310c13bd69ecd87bff884da9ec8e599df5605c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#43",
+      "hash": "sha256:70627699fe82f158110f3084a5a9e8d973747ac6e125fde567776c403b26a746"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#44",
+      "hash": "sha256:88837d17aec1c98e9ade18951a25f3aec0e46fae7472f91df6c09cd7e78b1966"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#45",
+      "hash": "sha256:e16a47b0b3124cdb305332987f5cd6bc36b16f3a318d72eeec8af79d33679d00"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#46",
+      "hash": "sha256:240d1a7f639a79787d12ac16ac80b0e36e10de3ef446a7d1c08ec45356cbfcf9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#47",
+      "hash": "sha256:6b667cec8f5e0ec6a00ec5092fce24851ac8b86f93b2b36fa91fc084eb77b0c6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#48",
+      "hash": "sha256:4469d92efe8bf55ee7366a7d91d4e13b2bf9e45b38395fc099c7acde8665f0c1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#49",
+      "hash": "sha256:6ac24d4959b63143f8d87c495a98bdb6a80c2517ed9ffacff37700d9e28ecc59"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#50",
+      "hash": "sha256:1c5728011ce02ad2e0fc8dc1815cd2db538b498b3f8a313061fd8e278065f095"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#51",
+      "hash": "sha256:bb59cb32378048bcb71f471b67f21f94b586efc2d6d83b46c8349099ee55fcf3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#52",
+      "hash": "sha256:b49d42c2df645ce74106c76694b23776f24f4142f59b6f2e77bcb39659ca196d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#53",
+      "hash": "sha256:a13810a6bc88c7e7fa69a5372f540827d51b52bc064a8a2c7946644e65e77b91"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#54",
+      "hash": "sha256:aa5d128a8b8a0d7a307e9998cb60a25fa6f65a6ad497f05228e7c17873eab793"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#55",
+      "hash": "sha256:cb9edddf492d61d023ceb80de856cde2b7edc5184747ef256a2b0b7928ac14e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#56",
+      "hash": "sha256:3f8acbd7aa4f76809c149b5b6400cf9de9f3022d47648edd011dae51f710f91c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#57",
+      "hash": "sha256:4bd8f307c8ff27788d60780b38e9d45bf32efd2d9264dde556dac7c5ddc43bcf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#58",
+      "hash": "sha256:fb6bc1298a37aff7c6113f493317ae1ce0e690b89735d3658ddcd70b35c664bc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#59",
+      "hash": "sha256:de57624ab7ad3574cd09619c1d30574151dd6bf21a1bf2d2c6a70b3ebd82b73e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#60",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#61",
+      "hash": "sha256:9d0a629091e2cc3723be038f4b1e97c787bdecce710e8ba3a33fe3b1feb78e3d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#62",
       "hash": "sha256:bd793a0b1c3e7c1bb4adb61502f49b85954ca7d2e1b4c776d2514c60f3e44d77"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#63",
+      "hash": "sha256:446af7a416e05a7052f2072f088be0159d90ba9e2033b7cb160e74c9e0442130"
     },
     {
       "content": "blocks",

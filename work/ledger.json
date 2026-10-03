@@ -101185,14 +101185,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "opus-p189-defaults",
-        "acquired_at": 1791015955,
-        "lease_expires_at": 1791033955
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -101204,6 +101200,231 @@
           "nomos-contract-tests"
         ],
         "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "baa8c0679ce59d.exe)\n     Running tests\\corpus_gates.rs (F:/repos/nomos-p189-target\\debug\\deps\\corpus_gates-da4a75d3d309d3ef.exe)\n     Running tests\\crossing_cold.rs (F:/repos/nomos-p189-target\\debug\\deps\\crossing_cold-0f9de3a884be5761.exe)\n     Running tests\\determinism_declarations.rs (F:/repos/nomos-p189-target\\debug\\deps\\determinism_declarations-bc6752ca6e73573c.exe)\n     Running tests\\determinism_vocabulary.rs (F:/repos/nomos-p189-target\\debug\\deps\\determinism_vocabulary-f4b3bb9fc86abd5f.exe)\n     Running tests\\public_surface\\main.rs (F:/repos/nomos-p189-target\\debug\\deps\\public_surface-0af8fb56f8a4a91f.exe)\n     Running tests\\record_citation.rs (F:/repos/nomos-p189-target\\debug\\deps\\record_citation-e19eef83b69a6f12.exe)\n     Running tests\\requirement_trace\\main.rs (F:/repos/nomos-p189-target\\debug\\deps\\requirement_trace-009de64f7282120e.exe)\n     Running tests\\rule_composition.rs (F:/repos/nomos-p189-target\\debug\\deps\\rule_composition-25a45331b893b875.exe)\n     Running tests\\rule_contract_citation.rs (F:/repos/nomos-p189-target\\debug\\deps\\rule_contract_citation-002e0e5a5c7c36ab.exe)\n     Running tests\\rule_descriptors.rs (F:/repos/nomos-p189-target\\debug\\deps\\rule_descriptors-b0eaaf57c3a31217.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/nomos-p189-target\\debug\\deps\\toolchain_floor-f83c22963bb3653d.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p189-target\\debug\\deps\\nomos_spec_store-06e6aa6a481bd8b1.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/nomos-p189-target\\debug\\deps\\governing_records_are_present-00262ca1fd3972b5.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/nomos-p189-target\\debug\\deps\\round_trip_holds-186543f7685a6a84.exe)\n     Running tests\\store_holds.rs (F:/repos/nomos-p189-target\\debug\\deps\\store_holds-9ca0a8b8a7346719.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/nomos-p189-target\\debug\\deps\\table_rows-8e18e4b8c31c2df5.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1791018222,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "488bb76499e5974638750aa0e53324e27b3168e1"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P190-A-RUN-NAMES-EVERY-VALUE-ITS-RULES-READ-THAT-THE-REPOSITORY-NEVER-DECLARED-BESIDE-ITS-CLAIM",
+      "title": "A run names every value its rules read that the repository never declared, beside its claim",
+      "why": "OD-RULES-011 version 3, amended by P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO, decides that a value a rule read and the repository did not declare is named once per run, beside the claim and apart from the population, never in a finding and never in Claim. This item builds that record's decisions 1, 2, 3, 5 and 6 for CheckOutcome::Judged, nomos check's text report and hex's calibration.\n\nMeasured at c131760d. nomos_rules::DESCRIPTORS has 77 rows, and 30 of them read a family a repository may leave undeclared. Eleven judge against a value the axis table in crates/rules/nomos-rules/src/rule_descriptor/policy_axis.rs substitutes (six limits rows, five naming rows), cyclomatic-complexity reports its value undeclared, and four judge nothing for want of a norm: declared-tooling-language-for-scripts, goals-and-parts-line-up, standards-corpus and requirement-trace-staleness. The other 14 only add exceptions or subjects (the words additions, the test-material locations, and the keys undeclared-policy-key reads) and are never named. In this repository the list would name 13 rules: the six limits rows, data-names-stay-lower-snake and the three Go naming rows (the six Go rows judge crates/languages/nomos-lang-go-types/helper/main.go), cyclomatic-complexity, goals-and-parts-line-up and standards-corpus. In hex's calibration fixture it would name 8: 1500-lines, parameter-count, nesting-depth, cyclomatic-complexity and the four that judge nothing. Today none of it reaches a reader except cyclomatic-complexity's own advisory, and the calibration states provenance by hand in its verdict reasons. One of those is wrong: data-names-stay-lower-snake's reason says the rule judges against its hardcoded default with no fixture-side override needed, while the fixture's standards.json declares module and field.\n\nrequirement-trace-staleness's payload, built by nomos-cap-requirement-trace's Discover_Workspace, answers a missing tests/contract/requirements/ directory, an unreadable one and one whose every entry resolves with the same empty payload, so the rule cannot say it judged nothing. Decision 6 requires the first to be told from the third. The module docs of crates/capabilities/nomos-cap-requirement-trace/src/provider.rs and crates/rules/nomos-rules/src/checks/requirement_trace.rs say no record decides this question, and version 3 does.\n\nThe placement follows OD-ANALYSIS-012 version 2 decision 1: the descriptor declares, the body resolves by the same statement, and the root records. Whether a value was declared is a fact about the repository's policy facts rather than the rule's subjects, so nomos-rules answers it after the rule is judged, and the axis table stays private to nomos-rules as OD-RULES-035 decision 2 decided.\n\nTerritory was grepped at c131760d. The CheckOutcome::Judged sites that construct it or bind every field without a rest pattern are the nine P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM named, and the rule bodies that resolve an optional value are reserved because decision 5 makes them read the descriptor's declaration. P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM is claimed and in flight, adds the population this list sits beside, and holds most of these files, so this item depends on it, and its territory may need a widen once that lands. crates/rules/nomos-rules/src/rule_descriptor/optional_read.rs and crates/orchestration/nomos-check-orchestration/src/examined/undeclared_values.rs are placeholders for where the declared reads and the per-run list live; a different file name is a widen, not a decline.\n\nThe predicate is P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM's seven packages plus nomos-cap-requirement-trace. That item bounded its seven at 13,500 seconds; this bound is 14,400. The claimant reports the predicate's real cost beside its verdict.",
+      "done_when": "Binding, and not the implementer's to revisit: OD-RULES-011 version 3 decides that a value nobody declared is named beside the claim, never in a finding and never in Claim, and that a finding does not depend on whether its value was declared. So this item adds, removes and alters no finding, Applicability gains no variant, CheckOutcome gains no arm, and Claim, Claim_Of and a gate run's disposition are unchanged in every case.\n\nCheckOutcome::Judged carries, for every rule the run selected whose population was nonempty, each value that rule read from an optional family OD-RULES-011 version 3 names and that the repository did not declare: the family, the key, the language scope the rule read it for, and what the rule did with it, which is the value it judged against, that it judged nothing, or that it reported the value undeclared. A goal ceiling that is absent or zero is named as a spread bound not judged. Words additions, test-material locations and the keys undeclared-policy-key reads are never named. A value whose family could not be read is not named, and neither is a rule whose population was empty. A rule reused from the reassessment cache is named exactly as the run that reused it would name it. The list sits beside the population and apart from it.\n\nWhich optional values a rule reads is declared on its descriptor as the one statement its body resolves by. A rule body that resolves an optional value its descriptor does not declare fails a test, which is shown able to fail by a mutation restored byte-identically. The axis table stays private to nomos-rules, and the orchestration root interprets no key.\n\nrequirement-trace-staleness's payload tells a repository with no tests/contract/requirements/ directory from one whose every entry resolves, and neither from a provider that did not run, so the rule is named as having judged nothing only in the first case. What an unreadable directory or a refused entry reads as is unchanged. The module docs of the requirement-trace provider and rule say what OD-RULES-011 version 3 decides, rather than that no record decides it.\n\nnomos check's text report prints the list in its default output, apart from the claim line and apart from the population, and prints nothing new for a run in which nothing was undeclared. A test drives one rule over a repository that declares its value and over one that does not, asserts that only the second is named, with identical findings and the same Claim in both, and is shown able to fail by a mutation restored byte-identically. The hex calibration asserts, rule by rule, whether the list names that rule and with what, and every verdict reason the list contradicts is corrected. The commit states what the workspace self-check names when it lands, and that the self-check's findings are identical to those of the same check built at the parent.\n\nEvery surface snapshot the change moves is re-blessed from a clean worktree with the diff read. The predicate passes, and so does the gate's lint step.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor/optional_read.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor/policy_axis.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor/policy_axis/undeclared.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/checks/structure.rs",
+          "crates/rules/nomos-rules/src/checks/structure/go_file_size.rs",
+          "crates/rules/nomos-rules/src/checks/structure/tests.rs",
+          "crates/rules/nomos-rules/src/checks/function_shape.rs",
+          "crates/rules/nomos-rules/src/checks/function_shape/go_parameter_count.rs",
+          "crates/rules/nomos-rules/src/checks/function_shape/tests.rs",
+          "crates/rules/nomos-rules/src/checks/nesting_depth.rs",
+          "crates/rules/nomos-rules/src/checks/cyclomatic_complexity.rs",
+          "crates/rules/nomos-rules/src/checks/naming.rs",
+          "crates/rules/nomos-rules/src/checks/naming/data_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go/function_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go/type_names.rs",
+          "crates/rules/nomos-rules/src/checks/script_discipline/tooling_language.rs",
+          "crates/rules/nomos-rules/src/checks/goals.rs",
+          "crates/rules/nomos-rules/src/checks/standards_corpus.rs",
+          "crates/rules/nomos-rules/src/checks/requirement_trace.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "crates/capabilities/nomos-cap-requirement-trace/src/contract.rs",
+          "crates/capabilities/nomos-cap-requirement-trace/src/payload.rs",
+          "crates/capabilities/nomos-cap-requirement-trace/src/payload/requirement_trace_payload.rs",
+          "crates/capabilities/nomos-cap-requirement-trace/src/provider.rs",
+          "tests/contract/surface/nomos-cap-requirement-trace.txt",
+          "crates/orchestration/nomos-check-orchestration/src/run_context.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context/judging.rs",
+          "crates/orchestration/nomos-check-orchestration/src/run_context/tests.rs",
+          "crates/orchestration/nomos-check-orchestration/src/examined.rs",
+          "crates/orchestration/nomos-check-orchestration/src/examined/check_outcome.rs",
+          "crates/orchestration/nomos-check-orchestration/src/examined/undeclared_values.rs",
+          "crates/orchestration/nomos-check-orchestration/src/lib.rs",
+          "tests/contract/surface/nomos-check-orchestration.txt",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment/reduction.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/gate_environment/occurrence_history/tests.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/sarif/fixtures.rs",
+          "crates/host/nomos-api/src/response/check_outcome_response.rs",
+          "crates/host/nomos-cli/src/gate/report/tests.rs",
+          "crates/host/nomos-cli/src/gate/report/tests/verdicts.rs",
+          "crates/host/nomos-cli/src/gate/report/tests/explain.rs",
+          "crates/host/nomos-cli/src/check/report.rs",
+          "crates/host/nomos-cli/src/check/tests.rs",
+          "tests/integration/tests/calibration.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM",
+        "P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-cap-requirement-trace",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 14400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P191-THE-GATE-REPORT-SARIF-AND-THE-API-NAME-THE-VALUES-NOBODY-DECLARED-BESIDE-THE-CLAIM",
+      "title": "The gate report, SARIF and the API name the values a rule read that nobody declared, beside the claim",
+      "why": "OD-RULES-011 version 3 decision 3, amended by P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO, requires the list of values a selected rule read and the repository never declared to be printed in default output wherever a verdict is rendered, beside the claim and the population. Its reason is OD-CAPABILITY-004's refusal of a flag nothing is required to read, and the condition the owner set on 2026-10-03 for the population report it sits beside: reported beside the claim degrades into not reported unless it is prominent. P190-A-RUN-NAMES-EVERY-VALUE-ITS-RULES-READ-THAT-THE-REPOSITORY-NEVER-DECLARED-BESIDE-ITS-CLAIM computes the list into CheckOutcome::Judged and renders it in nomos check's text report only. At c131760d, nomos gate run --root . printed this repository's 475 findings, a summary line and no claim line, and printed hex's 5 the same way; neither run says that 1500-lines, parameter-count and nesting-depth judged against values nobody declared, in either tree. P186-THE-GATE-REPORT-SARIF-AND-THE-API-DO-NOT-SAY-WHICH-RULES-JUDGED-AN-EMPTY-POPULATION renders the population on these three surfaces and decides where SARIF carries it. This item puts the list beside it, in the same places and in the same form, so it waits on both. Its territory is that item's, grepped at c131760d, without the record that item amends.",
+      "done_when": "Every default rendering of a verdict names, beside the claim and beside the population and apart from both, the values P190-A-RUN-NAMES-EVERY-VALUE-ITS-RULES-READ-THAT-THE-REPOSITORY-NEVER-DECLARED-BESIDE-ITS-CLAIM adds to CheckOutcome::Judged, with what each rule did with each, and says nothing new when there are none. That means nomos gate run's text report, the SARIF log nomos gate run and nomos check write, and nomos-api's check and gate responses. It reads what that item computes and computes nothing a second time. Claim, Claim_Of and a gate run's disposition are unchanged in every case. In SARIF the list is carried beside the population P186-THE-GATE-REPORT-SARIF-AND-THE-API-DO-NOT-SAY-WHICH-RULES-JUDGED-AN-EMPTY-POPULATION places, machine-readable, and never as a result, since it is not a finding. Each rendering is proven by a test that drives a run with one rule reading an undeclared value and one reading a declared value, and asserts that only the first is named, with the same claim either way; each test is shown able to fail by a mutation restored byte-identically. Surface snapshots the change moves are re-blessed with the diff read. The predicate passes, and so does the gate's lint step.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-cli/src/gate/report",
+          "crates/host/nomos-cli/src/gate/sarif_output.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/sarif",
+          "crates/orchestration/nomos-gate-orchestration/src/sarif.rs",
+          "crates/host/nomos-api/src/response/check_outcome_response.rs",
+          "crates/host/nomos-api/src/check/claim_response.rs",
+          "crates/host/nomos-api/src/response/gate_run_response.rs",
+          "tests/contract/surface/nomos-api.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P186-THE-GATE-REPORT-SARIF-AND-THE-API-DO-NOT-SAY-WHICH-RULES-JUDGED-AN-EMPTY-POPULATION",
+        "P190-A-RUN-NAMES-EVERY-VALUE-ITS-RULES-READ-THAT-THE-REPOSITORY-NEVER-DECLARED-BESIDE-ITS-CLAIM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--bins",
+          "--test",
+          "public_surface"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM",
+      "title": "A finding states the value it was judged against, and not where that value came from",
+      "why": "OD-RULES-011 version 3 decision 4, amended by P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO, decides that a finding states the value it was judged against and nothing about that value that only one of its sources makes true, so its text, and the two identities hashed from it, are the same whether the value was declared or substituted. Measured at c131760d, nine composed rules break it. function-naming-convention's summary, written in crates/rules/nomos-rules/src/checks/naming/violations.rs, says the name \"is not Pascal_Snake_Case: README.md's Conventions section requires function names to be Pascal_Snake_Case, and Cargo.toml disables rustc's own non_snake_case lint\" whatever case it resolved and in whatever repository. With hex's calibration fixture's standards.json removed, nomos check reports 13 such findings against hex, attributing this workspace's convention to hex's own files. data-names-stay-lower-snake says \"not lower snake case\", and exported-functions-use-upper-snake-case and unexported-functions-lowercase-only-the-first-letter say Upper_Snake_Case, whatever case they resolved. parameter-count and go-helpers-package-five-inputs say \"the configured value parameter cap\" when nothing was configured. five-hundred-line-review-trigger and one-thousand-line-hard-trigger call their threshold Go's when a repository declared it. nesting-depth names the depth it found and not the limit it judged against. types-use-upper-camel-case-lower-camel-case and 1500-lines already state the value they judged against, and cyclomatic-complexity's \"declared limit\" is true of the only value it judges by. OccurrenceLineageId::Of and FindingOccurrenceId::Of both hash a finding's summary, so these summaries change identities once, at this item, and never again when a repository restates a default. At c131760d neither this repository's self-check nor hex's calibration fixture carries a verdict finding from any of the nine; the unread-subject findings two of them report on tests/corpus/analysis/gamma/broken.rs keep their own text. Most of these files are in P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM's live territory, so this item waits on it.",
+      "done_when": "Every composed rule that judges against a value a repository may declare states, in each finding that reports a verdict, the value it actually judged against, and nothing about that value that only one of its sources makes true: no repository file, no \"configured\", no \"default\", and no language named as the owner of a number. So a repository that declares a case or a limit other than the default reads its own value in the finding, and a repository that declares exactly the default reads the same text as one that declares nothing. Tests show both, for each rule whose findings change, and are shown able to fail by a mutation restored byte-identically. No rule's verdicts change: the same subjects are reported in violation as at the parent, which the commit shows by comparing this repository's self-check and the hex calibration fixture's check at both, on everything but the summaries this item changes. Unread-subject findings keep their text. The predicate passes, and so does the gate's lint step.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming.rs",
+          "crates/rules/nomos-rules/src/checks/naming/violations.rs",
+          "crates/rules/nomos-rules/src/checks/naming/data_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/go/function_names.rs",
+          "crates/rules/nomos-rules/src/checks/naming/tests.rs",
+          "crates/rules/nomos-rules/src/checks/function_shape.rs",
+          "crates/rules/nomos-rules/src/checks/function_shape/tests.rs",
+          "crates/rules/nomos-rules/src/checks/structure/go_file_size.rs",
+          "crates/rules/nomos-rules/src/checks/structure/tests.rs",
+          "crates/rules/nomos-rules/src/checks/nesting_depth.rs",
+          "crates/rules/nomos-rules/src/checks/nesting_depth/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM",
+        "P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 7200
       },
       "verified": null,
       "abandoned": [],
