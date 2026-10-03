@@ -3,7 +3,7 @@ id: OD-RULES-035
 type: decision
 title: A preference axis is a key a repository can write, declared once beside the rules that read it
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -186,9 +186,10 @@ blocks code-standards owns, in the shape it owns them; test material is Nomos's 
 one axis, which is not a reason to reshape it.
 
 **It does not decide whether a defaulted value is visible in a report.** Decision 3 makes the
-meaning declared; surfacing that a verdict was reached against a default is the
-empty-population question `OD-ANALYSIS-012` accepted and
-`P99-A-RULE-THAT-JUDGED-AN-EMPTY-POPULATION-REPORTS-IT-AS-OD-ANALYSIS-012-DECIDED-3` builds.
+meaning declared. Whether a verdict reached against a stated default says so is a separate
+question, and no governing record decides it yet. It is not an empty population, because the
+rule judged real subjects. The amendment below names the records that come nearest and says why
+none of them owns it.
 
 **It does not touch waivers.** That is M5, and `ARC-CONFORMANCE-003` already says where it
 starts.
@@ -206,7 +207,58 @@ resolver per family, with every existing row-shaped read site moved onto it; the
 family's source moved to `nomos-limits.json`; and the finding for an undeclared key in a file
 Nomos owns.
 
+## Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owns Its Visibility Yet
+
+**What was wrong.** Version 1's "What This Does Not Do" sent the visibility of a verdict
+reached against a default to `OD-ANALYSIS-012`, as the empty-population question that record
+accepted, and to `P99-A-RULE-THAT-JUDGED-AN-EMPTY-POPULATION-REPORTS-IT-AS-OD-ANALYSIS-012-DECIDED-3`
+as the item that would build it. Neither holds any longer. `OD-ANALYSIS-012` version 2 decides
+that a rule's population is the files its norm is about, at the grain of a language or kind.
+It also decides that a norm the repository did not declare is not a population: the subjects
+were there, and nothing was declared to hold them to. It names that case as `OD-RULES-011`'s
+optional-read question and not its own. A rule that judged against a defaulted axis judged
+real subjects, so its population is not empty, and the per-rule report that record decides will not
+name it. The item was declined, because its `done_when` computed the population from the slice
+`run_context` holds, which is not the population of any rule that narrows its own subjects.
+
+**Where the question stands, read from the records.** Four records come near it, and none of
+them decides it.
+
+- `OD-ANALYSIS-012` version 2 excludes it, as above.
+- `OD-RULES-011` version 2 decides what a rule does when an optional read finds nothing. It
+  applies no override, keeps the rule's own prior behaviour, and produces or alters no finding
+  because of the absence itself. Its reason that no reader is owed the difference belongs to its
+  first family: whether a name conforms is the same statement whichever source supplied the
+  case. It decides this for the six casing rules and leaves every other family to be decided as
+  its own later instance.
+- This record's decision 3 makes the meaning of an undeclared axis a declared property of the
+  axis. One of its three meanings is visible by construction: a rule that reports the axis
+  undeclared judges nothing and says why. A verdict on an axis judged against a stated default
+  says nothing about where its value came from, and version 1 left that open.
+- `OD-POLICY-001` names `Default` as the lowest of its ten configuration layers. It decides that
+  an effective policy carries, for each field, the layer and the artifact that decided it, which
+  is the provenance a report would need. It does not settle this question, for three reasons.
+  It re-homes the rule-parameter families under its resolver only when a second layer states one
+  of their fields, and none has. It carries the provenance of a policy, not of a verdict judged
+  under that policy. And it leaves rendering undecided.
+
+So no record owns the question yet. `OD-RULES-011` is the record `OD-ANALYSIS-012` hands it to,
+and its answer covers one family by an argument it does not extend. Nothing decides whether that
+argument carries to the other families, or whether a verdict reached against a value the
+repository never declared owes its reader the provenance of that value.
+`P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO`
+is boarded to decide it.
+
+**What this changes in the decision.** Nothing. Decisions 1 to 6 and the bound stand as
+accepted. Only the sentence that routed an open question changed, and it now says the question
+is open.
+
 ## Status
 
 Accepted. `ARC-CONFORMANCE-003`'s M2 is re-stated by this record, and the amendment to that
 record says so.
+
+Amended at version 2 by
+`P172-OD-RULES-035-SENDS-A-DEFAULTED-VERDICT-TO-A-POPULATION-QUESTION-OD-ANALYSIS-012-NO-LONGER-ANSWERS`,
+which corrected where the record sent the visibility of a verdict reached against a default. No
+governing record decides that question yet. Nothing the record decided changed.

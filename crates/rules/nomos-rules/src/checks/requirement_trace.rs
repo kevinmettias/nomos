@@ -23,11 +23,16 @@
 //! this repository has no `tests/contract/requirements/` directory at all (every repository
 //! this rule judges except this one, today), the directory exists and holds no entry, or
 //! every committed entry resolves. `nomos_cap_requirement_trace::Discover_Workspace`'s own
-//! module doc names the same collapse and why: `OD-ANALYSIS-012` decided a rule that judged
-//! an empty population deserves a report apart from one that judged a real population
-//! clean, but built no mechanism for it yet, so this rule follows the identical
-//! "an absent or empty optional capability judges nothing" idiom [`crate::
-//! Check_Goals_And_Parts_Line_Up`] already uses for a repository that declared no goals.
+//! module doc names the same collapse and why. It is not an empty population, and it does
+//! not wait on `OD-ANALYSIS-012`'s mechanism. That record's version 2 gives a Workspace rule
+//! the one workspace as its population, which is never empty, so its per-rule report never
+//! names this rule. A repository with no requirements directory has not declared the norm
+//! this rule holds it to, and version 2 says that is not a population but `OD-RULES-011`'s
+//! optional-read question: an absent optional read applies no override and raises no
+//! finding of its own. So this rule follows the identical "an absent or empty optional
+//! capability judges nothing" idiom [`crate::Check_Goals_And_Parts_Line_Up`] already uses
+//! for a repository that declared no goals. Whether a run should say a verdict was reached
+//! with nothing declared is decided by no record yet, as `OD-RULES-035` version 2 records.
 
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_requirement_trace::{Problem, ProblemKind, RequirementTracePayload, REGISTRY};

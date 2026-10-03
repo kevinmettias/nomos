@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:173d3f640e8a6d3c082450cf3c7a01a05f2005bbcc2109921cab99bf0959fd14",
-  "inputs_digest": "sha256:4ec56ae30c1a2172f516b7403ae899d63d285968725c771468c0c6949c200b75",
+  "content_digest": "sha256:6819c856d596a6562a5ae279195b0c0b0f817f8376f76a74e440431b6cf790db",
+  "inputs_digest": "sha256:0b1b78112aa75b3b9d40d08a0cb937b58e1ec9d3464fc8cfac58d1ebc651c430",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2568
+      2569
     ],
     [
       "Source blocks",
-      9422
+      9429
     ]
   ],
   "inputs": [
@@ -1263,7 +1263,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md@authored",
-      "hash": "sha256:e0ac2aee6396b6fc81bc98d1175e073255b801a7e6e03e25608406efc7edce1c"
+      "hash": "sha256:112fae92b7e80030d3f0b0729a3409c2b6a2f535cde9850f7ffef0f052efb664"
     },
     {
       "content": "documents",
@@ -12803,7 +12803,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#32",
-      "hash": "sha256:531a5580b15af19bcc921542088206e084c3f636139dce25e9d6924f09399d9f"
+      "hash": "sha256:8c3424ddfe116748e9655730a5122337a6abbdb0539e622bd44516e8f735822b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#38",
+      "hash": "sha256:eb99f6ddd0d24c10610f6fef819685e0c535d6b2a4c0ed13f1ab8cc84895a30c"
     },
     {
       "content": "headings",
@@ -56298,7 +56303,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#27",
-      "hash": "sha256:5f351aa132c2c7283c0db804cf2ed0680c6c90d92a0de65c9fb2f9a641b3de9c"
+      "hash": "sha256:a044aa99fed077ad6295d50f215d7d9823081c131a19ef74a69587ea1adb80be"
     },
     {
       "content": "blocks",
@@ -56323,12 +56328,47 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#32",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:05d14f64f44a621638119fef074eb4ff8dc7429d306da06d70bcdcad777066d5"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#33",
+      "hash": "sha256:67150f2c210ed6c5b0a4028416ba7f89ed379e12bc79ed08f15805fd4d843bf8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#34",
+      "hash": "sha256:6f3bf65b5214dd379c66ff2046357f1d9ef1bfb220b6412a07a8ac2d1d47e467"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#35",
+      "hash": "sha256:0be8f0e3b14eae125ca214a2925a16fa209e0031e5c34fcf988db5d0d2e528b3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#36",
+      "hash": "sha256:802fa1e6f85a82bff30c3d1c9827db54a4572f1413d87858942a98c7f78531c2"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#37",
+      "hash": "sha256:e0400eaa8fff23d04eac6beb80b543400e053e4bb82374e922b8c41dc280b9e9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#38",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#39",
       "hash": "sha256:b685ba2450fb7b030b3cd27dad39b8984933eb4e9c02e4de8326cea850dd83e7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#40",
+      "hash": "sha256:81e10bfc10cf6ad547e6908e32cf925496a562bd23bed7a6a342e8d7240f397a"
     },
     {
       "content": "blocks",

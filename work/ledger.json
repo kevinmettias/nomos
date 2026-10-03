@@ -99901,7 +99901,9 @@
           "crates/rules/nomos-rules/src/checks/script_discipline/shebang.rs",
           "crates/rules/nomos-rules/src/checks/script_discipline/purpose.rs",
           "crates/rules/nomos-rules/src/checks/script_discipline/nounset.rs",
-          "crates/rules/nomos-rules/src/checks/function_shape/receiver_allowance.rs"
+          "crates/rules/nomos-rules/src/checks/function_shape/receiver_allowance.rs",
+          "crates/rules/nomos-rules/src/checks/function_shape/tests.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor/population/tests.rs"
         ],
         "patterns": []
       },
@@ -99958,6 +99960,20 @@
             "crates/rules/nomos-rules/src/checks/function_shape/receiver_allowance.rs"
           ],
           "widened_at": 1791014568
+        },
+        {
+          "holder": "opus-p172-population",
+          "added": [
+            "crates/rules/nomos-rules/src/checks/function_shape/tests.rs"
+          ],
+          "widened_at": 1791014634
+        },
+        {
+          "holder": "opus-p172-population",
+          "added": [
+            "crates/rules/nomos-rules/src/rule_descriptor/population/tests.rs"
+          ],
+          "widened_at": 1791015321
         }
       ]
     },
@@ -99973,18 +99989,15 @@
         "paths": [
           "crates/capabilities/nomos-cap-requirement-trace/src/provider.rs",
           "crates/rules/nomos-rules/src/checks/requirement_trace.rs",
-          "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md"
+          "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md",
+          "crates/rules/nomos-rules/src/checks/undeclared_policy_key.rs"
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "opus-p172-rules035",
-        "acquired_at": 1791014409,
-        "lease_expires_at": 1791028809
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -100001,11 +100014,46 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-cap-requirement-trace"
+        ],
+        "exit_code": 0,
+        "output_tail": "record_citation-e59db42c18b3efde.exe)\n     Running tests\\requirement_trace\\main.rs (F:/repos/nomos-p172r-target\\debug\\deps\\requirement_trace-8638fcf6bff8cacf.exe)\n     Running tests\\rule_composition.rs (F:/repos/nomos-p172r-target\\debug\\deps\\rule_composition-16d2b5612fb19225.exe)\n     Running tests\\rule_contract_citation.rs (F:/repos/nomos-p172r-target\\debug\\deps\\rule_contract_citation-f8d97f579a98aa1a.exe)\n     Running tests\\rule_descriptors.rs (F:/repos/nomos-p172r-target\\debug\\deps\\rule_descriptors-26898bb0d28acdd7.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/nomos-p172r-target\\debug\\deps\\toolchain_floor-ff259384269e25a4.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p172r-target\\debug\\deps\\nomos_rules-8f9f4cdb33820fc9.exe)\n     Running tests\\integration_seams.rs (F:/repos/nomos-p172r-target\\debug\\deps\\integration_seams-d9394d4149bb615a.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p172r-target\\debug\\deps\\nomos_spec_store-06e6aa6a481bd8b1.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/nomos-p172r-target\\debug\\deps\\governing_records_are_present-00262ca1fd3972b5.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/nomos-p172r-target\\debug\\deps\\round_trip_holds-186543f7685a6a84.exe)\n     Running tests\\store_holds.rs (F:/repos/nomos-p172r-target\\debug\\deps\\store_holds-9ca0a8b8a7346719.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/nomos-p172r-target\\debug\\deps\\table_rows-8e18e4b8c31c2df5.exe)\n   Doc-tests nomos_cap_requirement_trace\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_rules\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: 1 warning emitted\n\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1791015800,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "e511f38737acfa41941fcd2d979e45c3d68ae9c4"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "opus-p172-rules035",
+          "added": [
+            "crates/rules/nomos-rules/src/checks/undeclared_policy_key.rs"
+          ],
+          "widened_at": 1791015291
+        }
+      ]
     },
     {
       "id": "P176-THE-PACKAGE-CONFORMANCE-TEST-CALLS-SEVEN-PROVIDERS-A-GAP-AND-THREE-LANGUAGE-PACKAGES-CALL-THEM-A-DESIGN",
@@ -101021,7 +101069,8 @@
         "paths": [
           "tests/contract/tests/boundaries/main.rs",
           "tests/contract/tests/boundaries/walk_coverage.rs",
-          "tests/contract/Cargo.toml"
+          "tests/contract/Cargo.toml",
+          "Cargo.lock"
         ],
         "patterns": []
       },
@@ -101049,7 +101098,15 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "opus-p187-walk",
+          "added": [
+            "Cargo.lock"
+          ],
+          "widened_at": 1791014917
+        }
+      ]
     },
     {
       "id": "P188-A-PREDICATE-COVERS-ITS-OWN-PACKAGES-AND-FIVE-LANDINGS-REDDENED-A-DEPENDENT-NOBODY-RAN",
@@ -101088,6 +101145,42 @@
           "record_citation"
         ],
         "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO",
+      "title": "No record decides whether a verdict reached against a value the repository never declared says so in what a run reports",
+      "why": "OD-RULES-035 version 1 sent the visibility of a verdict reached against a default to OD-ANALYSIS-012 as an empty-population question. OD-ANALYSIS-012 version 2 decides that a norm the repository did not declare is not a population, and hands that case to OD-RULES-011's optional-read question. So P172-OD-RULES-035-SENDS-A-DEFAULTED-VERDICT-TO-A-POPULATION-QUESTION-OD-ANALYSIS-012-NO-LONGER-ANSWERS read the records at e511f387 for an owner, and found none. OD-RULES-011 version 2 decides what a rule does when an optional read finds nothing: it applies no override, keeps the rule's prior behaviour, and produces or alters no finding because of the absence. Its reason that no reader is owed the difference is particular to casing, since whether a name conforms is the same statement whichever source supplied the case. It decides this for the six casing rules only and leaves every other family to its own later instance. OD-RULES-035 decision 3 makes what an undeclared axis means a declared property of the axis, with three meanings. A rule that reports an axis undeclared is visible by construction, but a verdict on an axis judged against a stated default says nothing about where its value came from, and OD-RULES-035 left that open. OD-POLICY-001 names Default as a configuration layer and gives an effective policy per-field provenance, but it does not settle this. It re-homes the rule-parameter families under its resolver only when a second layer states one of their fields, which none has; it carries the provenance of a policy, not of a verdict judged under it; and it does not decide rendering. OD-CAPABILITY-004 obliges a knowledge-context packet to carry its resolution, and OD-RULES-011 version 2 expressly declines to extend that obligation to naming judgments. No record requires any report to say which verdicts were reached against a value nobody declared. The population is real. At e511f387 the axis table in crates/rules/nomos-rules/src/rule_descriptor/policy_axis.rs declares 12 axes: 11 are judged against a stated default when undeclared (four limits, seven naming), and one, cyclomatic-complexity-max, is reported as undeclared. Outside the table, the requirement-trace, goals and tooling-language rules judge nothing when their norm is undeclared. On 2026-10-03 none of this repository, kwb, xvpe or code-standards had a nomos-limits.json at its root, so in each of them every limits axis but cyclomatic-complexity-max is judged against a compiled default that no repository chose.",
+      "done_when": "OD-RULES-011 is amended with a version bump to decide whether a verdict a rule reaches against a value the repository did not declare says so in what a run reports. The decision covers every family a rule reads optionally, not casing alone. It may differ by family or by an axis's declared meaning, but where it differs it says why, and it may not leave a family undecided. It is decided by measurement: it lists which composed rules read a value a repository can leave undeclared and what each does then, and for each option it weighs it states what a reader of the report gains and what it costs. It weighs, at least: OD-RULES-011 version 2's own argument that a casing verdict is the same statement whatever source supplied the case, and whether that carries to a threshold; OD-RULES-035 decision 3's reported-as-undeclared meaning; OD-POLICY-001's Default layer and per-field provenance; and OD-CAPABILITY-004's packet-carries-its-resolution obligation. Forbidden: treating a verdict reached against a default as an empty population or routing it to OD-ANALYSIS-012's population report, since OD-ANALYSIS-012 version 2 excludes it; making it a new Applicability variant or a finding of its own without saying why a fact about provenance has a subject; and letting it change Claim without measuring what that does to every repository that declares nothing. The record builds nothing. Any mechanism it decides is boarded as a separate item whose territory is grepped from the code. The record says what would reopen it. Both projections are re-rendered from the tree the commit publishes, and the predicate passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
       },
       "verified": null,
       "abandoned": [],

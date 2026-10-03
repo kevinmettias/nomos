@@ -74,18 +74,23 @@ fn Compute_Fact_Key(subject: SubjectId, guarantee: Guarantee, context: FactConte
 ///
 /// `root/tests/contract/requirements/` missing entirely, unreadable, or holding an entry
 /// this crate's own [`crate::registry::Parse`] refuses are all the identical answer: a
-/// payload reporting zero problems. `OD-ANALYSIS-012` named the general shape this
-/// collapses — a rule that judged an empty population should be reported apart from one
-/// that judged a real population clean — as a decision with nothing built yet
-/// (`CheckOutcome::Judged`'s own per-rule population count, its own "What This Record Does
-/// Not Do" section says so explicitly); until that mechanism exists, this crate follows the
-/// same "an absent or unreadable optional capability answers as if it declared nothing"
-/// idiom `nomos-repo-policy`'s own four `nomos.cap.*.policy` providers already use for a
-/// missing `standards.json`, rather than inventing a sixth reported case this repository's
-/// own contract does not name. What matters for a repository that is not this one is that
-/// the ordinary case — no `tests/contract/requirements/` directory at all — never raises a
-/// finding: this predicate corpus is nomos's own, not a convention every judged repository
-/// is expected to have adopted.
+/// payload reporting zero problems. None of the three is the empty population
+/// `OD-ANALYSIS-012` reports, and nothing here waits on that record's mechanism. Its
+/// version 2 makes a rule's population the files its norm is about, and the one rule that
+/// reads this payload, `requirement-trace-staleness`, is a Workspace rule: its population is
+/// the one workspace, which is never empty, so the per-rule report that record decides will
+/// never name it. The ordinary case, no directory at all, is a norm the repository did not
+/// declare. Version 2 says that is not a population and leaves it to `OD-RULES-011`'s
+/// optional-read question, whose answer is that an absent optional read applies no override
+/// and raises no finding of its own. This crate follows the same "an absent or unreadable
+/// optional capability answers as if it declared nothing" idiom `nomos-repo-policy`'s own
+/// four `nomos.cap.*.policy` providers already use for a missing `standards.json`, rather
+/// than inventing a sixth reported case this repository's own contract does not name.
+/// Whether a run should say that a verdict was reached with nothing declared is decided by
+/// no record yet, as `OD-RULES-035` version 2 records. What matters for a repository that
+/// is not this one is that the ordinary case — no `tests/contract/requirements/` directory
+/// at all — never raises a finding: this predicate corpus is nomos's own, not a convention
+/// every judged repository is expected to have adopted.
 #[must_use]
 pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> RequirementTracePayload
 {
