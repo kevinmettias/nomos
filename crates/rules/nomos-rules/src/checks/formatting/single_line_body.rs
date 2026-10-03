@@ -6,7 +6,7 @@
 //! quoting the same shape by carrying the literal state a line ends in into the next one, so
 //! the whole byte-walking machine lives here rather than beside rules that never need it.
 
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_contracts::Finding;
 
 use super::{Finding_For_Line, For_Each_Line_Number, NO_SINGLE_LINE_FUNCTION_BODIES};
@@ -21,7 +21,7 @@ pub fn Check_No_Single_Line_Function_Bodies(sources: &[SourceFile]) -> Vec<Findi
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE)
+        if crate::checks::populations::SINGLE_LINE_BODY_POPULATION.Holds(source)
         {
             findings.extend(Single_Line_Body_Findings_In(source));
         }

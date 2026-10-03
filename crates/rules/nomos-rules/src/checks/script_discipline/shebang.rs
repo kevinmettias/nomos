@@ -9,7 +9,7 @@ use nomos_contracts::Finding;
 #[must_use]
 pub fn Check_Scripts_Use_A_Portable_Shebang(sources: &[SourceFile]) -> Vec<Finding>
 {
-    let mut findings: Vec<Finding> = sources.iter().filter_map(Portable_Shebang_Finding_For).collect();
+    let mut findings: Vec<Finding> = sources.iter().filter(|source| return crate::checks::populations::SCRIPT_POPULATION.Holds(source)).filter_map(Portable_Shebang_Finding_For).collect();
 
     findings.sort_by(|left, right| return left.subject_name.cmp(&right.subject_name));
     return findings;

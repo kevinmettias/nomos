@@ -2,7 +2,7 @@
 //!
 //! Split out of [`super`], which states the family's shared reasoning.
 
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_contracts::Finding;
 
 use super::comment_block::{Comment_Text_Of, Has_A_Previous_Comment_Block};
@@ -19,7 +19,7 @@ pub fn Check_Shared_Interior_Mutability_Says_Why(sources: &[SourceFile]) -> Vec<
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
+        if crate::checks::populations::INTERIOR_MUTABILITY_POPULATION.Holds(source) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Shared_Interior_Mutability_Findings_In(source));
         }

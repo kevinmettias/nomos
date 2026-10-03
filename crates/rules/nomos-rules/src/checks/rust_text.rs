@@ -211,7 +211,7 @@ fn Declared_Fixture_Locations_For(declaration: &DeclaredTextRule, facts: &mut dy
 /// criterion and its self-exemption, in the order the rules it replaces asked them in.
 fn Is_Judged_By(declaration: &DeclaredTextRule, source: &SourceFile, declared_fixture_locations: &[String]) -> bool
 {
-    if declaration.language.is_some_and(|language| return !source.Is_Written_In(language))
+    if !declaration.Population().Holds(source)
     {
         return false;
     }

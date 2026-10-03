@@ -2,7 +2,7 @@
 
 use super::{FIVE_HUNDRED_LINE_REVIEW_TRIGGER, Findings_For_Threshold, GO, LineThreshold, ONE_THOUSAND_LINE_HARD_TRIGGER, Resolve_Count, Undeclared_Limit};
 use crate::rule_descriptor::policy_axis::{FILE_SIZE_HARD_LINES, FILE_SIZE_REVIEW_LINES};
-use crate::{GO_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
 
@@ -19,7 +19,7 @@ pub fn Check_Go_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn
     return Findings_For_Threshold(
         sources,
         LineThreshold { rule: FIVE_HUNDRED_LINE_REVIEW_TRIGGER, lines: threshold, because: &because },
-        |source| return source.Is_Written_In(GO_LANGUAGE),
+        |source| return crate::checks::populations::GO_FILE_SIZE_POPULATION.Holds(source),
     );
 }
 
@@ -36,7 +36,7 @@ pub fn Check_Go_File_Size_Hard_Trigger(sources: &[SourceFile], facts: &mut dyn F
     return Findings_For_Threshold(
         sources,
         LineThreshold { rule: ONE_THOUSAND_LINE_HARD_TRIGGER, lines: threshold, because: &because },
-        |source| return source.Is_Written_In(GO_LANGUAGE),
+        |source| return crate::checks::populations::GO_FILE_SIZE_POPULATION.Holds(source),
     );
 }
 

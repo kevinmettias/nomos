@@ -68,6 +68,7 @@ mod nesting_depth;
 mod orphan_modules;
 mod placement;
 mod policy;
+pub(crate) mod populations;
 mod procedural_macro;
 mod reachability;
 mod requirement_trace;
@@ -130,7 +131,7 @@ pub use formatting::{
 };
 pub use function_shape::{
     Check_Function_Arity_Policy, Check_Go_Parameter_Count, Check_Parameter_Count, FunctionArityPolicy,
-    FunctionAritySource, ReceiverAllowance, GO_PARAMETER_COUNT, PARAMETER_COUNT,
+    ReceiverAllowance, GO_PARAMETER_COUNT, PARAMETER_COUNT,
 };
 pub use go_text::{
     Check_A_Discarded_Error_Is_Explained, Check_A_Skipped_Test_States_Why, Check_An_Excluded_File_Says_Why,

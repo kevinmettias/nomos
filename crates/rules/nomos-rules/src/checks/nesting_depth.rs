@@ -54,7 +54,7 @@
 use super::formatting::{Advance_Literal_State, RustLiteralState};
 use super::structure::{Resolve_Count, Undeclared_Limit};
 use crate::rule_descriptor::policy_axis::NESTING_DEPTH_MAX;
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -87,7 +87,7 @@ pub fn Check_Nesting_Depth(sources: &[SourceFile], facts: &mut dyn FactReader) -
     };
     let mut findings = Vec::new();
 
-    for source in sources.iter().filter(|source| return source.Is_Written_In(RUST_LANGUAGE))
+    for source in sources.iter().filter(|source| return crate::checks::populations::NESTING_DEPTH_POPULATION.Holds(source))
     {
         let found = Deep_Function_Findings_In(source, limit);
         findings.extend(found);

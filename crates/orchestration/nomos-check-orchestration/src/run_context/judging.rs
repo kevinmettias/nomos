@@ -8,11 +8,16 @@
 //! both are orchestration concepts: which capability slice a rule is judged over
 //! ([`Judged_Sources`]), and which findings materialization raised on its own rather than
 //! through a rule ([`Capability_Findings`]).
+//!
+//! It also counts, for every rule it walks, how many sources that rule was judged over
+//! ([`Population_Size`]): the population the rule's descriptor declares, counted over exactly
+//! the sources the rule is handed. It only counts. Each rule still receives every source
+//! [`Judged_Sources`] gives it, and the count changes no finding and no claim.
 
 use nomos_analysis::Reader;
 use nomos_contracts::Finding;
 use nomos_rules::{
-    SourceFile, DESCRIPTORS, RuleDescriptor,
+    SourceFile, SubjectKind, DESCRIPTORS, RuleDescriptor,
     // The ten rules of [`Judged_Sources`]' mapping. Every rule identifier this crate used
     // to name for the sake of *running* a rule is now read off `DESCRIPTORS` at run time;
     // these ten are the residue `OD-RULES-027` measured and licensed, plus the two
@@ -22,7 +27,7 @@ use nomos_rules::{
     NESTED_LOCKS, REVIEW_FINDING, UNCOMPILED_CONDITIONAL_BRANCH, WRITE_AUTHORITY,
 };
 
-use crate::examined::{FactRead, Reduced};
+use crate::examined::{FactRead, Populations, Reduced};
 
 use super::{CapabilityMaterialization, Is_Rule_Selected, JudgeEnvironment, Reassessment};
 
@@ -33,16 +38,26 @@ use super::{CapabilityMaterialization, Is_Rule_Selected, JudgeEnvironment, Reass
 /// than judged) -- unconditionally, since each such finding already carries its own rule
 /// and a caller that did not select it would never have triggered the materialization
 /// that raises it.
-pub(super) fn Judged_Findings(sources: &[SourceFile], capabilities: CapabilityMaterialization, env: &JudgeEnvironment<'_>, reassessment: Reassessment<'_>) -> Vec<Finding>
+pub(super) fn Judged_Findings(sources: &[SourceFile], capabilities: CapabilityMaterialization, env: &JudgeEnvironment<'_>, reassessment: Reassessment<'_>) -> Judgments
 {
     let Reassessment { selected, cache, changed } = reassessment;
 
-    let mut findings = Rule_Findings(sources, &capabilities, env, Reassessment { selected, cache: &mut *cache, changed });
+    let mut judgments = Rule_Findings(sources, &capabilities, env, Reassessment { selected, cache: &mut *cache, changed });
     let raised = Capability_Findings(capabilities);
     cache.Note_Materialization_Raised(&raised);
-    findings.extend(raised);
+    judgments.findings.extend(raised);
 
-    return findings;
+    return judgments;
+}
+
+/// What judging the selected rules produced: every finding, and how many sources each rule was
+/// judged over.
+pub(super) struct Judgments
+{
+    /// What the rules found, and what materialization raised on its own.
+    pub(super) findings: Vec<Finding>,
+    /// Each selected rule's population size, in the order the rules were judged.
+    pub(super) populations: Populations,
 }
 
 /// Every finding the completeness, naming-convention, dependency-direction,
@@ -79,7 +94,7 @@ pub(super) fn Judged_Findings(sources: &[SourceFile], capabilities: CapabilityMa
 /// broken.rs`, deliberately-invalid corpus content) was fixed directly rather than composed
 /// around, since it cost one line. All five are composed below with their two already-wired
 /// siblings.
-fn Rule_Findings(sources: &[SourceFile], capabilities: &CapabilityMaterialization, env: &JudgeEnvironment<'_>, reassessment: Reassessment<'_>) -> Vec<Finding>
+fn Rule_Findings(sources: &[SourceFile], capabilities: &CapabilityMaterialization, env: &JudgeEnvironment<'_>, reassessment: Reassessment<'_>) -> Judgments
 {
     return Findings_For_Selected_Rules(Judged { sources, capabilities }, env, reassessment);
 }
@@ -90,17 +105,22 @@ fn Rule_Findings(sources: &[SourceFile], capabilities: &CapabilityMaterializatio
 /// reused instead of running its closure again. See
 /// `crate::run_context::rule_reassessment_cache`'s own module doc for which rules that is,
 /// today.
-fn Findings_For_Selected_Rules(judged: Judged<'_>, env: &JudgeEnvironment<'_>, reassessment: Reassessment<'_>) -> Vec<Finding>
+fn Findings_For_Selected_Rules(judged: Judged<'_>, env: &JudgeEnvironment<'_>, reassessment: Reassessment<'_>) -> Judgments
 {
     let Reassessment { selected, cache, changed } = reassessment;
 
     let mut findings = Vec::new();
+    let mut populations = Populations::New();
     for descriptor in DESCRIPTORS
     {
         if !Is_Rule_Selected(selected, descriptor.id)
         {
             continue;
         }
+
+        // Counted before the cache is asked, so a rule whose findings are reused still reports
+        // the population of the run that reused them.
+        populations.Note(descriptor.Rule(), Population_Size(descriptor, &judged));
 
         if let Some(reused) = cache.Reusable(descriptor.id, changed)
         {
@@ -113,7 +133,24 @@ fn Findings_For_Selected_Rules(judged: Judged<'_>, env: &JudgeEnvironment<'_>, r
         findings.extend(rule_findings);
     }
 
-    return findings;
+    return Judgments { findings, populations };
+}
+
+/// How many sources `descriptor`'s rule is judged over: its declared population counted over the
+/// sources [`Judged_Sources`] hands it, or one for a rule whose subject is the workspace, which
+/// is never empty.
+///
+/// Reads the declaration and partitions nothing. `OD-RULES-014` declined a partition of the
+/// source list at the root, and the rule's own body filters by the same declared value, so this
+/// count is of exactly the sources the body judges.
+fn Population_Size(descriptor: &RuleDescriptor, judged: &Judged<'_>) -> usize
+{
+    if matches!(descriptor.subject, SubjectKind::Workspace)
+    {
+        return 1;
+    }
+
+    return Judged_Sources(descriptor.id, judged).iter().filter(|source| return descriptor.population.Holds(source)).count();
 }
 
 /// One descriptor's own judgment: its rule's callable, over the sources that rule reads, and

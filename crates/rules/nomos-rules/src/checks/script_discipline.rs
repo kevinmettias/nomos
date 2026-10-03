@@ -28,7 +28,7 @@ pub const DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS: &str = "declared-tooling-langua
 
 /// Whether a source's first line is a shebang at all -- the one question the script rules
 /// that take only a path and a body ask before looking any further.
-fn Is_Shebang_Script(source: &SourceFile) -> bool
+pub(super) fn Is_Shebang_Script(source: &SourceFile) -> bool
 {
     return Shebang_Interpreter(source).is_some();
 }

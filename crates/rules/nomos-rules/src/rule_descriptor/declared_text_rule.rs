@@ -55,7 +55,7 @@ use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
 
-use super::{DeclaredDetector, DeclaredJustification, DeclaredParameter, RequiredFact, SubjectKind, TestMaterialSensitivity};
+use super::{DeclaredDetector, DeclaredJustification, DeclaredParameter, Population, RequiredFact, SubjectKind, TestMaterialSensitivity};
 
 /// What a rule of the archetype states about itself, and the whole of it.
 ///
@@ -113,6 +113,20 @@ impl DeclaredTextRule
     pub(crate) fn Judges(&self, sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
     {
         return crate::checks::Judged_By_Declaration(self, sources, facts);
+    }
+
+    /// The sources this rule judges: those written in [`Self::language`], or every source when
+    /// it names none.
+    ///
+    /// Derived rather than declared a second time, so the descriptor's population and the
+    /// interpreter's filter are the one field: `checks::rust_text` reads exactly this.
+    pub(crate) const fn Population(&self) -> Population
+    {
+        return match self.language
+        {
+            Some(language) => Population::Language(language),
+            None => Population::Every,
+        };
     }
 
     /// What a run must have materialized before this rule can be judged.

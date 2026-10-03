@@ -7,10 +7,15 @@
 //! reader, not a second fact a caller could need without also wanting to print it.
 //! `Examined` and `Claim` moved out because they are exactly that second kind: a judgment a
 //! second adapter would otherwise have to re-derive rather than read off `CheckOutcome`.
+//!
+//! So did `Populations`, which this report renders after the claim and apart from it: the rules
+//! that judged an empty population, whose zero findings are not a clean judgment.
+//! `OD-ANALYSIS-012` version 2 decided both halves -- the reader is shown them, and the claim
+//! does not move because of them.
 
 use super::{ExitCode, Finding, Path, Write};
 use nomos_capability::RegistryError;
-use nomos_check_orchestration::{CheckOutcome, Claim, Examined};
+use nomos_check_orchestration::{CheckOutcome, Claim, Examined, Populations};
 use nomos_contracts::Applicability;
 
 /// How many subjects this run placed in each [`Applicability`] state.
@@ -144,7 +149,12 @@ pub(super) fn Render_Outcome(root: &Path, outcome: &CheckOutcome, stdout: &mut i
         CheckOutcome::Contradictory(error) => Render_Contradictory(error, stderr),
         CheckOutcome::NoSource => Render_No_Source(root, stderr),
         CheckOutcome::NoFacts { files } => Render_No_Facts(root, *files, stderr),
-        CheckOutcome::Judged { findings, examined, claim, .. } => Report_Findings(findings, *examined, *claim, stdout),
+        CheckOutcome::Judged { findings, examined, claim, populations, .. } =>
+        {
+            let code = Report_Findings(findings, *examined, *claim, stdout);
+            Print_Empty_Populations(populations, stdout);
+            code
+        }
     };
 }
 
@@ -255,11 +265,35 @@ fn Print_Counts(findings: &[Finding], examined: Examined, claim: Claim, stdout: 
     }
 }
 
+/// Every selected rule whose population was empty, after the claim and apart from it.
+///
+/// Such a rule judged nothing: the run handed it no source of the language or kind its norm is
+/// about. Its zero findings read exactly like a judgment of real subjects found clean, and this is
+/// the one place a reader is told the difference. The claim above is what the findings support
+/// and is not changed by it.
+///
+/// Prints nothing for a run in which every selected rule judged something.
+fn Print_Empty_Populations(populations: &Populations, stdout: &mut impl Write)
+{
+    let empty = populations.Empty();
+    if empty.is_empty()
+    {
+        return;
+    }
+
+    let _ignored = writeln!(stdout, "
+{} rule(s) judged nothing, because no source was in their population:", empty.len());
+    for rule in empty
+    {
+        let _ignored = writeln!(stdout, "  {rule}");
+    }
+}
+
 #[cfg(test)]
 mod tests
 {
     use super::*;
-    use nomos_check_orchestration::Claim_Of;
+    use nomos_check_orchestration::{Claim_Of, SupportingFactTrail};
     use nomos_contracts::{Digest128, EvidenceClass, GateCategory, RuleId, SubjectId};
 
     /// The byte the fixture subject digest repeats to fill `Digest128`'s width. Opaque to
@@ -431,5 +465,48 @@ mod tests
         assert!(debt_rendered.contains("claim: incomplete"), "{debt_rendered}");
         assert!(debt_rendered.contains("DependencyUnavailable"), "{debt_rendered}");
         assert!(!clean_rendered.contains("DependencyUnavailable"), "{clean_rendered}");
+    }
+
+    fn Judged_Over(populations: Populations) -> String
+    {
+        let outcome = CheckOutcome::Judged {
+            findings: Vec::new(),
+            examined: Examined { files: 1, facts: 1 },
+            claim: Claim_Of(&[]),
+            supporting_facts: SupportingFactTrail::New(),
+            populations,
+        };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let _code = Render_Outcome(Path::new("."), &outcome, &mut stdout, &mut stderr);
+        return String::from_utf8(stdout).expect("Render_Outcome writes only str into the buffer");
+    }
+
+    /// A rule whose population was empty is named after the claim, the rule that judged a real
+    /// source is not, and the claim reads what it reads with no population reported at all.
+    #[test]
+    fn Test_An_Empty_Population_Should_Be_Named_Apart_From_An_Unchanged_Claim()
+    {
+        let mut populations = Populations::New();
+        populations.Note(RuleId::New("go-only-rule"), 0);
+        populations.Note(RuleId::New("rust-only-rule"), 3);
+
+        let rendered = Judged_Over(populations);
+        let without = Judged_Over(Populations::New());
+
+        assert!(rendered.contains("1 rule(s) judged nothing, because no source was in their population:\n  go-only-rule\n"), "{rendered}");
+        assert!(!rendered.contains("rust-only-rule"), "{rendered}");
+        assert!(rendered.contains("claim: complete"), "{rendered}");
+        assert!(rendered.starts_with(&without), "the report up to and including the claim is unchanged:\n{rendered}\n---\n{without}");
+    }
+
+    /// A run in which every selected rule judged something prints nothing new.
+    #[test]
+    fn Test_A_Run_With_No_Empty_Population_Should_Print_Nothing_New()
+    {
+        let mut populations = Populations::New();
+        populations.Note(RuleId::New("rust-only-rule"), 3);
+
+        assert_eq!(Judged_Over(populations), Judged_Over(Populations::New()));
     }
 }

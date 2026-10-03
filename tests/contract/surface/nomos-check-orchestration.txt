@@ -4,7 +4,7 @@ pub enum nomos_check_orchestration::Claim
 pub enum nomos_check_orchestration::RuleResolutionError
 pub enum nomos_check_orchestration::SupportingFacts
 pub enum variant nomos_check_orchestration::CheckOutcome::Contradictory(RegistryError)
-pub enum variant nomos_check_orchestration::CheckOutcome::Judged { findings: Vec<Finding>, examined: Examined, claim: Claim, supporting_facts: SupportingFactTrail, }
+pub enum variant nomos_check_orchestration::CheckOutcome::Judged { findings: Vec<Finding>, examined: Examined, claim: Claim, supporting_facts: SupportingFactTrail, populations: Populations, }
 pub enum variant nomos_check_orchestration::CheckOutcome::NoFacts { files: usize, }
 pub enum variant nomos_check_orchestration::CheckOutcome::NoSource
 pub enum variant nomos_check_orchestration::CheckOutcome::Unreadable
@@ -21,6 +21,11 @@ pub fn nomos_check_orchestration::Claim::fmt(&self, formatter: &mut core::fmt::F
 pub fn nomos_check_orchestration::Claim_Of(findings: &[Finding]) -> Claim
 pub fn nomos_check_orchestration::Composed_Rules() -> Vec<RuleId>
 pub fn nomos_check_orchestration::Declared_Rules() -> Vec<RulePackage>
+pub fn nomos_check_orchestration::Populations::Empty(&self) -> Vec<&RuleId>
+pub fn nomos_check_orchestration::Populations::Judged(&self) -> &[(RuleId, usize)]
+pub fn nomos_check_orchestration::Populations::New() -> Self
+pub fn nomos_check_orchestration::Populations::Note(&mut self, rule: RuleId, size: usize)
+pub fn nomos_check_orchestration::Populations::Of(&self, rule: &RuleId) -> Option<usize>
 pub fn nomos_check_orchestration::Recognized_Language(providers: &[SyntaxProvider], path: &str) -> Option<Language>
 pub fn nomos_check_orchestration::Recognized_Syntax_Provider<'a>(providers: &'a [SyntaxProvider], path: &str) -> Option<&'a SyntaxProvider>
 pub fn nomos_check_orchestration::Registered(offer: RegistryOffers) -> Result<Registry, RegistryError>
@@ -103,6 +108,7 @@ pub struct nomos_check_orchestration::ComposedProviders<Launcher: ProgramLaunche
 pub struct nomos_check_orchestration::DeclaredPackage<'a>
 pub struct nomos_check_orchestration::Examined
 pub struct nomos_check_orchestration::FactRead
+pub struct nomos_check_orchestration::Populations
 pub struct nomos_check_orchestration::RuleReassessmentCache
 pub struct nomos_check_orchestration::RuleResolution
 pub struct nomos_check_orchestration::RunContext<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>

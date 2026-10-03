@@ -6,7 +6,7 @@
 //! ships, so neither earned a capability or a shared helper — both are decidable from
 //! [`SourceFile`] text alone.
 
-use crate::{GO_LANGUAGE, RUST_LANGUAGE, SourceFile};
+use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_analysis::FactReader;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -44,7 +44,7 @@ pub fn Check_A_Package_Is_Named_After_Its_Directory(sources: &[SourceFile]) -> V
 /// already matches, or is an external test package matching its subject's directory.
 fn Package_Mismatch_Finding(source: &SourceFile) -> Option<Finding>
 {
-    if !source.Is_Written_In(GO_LANGUAGE)
+    if !crate::checks::populations::PACKAGE_PLACEMENT_POPULATION.Holds(source)
     {
         return None;
     }
@@ -125,11 +125,17 @@ pub fn Check_No_Wildcard_Imports(sources: &[SourceFile], facts: &mut dyn FactRea
 
     for source in sources
     {
+        if !crate::checks::populations::WILDCARD_IMPORT_POPULATION.Holds(source)
+        {
+            continue;
+        }
+
+        // Within the population, a source that is not Rust is Go.
         if source.Is_Written_In(RUST_LANGUAGE)
         {
             findings.extend(Rust_Wildcard_Findings_In(source, &declared));
         }
-        else if source.Is_Written_In(GO_LANGUAGE)
+        else
         {
             findings.extend(Go_Wildcard_Findings_In(source));
         }

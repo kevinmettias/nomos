@@ -26,7 +26,7 @@
 //! offered to a caller. Dropping the colon turned this into a rule against the `&` operator.
 
 use super::code_prefix::Code_Prefix;
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 /// The code-standards borrowing rule id this judges.
@@ -61,7 +61,7 @@ pub fn Check_Parameters_Borrow_Unless_Ownership_Is_Taken(sources: &[SourceFile])
 {
     let mut findings = Vec::new();
 
-    for source in sources.iter().filter(|source| return source.Is_Written_In(RUST_LANGUAGE))
+    for source in sources.iter().filter(|source| return crate::checks::populations::BORROWED_CONTAINER_POPULATION.Holds(source))
     {
         findings.extend(Borrowed_Container_Findings_In(source));
     }

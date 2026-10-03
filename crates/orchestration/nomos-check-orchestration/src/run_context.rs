@@ -169,9 +169,9 @@ pub fn Run_Reassessing<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environme
         root, launcher, filesystem, environment, providers, registry: &composed.registry, context: composed.context, selected,
     };
     let mut state = RunState { store, reassessment, changed: composed.changed };
-    let findings = Judged_Over(sources, run, &mut state);
+    let judgments = Judged_Over(sources, run, &mut state);
 
-    return Outcome_Of(Examination { files: sources.len(), facts: composed.facts }, findings, state.reassessment.Supporting_Facts().clone());
+    return Outcome_Of(Examination { files: sources.len(), facts: composed.facts }, judgments, state.reassessment.Supporting_Facts().clone());
 }
 
 /// The registry composed, `sources` ingested and the syntax facts materialized -- the three
@@ -287,7 +287,7 @@ struct RunState<'a>
 
 /// Every capability [`Run`] can materialize, judged -- the two steps [`Run`] itself used to
 /// inline, composed here so its own body names one step instead of four.
-fn Judged_Over<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], environment: RunEnvironment<'_, Launcher, Fs, Env>, state: &mut RunState<'_>) -> Vec<Finding>
+fn Judged_Over<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(sources: &[SourceFile], environment: RunEnvironment<'_, Launcher, Fs, Env>, state: &mut RunState<'_>) -> judging::Judgments
 {
     let mut materialization_environment = MaterializationEnvironment {
         root: environment.root,
@@ -392,15 +392,20 @@ struct Examination
 }
 
 /// The whole run, once judging is done -- how much it examined, the claim its own findings
-/// support, and which facts each rule read to reach them.
-fn Outcome_Of(examination: Examination, findings: Vec<Finding>, supporting_facts: SupportingFactTrail) -> CheckOutcome
+/// support, which facts each rule read to reach them, and how many sources each rule was judged
+/// over.
+///
+/// The claim is read from the findings alone, before and apart from the populations, which is
+/// `OD-ANALYSIS-012` version 2's second decision: no empty population changes it.
+fn Outcome_Of(examination: Examination, judgments: judging::Judgments, supporting_facts: SupportingFactTrail) -> CheckOutcome
 {
     use crate::examined::{Claim_Of, Examined};
 
+    let judging::Judgments { findings, populations } = judgments;
     let examined = Examined { files: examination.files, facts: examination.facts };
     let claim = Claim_Of(&findings);
 
-    return CheckOutcome::Judged { findings, examined, claim, supporting_facts };
+    return CheckOutcome::Judged { findings, examined, claim, supporting_facts, populations };
 }
 
 /// Every rule [`Run`] composes, in the order it runs them.

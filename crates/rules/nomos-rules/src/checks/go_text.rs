@@ -25,7 +25,7 @@ pub use exclusion::Check_An_Excluded_File_Says_Why;
 pub use markers::{Check_Suppression_Directives_Carry_A_Reason, Check_Workspace_Markers_Carry_A_Reason};
 
 use super::code_prefix::Code_Prefix;
-use crate::{GO_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 /// The code-standards skipped-test rule id.
@@ -45,7 +45,7 @@ pub fn Check_A_Skipped_Test_States_Why(sources: &[SourceFile]) -> Vec<Finding>
     let mut findings = Vec::new();
     for source in sources
     {
-        if source.Is_Written_In(GO_LANGUAGE)
+        if crate::checks::populations::SKIPPED_TEST_POPULATION.Holds(source)
         {
             findings.extend(Skip_Findings_In(source));
         }

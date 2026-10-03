@@ -41,7 +41,7 @@
 
 use super::structure::{Resolve_Count, Undeclared_Limit};
 use crate::rule_descriptor::policy_axis::CYCLOMATIC_COMPLEXITY_MAX;
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest, MaterializedFact};
 use nomos_cap_complexity::{Aggregation, ComplexityPayload, Directionality, FunctionComplexity};
 use nomos_capability::Requirement;
@@ -74,7 +74,7 @@ pub(crate) fn Complexity_Requirement() -> Requirement
 #[must_use]
 pub fn Check_Cyclomatic_Complexity(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    let rust: Vec<&SourceFile> = sources.iter().filter(|source| return source.Is_Written_In(RUST_LANGUAGE)).collect();
+    let rust: Vec<&SourceFile> = sources.iter().filter(|source| return crate::checks::populations::CYCLOMATIC_COMPLEXITY_POPULATION.Holds(source)).collect();
     if rust.is_empty()
     {
         return Vec::new();

@@ -63,7 +63,7 @@
 //! already made once for a stale claim.
 
 use super::code_prefix::Code_Prefix;
-use crate::{GO_LANGUAGE, RUST_LANGUAGE, SourceFile};
+use crate::{RUST_LANGUAGE, SourceFile};
 use nomos_analysis::FactReader;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -116,12 +116,18 @@ pub fn Check_Sleep_Is_Not_Synchronization(sources: &[SourceFile], facts: &mut dy
 /// -- every Rust source, but only a Go source whose own filename already marks it a test.
 fn Sleep_Vocabulary_For(source: &SourceFile) -> Option<&'static [&'static str]>
 {
+    if !crate::checks::populations::SLEEP_POPULATION.Holds(source)
+    {
+        return None;
+    }
+
     if source.Is_Written_In(RUST_LANGUAGE)
     {
         return Some(RUST_SLEEP_CALLS);
     }
 
-    if source.Is_Written_In(GO_LANGUAGE) && Is_Go_Test_File(source)
+    // Within the population, a source that is not Rust is Go; only a test file is judged.
+    if Is_Go_Test_File(source)
     {
         return Some(GO_SLEEP_CALLS);
     }
@@ -263,7 +269,7 @@ pub fn Check_A_Test_Does_Not_Retry_Until_Green(sources: &[SourceFile]) -> Vec<Fi
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
+        if crate::checks::populations::RETRY_UNTIL_GREEN_POPULATION.Holds(source) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Retry_Findings_In(source));
         }

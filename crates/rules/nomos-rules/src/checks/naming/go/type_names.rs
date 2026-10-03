@@ -7,7 +7,7 @@
 use crate::checks::finding_shape::{Finding_Shape, Own_Name_Finding};
 use crate::checks::naming::Resolve_Case;
 use crate::rule_descriptor::policy_axis::{EXPORTED_TYPE_CASE, UNEXPORTED_TYPE_CASE};
-use crate::{GO_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload};
@@ -51,7 +51,7 @@ fn Judged_Go_Type_Sources(
 
     for source in sources
     {
-        if !source.Is_Written_In(GO_LANGUAGE)
+        if !crate::checks::populations::GO_TYPE_NAMES_POPULATION.Holds(source)
         {
             continue;
         }

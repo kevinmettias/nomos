@@ -11,7 +11,7 @@
 //! by export status, the same way the standard itself does not split it.
 
 use crate::checks::finding_shape::{Finding_Shape, Own_Name_Finding};
-use crate::{GO_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_cap_syntax::{PayloadItem, SyntaxPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId, SubjectId};
@@ -147,7 +147,7 @@ fn Judged_Go_Sources(
 
     for source in sources
     {
-        if !source.Is_Written_In(GO_LANGUAGE)
+        if !crate::checks::populations::GO_DATA_NAMES_POPULATION.Holds(source)
         {
             continue;
         }

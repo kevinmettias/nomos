@@ -5,17 +5,23 @@
 //! `pub use` route does not name loses them from `tests/contract/surface` silently, and the
 //! diff that would show it is the blessed snapshot rather than a compiler error.
 
-use super::{FunctionAritySource, ReceiverAllowance};
+use super::ReceiverAllowance;
+use crate::rule_descriptor::Population;
 use nomos_contracts::GateCategory;
 
 /// A configurable function-arity rule.
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+///
+/// No `PartialEq`: [`Self::source`] is a [`Population`], which can hold a function pointer, and
+/// comparing two of those compares addresses the compiler is free to merge or duplicate.
+/// Nothing compares two policies.
+#[derive(Clone, Copy, Debug)]
 pub struct FunctionArityPolicy
 {
     /// The rule id reported on findings.
     pub rule: &'static str,
-    /// Which files this policy judges.
-    pub source: FunctionAritySource,
+    /// Which of the sources handed to the rule this policy judges: the population the rule's
+    /// own descriptor declares, so the policy and the descriptor are one statement.
+    pub source: Population,
     /// Maximum value parameters allowed before a finding is reported.
     pub max_value_parameters: u32,
     /// Whether qualified functions get one possible receiver input.
@@ -32,18 +38,18 @@ impl FunctionArityPolicy
     {
         return Self {
             rule,
-            source: FunctionAritySource::All,
+            source: Population::Every,
             max_value_parameters,
             receiver_allowance: ReceiverAllowance::None,
             gate: GateCategory::Blocking,
         };
     }
 
-    /// Narrows this policy to one language.
+    /// Narrows this policy to `population` -- the constant its rule's descriptor declares.
     #[must_use]
-    pub const fn For_Language(mut self, language: &'static str) -> Self
+    pub const fn Judging(mut self, population: Population) -> Self
     {
-        self.source = FunctionAritySource::Language(language);
+        self.source = population;
         return self;
     }
 

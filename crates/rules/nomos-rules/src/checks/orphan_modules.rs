@@ -156,7 +156,7 @@ impl<'a> SourceTree<'a>
     {
         let mut by_path = BTreeMap::new();
 
-        for source in sources.iter().filter(|source| return source.path.ends_with(RUST_SOURCE_SUFFIX))
+        for source in sources.iter().filter(|source| return crate::checks::populations::ORPHAN_MODULES_POPULATION.Holds(source))
         {
             by_path.insert(source.path.as_str(), source);
         }

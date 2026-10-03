@@ -32,7 +32,7 @@
 //! would be nowhere to say otherwise.
 
 use super::code_prefix::{Code_Prefix, Code_With_String_Bodies_Masked};
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 use std::collections::BTreeSet;
 
@@ -77,7 +77,7 @@ pub fn Check_Lifetimes_Follow_The_Descriptive_Naming_Rule(sources: &[SourceFile]
 {
     let mut findings = Vec::new();
 
-    for source in sources.iter().filter(|source| return source.Is_Written_In(RUST_LANGUAGE))
+    for source in sources.iter().filter(|source| return crate::checks::populations::LIFETIME_DISCIPLINE_POPULATION.Holds(source))
     {
         findings.extend(Terse_Lifetime_Findings_In(source));
     }
@@ -233,7 +233,7 @@ pub fn Check_Static_Bounds_Are_Justified(sources: &[SourceFile]) -> Vec<Finding>
 {
     let mut findings = Vec::new();
 
-    for source in sources.iter().filter(|source| return source.Is_Written_In(RUST_LANGUAGE))
+    for source in sources.iter().filter(|source| return crate::checks::populations::LIFETIME_DISCIPLINE_POPULATION.Holds(source))
     {
         findings.extend(Static_Bound_Findings_In(source));
     }

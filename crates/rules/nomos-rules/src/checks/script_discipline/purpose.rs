@@ -1,7 +1,7 @@
 //! `script_discipline.rs`'s purpose-comment rule: the first nonblank line after a shebang must
 //! say what the script is for before anything runs.
 
-use super::{A_SCRIPT_DECLARES_ITS_PURPOSE, Because, Finding_For_Source, Is_Shebang_Script, Rule};
+use super::{A_SCRIPT_DECLARES_ITS_PURPOSE, Because, Finding_For_Source, Rule};
 use crate::SourceFile;
 use nomos_contracts::Finding;
 
@@ -13,7 +13,7 @@ pub fn Check_A_Script_Declares_Its_Purpose(sources: &[SourceFile]) -> Vec<Findin
 
     for source in sources
     {
-        if !Is_Shebang_Script(source)
+        if !crate::checks::populations::SCRIPT_POPULATION.Holds(source)
         {
             continue;
         }

@@ -11,7 +11,7 @@ pub fn Check_An_Excluded_File_Says_Why(sources: &[SourceFile]) -> Vec<Finding>
     let mut findings = Vec::new();
     for source in sources
     {
-        if source.Is_Written_In(crate::GO_LANGUAGE)
+        if crate::checks::populations::EXCLUDED_FILE_POPULATION.Holds(source)
         {
             findings.extend(Build_Ignore_Findings_In(source));
         }

@@ -24,7 +24,7 @@
 //! the measurement behind it.
 
 use super::code_prefix::Code_Prefix;
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 /// The code-standards procedural-macro rule id.
@@ -47,7 +47,7 @@ pub fn Check_Prefer_Macro_Rules_Over_Procedural_Macros(sources: &[SourceFile]) -
 {
     let mut findings = Vec::new();
 
-    for source in sources.iter().filter(|source| return source.Is_Written_In(RUST_LANGUAGE))
+    for source in sources.iter().filter(|source| return crate::checks::populations::PROCEDURAL_MACRO_POPULATION.Holds(source))
     {
         findings.extend(Procedural_Macro_Findings_In(source));
     }

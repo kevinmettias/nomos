@@ -36,7 +36,7 @@
 //! and is a genuine zero: nothing in this workspace boxes or shares a closure.
 
 use super::code_prefix::Code_Prefix;
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -406,7 +406,7 @@ const OWN_IMPLEMENTATION_FILES: &[&str] = &[
 /// crate reads, rather than a third private path list beside it.
 fn Is_Judgeable_Source(source: &SourceFile, declared: &[String]) -> bool
 {
-    return source.Is_Written_In(RUST_LANGUAGE)
+    return crate::checks::populations::CLOSURE_BOUNDS_POPULATION.Holds(source)
         && !Is_Own_Implementation_File(source)
         && !super::Is_Test_Or_Example_Source(source, declared);
 }

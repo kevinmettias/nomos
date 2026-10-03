@@ -4,7 +4,7 @@
 
 mod sourced_library;
 
-use super::{Because, EXECUTED_SCRIPTS_SET_NOUNSET, Finding_For_Source, Is_Shebang_Script, Rule};
+use super::{Because, EXECUTED_SCRIPTS_SET_NOUNSET, Finding_For_Source, Rule};
 use crate::SourceFile;
 use nomos_contracts::Finding;
 
@@ -27,7 +27,7 @@ fn Nounset_Finding_For(source: &SourceFile) -> Option<Finding>
 {
     use sourced_library::Is_Sourced_Library;
 
-    if !Is_Shebang_Script(source)
+    if !crate::checks::populations::SCRIPT_POPULATION.Holds(source)
     {
         return None;
     }

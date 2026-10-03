@@ -99907,16 +99907,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P171-THE-CSHARP-CONDITIONAL-COMPILATION-FACT-JOINS-THE-RUN-FOR-THE-BUILDS-A-REPOSITORY-DECLARES"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "opus-p172-population",
-        "acquired_at": 1791013825,
-        "lease_expires_at": 1791044925
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -99939,7 +99935,40 @@
         ],
         "timeout_seconds": 13500
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "   Running tests\\rule_contract_citation.rs (F:/repos/p172-clean-target\\debug\\deps\\rule_contract_citation-0ac6f384425dd5b3.exe)\n     Running tests\\rule_descriptors.rs (F:/repos/p172-clean-target\\debug\\deps\\rule_descriptors-c5132aba7ca98bfd.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/p172-clean-target\\debug\\deps\\toolchain_floor-dfd3a139dad18d9a.exe)\n     Running unittests src\\lib.rs (F:/repos/p172-clean-target\\debug\\deps\\nomos_gate_orchestration-1daf67a7daaf757e.exe)\n     Running tests\\check_orchestration_seam.rs (F:/repos/p172-clean-target\\debug\\deps\\check_orchestration_seam-6143c4cd6f1f64c5.exe)\n     Running tests\\gate_run_outcome.rs (F:/repos/p172-clean-target\\debug\\deps\\gate_run_outcome-ab4833f71005301b.exe)\n     Running unittests src\\lib.rs (F:/repos/p172-clean-target\\debug\\deps\\nomos_integration_tests-bf3d355783cbaf1a.exe)\n     Running tests\\analysis_slice\\main.rs (F:/repos/p172-clean-target\\debug\\deps\\analysis_slice-b5ef3b3d9b45f99d.exe)\n     Running tests\\calibration.rs (F:/repos/p172-clean-target\\debug\\deps\\calibration-3ba8879a3eb61439.exe)\n     Running tests\\determinism\\main.rs (F:/repos/p172-clean-target\\debug\\deps\\determinism-2cf31c5902154a09.exe)\n     Running unittests src\\lib.rs (F:/repos/p172-clean-target\\debug\\deps\\nomos_rules-6ae30c39c8146f09.exe)\n     Running tests\\integration_seams.rs (F:/repos/p172-clean-target\\debug\\deps\\integration_seams-bb7a512fffe35b5f.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_rules\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: 1 warning emitted\n\n",
+        "verified_at": 1791028777,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "612e3660376a2769bd16f54aaef98f607a10225e"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -101583,12 +101612,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P188-A-PREDICATE-COVERS-ITS-OWN-PACKAGES-AND-FIVE-LANDINGS-REDDENED-A-DEPENDENT-NOBODY-RAN"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p195-rules-step",
+        "acquired_at": 1791026034,
+        "lease_expires_at": 1791044034
+      },
       "verification": {
         "argv": [
           "cargo",

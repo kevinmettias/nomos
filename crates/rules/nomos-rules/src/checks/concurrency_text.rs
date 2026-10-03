@@ -29,7 +29,7 @@
 mod relaxed;
 
 use super::code_prefix::Code_Prefix;
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
@@ -76,7 +76,7 @@ fn Findings_For(sources: &[SourceFile], facts: &mut dyn FactReader, rule: &str, 
     for source in sources
     {
         let is_judged_rust_source =
-            source.Is_Written_In(RUST_LANGUAGE) && !super::Is_Test_Or_Example_Source(source, &declared) && !Is_Own_Implementation_File(source);
+            crate::checks::populations::CONCURRENCY_TEXT_POPULATION.Holds(source) && !super::Is_Test_Or_Example_Source(source, &declared) && !Is_Own_Implementation_File(source);
         if is_judged_rust_source
         {
             let ordering_findings = Ordering_Findings_In(source, rule, matches_partition);

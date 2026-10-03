@@ -5,7 +5,7 @@
 //! rather than the string-body-masked text.
 
 use crate::checks::code_prefix::Code_Prefix;
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_contracts::Finding;
 use std::path::Component;
 
@@ -19,7 +19,7 @@ pub fn Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources: &[SourceFile]) ->
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
+        if crate::checks::populations::PATH_ATTRIBUTE_POPULATION.Holds(source) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Path_Attribute_Findings_In(source));
         }

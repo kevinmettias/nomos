@@ -1,9 +1,10 @@
 pub const fn nomos_rules::FunctionArityPolicy::Allow_One_Receiver_For_Qualified_Functions(mut self) -> Self
-pub const fn nomos_rules::FunctionArityPolicy::For_Language(mut self, language: &'static str) -> Self
+pub const fn nomos_rules::FunctionArityPolicy::Judging(mut self, population: Population) -> Self
 pub const fn nomos_rules::FunctionArityPolicy::New(rule: &'static str, max_value_parameters: u32) -> Self
 pub const fn nomos_rules::FunctionArityPolicy::With_Gate(mut self, gate: GateCategory) -> Self
 pub const fn nomos_rules::RuleDescriptor::Citing(self, record: &'static str, version: u32) -> Self
 pub const fn nomos_rules::RuleDescriptor::Is_Citing_A_Versioned_Record(&self) -> bool
+pub const fn nomos_rules::RuleDescriptor::Judging(self, population: Population) -> Self
 pub const nomos_rules::ABBREVIATIONS: &str
 pub const nomos_rules::AN_EXCLUDED_FILE_SAYS_WHY: &str
 pub const nomos_rules::ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED: &str
@@ -132,15 +133,17 @@ pub const nomos_rules::WRITE_AUTHORITY: &str
 pub const nomos_rules::WRITE_AUTHORITY_CONTRACT_RECORD: &str
 pub const nomos_rules::WRITE_AUTHORITY_CONTRACT_RECORD_VERSION: u32
 pub const nomos_rules::ZERO_FLAKE_POLICY: &str
-pub enum nomos_rules::FunctionAritySource
+pub enum nomos_rules::Population
 pub enum nomos_rules::Reading
 pub enum nomos_rules::ReceiverAllowance
 pub enum nomos_rules::RequiredFact
 pub enum nomos_rules::RuleRegistryError
 pub enum nomos_rules::SubjectKind
 pub enum nomos_rules::UniverseKind
-pub enum variant nomos_rules::FunctionAritySource::All
-pub enum variant nomos_rules::FunctionAritySource::Language(&'static str)
+pub enum variant nomos_rules::Population::Every
+pub enum variant nomos_rules::Population::Kind { name: &'static str, holds: fn(&SourceFile) -> bool, }
+pub enum variant nomos_rules::Population::Language(&'static str)
+pub enum variant nomos_rules::Population::Languages(&'static [&'static str])
 pub enum variant nomos_rules::Reading::Observed(Vec<DeclaredUniverse>)
 pub enum variant nomos_rules::Reading::Unobserved { because: String, }
 pub enum variant nomos_rules::ReceiverAllowance::None
@@ -264,6 +267,8 @@ pub fn nomos_rules::Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Fi
 pub fn nomos_rules::Check_Unwrap_Expect_Discipline(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 pub fn nomos_rules::Check_Workspace_Markers_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Finding>
 pub fn nomos_rules::Check_Write_Authority(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
+pub fn nomos_rules::Population::Holds(&self, source: &SourceFile) -> bool
+pub fn nomos_rules::Population::Name(&self) -> String
 pub fn nomos_rules::RequiredFact::Capability(self) -> CapabilityId
 pub fn nomos_rules::RuleDescriptor::Rule(&self) -> RuleId
 pub fn nomos_rules::RuleRegistry::New() -> Self
@@ -281,7 +286,7 @@ pub struct field nomos_rules::FunctionArityPolicy::gate: GateCategory
 pub struct field nomos_rules::FunctionArityPolicy::max_value_parameters: u32
 pub struct field nomos_rules::FunctionArityPolicy::receiver_allowance: ReceiverAllowance
 pub struct field nomos_rules::FunctionArityPolicy::rule: &'static str
-pub struct field nomos_rules::FunctionArityPolicy::source: FunctionAritySource
+pub struct field nomos_rules::FunctionArityPolicy::source: Population
 pub struct field nomos_rules::RoleSurfacePair::actual_surface: String
 pub struct field nomos_rules::RoleSurfacePair::crate_name: String
 pub struct field nomos_rules::RoleSurfacePair::crate_root: String
@@ -290,6 +295,7 @@ pub struct field nomos_rules::RuleDescriptor::check: RuleJudgment
 pub struct field nomos_rules::RuleDescriptor::contract_record: &'static str
 pub struct field nomos_rules::RuleDescriptor::contract_record_version: u32
 pub struct field nomos_rules::RuleDescriptor::id: &'static str
+pub struct field nomos_rules::RuleDescriptor::population: Population
 pub struct field nomos_rules::RuleDescriptor::requires: &'static [RequiredFact]
 pub struct field nomos_rules::RuleDescriptor::subject: SubjectKind
 pub struct field nomos_rules::RuleOffer::contract_record: String

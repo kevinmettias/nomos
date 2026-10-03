@@ -2,7 +2,7 @@
 
 use super::{Check_Function_Arity_Policy, FunctionArityPolicy, GO, GO_PARAMETER_COUNT, Resolve_Limit, Undeclared_Limit};
 use crate::rule_descriptor::policy_axis::PARAMETER_COUNT_MAX;
-use crate::{GO_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
 
@@ -25,7 +25,7 @@ pub fn Check_Go_Parameter_Count(
         sources,
         facts,
         FunctionArityPolicy::New(GO_PARAMETER_COUNT, max)
-            .For_Language(GO_LANGUAGE)
+            .Judging(crate::checks::populations::GO_PARAMETER_COUNT_POPULATION)
             .Allow_One_Receiver_For_Qualified_Functions(),
     );
 }

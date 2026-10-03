@@ -32,7 +32,7 @@ pub use checks::{
     Check_No_Trailing_Whitespace, Check_Todo_Format, DEPRECATION, NO_DECORATIVE_SECTION_DIVIDERS,
     NO_SINGLE_LINE_FUNCTION_BODIES, NO_TRAILING_WHITESPACE, TODO_FORMAT,
     Check_Function_Arity_Policy, Check_Go_Parameter_Count, Check_Parameter_Count, FunctionArityPolicy,
-    FunctionAritySource, ReceiverAllowance, GO_PARAMETER_COUNT, PARAMETER_COUNT,
+    ReceiverAllowance, GO_PARAMETER_COUNT, PARAMETER_COUNT,
     Check_Lint_Diagnostics, LINT_CONTRACT_RECORD, LINT_CONTRACT_RECORD_VERSION, LINT_DIAGNOSTICS,
     Check_Dependency_Policy, DEPENDENCY_POLICY, DEPENDENCY_POLICY_CONTRACT_RECORD,
     DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION,
@@ -107,7 +107,7 @@ pub use checks::{
 pub use declared_universe::DeclaredUniverse;
 pub use reading::Reading;
 pub use registry::{RuleOffer, RuleRegistry, RuleRegistryError};
-pub use rule_descriptor::{RequiredFact, RuleDescriptor, SubjectKind, DESCRIPTORS};
+pub use rule_descriptor::{Population, RequiredFact, RuleDescriptor, SubjectKind, DESCRIPTORS};
 pub use universe_kind::{UniverseKind, Universes_In};
 
 /// What this crate needs from a syntax provider before it will believe an answer.

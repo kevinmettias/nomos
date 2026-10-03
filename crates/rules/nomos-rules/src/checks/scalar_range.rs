@@ -44,7 +44,7 @@
 //! hold a stated range. This file keeps only the judgment: the two predicates, the walk over
 //! each source's bounds, and the finding each one renders to.
 
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 mod bound;
@@ -83,7 +83,7 @@ fn Findings_For(sources: &[SourceFile], rule: &str, matches: fn(&Bound) -> bool)
 
     for source in sources
     {
-        if !source.Is_Written_In(RUST_LANGUAGE) || Is_Own_Implementation_File(source)
+        if !crate::checks::populations::SCALAR_RANGE_POPULATION.Holds(source) || Is_Own_Implementation_File(source)
         {
             continue;
         }

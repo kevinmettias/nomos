@@ -26,7 +26,7 @@
 //! left unjudged rather than guessed at.
 
 use super::code_prefix::Code_Prefix;
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 /// The code-standards message-starts-lowercase rule id.
@@ -128,7 +128,7 @@ pub fn Check_Eager_Vs_Lazy_Context(sources: &[SourceFile]) -> Vec<Finding>
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
+        if crate::checks::populations::ERROR_TEXT_POPULATION.Holds(source) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Context_Laziness_Findings_In(source));
         }
@@ -181,7 +181,7 @@ fn Error_Message_Findings(sources: &[SourceFile], rule: &str, judge: impl Fn(&st
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
+        if crate::checks::populations::ERROR_TEXT_POPULATION.Holds(source) && !Is_Own_Implementation_File(source)
         {
             let source_findings = Error_Attribute_Findings_In(source, rule, &judge);
             findings.extend(source_findings);

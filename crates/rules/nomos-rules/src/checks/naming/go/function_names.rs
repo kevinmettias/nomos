@@ -22,7 +22,7 @@
 
 use crate::checks::naming::Resolve_Case;
 use crate::rule_descriptor::policy_axis::{EXPORTED_FUNCTION_CASE, UNEXPORTED_FUNCTION_CASE};
-use crate::{GO_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{FUNCTION, PayloadItem, SyntaxPayload};
@@ -194,7 +194,7 @@ fn Judged_Go_Function_Sources(sources: &[SourceFile], facts: &mut dyn FactReader
 
     for source in sources
     {
-        if !source.Is_Written_In(GO_LANGUAGE)
+        if !crate::checks::populations::GO_FUNCTION_NAMES_POPULATION.Holds(source)
         {
             continue;
         }

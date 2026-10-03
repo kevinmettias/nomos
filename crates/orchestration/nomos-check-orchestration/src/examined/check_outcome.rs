@@ -3,7 +3,7 @@
 use nomos_capability::RegistryError;
 use nomos_contracts::Finding;
 
-use crate::examined::{Claim, Examined, SupportingFactTrail};
+use crate::examined::{Claim, Examined, Populations, SupportingFactTrail};
 
 /// What a `nomos check` run produced.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -43,5 +43,11 @@ pub enum CheckOutcome
         /// finding is what a rule says about a subject, and how the rule came to say it is
         /// a property of the run.
         supporting_facts: SupportingFactTrail,
+        /// How many sources each selected rule was judged over, in its declared population.
+        ///
+        /// Beside [`Self::Judged::claim`] and never in it, as `OD-ANALYSIS-012` version 2
+        /// decided: an empty population is reported here, and the claim is what the findings
+        /// alone support. [`Populations::Empty`] names the rules that judged nothing.
+        populations: Populations,
     },
 }

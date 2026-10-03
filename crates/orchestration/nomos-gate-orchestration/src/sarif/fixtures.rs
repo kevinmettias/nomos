@@ -92,6 +92,7 @@ pub(crate) fn Judged_Outcome_With(findings: Vec<Finding>, claim: Claim) -> Check
         examined: Examined { files: FIXTURE_EXAMINED, facts: FIXTURE_EXAMINED },
         claim,
         supporting_facts: SupportingFactTrail::New(),
+        populations: nomos_check_orchestration::Populations::New(),
     };
 }
 

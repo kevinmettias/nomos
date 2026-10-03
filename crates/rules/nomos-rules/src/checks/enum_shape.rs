@@ -49,7 +49,7 @@
 //! rule reads `nomos_cap_syntax::PayloadItem`, which carries no line number at all.
 
 use crate::checks::declaration_scan::{DeclarationBlock, Is_Ident_Char, Line_Number, Name_After_Keyword};
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
 
 /// This crate's chosen canonical rule id among the three code-standards ids that name
@@ -79,7 +79,7 @@ pub fn Check_Named_Fields_Over_Positional_Variant_Payloads(sources: &[SourceFile
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
+        if crate::checks::populations::ENUM_SHAPE_POPULATION.Holds(source) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Variant_Findings_In(source));
         }

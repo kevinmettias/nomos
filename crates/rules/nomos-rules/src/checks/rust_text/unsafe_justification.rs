@@ -7,7 +7,7 @@
 //! judged by a rustdoc `# Safety` section instead.
 
 use crate::checks::code_prefix::{Code_Prefix, Code_With_String_Bodies_Masked};
-use crate::{RUST_LANGUAGE, SourceFile};
+use crate::SourceFile;
 use nomos_contracts::Finding;
 
 use super::comment_block::{Comment_Text_Of, Preceding_Comment_Block, Preceding_Documentation_Comment_Block};
@@ -27,7 +27,7 @@ pub fn Check_Unsafe_Justification(sources: &[SourceFile]) -> Vec<Finding>
 
     for source in sources
     {
-        if source.Is_Written_In(RUST_LANGUAGE) && !Is_Own_Implementation_File(source)
+        if crate::checks::populations::UNSAFE_JUSTIFICATION_POPULATION.Holds(source) && !Is_Own_Implementation_File(source)
         {
             findings.extend(Unsafe_Findings_In(source));
         }

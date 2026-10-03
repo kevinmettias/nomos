@@ -32,12 +32,10 @@ use nomos_cap_syntax::{FUNCTION, Function_Arity, PayloadItem, SyntaxPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, RuleId, SubjectId};
 
 mod function_arity_policy;
-mod function_arity_source;
 mod go_parameter_count;
 mod receiver_allowance;
 
 pub use function_arity_policy::FunctionArityPolicy;
-pub use function_arity_source::FunctionAritySource;
 pub use go_parameter_count::Check_Go_Parameter_Count;
 pub use receiver_allowance::ReceiverAllowance;
 
@@ -75,7 +73,7 @@ pub fn Check_Parameter_Count(
 /// to call, and a test's parameters are its fixtures: the shapes that make a case say what
 /// it varies. This is [`crate::checks::Is_Test_Or_Example_Source`], the same exemption
 /// `concurrency_text` and `file_names` already read, applied here for the first time; it sits
-/// beside the policy's language filter rather than inside it because where a file sits and
+/// beside the policy's population filter rather than inside it because where a file sits and
 /// what it is written in are different questions, and `Is_Policy_Accepting_Source` answers only
 /// the second.
 #[must_use]
@@ -105,11 +103,7 @@ pub fn Check_Function_Arity_Policy(
 
 fn Is_Policy_Accepting_Source(policy: FunctionArityPolicy, source: &SourceFile) -> bool
 {
-    return match policy.source
-    {
-        FunctionAritySource::All => true,
-        FunctionAritySource::Language(expected) => source.Is_Written_In(expected),
-    };
+    return policy.source.Holds(source);
 }
 
 /// One source's findings under `policy`: its function-arity violations when its syntax

@@ -50,6 +50,7 @@ use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::{Finding, RuleId};
 
+pub use population::Population;
 pub use required_fact::RequiredFact;
 pub use rule_judgment::RuleJudgment;
 pub use subject_kind::SubjectKind;
@@ -66,6 +67,7 @@ mod declared_detector;
 mod declared_justification;
 mod declared_parameter;
 mod declared_text_rule;
+mod population;
 mod required_fact;
 mod rule_judgment;
 mod subject_kind;
@@ -114,6 +116,15 @@ pub struct RuleDescriptor
     /// its table from this field and calls it through [`RuleJudgment::Judges`]; see
     /// [`RuleJudgment`] for the one shape they share.
     pub check: RuleJudgment,
+    /// Which of the sources this rule is handed it judges, as `OD-ANALYSIS-012` version 2
+    /// decided: [`Population::Every`] unless the row says otherwise with
+    /// [`RuleDescriptor::Judging`].
+    ///
+    /// The very value the rule's body filters by, not a description of it beside the body. A row
+    /// that narrows names the constant its body reads, so the two cannot disagree, and the
+    /// composition root reads it only to count how many sources the rule was judged over -- it
+    /// hands the body exactly the sources it always did.
+    pub population: Population,
 }
 
 impl RuleDescriptor
@@ -146,6 +157,16 @@ impl RuleDescriptor
     pub const fn Citing(self, record: &'static str, version: u32) -> Self
     {
         return Self { contract_record: record, contract_record_version: version, ..self };
+    }
+
+    /// The same descriptor, judging `population` rather than every source it is handed.
+    ///
+    /// `population` is the constant the rule's own body filters by, named here rather than
+    /// restated, which is what keeps the declaration and the body one statement.
+    #[must_use]
+    pub const fn Judging(self, population: Population) -> Self
+    {
+        return Self { population, ..self };
     }
 }
 
@@ -193,6 +214,7 @@ const fn Descriptor_For(id: &'static str, subject: SubjectKind, requires: &'stat
         check: RuleJudgment::New(judge),
         contract_record: PORTED_STANDARD,
         contract_record_version: NO_VERSIONED_RECORD,
+        population: Population::Every,
     };
 }
 
@@ -224,6 +246,7 @@ const fn Descriptor_For_Declaration(declaration: &'static DeclaredTextRule) -> R
         check: RuleJudgment::Declaring(declaration),
         contract_record: declaration.contract_record,
         contract_record_version: declaration.contract_record_version,
+        population: declaration.Population(),
     };
 }
 
@@ -268,64 +291,64 @@ pub const DESCRIPTORS: &[RuleDescriptor] = &[
     Descriptor_For(crate::NO_TRAILING_WHITESPACE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_No_Trailing_Whitespace(sources)),
     Descriptor_For(crate::TODO_FORMAT, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Todo_Format(sources)),
     Descriptor_For(crate::DEPRECATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Deprecation_Carries_A_Reason(sources)),
-    Descriptor_For(crate::A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources)),
-    Descriptor_For(crate::SHARED_INTERIOR_MUTABILITY_SAYS_WHY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Shared_Interior_Mutability_Says_Why(sources)),
+    Descriptor_For(crate::A_RUST_PATH_STAYS_WITHIN_ITS_OWN_SUBTREE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Rust_Path_Stays_Within_Its_Own_Subtree(sources)).Judging(crate::checks::populations::PATH_ATTRIBUTE_POPULATION),
+    Descriptor_For(crate::SHARED_INTERIOR_MUTABILITY_SAYS_WHY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Shared_Interior_Mutability_Says_Why(sources)).Judging(crate::checks::populations::INTERIOR_MUTABILITY_POPULATION),
     Descriptor_For_Declaration(&crate::checks::EVERY_ALLOW_DECLARATION),
-    Descriptor_For(crate::UNSAFE_JUSTIFICATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Unsafe_Justification(sources)),
-    Descriptor_For(crate::SCRIPTS_USE_A_PORTABLE_SHEBANG, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Scripts_Use_A_Portable_Shebang(sources)),
-    Descriptor_For(crate::A_SCRIPT_DECLARES_ITS_PURPOSE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Script_Declares_Its_Purpose(sources)),
-    Descriptor_For(crate::EXECUTED_SCRIPTS_SET_NOUNSET, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Executed_Scripts_Set_Nounset(sources)),
-    Descriptor_For(crate::SLEEP_BASED_SYNCHRONIZATION, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_Sleep_Is_Not_Synchronization),
-    Descriptor_For(crate::ZERO_FLAKE_POLICY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Test_Does_Not_Retry_Until_Green(sources)),
+    Descriptor_For(crate::UNSAFE_JUSTIFICATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Unsafe_Justification(sources)).Judging(crate::checks::populations::UNSAFE_JUSTIFICATION_POPULATION),
+    Descriptor_For(crate::SCRIPTS_USE_A_PORTABLE_SHEBANG, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Scripts_Use_A_Portable_Shebang(sources)).Judging(crate::checks::populations::SCRIPT_POPULATION),
+    Descriptor_For(crate::A_SCRIPT_DECLARES_ITS_PURPOSE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Script_Declares_Its_Purpose(sources)).Judging(crate::checks::populations::SCRIPT_POPULATION),
+    Descriptor_For(crate::EXECUTED_SCRIPTS_SET_NOUNSET, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Executed_Scripts_Set_Nounset(sources)).Judging(crate::checks::populations::SCRIPT_POPULATION),
+    Descriptor_For(crate::SLEEP_BASED_SYNCHRONIZATION, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_Sleep_Is_Not_Synchronization).Judging(crate::checks::populations::SLEEP_POPULATION),
+    Descriptor_For(crate::ZERO_FLAKE_POLICY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Test_Does_Not_Retry_Until_Green(sources)).Judging(crate::checks::populations::RETRY_UNTIL_GREEN_POPULATION),
     Descriptor_For(crate::NO_MOD_RS_FILES, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_No_Mod_Rs_Files(sources)),
     Descriptor_For(crate::A_CREDENTIAL_IS_NOT_HARDCODED_IN_SOURCE, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_A_Credential_Is_Not_Hardcoded_In_Source),
     Descriptor_For(crate::A_SECRET_DOES_NOT_TRAVEL_IN_A_URL, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_A_Secret_Does_Not_Travel_In_A_Url),
     Descriptor_For(crate::CERTIFICATE_VERIFICATION_IS_NOT_DISABLED, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_Certificate_Verification_Is_Not_Disabled),
     Descriptor_For(crate::A_DISCARDED_ERROR_IS_EXPLAINED, SubjectKind::SourceFacts, &[RequiredFact::GoDiscardedValues], crate::Check_A_Discarded_Error_Is_Explained),
-    Descriptor_For(crate::A_SKIPPED_TEST_STATES_WHY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Skipped_Test_States_Why(sources)),
-    Descriptor_For(crate::AN_EXCLUDED_FILE_SAYS_WHY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_An_Excluded_File_Says_Why(sources)),
-    Descriptor_For(crate::SUPPRESSION_DIRECTIVES_CARRY_A_REASON, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Suppression_Directives_Carry_A_Reason(sources)),
-    Descriptor_For(crate::WORKSPACE_MARKERS_CARRY_A_REASON, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Workspace_Markers_Carry_A_Reason(sources)),
-    Descriptor_For(crate::A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Package_Is_Named_After_Its_Directory(sources)),
-    Descriptor_For(crate::ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_Atomic_Ordering_Choices_Are_Justified),
-    Descriptor_For(crate::SEQCST_JUSTIFIED_EXPLICITLY, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_Seqcst_Justified_Explicitly),
-    Descriptor_For(crate::RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_Relaxed_Not_Used_When_Ordering_Matters),
+    Descriptor_For(crate::A_SKIPPED_TEST_STATES_WHY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Skipped_Test_States_Why(sources)).Judging(crate::checks::populations::SKIPPED_TEST_POPULATION),
+    Descriptor_For(crate::AN_EXCLUDED_FILE_SAYS_WHY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_An_Excluded_File_Says_Why(sources)).Judging(crate::checks::populations::EXCLUDED_FILE_POPULATION),
+    Descriptor_For(crate::SUPPRESSION_DIRECTIVES_CARRY_A_REASON, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Suppression_Directives_Carry_A_Reason(sources)).Judging(crate::checks::populations::GO_MARKERS_POPULATION),
+    Descriptor_For(crate::WORKSPACE_MARKERS_CARRY_A_REASON, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Workspace_Markers_Carry_A_Reason(sources)).Judging(crate::checks::populations::GO_MARKERS_POPULATION),
+    Descriptor_For(crate::A_PACKAGE_IS_NAMED_AFTER_ITS_DIRECTORY, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Package_Is_Named_After_Its_Directory(sources)).Judging(crate::checks::populations::PACKAGE_PLACEMENT_POPULATION),
+    Descriptor_For(crate::ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_Atomic_Ordering_Choices_Are_Justified).Judging(crate::checks::populations::CONCURRENCY_TEXT_POPULATION),
+    Descriptor_For(crate::SEQCST_JUSTIFIED_EXPLICITLY, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_Seqcst_Justified_Explicitly).Judging(crate::checks::populations::CONCURRENCY_TEXT_POPULATION),
+    Descriptor_For(crate::RELAXED_NOT_USED_WHEN_ORDERING_MATTERS, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_Relaxed_Not_Used_When_Ordering_Matters).Judging(crate::checks::populations::CONCURRENCY_TEXT_POPULATION),
     Descriptor_For(crate::MODULE_AND_FIELD_NAMES_STAY_LOWER_SNAKE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy], crate::Check_Module_And_Field_Names_Stay_Lower_Snake),
     Descriptor_For(crate::FILE_NAME_MATCHES_DECLARED_TYPE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::TestMaterialPolicy], crate::Check_File_Name_Matches_Declared_Type),
-    Descriptor_For(crate::CONSTANTS_SPLIT_BY_EXPORT, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_Go_Constants_Split_By_Export),
-    Descriptor_For(crate::GO_VARIABLES_USE_LOWER_SNAKE_CASE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_Go_Variables_Use_Lower_Snake_Case),
-    Descriptor_For(crate::EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy], crate::Check_Exported_Go_Functions_Use_Upper_Snake_Case),
-    Descriptor_For(crate::UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy], crate::Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter),
-    Descriptor_For(crate::TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy], crate::Check_Go_Type_Names_Use_Camel_Case),
+    Descriptor_For(crate::CONSTANTS_SPLIT_BY_EXPORT, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_Go_Constants_Split_By_Export).Judging(crate::checks::populations::GO_DATA_NAMES_POPULATION),
+    Descriptor_For(crate::GO_VARIABLES_USE_LOWER_SNAKE_CASE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_Go_Variables_Use_Lower_Snake_Case).Judging(crate::checks::populations::GO_DATA_NAMES_POPULATION),
+    Descriptor_For(crate::EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy], crate::Check_Exported_Go_Functions_Use_Upper_Snake_Case).Judging(crate::checks::populations::GO_FUNCTION_NAMES_POPULATION),
+    Descriptor_For(crate::UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy], crate::Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter).Judging(crate::checks::populations::GO_FUNCTION_NAMES_POPULATION),
+    Descriptor_For(crate::TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::NamingPolicy], crate::Check_Go_Type_Names_Use_Camel_Case).Judging(crate::checks::populations::GO_TYPE_NAMES_POPULATION),
     Descriptor_For(crate::PARAMETER_COUNT, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::LimitsPolicy, RequiredFact::TestMaterialPolicy], crate::Check_Parameter_Count),
-    Descriptor_For(crate::GO_PARAMETER_COUNT, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::LimitsPolicy, RequiredFact::TestMaterialPolicy], crate::Check_Go_Parameter_Count),
+    Descriptor_For(crate::GO_PARAMETER_COUNT, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::LimitsPolicy, RequiredFact::TestMaterialPolicy], crate::Check_Go_Parameter_Count).Judging(crate::checks::populations::GO_PARAMETER_COUNT_POPULATION),
     Descriptor_For(crate::DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, SubjectKind::SourceFacts, &[RequiredFact::ScriptingPolicy], crate::Check_Declared_Tooling_Language_For_Scripts),
     Descriptor_For(crate::FILE_SIZE_JUSTIFICATION_TRIGGER, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy], crate::Check_File_Size_Justification_Trigger),
-    Descriptor_For(crate::NONNEGATIVE_STORAGE_IS_UNSIGNED, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Nonnegative_Storage_Is_Unsigned(sources)),
-    Descriptor_For(crate::A_KNOWN_RANGE_PICKS_ITS_TYPE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Known_Range_Picks_Its_Type(sources)),
-    Descriptor_For(crate::NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Named_Fields_Over_Positional_Variant_Payloads(sources)),
-    Descriptor_For(crate::ONE_THOUSAND_LINE_HARD_TRIGGER, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy], crate::Check_Go_File_Size_Hard_Trigger),
-    Descriptor_For(crate::FIVE_HUNDRED_LINE_REVIEW_TRIGGER, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy], crate::Check_Go_File_Size_Review_Trigger),
-    Descriptor_For(crate::LOWERCASE_FIRST_LETTER, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Error_Message_Starts_Lowercase(sources)),
-    Descriptor_For(crate::NO_TRAILING_PUNCTUATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Error_Message_Has_No_Trailing_Punctuation(sources)),
-    Descriptor_For(crate::EAGER_VS_LAZY_CONTEXT, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Eager_Vs_Lazy_Context(sources)),
+    Descriptor_For(crate::NONNEGATIVE_STORAGE_IS_UNSIGNED, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Nonnegative_Storage_Is_Unsigned(sources)).Judging(crate::checks::populations::SCALAR_RANGE_POPULATION),
+    Descriptor_For(crate::A_KNOWN_RANGE_PICKS_ITS_TYPE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_A_Known_Range_Picks_Its_Type(sources)).Judging(crate::checks::populations::SCALAR_RANGE_POPULATION),
+    Descriptor_For(crate::NAMED_FIELDS_OVER_POSITIONAL_VARIANT_PAYLOADS, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Named_Fields_Over_Positional_Variant_Payloads(sources)).Judging(crate::checks::populations::ENUM_SHAPE_POPULATION),
+    Descriptor_For(crate::ONE_THOUSAND_LINE_HARD_TRIGGER, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy], crate::Check_Go_File_Size_Hard_Trigger).Judging(crate::checks::populations::GO_FILE_SIZE_POPULATION),
+    Descriptor_For(crate::FIVE_HUNDRED_LINE_REVIEW_TRIGGER, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy], crate::Check_Go_File_Size_Review_Trigger).Judging(crate::checks::populations::GO_FILE_SIZE_POPULATION),
+    Descriptor_For(crate::LOWERCASE_FIRST_LETTER, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Error_Message_Starts_Lowercase(sources)).Judging(crate::checks::populations::ERROR_TEXT_POPULATION),
+    Descriptor_For(crate::NO_TRAILING_PUNCTUATION, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Error_Message_Has_No_Trailing_Punctuation(sources)).Judging(crate::checks::populations::ERROR_TEXT_POPULATION),
+    Descriptor_For(crate::EAGER_VS_LAZY_CONTEXT, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Eager_Vs_Lazy_Context(sources)).Judging(crate::checks::populations::ERROR_TEXT_POPULATION),
     Descriptor_For(crate::GOALS_AND_PARTS_LINE_UP, SubjectKind::Workspace, &[RequiredFact::GoalsPolicy], |_sources, reader| return crate::Check_Goals_And_Parts_Line_Up(reader)),
     Descriptor_For(crate::REQUIREMENT_TRACE_STALENESS, SubjectKind::Workspace, &[RequiredFact::RequirementTrace], |_sources, reader| return crate::Check_Requirement_Trace_Staleness(reader)) .Citing(crate::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD, crate::REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD_VERSION),
     Descriptor_For(crate::ABBREVIATIONS, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::WordsPolicy], crate::Check_Abbreviations),
     Descriptor_For(crate::SINGLE_LETTER_NAMES, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems], crate::Check_Single_Letter_Names),
     Descriptor_For_Declaration(&crate::checks::A_DISABLED_TEST_DECLARATION),
     Descriptor_For_Declaration(&crate::checks::INLINE_ALWAYS_DECLARATION),
-    Descriptor_For(crate::NO_WILDCARD_IMPORTS, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_No_Wildcard_Imports),
-    Descriptor_For(crate::NO_SINGLE_LINE_FUNCTION_BODIES, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_No_Single_Line_Function_Bodies(sources)),
-    Descriptor_For(crate::NO_ORPHAN_MODULES, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_No_Orphan_Modules(sources)),
-    Descriptor_For(crate::PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Parameters_Borrow_Unless_Ownership_Is_Taken(sources)),
-    Descriptor_For(crate::LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Lifetimes_Follow_The_Descriptive_Naming_Rule(sources)),
-    Descriptor_For(crate::STATIC_BOUNDS_ARE_JUSTIFIED, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Static_Bounds_Are_Justified(sources)),
-    Descriptor_For(crate::PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Prefer_Macro_Rules_Over_Procedural_Macros(sources)),
-    Descriptor_For(crate::NESTING_DEPTH, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy], crate::Check_Nesting_Depth),
-    Descriptor_For(crate::CYCLOMATIC_COMPLEXITY, SubjectKind::SourceFacts, &[RequiredFact::Complexity, RequiredFact::LimitsPolicy], crate::Check_Cyclomatic_Complexity).Citing(crate::CYCLOMATIC_COMPLEXITY_CONTRACT_RECORD, crate::CYCLOMATIC_COMPLEXITY_CONTRACT_RECORD_VERSION),
-    Descriptor_For(crate::CLOSURE_BOUNDS_ARE_MINIMAL, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::TestMaterialPolicy], crate::Check_Closure_Bounds_Are_Minimal),
-    Descriptor_For(crate::BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::TestMaterialPolicy], crate::Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths),
+    Descriptor_For(crate::NO_WILDCARD_IMPORTS, SubjectKind::SourceFacts, &[RequiredFact::TestMaterialPolicy], crate::Check_No_Wildcard_Imports).Judging(crate::checks::populations::WILDCARD_IMPORT_POPULATION),
+    Descriptor_For(crate::NO_SINGLE_LINE_FUNCTION_BODIES, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_No_Single_Line_Function_Bodies(sources)).Judging(crate::checks::populations::SINGLE_LINE_BODY_POPULATION),
+    Descriptor_For(crate::NO_ORPHAN_MODULES, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_No_Orphan_Modules(sources)).Judging(crate::checks::populations::ORPHAN_MODULES_POPULATION),
+    Descriptor_For(crate::PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Parameters_Borrow_Unless_Ownership_Is_Taken(sources)).Judging(crate::checks::populations::BORROWED_CONTAINER_POPULATION),
+    Descriptor_For(crate::LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Lifetimes_Follow_The_Descriptive_Naming_Rule(sources)).Judging(crate::checks::populations::LIFETIME_DISCIPLINE_POPULATION),
+    Descriptor_For(crate::STATIC_BOUNDS_ARE_JUSTIFIED, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Static_Bounds_Are_Justified(sources)).Judging(crate::checks::populations::LIFETIME_DISCIPLINE_POPULATION),
+    Descriptor_For(crate::PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS, SubjectKind::SourceText, &[], |sources, _reader| return crate::Check_Prefer_Macro_Rules_Over_Procedural_Macros(sources)).Judging(crate::checks::populations::PROCEDURAL_MACRO_POPULATION),
+    Descriptor_For(crate::NESTING_DEPTH, SubjectKind::SourceFacts, &[RequiredFact::LimitsPolicy], crate::Check_Nesting_Depth).Judging(crate::checks::populations::NESTING_DEPTH_POPULATION),
+    Descriptor_For(crate::CYCLOMATIC_COMPLEXITY, SubjectKind::SourceFacts, &[RequiredFact::Complexity, RequiredFact::LimitsPolicy], crate::Check_Cyclomatic_Complexity).Citing(crate::CYCLOMATIC_COMPLEXITY_CONTRACT_RECORD, crate::CYCLOMATIC_COMPLEXITY_CONTRACT_RECORD_VERSION).Judging(crate::checks::populations::CYCLOMATIC_COMPLEXITY_POPULATION),
+    Descriptor_For(crate::CLOSURE_BOUNDS_ARE_MINIMAL, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::TestMaterialPolicy], crate::Check_Closure_Bounds_Are_Minimal).Judging(crate::checks::populations::CLOSURE_BOUNDS_POPULATION),
+    Descriptor_For(crate::BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, SubjectKind::SourceFacts, &[RequiredFact::SyntaxItems, RequiredFact::TestMaterialPolicy], crate::Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths).Judging(crate::checks::populations::CLOSURE_BOUNDS_POPULATION),
     Descriptor_For(crate::COPY_CLONES, SubjectKind::SourceFacts, &[RequiredFact::CopyClones], crate::Check_Copy_Clones).Citing(crate::COPY_CLONES_CONTRACT_RECORD, crate::COPY_CLONES_CONTRACT_RECORD_VERSION),
     Descriptor_For(crate::NESTED_LOCKS, SubjectKind::SourceFacts, &[RequiredFact::NestedLocks], crate::Check_Nested_Locks).Citing(crate::NESTED_LOCKS_CONTRACT_RECORD, crate::NESTED_LOCKS_CONTRACT_RECORD_VERSION),
     Descriptor_For(crate::STANDARDS_CORPUS, SubjectKind::Workspace, &[RequiredFact::StandardsCorpusPolicy], |_sources, reader| return crate::Check_Standards_Corpus(reader)).Citing(crate::STANDARDS_CORPUS_CONTRACT_RECORD, crate::STANDARDS_CORPUS_CONTRACT_RECORD_VERSION),

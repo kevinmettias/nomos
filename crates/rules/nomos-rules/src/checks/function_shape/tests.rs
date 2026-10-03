@@ -75,7 +75,7 @@ fn Test_Check_Function_Arity_Policy_Should_Filter_By_Configured_Source_Extension
     const CAP: u32 = 2;
     let source = Source(Path("src/lib.rs"), Text("pub fn Build(a: A, b: B, c: C) {}"));
     let TestOffering { store, registry, .. } = Offering();
-    let policy = FunctionArityPolicy::New("custom-go-only-cap", CAP).For_Language(GO_LANGUAGE);
+    let policy = FunctionArityPolicy::New("custom-go-only-cap", CAP).Judging(crate::Population::Language(GO_LANGUAGE));
 
     let mut reader = Reader::On(&store, &registry, Test_Context());
     let findings = Check_Function_Arity_Policy(&[source], &mut reader, policy);

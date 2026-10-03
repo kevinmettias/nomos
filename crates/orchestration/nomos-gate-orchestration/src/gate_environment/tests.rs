@@ -114,6 +114,7 @@ fn Incomplete_Judgment() -> CheckOutcome
         examined: nomos_check_orchestration::Examined { files: 1, facts: 1 },
         claim: Claim::Incomplete,
         supporting_facts: nomos_check_orchestration::SupportingFactTrail::New(),
+        populations: nomos_check_orchestration::Populations::New(),
     };
 }
 

@@ -11,7 +11,7 @@ pub fn Check_Suppression_Directives_Carry_A_Reason(sources: &[SourceFile]) -> Ve
     let mut findings = Vec::new();
     for source in sources
     {
-        if source.Is_Written_In(crate::GO_LANGUAGE)
+        if crate::checks::populations::GO_MARKERS_POPULATION.Holds(source)
         {
             findings.extend(Nolint_Findings_In(source));
         }
@@ -73,7 +73,7 @@ pub fn Check_Workspace_Markers_Carry_A_Reason(sources: &[SourceFile]) -> Vec<Fin
     let mut findings = Vec::new();
     for source in sources
     {
-        if source.Is_Written_In(crate::GO_LANGUAGE)
+        if crate::checks::populations::GO_MARKERS_POPULATION.Holds(source)
         {
             findings.extend(Workspace_Marker_Findings_In(source));
         }

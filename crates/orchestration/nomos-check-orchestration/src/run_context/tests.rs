@@ -193,6 +193,68 @@ fn Test_Recognized_Sources_Should_Leave_An_Unrecognized_Path_With_No_Preferred_P
     assert_eq!(recognized.first().expect("one source in, one source out").preferred_syntax_provider, None);
 }
 
+/// `OD-ANALYSIS-012` version 2, end to end: one Go-only rule judged over a tree holding no Go
+/// source, and over a tree holding one Go source it finds clean. The first reports the rule's
+/// population empty and the second reports one source, and the two reach the same claim with
+/// the same zero findings -- the empty population is reported beside the claim and never in it.
+#[test]
+fn Test_An_Empty_Population_Should_Be_Reported_Beside_An_Unchanged_Claim()
+{
+    let rule = RuleId::New(nomos_rules::A_SKIPPED_TEST_STATES_WHY);
+    let no_go = [SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
+    let clean_go = [SourceFile::New("main.go", nomos_model::Subject_Of_Path("main.go"), "package main\n\nfunc main() {}\n")];
+
+    let (empty_claim, empty) = Claim_And_Populations(&no_go, &rule);
+    let (judged_claim, judged) = Claim_And_Populations(&clean_go, &rule);
+
+    assert_eq!(empty.Of(&rule), Some(0), "{empty:?}");
+    assert_eq!(empty.Empty(), [&rule]);
+    assert_eq!(judged.Of(&rule), Some(1), "{judged:?}");
+    assert!(judged.Empty().is_empty(), "{judged:?}");
+    assert_eq!(empty_claim, crate::examined::Claim::Complete);
+    assert_eq!(judged_claim, empty_claim, "an empty population changes no claim");
+}
+
+/// A rule whose findings the reassessment cache reuses still reports the population of the run
+/// that reused them, so a second, unchanged call reads exactly what the first did.
+#[test]
+fn Test_A_Reused_Rule_Should_Still_Report_Its_Population()
+{
+    let selected = [RuleId::New(nomos_rules::A_SKIPPED_TEST_STATES_WHY), RuleId::New(COMPLETENESS_MIRROR)];
+    let sources = Reassessed_Sources();
+    let mut fixture = Test_Reassessing_Fixture();
+
+    let first = Reassessing_Outcome(&sources, &selected, &mut fixture);
+    let recorded_after_first = fixture.reassessment.Recorded();
+    let second = Reassessing_Outcome(&sources, &selected, &mut fixture);
+
+    assert_eq!(fixture.reassessment.Recorded(), recorded_after_first, "the second call reuses every rule");
+    let (CheckOutcome::Judged { populations: first, .. }, CheckOutcome::Judged { populations: second, .. }) = (first, second)
+    else
+    {
+        panic!("a tree the provider can read must be judged");
+    };
+    assert_eq!(first.Judged().len(), selected.len(), "{first:?}");
+    assert_eq!(second, first);
+}
+
+/// The claim and the populations of one `Run` selecting only `rule` over `sources`, which must
+/// raise no finding.
+fn Claim_And_Populations(sources: &[SourceFile], rule: &RuleId) -> (crate::examined::Claim, crate::examined::Populations)
+{
+    let mut workspace = None;
+    let mut store = MemoryFactStore::New();
+    let outcome = Run(sources, Test_Context(Path::new("."), &mut workspace, &mut store), std::slice::from_ref(rule));
+
+    let CheckOutcome::Judged { findings, claim, populations, .. } = outcome
+    else
+    {
+        panic!("a tree the provider can read must be judged");
+    };
+    assert!(findings.is_empty(), "{findings:?}");
+    return (claim, populations);
+}
+
 /// One `Run_Reassessing` call over a caller-held [`ReassessingFixture`], composed the
 /// identical way the test above assembles it -- extracted because the two calls it makes
 /// differ only in what the caller asserts about them, not in how they are made.
