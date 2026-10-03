@@ -33,6 +33,28 @@ fn Test_This_Repository_Gate_Should_Still_Yield_A_Lint_Step()
     );
 }
 
+/// The same guard for the `Rules` step. This repository declares one, so a finish here runs
+/// it; renaming it, scripting it or deleting it would make every finish here record it as not
+/// declared or refuse, and this test is what says so before a finish does.
+#[test]
+fn Test_This_Repository_Gate_Should_Still_Yield_A_Rules_Step()
+{
+    use std::path::Path;
+
+    let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../..");
+    let workflow = std::fs::read_to_string(nomos_ledger::Workflow_Path(&root))
+        .expect("this repository has a gate workflow");
+
+    let argv = nomos_ledger::Derive_Step(&workflow, nomos_ledger::RULES_STEP)
+        .unwrap_or_else(|refusal| panic!("the repository's gate must still yield a Rules step: {}", refusal.Describe()));
+
+    assert_eq!(argv.first().map(String::as_str), Some("cargo"));
+    assert!(
+        argv.windows(2).any(|pair| return pair == ["gate", "run"]),
+        "the Rules step a finish runs must still be `gate run`, got {argv:?}"
+    );
+}
+
 /// `Duration` is used by the predicate's timeout; this keeps the import honest if the
 /// fixture above ever stops constructing one.
 #[test]

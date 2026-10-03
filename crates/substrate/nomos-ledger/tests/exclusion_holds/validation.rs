@@ -148,6 +148,7 @@ fn Test_A_Verified_Done_Item_Should_Be_Accepted()
         output_tail: "test result: ok".to_owned(),
         verified_at: Timestamp_From_Seconds(NOW),
         gate: None,
+        rules: None,
         revision: None,
     });
 

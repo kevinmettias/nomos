@@ -7,7 +7,7 @@
 use crate::board::{
     Abandonment, Timestamp_From_Seconds, AT_NOW, Blocker, Claim, Document_Holding_Items, GateOutcome, Held_By,
     Item_Reserving_Files, ItemId, ItemState, ItemTerritory, LEASE_ENDS_AT, Ledger_At, LedgerDocument, LedgerError,
-    LedgerItem, NOW, SCHEMA_VERSION, Temporary_Directory, VerificationPredicate, VerificationRecord,
+    LedgerItem, NOW, OptionalStepOutcome, SCHEMA_VERSION, Temporary_Directory, VerificationPredicate, VerificationRecord,
 };
 
 /// A schema version from a build later than this one, which the reader has to tell apart from
@@ -20,7 +20,10 @@ const NEWER_SCHEMA_VERSION: u32 = 9_999;
 /// The count is what makes the walk below say something: an item with an empty list
 /// serializes as `[]`, contributes no node, and leaves whatever type lives inside it
 /// unprobed. If this number falls, the fixture stopped populating something.
-const JSON_NODES_IN_A_POPULATED_DOCUMENT: usize = 11;
+///
+/// `13` since `OD-GATE-036`'s `rules` field: the step outcome is one node and the gate
+/// outcome it carries is another.
+const JSON_NODES_IN_A_POPULATED_DOCUMENT: usize = 13;
 
 /// When the displaced claim's lease ran out: a minute after it was taken, so the fixture's
 /// two claims do not share one expiry and a reader can tell which is which.
@@ -227,6 +230,10 @@ fn Fully_Populated() -> LedgerItem
             argv: vec!["cargo".to_owned(), "--version".to_owned()],
             exit_code: 0,
         }),
+        rules: Some(OptionalStepOutcome::Ran(GateOutcome {
+            argv: vec!["cargo".to_owned(), "run".to_owned()],
+            exit_code: 0,
+        })),
         revision: Some("abc123".to_owned()),
     });
     item.abandoned = vec![Abandonment {

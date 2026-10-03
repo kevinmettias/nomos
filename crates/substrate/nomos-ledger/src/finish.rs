@@ -39,6 +39,10 @@ use crate::ExclusionLedger;
 use crate::Derive_Step;
 use crate::GateUnknown;
 use crate::LINT_STEP;
+use crate::RULES_STEP;
+use crate::OptionalStepOutcome;
+use crate::StepName;
+use crate::WorkflowText;
 use crate::Workflow_Path;
 use crate::GateOutcome;
 use crate::ItemId;
@@ -114,18 +118,19 @@ fn Loaded_Document<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     });
 }
 
-/// Runs the gate's step, then the item's own predicate, refusing on either's failure.
+/// Runs the gate's `Lint` and `Rules` steps, then the item's own predicate, refusing on the
+/// first failure.
 ///
-/// The gate's own step runs first and short-circuits: an author told "your tests passed"
+/// The gate's own steps run first and short-circuit: an author told "your tests passed"
 /// and "you cannot land" in one breath reads only the first sentence.
 fn Verify_Predicate<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Files, TimeSource, Lock>,
     launcher: &impl ProgramLauncher,
     item: &ItemId,
     run: PredicateRun<'_>,
-) -> Result<(GateOutcome, Ran), FinishRefusal>
+) -> Result<(gate_step::GateSteps, Ran), FinishRefusal>
 {
-    let gate = gate_step::Run_Gate_Step(ledger, launcher, item, run.runner)?;
+    let gate = gate_step::Run_Gate_Steps(ledger, launcher, item, run.runner)?;
 
     let command = Command_From_Argv(run.predicate.argv.clone(), run.runner);
     let ran = Ran_To_Completion(launcher, &command, item)?;
@@ -312,16 +317,18 @@ fn Non_Empty(text: &str) -> Option<String>
 
 /// The record a passing predicate leaves behind.
 ///
-/// It carries the gate's outcome as well as its own, because "this item was verified" is
-/// only true of a tree the gate also accepted.
-fn Record_From_Argv(argv: &[String], ran: &Ran, gate: GateOutcome, context: RecordContext) -> VerificationRecord
+/// It carries the gate's outcomes as well as its own, because "this item was verified" is
+/// only true of a tree the gate also accepted -- and a `Rules` step the workflow never
+/// declared is recorded as exactly that, so it cannot read as one that passed.
+fn Record_From_Argv(argv: &[String], ran: &Ran, gate: gate_step::GateSteps, context: RecordContext) -> VerificationRecord
 {
     return VerificationRecord {
         argv: argv.to_vec(),
         exit_code: ran.code,
         output_tail: ran.tail.clone(),
         verified_at: context.at,
-        gate: Some(gate),
+        gate: Some(gate.lint),
+        rules: Some(gate.rules),
         revision: context.revision,
     };
 }
@@ -376,10 +383,12 @@ mod local_tests
                             \x20     - name: Lint\n\
                             \x20       run: cargo clippy --workspace --all-targets -- -D warnings\n\
                             \x20     - name: Test\n\
-                            \x20       run: cargo test --workspace\n";
+                            \x20       run: cargo test --workspace\n\
+                            \x20     - name: Rules\n\
+                            \x20       run: cargo run --quiet -p nomos-cli --bin nomos -- gate run --root .\n";
 
-    /// A launcher that always exits zero, standing in for a lint step and a predicate that
-    /// both pass.
+    /// A launcher that always exits zero, standing in for a lint step, a rules step and a
+    /// predicate that all pass.
     struct AlwaysZero;
 
     /// Answers from fixed data, so its outputs reproduce byte for byte.
@@ -513,6 +522,11 @@ mod local_tests
         assert!(
             record.gate.is_some(),
             "the gate's own outcome must ride along with the predicate's"
+        );
+        assert!(
+            matches!(record.rules, Some(OptionalStepOutcome::Ran(_))),
+            "a workflow that declares a Rules step must leave that step's run on the record, got {:?}",
+            record.rules
         );
     }
 

@@ -148,7 +148,7 @@ profile: domain-specification
 | docs/records/OD-HOST-020-a-provider-set-is-selected-once-by-a-composer-and-the-service-and-the-crates-that-run-it-receive-it-rather-than-choose-it.md@authored | docs/records/OD-HOST-020-a-provider-set-is-selected-once-by-a-composer-and-the-service-and-the-crates-that-run-it-receive-it-rather-than-choose-it.md | authored | 48 | 16 | sha256:f071db351bb1393debde951b9b77d5bc445a045a28fe8b1119ce64f2d4b38585 |
 | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md@authored | docs/records/OD-LEDGER-001-territory-is-declared-not-enforced.md | authored | 41 | 9 | sha256:dd08db28191c57f150438f906daae1c7733089e622904118ea906349fb8a5e30 |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md@authored | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md | authored | 23 | 8 | sha256:45ad77676397a486ad7f463e44d50aaea8213377aaa200fe47ee2570fcdfef33 |
-| docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 25 | 6 | sha256:2cf8d6b1587d929c2ba23a6e8f5107d2b3934b8dc3fe05202aefccb6530386c6 |
+| docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md | authored | 38 | 7 | sha256:1ea9e32513c083e8f2a3aa69000315149c6f3279c6e8ff9aa5fb4b01163b9af6 |
 | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md@authored | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md | authored | 40 | 11 | sha256:24377a098af14a7108359fca1224d1d1ef08d6c700415a93b4322713f2624785 |
 | docs/records/OD-LEDGER-005-ready-meant-unheld-and-was-read-as-claimable.md@authored | docs/records/OD-LEDGER-005-ready-meant-unheld-and-was-read-as-claimable.md | authored | 25 | 8 | sha256:d749ba4084b715e35c6f0181a25e7ad2eaa66d828b206ba1aa458129ad7b8bf7 |
 | docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md@authored | docs/records/OD-LEDGER-006-a-reason-attached-to-a-transition-does-not-survive-it.md | authored | 44 | 10 | sha256:40882902c092c75dd927be661ca5d2fba26f935a63e9f85e052833f8d52c17fa |
@@ -1536,12 +1536,13 @@ profile: domain-specification
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md#16 | authored | 2 | What Could Not Be Checked From Here |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md#19 | authored | 2 | What Would Close This Properly |
 | docs/records/OD-LEDGER-002-a-ledger-id-is-not-a-plan-phase.md#22 | authored | 2 | Status |
-| docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#1 | authored | 1 | Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped |
+| docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#1 | authored | 1 | Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#6 | authored | 2 | What Actually Happened |
 | docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#11 | authored | 2 | Decision |
-| docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#18 | authored | 2 | What Stays Weaker, And Why |
-| docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#22 | authored | 2 | Consequences |
+| docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#19 | authored | 2 | What Stays Weaker, And Why |
+| docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#23 | authored | 2 | Consequences |
+| docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#27 | authored | 2 | Amendment, Version 2: Finishing Also Runs The Gate's Rules Step |
 | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md#1 | authored | 1 | An item reserves the record it will write, not the directory records live in |
 | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md#4 | authored | 2 | The Fourth Instance, Measured |
@@ -46808,26 +46809,26 @@ Closed by `P9-PHASE-NUMBERS`. No item was renamed and the ledger validates uncha
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#1
 
-*revision: authored · kind: heading · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped · hash: sha256:946efbeea94a1e9cd6c74a868610d440aef5dfa494c0cb8f3408fe6ff3a26d1e*
+*revision: authored · kind: heading · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped · hash: sha256:28801d417aad0064effa14256e76d926ad7bbb82a1746085f05ace1d7ec0f565*
 
-# Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped
+# Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#2
 
-*revision: authored · kind: heading · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+*revision: authored · kind: heading · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
 
 ## Question
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#3
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Question · hash: sha256:1e9098a498b2ab71c5850c81b25364da2e1504edde242defa1a39ec0763f6aa6*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Question · hash: sha256:1e9098a498b2ab71c5850c81b25364da2e1504edde242defa1a39ec0763f6aa6*
 
 `work finish` runs an item's verification predicate and records the item `Done` if it exits
 zero. Every item's predicate is a `cargo test` invocation.
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#4
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Question · hash: sha256:0314bc59b913202f16d1da1c708d7457fca6fc7bd00bc66d8dc54357a8a2a431*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Question · hash: sha256:0314bc59b913202f16d1da1c708d7457fca6fc7bd00bc66d8dc54357a8a2a431*
 
 The gate is not a `cargo test` invocation. It lints first —
 `cargo clippy --workspace --all-targets -- -D warnings` — over a workspace that *denies*
@@ -46837,20 +46838,20 @@ at the same step.
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#5
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Question · hash: sha256:05f21e710646569970eebb788e61f6211b2229f2080528d31399060e69b7e3c5*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Question · hash: sha256:05f21e710646569970eebb788e61f6211b2229f2080528d31399060e69b7e3c5*
 
 So an item could be recorded verified while the gate that follows it was already red, and
 the ledger would say the work was checked.
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#6
 
-*revision: authored · kind: heading · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / What Actually Happened · hash: sha256:24f616965b462ed9ea04ac7d4be673f71a7217c3de3284356dde5bfd9dba50cb*
+*revision: authored · kind: heading · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / What Actually Happened · hash: sha256:24f616965b462ed9ea04ac7d4be673f71a7217c3de3284356dde5bfd9dba50cb*
 
 ## What Actually Happened
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#7
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / What Actually Happened · hash: sha256:adac6f157b16effb9964193dea664d0851637d057cb79830e87022dc3788b5c7*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / What Actually Happened · hash: sha256:adac6f157b16effb9964193dea664d0851637d057cb79830e87022dc3788b5c7*
 
 `P9-SKIP` and `P9-PHASE-GAP` were both finished with a clippy error in a file the item had
 just written, and both were caught afterwards by a person running clippy by hand. That is
@@ -46859,7 +46860,7 @@ already had to write once about territory.
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#8
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / What Actually Happened · hash: sha256:361898cf5d0abc1d99ecac3c031fb69b20876bbf3d3b5d8b76a1eff3f0ee2a71*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / What Actually Happened · hash: sha256:361898cf5d0abc1d99ecac3c031fb69b20876bbf3d3b5d8b76a1eff3f0ee2a71*
 
 The evidence is not where one would expect it, and the difference matters enough to record.
 **Clippy passes on both commits.** Measured at `e121777` and `4c0fd3b` in detached
@@ -46869,7 +46870,7 @@ green.
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#9
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / What Actually Happened · hash: sha256:da7f1820e130ab447a61cac7b11a7ea98dac878257bcc14e6a4331f87d26f715*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / What Actually Happened · hash: sha256:da7f1820e130ab447a61cac7b11a7ea98dac878257bcc14e6a4331f87d26f715*
 
 The defect existed only in the working tree, in the window between `work finish` and
 `git commit`: 180 seconds for `P9-SKIP`, 185 for `P9-PHASE-GAP`, measured from each item's
@@ -46878,7 +46879,7 @@ written.
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#10
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / What Actually Happened · hash: sha256:64f13c38d25371d4032acc71d44d3b961d09a8fc78edabceb5ea2aad9f4fce57*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / What Actually Happened · hash: sha256:64f13c38d25371d4032acc71d44d3b961d09a8fc78edabceb5ea2aad9f4fce57*
 
 That makes the case *stronger*, not weaker. A red commit would mean the gate caught it. A
 clean commit with a three-minute window means a person caught it, twice, and the ledger
@@ -46889,26 +46890,34 @@ predicate that exits zero while the gate's own step does not.
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#11
 
-*revision: authored · kind: heading · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+*revision: authored · kind: heading · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
 
 ## Decision
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#12
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Decision · hash: sha256:f9d2fe01dcac153380dd0f9a66c1c9cf04b399ddeb3669c4a1bad2e8ec19ea4d*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Decision · hash: sha256:f9d2fe01dcac153380dd0f9a66c1c9cf04b399ddeb3669c4a1bad2e8ec19ea4d*
 
 **Finishing runs the gate's lint step before the item's predicate, and the step is derived
 from the gate rather than written down beside it.**
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#13
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Decision · hash: sha256:39802007c6c2d315b8ba1b86eadabfc7fae3f941edf1a4120dc359da1b18c627*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Decision · hash: sha256:f1adb4495efb2b989a2127223961c91a0d244fdc93a91a959e622a0c9fc6b235*
 
-Three parts, each load-bearing.
+That is the decision as version 1 made it. Version 2 runs the gate's `Rules` step after the
+lint step and before the predicate, under the same three parts below; the amendment at the end
+of this record says what changed and what did not.
 
 ### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#14
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Decision · hash: sha256:5bc4b71ae99483833a271754f5954ec68e5530678a81569391743a7f99c8dee3*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Decision · hash: sha256:39802007c6c2d315b8ba1b86eadabfc7fae3f941edf1a4120dc359da1b18c627*
+
+Three parts, each load-bearing.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#15
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Decision · hash: sha256:5bc4b71ae99483833a271754f5954ec68e5530678a81569391743a7f99c8dee3*
 
 **1. Derived, never copied.** `nomos-ledger` reads `.github/workflows/gate.yml` and takes
 the `run:` line of the step named `Lint`. A copy of that command inside the crate would be
@@ -46916,9 +46925,9 @@ a second source of truth that goes stale the day the workflow changes, and two g
 one rule is how they come to disagree. A test asserts that altering the workflow alters
 what `finish` runs, which is what fails if somebody later reintroduces the constant.
 
-### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#15
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#16
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Decision · hash: sha256:5030f4a16b3648730c16f72f2b50ba48e677b063dd373f3129c6ea27c76ed1b9*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Decision · hash: sha256:5030f4a16b3648730c16f72f2b50ba48e677b063dd373f3129c6ea27c76ed1b9*
 
 **2. An underivable gate refuses.** A missing, unreadable, or scripted `run:` line yields
 `FinishRefusal::GateUndetermined`, and nothing is run. Deriving an argv from
@@ -46928,9 +46937,9 @@ level up in `ClaimRefusal::UnknownIndependence`: an unanswered question refuses 
 grants. `GateUndetermined` answers `Judged_The_Work()` false — nobody found out whether the
 work passes, and reporting that as failing work would send an author to fix working code.
 
-### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#16
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#17
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Decision · hash: sha256:c399ad37011250f1d09acc9827a18c17dcd3f43add7a35c9854a8902d043b74c*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Decision · hash: sha256:c399ad37011250f1d09acc9827a18c17dcd3f43add7a35c9854a8902d043b74c*
 
 **3. The lint runs first and short-circuits.** An author told "your tests passed" and "you
 cannot land" in one breath reads only the first sentence. A red gate is
@@ -46938,31 +46947,31 @@ cannot land" in one breath reads only the first sentence. A red gate is
 failing predicate says the work does not do what the item asked, a failing gate says the
 work may be exactly right and still cannot land.
 
-### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#17
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#18
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Decision · hash: sha256:90943392f4ed5e32c410aece0638d4c1b7d72d77a8cd0c6102dc39229c3aad9f*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Decision · hash: sha256:90943392f4ed5e32c410aece0638d4c1b7d72d77a8cd0c6102dc39229c3aad9f*
 
 The result is recorded. `VerificationRecord` carries a `gate` field holding the derived argv
 and its exit code. Records written before this decision carry `null` there, and are left
 that way rather than backfilled — otherwise a reader cannot tell an item finished under the
 gate from one finished before the gate was part of finishing.
 
-### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#18
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#19
 
-*revision: authored · kind: heading · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / What Stays Weaker, And Why · hash: sha256:5f891ada093827ab281b174d014148afa1dc6497e50566170c23f281bd6eb72f*
+*revision: authored · kind: heading · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / What Stays Weaker, And Why · hash: sha256:5f891ada093827ab281b174d014148afa1dc6497e50566170c23f281bd6eb72f*
 
 ## What Stays Weaker, And Why
 
-### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#19
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#20
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / What Stays Weaker, And Why · hash: sha256:0b26d05b9b58a06f15ebdeefc405478c66ff603adc1c5cd078b88c14ccf1e00f*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / What Stays Weaker, And Why · hash: sha256:0b26d05b9b58a06f15ebdeefc405478c66ff603adc1c5cd078b88c14ccf1e00f*
 
 **The gate's test step is not derived.** It runs `cargo test --workspace`; an item's
 predicate stays the scoped `cargo test -p …` its author wrote.
 
-### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#20
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#21
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / What Stays Weaker, And Why · hash: sha256:65bd379729d55f65cc78213bab5b1d7fbac1789df8419a98cc2bd0857e2d0fd9*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / What Stays Weaker, And Why · hash: sha256:65bd379729d55f65cc78213bab5b1d7fbac1789df8419a98cc2bd0857e2d0fd9*
 
 This is deliberate, and it is the part a reader should be suspicious of, so it is stated
 rather than left to be discovered. A scoped test is what a per-item predicate is *for*.
@@ -46970,9 +46979,9 @@ Running the whole workspace on every finish costs minutes, and the failure mode 
 that costs minutes is not a slow ledger — it is an author who stops running `work finish`
 and marks the item done another way, which is the failure this system exists to prevent.
 
-### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#21
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#22
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / What Stays Weaker, And Why · hash: sha256:a4fff2ea751e6620e8fa1079525084fee3acf36d2f482104c6464d365f3e1508*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / What Stays Weaker, And Why · hash: sha256:a4fff2ea751e6620e8fa1079525084fee3acf36d2f482104c6464d365f3e1508*
 
 So the remaining hole is real: an item can still be finished while a test elsewhere in the
 workspace is red. What closes it is the gate itself, at push time, where a full workspace
@@ -46980,35 +46989,168 @@ run belongs. What this decision closes is the narrower and more damaging case �
 that is recorded `Done` having never been linted at all, which is the case that actually
 occurred, twice, in three items.
 
-### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#22
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#23
 
-*revision: authored · kind: heading · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
+*revision: authored · kind: heading · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Consequences · hash: sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416*
 
 ## Consequences
 
-### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#23
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#24
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Consequences · hash: sha256:18336959cc12a79ce4aa9bda817cd2106d12d09df224c359e1d4638083d62bc8*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Consequences · hash: sha256:18336959cc12a79ce4aa9bda817cd2106d12d09df224c359e1d4638083d62bc8*
 
 `work finish` now needs a readable gate workflow. A tree without one cannot finish an item,
 which is correct: an item finished in a tree with no gate has been checked against nothing
 in particular.
 
-### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#24
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#25
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Consequences · hash: sha256:1a81a375f25fd7419a2b7a718886199dc71f51763b66dad5c1563269f8ea70f5*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Consequences · hash: sha256:1a81a375f25fd7419a2b7a718886199dc71f51763b66dad5c1563269f8ea70f5*
 
 Every test that builds a ledger in a temporary directory now builds a gate beside it. Those
 fixtures lint with `cargo --version` rather than the real clippy invocation, because those
 tests are about what a predicate's exit code does to an item; what the derived step actually
 is, and that it comes from the workflow, is covered separately.
 
-### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#25
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#26
 
-*revision: authored · kind: prose · heading: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped / Consequences · hash: sha256:fc36e595b270db3667fdb1bbc16e1bef7d79b434bae737cab63658a30dceef39*
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Consequences · hash: sha256:fc36e595b270db3667fdb1bbc16e1bef7d79b434bae737cab63658a30dceef39*
 
 `OD-GATE-001` remains the authority on the corpus step reporting what did not run. This
 decides only what `finish` is obliged to run before it writes `Done`.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#27
+
+*revision: authored · kind: heading · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 2: Finishing Also Runs The Gate's Rules Step · hash: sha256:a9cf637e6698306b7ed009fa9e0df668fed6ea674bce75a066872cecb0e54617*
+
+## Amendment, Version 2: Finishing Also Runs The Gate's Rules Step
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#28
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 2: Finishing Also Runs The Gate's Rules Step · hash: sha256:998452e85dbddac9dcb327699fcb0f4448b3501728099374931df0162c642980*
+
+Added at version 2. `OD-GATE-036` decided it, in its first part, on five measured landings, two
+of which passed their own predicate and left a Blocking finding at `HEAD` for hours.
+`P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP` built it.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#29
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 2: Finishing Also Runs The Gate's Rules Step · hash: sha256:f87bfcae3f9dbb7f48b91642482740f5a005b2ead450cdec9bd443ef9610fcfb*
+
+**What is superseded, and it is one clause.** "Finishing runs the gate's lint step before the
+item's predicate" now reads: finishing runs the gate's `Lint` step and then its `Rules` step
+before the item's predicate. The other clause of the title, that the test step stays scoped,
+stands unchanged, and `OD-GATE-036`'s 7,202.9 s run of the whole workspace is the measurement
+that keeps it standing.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#30
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 2: Finishing Also Runs The Gate's Rules Step · hash: sha256:6e763dffdb4a4fb093ad82cbec9227facafee2e74bcd0e17d8752bceb82d5ef8*
+
+**The three parts, carried to the second step.**
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#31
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 2: Finishing Also Runs The Gate's Rules Step · hash: sha256:928b5d578a86c67f3f63040635057936eafdd444929bf666abb86d4f42851cda*
+
+- **Derived, never copied.** `nomos-ledger` names the step `RULES_STEP` beside `LINT_STEP` and
+  takes both from one reading of the workflow through the same `Derive_Step`. A test rewrites a
+  fixture workflow's `Rules` line and finds the new command in what the finish ran and in what it
+  recorded; writing the command into the crate as a constant fails it.
+- **An underivable step refuses.** A scripted `Rules` step, or one declared with no `run:` line,
+  is `GateUndetermined`. Both steps are derived before either runs, so the refusal comes before
+  the lint step has spent its minutes and nothing runs at all.
+- **The first failure short-circuits.** The order is `Lint`, `Rules`, predicate. Any nonzero
+  exit of the `Rules` step, whether 1 for a Blocking finding, 5 for a run that could not be
+  assembled or 6 for a run that judged nothing, is `GateFailed`, carrying the step's argv and the
+  tail of what it printed, and it judged the work exactly as a red lint step does.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#32
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 2: Finishing Also Runs The Gate's Rules Step · hash: sha256:309cd27197649d22706c8dbd80ac5bdda3f3b0c435113f6daeeba1dea315ebd6*
+
+**Where the second step differs from the first, which is absence.** A workflow that declares no
+`Rules` step is not undetermined. It has made no claim for a finish to honour, and the same
+ledger serves KWB, whose gate declares `Lint`, `Test` and `Contract`, so the finish goes ahead
+and records the step as not declared. That required absence to mean only absence: `Derive_Step`
+had answered `NoSuchStep` both for a step the workflow never declares and for one declared with
+no `run:` line, and the second would have been recorded as absent while it sat in the file
+unrun. It now answers `NoSuchStep` only for the first, and gives the second the
+`NotASingleCommand` refusal the whole-set reader `Derive_Steps` already gave it. For the lint
+step both causes refuse, so nothing a finish did before this version changes.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#33
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 2: Finishing Also Runs The Gate's Rules Step · hash: sha256:1e8c4a4d2c9ff851975b6293efdb13bd42c4a513bfa6471294d6e402551162f4*
+
+**Bounded by the item.** The `Rules` step runs under the same `Runner` as the lint step: the
+item's own timeout as the wall bound, half of it as the idle bound, in the tree being finished.
+`gate run` prints nothing until it is done, so an item whose timeout is less than twice the
+step's running time is cut off at the idle bound; `OD-GATE-036` counts the predicates on the
+board that are exposed to it.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#34
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 2: Finishing Also Runs The Gate's Rules Step · hash: sha256:3de13024ebf1469dce58b1a009a492df7308169cf7b16c8dd0b95c31348b84d6*
+
+**Recorded, never backfilled.** `VerificationRecord` carries `rules` beside `gate`: `Ran`, with
+the argv and the exit code, or `NotDeclared`. Every record written before this version holds
+no such key and is read as `None`, which is left as it is for the reason `gate` was: a reader
+must be able to tell a finish that ran the step from one that predates it, and both from a
+finish in a workflow that never declared it. The ledger schema version moves to 7, and a binary
+copied before this version refuses a board carrying the new key, once, by `OD-LEDGER-008`'s
+guard, which `OD-GATE-036` accepted.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#35
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 2: Finishing Also Runs The Gate's Rules Step · hash: sha256:48a513e492e94e0e7b4a7063a172944e82f215b8df531944f614e1aa80f06c20*
+
+**What it costs, measured.** On 2026-10-03, in a detached worktree of this change with its own
+warm target directory, under the board's ordinary load (total CPU at 24 to 39 percent and about
+6.9 GB available without these runs), a finish of a scratch item whose predicate is
+`cargo --version` took 7.8, 10.9 and 2.1 s with the binary from before this change, which runs
+the lint step only, and 78.4, 74.7 and 64.3 s with this change's binary. The `Rules` step adds
+about a minute to a warm finish here, inside the 52.6 s quiet and 210.5 s loaded range
+`OD-GATE-036` measured for the step alone.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#36
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 2: Finishing Also Runs The Gate's Rules Step · hash: sha256:0a4f60e252dfa2306a14779640777cdea74aa50850f80303b366fdeb3e509003*
+
+**What it catches, measured.** In a scratch copy of this change's tree with `be59c109`'s helper
+name reintroduced, the three spellings of `Assert_Well_Formed_Graph_Document` renamed back to
+`Assert_Well_Formed_GraphML` as `OD-GATE-036` did at `0000e0e3`, a finish of a scratch item
+exited 1 and left the item claimed with no record: the lint step passed, the `Rules` step
+exited 1, and the predicate did not run. It took 239.3 s with the copy's target directory cold
+and 73.3 s warm. The refusal named the step's command and carried the tail of its output, and
+that tail says `476 finding(s), 1 of which can fail a build` but not the finding's own line.
+`cargo run` replays the workspace's cached compiler warnings on stderr, after the run's findings
+on stdout, and the Blocking line is not the last finding `gate run` prints, so it fell outside
+the 2,000 bytes a refusal keeps; `gate run` over the same tree names it, 472nd of 479 lines.
+In a scratch tree whose workflow declares `Lint`, `Test` and `Contract`, a finish exited 0 and
+its record carries `"rules": "NotDeclared"`. In one whose `Rules` step is an action, a finish
+refused as undetermined, exit 4, having run nothing.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#37
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 2: Finishing Also Runs The Gate's Rules Step · hash: sha256:0eef4cc925452932bafcd751f85d2cd52074e7a5aa0c3f8bfbb55f208611490c*
+
+**What stands.** The three parts for the lint step, the `gate` field and its rule against
+backfill, and "What Stays Weaker, And Why". The hole that section describes, a test red
+elsewhere in the workspace, is not closed by this version: `OD-GATE-036`'s second part narrows
+it with a rule on how predicates are authored, and nothing a finish runs.
+
+### docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#38
+
+*revision: authored · kind: prose · heading: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped / Amendment, Version 2: Finishing Also Runs The Gate's Rules Step · hash: sha256:5d791e214e09208ce343cfd746b23baeb44894cec960d72091a9648ecfdde610*
+
+**Consequences.** A finish now judges the tree it runs in with the rule layer, so in a shared
+tree a peer's uncommitted Blocking finding refuses an unrelated finish, as a peer's clippy error
+already did; finishing from a worktree at the commit to be published is the remedy
+`OD-GATE-036` names. The fixtures that build a ledger with a gate beside it still lint with
+`cargo --version`, and they declare no `Rules` step, so their finishes record it as not
+declared. The cases that run the step are against fixture workflows that declare it, beside a
+test that this repository's own workflow still yields a `Rules` argv.
 
 ### docs/records/OD-LEDGER-004-the-record-directory-is-the-lock.md#1
 

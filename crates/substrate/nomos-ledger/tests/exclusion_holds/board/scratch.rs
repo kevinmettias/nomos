@@ -68,6 +68,10 @@ pub(crate) fn Temporary_Directory(name: &str) -> Scratch
 /// in each of them would make the suite take minutes and would couple it to whatever the
 /// workspace currently contains. What the derived step actually is, and that it comes from
 /// the workflow rather than from a constant, is covered in `gate_covers_finish.rs`.
+///
+/// It declares no `Rules` step, which a workflow is free to do, so every finish here records
+/// that step as not declared and runs nothing in its place -- the shape `gate_covers_finish`'s
+/// `rules_step.rs` asserts directly.
 fn Write_Gate(directory: &Path)
 {
     let workflows = directory.join(".github").join("workflows");

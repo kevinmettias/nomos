@@ -27,7 +27,8 @@ pub const LOCK_STALE_AFTER: Duration = Duration::from_secs(15 * 60);
 /// on the next instance of the defect it was built for. Here a forgotten bump can only degrade
 /// a message, and can never cost a field.
 ///
-/// `6` since `OD-LEDGER-039` added [`crate::LedgerItem::widened`];
+/// `7` since `OD-GATE-036` added [`crate::VerificationRecord::rules`];
+/// `6` was `OD-LEDGER-039`'s [`crate::LedgerItem::widened`];
 /// `5` was `OD-LEDGER-024`'s [`crate::LedgerItem::kind`] and
 /// [`crate::LedgerItem::origin`]; `4` was `OD-LEDGER-027`'s
 /// [`crate::VerificationRecord::revision`]; `3` was `OD-LEDGER-019`'s
@@ -42,10 +43,14 @@ pub const LOCK_STALE_AFTER: Duration = Duration::from_secs(15 * 60);
 /// silently accepting a row missing it. `nomos work validate` prints the same two numbers on
 /// request, which is how to tell before that refusal arrives rather than at it.
 ///
+/// `rules` does carry `#[serde(default)]`, and on purpose rather than by habit. Its absence
+/// is the one honest value for every record written before it existed -- those finishes did
+/// not run the step -- so the board is not migrated to carry it, which would be a backfill.
+///
 /// Note which mechanism does which, because attributing either to the other is how a guard
 /// comes to rest on something that does not hold it. An **older build meeting a newer file**
 /// is stopped by `deny_unknown_fields`, mechanically, for any field ever added. A **newer
 /// build meeting an older file** is stopped, per field, by the absence of
 /// `#[serde(default)]` — which is what forces a migration rather than a silent default. This
 /// number stops neither.
-pub const SCHEMA_VERSION: u32 = 6;
+pub const SCHEMA_VERSION: u32 = 7;

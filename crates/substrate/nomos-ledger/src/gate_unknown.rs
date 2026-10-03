@@ -10,11 +10,15 @@
 //! second source of truth that goes stale the day the workflow changes, and two guards
 //! for one rule is how they come to disagree. This module reads the workflow.
 
-// What running the gate produced.
+// What running the gate produced, and what a finish records for a step a workflow is free not
+// to declare.
 #[path = "gate/gate_outcome.rs"]
 mod outcome;
+#[path = "gate/optional_step_outcome.rs"]
+mod optional_step_outcome;
 
 pub use outcome::GateOutcome;
+pub use optional_step_outcome::OptionalStepOutcome;
 
 // The workflow's whole text, and a step's name within it — kept apart purely by type, and
 // each large enough on its own to want a file of its own.
@@ -56,11 +60,20 @@ pub const GATE_WORKFLOW: &str = ".github/workflows/gate.yml";
 
 /// The step every item's predicate was missing.
 ///
-/// Only the lint step is derived. The gate's test step stays authored per item, because
-/// a scoped test is what a per-item predicate is *for* — running the whole workspace on
-/// every finish costs minutes, and a finish that costs minutes is one that gets skipped.
-/// That remaining gap is deliberate and is recorded, not hidden.
+/// This and [`RULES_STEP`] are the steps a finish derives. The gate's test step stays
+/// authored per item, because a scoped test is what a per-item predicate is *for* — running
+/// the whole workspace on every finish costs minutes, and a finish that costs minutes is one
+/// that gets skipped. That remaining gap is deliberate and is recorded, not hidden.
 pub const LINT_STEP: &str = "Lint";
+
+/// The step a finish runs after [`LINT_STEP`] and before the item's predicate.
+///
+/// `OD-GATE-036` added it on measurement: two landings passed their own predicate and left a
+/// Blocking finding at `HEAD` for hours, and the second sat in a crate nothing depended on, so
+/// no predicate sized from the dependency graph could have reached it. Unlike the lint step, a
+/// workflow may decline to declare it -- KWB's gate declares `Lint`, `Test` and `Contract` --
+/// and a finish then records it as not declared rather than as passed.
+pub const RULES_STEP: &str = "Rules";
 
 /// Characters that mean the `run:` line is a shell script rather than one command.
 ///
@@ -99,6 +112,9 @@ pub enum GateUnknown
         step: String,
     },
     /// The step's `run:` is a script, so no argv can be derived from it without guessing.
+    ///
+    /// An empty `run` is a declared step with no `run:` line at all, which both readers --
+    /// [`Derive_Step`] and [`Derive_Steps`] -- refuse the same way.
     NotASingleCommand
     {
         /// The step.
@@ -147,6 +163,11 @@ impl GateUnknown
                 "the gate workflow has no step named `{step}`, so the step an item's \
                  predicate is missing cannot be derived"
             ),
+            Self::NotASingleCommand { step, run } if run.is_empty() => format!(
+                "the gate's `{step}` step has no `run:` line, so it declares no command an \
+                 argv could be derived from. Taking it as absent would record a step that is \
+                 there as one that is not"
+            ),
             Self::NotASingleCommand { step, run } => format!(
                 "the gate's `{step}` step runs `{run}`, which is a script rather than one \
                  command. Deriving an argv from it would mean guessing, and a guessed \
@@ -186,17 +207,39 @@ pub fn Derive_Step<'a>(workflow: impl Into<WorkflowText<'a>>, step: impl Into<St
     let Some(run) = Find_Run(workflow.As_Text(), step.As_Text())
     else
     {
-        return Err(GateUnknown::NoSuchStep {
-            step: step.As_Text().to_owned(),
-        });
+        return Err(Missing_Run(workflow, step));
     };
 
     return Argv_Of(run, step);
 }
 
+/// Why a step yielded no `run:` line: the workflow never declares it, or declares it with
+/// nothing to run.
+///
+/// The two were one answer, [`GateUnknown::NoSuchStep`], while the lint step was the only step
+/// a finish derived, and for the lint step either one refuses. They part for
+/// [`RULES_STEP`], which a workflow may decline to declare: a finish takes a step that is not
+/// there as not declared, so a step that is there with no command it could derive -- an
+/// action, say -- would be recorded as absent when it is present and unrun. Whether the step
+/// is declared is therefore asked of [`Derive_Steps`], the reader that already answers what a
+/// step is, and a declared step with no command gets the refusal that reader gives it.
+fn Missing_Run(workflow: WorkflowText<'_>, step: StepName<'_>) -> GateUnknown
+{
+    let name = step.As_Text();
+    let declared = Derive_Steps(workflow).iter().any(|derived| return derived.name == name);
+
+    if declared
+    {
+        return GateUnknown::NotASingleCommand { step: name.to_owned(), run: String::new() };
+    }
+
+    return GateUnknown::NoSuchStep { step: name.to_owned() };
+}
+
 
 /// The trimmed argument of the named step's `run:` line, or `None` if the workflow never
-/// declares that step, or declares it with no `run:` line.
+/// declares that step, or declares it with no `run:` line. [`Missing_Run`] tells those two
+/// apart.
 fn Find_Run<'a>(workflow: &'a str, step: &str) -> Option<&'a str>
 {
     let mut inside = false;
@@ -354,6 +397,26 @@ mod tests
         return ["Boundaries"];
     }
 
+    /// A step that is declared and has no `run:` line is not a missing step. A finish takes a
+    /// missing [`RULES_STEP`] as not declared, so reporting this one as missing would record a
+    /// step that is there, unrun, as one nobody wrote. It gets the refusal [`Derive_Steps`]
+    /// gives the same step, so the two readers agree.
+    #[test]
+    fn Test_A_Declared_Step_With_No_Command_Should_Not_Read_As_Missing()
+    {
+        let workflow = format!("{WORKFLOW}      - name: {RULES_STEP}\n        uses: some/rules-action@v1\n");
+
+        let refusal = Derive_Step(&workflow, RULES_STEP).expect_err("an action is no command to derive");
+        let whole_set = Derive_Steps(&workflow);
+        let listed = whole_set.iter().find(|step| return step.name == RULES_STEP).expect("the set lists the step");
+
+        assert!(
+            matches!(&refusal, GateUnknown::NotASingleCommand { run, .. } if run.is_empty()),
+            "got {refusal:?}"
+        );
+        assert_eq!(listed.argv.as_ref().err(), Some(&refusal), "both readers must refuse it alike");
+    }
+
     /// A shell script cannot be turned into an argv without guessing, and a guessed
     /// predicate is worse than a refused one because it looks like it worked.
     #[test]
@@ -399,6 +462,10 @@ mod tests
             GateUnknown::NotASingleCommand {
                 step: "Lint".to_owned(),
                 run: "a && b".to_owned(),
+            },
+            GateUnknown::NotASingleCommand {
+                step: "Rules".to_owned(),
+                run: String::new(),
             },
         ];
 

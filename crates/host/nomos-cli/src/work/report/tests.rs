@@ -117,6 +117,7 @@ fn Test_Report_Finish_Should_Print_The_Verified_Command_On_Success()
             output_tail: String::new(),
             verified_at: Timestamp::From_Unix_Seconds(VERIFIED_AT_UNIX_SECONDS),
             gate: None,
+            rules: None,
             revision: None,
         }),
         &mut output,
@@ -434,6 +435,7 @@ fn A_Verification_Record() -> nomos_ledger::VerificationRecord
         output_tail: String::new(),
         verified_at: Timestamp::From_Unix_Seconds(VERIFIED_AT_UNIX_SECONDS),
         gate: None,
+        rules: None,
         revision: None,
     };
 }

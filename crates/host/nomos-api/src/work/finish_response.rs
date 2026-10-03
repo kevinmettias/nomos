@@ -11,9 +11,10 @@ use std::path::Path;
 ///
 /// `nomos_work_orchestration::Run`'s own `WorkCommand::Finish` arm always calls
 /// `nomos_ledger::Finish_Item` with a `None` `working_directory` -- not a choice this function or
-/// its caller can vary, so the gate's own lint step (derived from `.github/workflows/
-/// gate.yml`) resolves relative to the calling process's own current directory, the same
-/// fixed composition `nomos-cli`'s own `nomos work finish` already runs under.
+/// its caller can vary, so the gate's own `Lint` and `Rules` steps (derived from
+/// `.github/workflows/gate.yml`) resolve relative to the calling process's own current
+/// directory, the same fixed composition `nomos-cli`'s own `nomos work finish` already runs
+/// under. A finished response's record says whether the `Rules` step ran or was not declared.
 #[must_use]
 pub fn Handle_Work_Finish(directory: &Path, item: &ItemId, holder: &str) -> FinishResponse
 {

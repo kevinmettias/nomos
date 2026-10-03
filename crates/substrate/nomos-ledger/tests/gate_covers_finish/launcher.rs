@@ -43,7 +43,36 @@ pub(crate) const WORKFLOW: &str = concat!(
     "        run: cargo clippy --workspace --all-targets -- -D warnings\n",
     "      - name: Test\n",
     "        run: cargo test --workspace\n",
+    "      - name: Rules\n",
+    "        if: matrix.os == 'ubuntu-latest'\n",
+    "        run: cargo run --quiet -p nomos-cli --bin nomos -- gate run --root .\n",
 );
+
+/// The `run:` line of [`WORKFLOW`]'s `Rules` step, for the cases that rewrite it.
+pub(crate) const RULES_RUN: &str = "cargo run --quiet -p nomos-cli --bin nomos -- gate run --root .";
+
+/// A workflow that declares no `Rules` step: KWB's, whose gate declares `Lint`, `Test` and
+/// `Contract`. The same ledger serves it, and `OD-GATE-036` says a finish there runs no rules
+/// step and records that it was not declared.
+pub(crate) const WORKFLOW_WITHOUT_RULES: &str = concat!(
+    "name: gate\n",
+    "\n",
+    "jobs:\n",
+    "  gate:\n",
+    "    steps:\n",
+    "      - uses: actions/checkout@v4\n",
+    "      - name: Lint\n",
+    "        run: cargo clippy --workspace --all-targets -- -D warnings\n",
+    "      - name: Test\n",
+    "        run: cargo test --workspace --no-fail-fast\n",
+    "      - name: Contract\n",
+    "        run: cargo test -p kwb-contract-tests --no-fail-fast\n",
+);
+
+/// What the scripted `Rules` step prints: the shape of the one Blocking finding
+/// `OD-GATE-036` reintroduced at `0000e0e3` to measure that the step catches it.
+pub(crate) const RULES_OUTPUT: &str =
+    "Blocking  abbreviations  crates/orchestration/nomos-gate-orchestration/src/graph.rs  Assert_Well_Formed_GraphML";
 
 pub(crate) struct FixedClock(i64);
 
@@ -65,31 +94,53 @@ impl Clock for &FixedClock
 
 /// A launcher that answers by argv rather than by running anything.
 ///
-/// The point of these tests is the ordering and the arithmetic of two exit codes, not
-/// whether clippy works. Running a real clippy here would make the suite slow and would
-/// couple it to whatever the workspace happens to contain.
+/// The point of these tests is the ordering and the arithmetic of three exit codes, not
+/// whether clippy or the rule layer works. Running either for real here would make the suite
+/// slow and would couple it to whatever the workspace happens to contain.
 pub(crate) struct Scripted
 {
     lint_exit: i32,
+    rules_exit: i32,
     predicate_exit: i32,
-    calls: RefCell<Vec<Vec<String>>>,
+    commands: RefCell<Vec<Command>>,
 }
 
 impl Scripted
 {
+    /// A launcher whose `Rules` step, when one runs, exits zero.
     pub(crate) fn New(lint_exit: i32, predicate_exit: i32) -> Self
     {
         return Self {
             lint_exit,
+            rules_exit: 0,
             predicate_exit,
-            calls: RefCell::new(Vec::new()),
+            commands: RefCell::new(Vec::new()),
         };
     }
 
+    /// The same launcher, with its `Rules` step exiting `code`.
+    pub(crate) fn With_Rules_Exit(self, code: i32) -> Self
+    {
+        return Self { rules_exit: code, ..self };
+    }
+
+    /// The argv of every command run, in the order it ran.
     pub(crate) fn Calls(&self) -> Vec<Vec<String>>
     {
-        return self.calls.borrow().clone();
+        return self.commands.borrow().iter().map(|command| return command.argv.clone()).collect();
     }
+
+    /// Every command run, whole, for the cases about how a step was bounded.
+    pub(crate) fn Commands(&self) -> Vec<Command>
+    {
+        return self.commands.borrow().clone();
+    }
+}
+
+/// Whether an argv is the `Rules` step's: the one command here that runs `gate run`.
+pub(crate) fn Is_Rules_Step(argv: &[String]) -> bool
+{
+    return argv.iter().any(|argument| return argument == "gate");
 }
 
 /// Answers from fixed data, so its outputs reproduce byte for byte.
@@ -104,14 +155,16 @@ impl ProgramLauncher for &Scripted
 {
     fn Run(&self, command: &Command) -> Result<ProgramOutput, String>
     {
-        self.calls.borrow_mut().push(command.argv.clone());
+        self.commands.borrow_mut().push(command.clone());
 
         let is_lint = command.argv.iter().any(|argument| return argument == "clippy");
-        let code = if is_lint { self.lint_exit } else { self.predicate_exit };
+        let is_rules = Is_Rules_Step(&command.argv);
+        let code = if is_lint { self.lint_exit } else if is_rules { self.rules_exit } else { self.predicate_exit };
+        let stdout = if is_rules { RULES_OUTPUT } else { "" };
 
         return Ok(ProgramOutput {
             outcome: ExitOutcome::Exited { code },
-            stdout: String::new(),
+            stdout: stdout.to_owned(),
             stderr: "captured output".to_owned(),
         });
     }
@@ -251,8 +304,35 @@ pub(crate) fn State_Of(directory: &Path) -> Standing
 pub(crate) struct Bench
 {
     pub(crate) directory: PathBuf,
-    pub(crate) ledger: FileLedger<StdFileSystem, &'static FixedClock, FileLock>,
+    pub(crate) ledger: BenchLedger,
     pub(crate) launcher: Scripted,
+}
+
+/// The ledger every bench finishes through.
+pub(crate) type BenchLedger = FileLedger<StdFileSystem, &'static FixedClock, FileLock>;
+
+/// Removes `key` from every verification record in the bench's ledger file.
+///
+/// A record written before a field existed has no key at all, which no `Save` of the current
+/// type can produce: it writes `null` for an absent value. Editing the file is the only way to
+/// put the older shape on disk, and the older shape is the one the real board holds.
+pub(crate) fn Strip_Key_From_Ledger(directory: &Path, key: &str)
+{
+    let path = directory.join("ledger.json");
+    let text = std::fs::read_to_string(&path).expect("the bench's ledger is readable");
+    let mut document: serde_json::Value = serde_json::from_str(&text).expect("the bench's ledger is JSON");
+    let items = document.get_mut("items").and_then(serde_json::Value::as_array_mut).expect("a ledger holds items");
+
+    for item in items
+    {
+        if let Some(record) = item.get_mut("verified").and_then(serde_json::Value::as_object_mut)
+        {
+            record.remove(key);
+        }
+    }
+
+    std::fs::write(&path, serde_json::to_string_pretty(&document).expect("JSON serializes"))
+        .expect("test needs to rewrite its ledger");
 }
 
 /// The clock these tests share. `'static` so the ledger [`Bench_At`] returns can outlive it.

@@ -1,9 +1,9 @@
 ---
 id: OD-LEDGER-003
 type: decision
-title: Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped
+title: Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - work-ledger
@@ -14,9 +14,11 @@ relations:
     type: relates-to
   - target: OD-GATE-001
     type: relates-to
+  - target: OD-GATE-036
+    type: relates-to
 ---
 
-# Finishing runs the gate's lint step, derived from the gate, and the test step stays scoped
+# Finishing runs the gate's lint and rules steps, derived from the gate, and the test step stays scoped
 
 ## Question
 
@@ -61,6 +63,10 @@ predicate that exits zero while the gate's own step does not.
 
 **Finishing runs the gate's lint step before the item's predicate, and the step is derived
 from the gate rather than written down beside it.**
+
+That is the decision as version 1 made it. Version 2 runs the gate's `Rules` step after the
+lint step and before the predicate, under the same three parts below; the amendment at the end
+of this record says what changed and what did not.
 
 Three parts, each load-bearing.
 
@@ -119,3 +125,88 @@ is, and that it comes from the workflow, is covered separately.
 
 `OD-GATE-001` remains the authority on the corpus step reporting what did not run. This
 decides only what `finish` is obliged to run before it writes `Done`.
+
+## Amendment, Version 2: Finishing Also Runs The Gate's Rules Step
+
+Added at version 2. `OD-GATE-036` decided it, in its first part, on five measured landings, two
+of which passed their own predicate and left a Blocking finding at `HEAD` for hours.
+`P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP` built it.
+
+**What is superseded, and it is one clause.** "Finishing runs the gate's lint step before the
+item's predicate" now reads: finishing runs the gate's `Lint` step and then its `Rules` step
+before the item's predicate. The other clause of the title, that the test step stays scoped,
+stands unchanged, and `OD-GATE-036`'s 7,202.9 s run of the whole workspace is the measurement
+that keeps it standing.
+
+**The three parts, carried to the second step.**
+
+- **Derived, never copied.** `nomos-ledger` names the step `RULES_STEP` beside `LINT_STEP` and
+  takes both from one reading of the workflow through the same `Derive_Step`. A test rewrites a
+  fixture workflow's `Rules` line and finds the new command in what the finish ran and in what it
+  recorded; writing the command into the crate as a constant fails it.
+- **An underivable step refuses.** A scripted `Rules` step, or one declared with no `run:` line,
+  is `GateUndetermined`. Both steps are derived before either runs, so the refusal comes before
+  the lint step has spent its minutes and nothing runs at all.
+- **The first failure short-circuits.** The order is `Lint`, `Rules`, predicate. Any nonzero
+  exit of the `Rules` step, whether 1 for a Blocking finding, 5 for a run that could not be
+  assembled or 6 for a run that judged nothing, is `GateFailed`, carrying the step's argv and the
+  tail of what it printed, and it judged the work exactly as a red lint step does.
+
+**Where the second step differs from the first, which is absence.** A workflow that declares no
+`Rules` step is not undetermined. It has made no claim for a finish to honour, and the same
+ledger serves KWB, whose gate declares `Lint`, `Test` and `Contract`, so the finish goes ahead
+and records the step as not declared. That required absence to mean only absence: `Derive_Step`
+had answered `NoSuchStep` both for a step the workflow never declares and for one declared with
+no `run:` line, and the second would have been recorded as absent while it sat in the file
+unrun. It now answers `NoSuchStep` only for the first, and gives the second the
+`NotASingleCommand` refusal the whole-set reader `Derive_Steps` already gave it. For the lint
+step both causes refuse, so nothing a finish did before this version changes.
+
+**Bounded by the item.** The `Rules` step runs under the same `Runner` as the lint step: the
+item's own timeout as the wall bound, half of it as the idle bound, in the tree being finished.
+`gate run` prints nothing until it is done, so an item whose timeout is less than twice the
+step's running time is cut off at the idle bound; `OD-GATE-036` counts the predicates on the
+board that are exposed to it.
+
+**Recorded, never backfilled.** `VerificationRecord` carries `rules` beside `gate`: `Ran`, with
+the argv and the exit code, or `NotDeclared`. Every record written before this version holds
+no such key and is read as `None`, which is left as it is for the reason `gate` was: a reader
+must be able to tell a finish that ran the step from one that predates it, and both from a
+finish in a workflow that never declared it. The ledger schema version moves to 7, and a binary
+copied before this version refuses a board carrying the new key, once, by `OD-LEDGER-008`'s
+guard, which `OD-GATE-036` accepted.
+
+**What it costs, measured.** On 2026-10-03, in a detached worktree of this change with its own
+warm target directory, under the board's ordinary load (total CPU at 24 to 39 percent and about
+6.9 GB available without these runs), a finish of a scratch item whose predicate is
+`cargo --version` took 7.8, 10.9 and 2.1 s with the binary from before this change, which runs
+the lint step only, and 78.4, 74.7 and 64.3 s with this change's binary. The `Rules` step adds
+about a minute to a warm finish here, inside the 52.6 s quiet and 210.5 s loaded range
+`OD-GATE-036` measured for the step alone.
+
+**What it catches, measured.** In a scratch copy of this change's tree with `be59c109`'s helper
+name reintroduced, the three spellings of `Assert_Well_Formed_Graph_Document` renamed back to
+`Assert_Well_Formed_GraphML` as `OD-GATE-036` did at `0000e0e3`, a finish of a scratch item
+exited 1 and left the item claimed with no record: the lint step passed, the `Rules` step
+exited 1, and the predicate did not run. It took 239.3 s with the copy's target directory cold
+and 73.3 s warm. The refusal named the step's command and carried the tail of its output, and
+that tail says `476 finding(s), 1 of which can fail a build` but not the finding's own line.
+`cargo run` replays the workspace's cached compiler warnings on stderr, after the run's findings
+on stdout, and the Blocking line is not the last finding `gate run` prints, so it fell outside
+the 2,000 bytes a refusal keeps; `gate run` over the same tree names it, 472nd of 479 lines.
+In a scratch tree whose workflow declares `Lint`, `Test` and `Contract`, a finish exited 0 and
+its record carries `"rules": "NotDeclared"`. In one whose `Rules` step is an action, a finish
+refused as undetermined, exit 4, having run nothing.
+
+**What stands.** The three parts for the lint step, the `gate` field and its rule against
+backfill, and "What Stays Weaker, And Why". The hole that section describes, a test red
+elsewhere in the workspace, is not closed by this version: `OD-GATE-036`'s second part narrows
+it with a rule on how predicates are authored, and nothing a finish runs.
+
+**Consequences.** A finish now judges the tree it runs in with the rule layer, so in a shared
+tree a peer's uncommitted Blocking finding refuses an unrelated finish, as a peer's clippy error
+already did; finishing from a worktree at the commit to be published is the remedy
+`OD-GATE-036` names. The fixtures that build a ledger with a gate beside it still lint with
+`cargo --version`, and they declare no `Rules` step, so their finishes record it as not
+declared. The cases that run the step are against fixture workflows that declare it, beside a
+test that this repository's own workflow still yields a `Rules` argv.

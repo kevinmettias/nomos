@@ -3,6 +3,7 @@
 use serde::Deserialize;
 use serde::Serialize;
 use crate::GateOutcome;
+use crate::OptionalStepOutcome;
 use nomos_platform::Timestamp;
 /// What happened when the predicate was run.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -25,6 +26,17 @@ pub struct VerificationRecord
     /// fact about those records and is left visible rather than backfilled.
     #[serde(default)]
     pub gate: Option<GateOutcome>,
+    /// The gate's `Rules` step, which ran after `gate` and before the predicate, or the fact
+    /// that the workflow declares no such step.
+    ///
+    /// Three readings, kept apart on purpose. `Some(Ran)` is a step that ran and exited zero;
+    /// `Some(NotDeclared)` is a workflow -- KWB's, for one -- that declares no `Rules` step, so
+    /// nothing ran and nothing passed; `None` is a record written before `OD-GATE-036` made the
+    /// step part of finishing. Like `gate` beside it, never backfilled: a record that predates
+    /// the step did not run it, and filling the field in would claim that it had, or that the
+    /// workflow then declared none, neither of which anybody measured.
+    #[serde(default)]
+    pub rules: Option<OptionalStepOutcome>,
     /// The tree this predicate ran against, as `HEAD` resolved at `verified_at`.
     ///
     /// Same shape as `gate`, deliberately: `None` on every record written before this field

@@ -12,6 +12,7 @@ pub const nomos_ledger::LOCK_FILENAME: &str
 pub const nomos_ledger::LOCK_STALE_AFTER: Duration
 pub const nomos_ledger::LOCK_WAIT_LIMIT: Duration
 pub const nomos_ledger::MAXIMUM_LEASE: Duration
+pub const nomos_ledger::RULES_STEP: &str
 pub const nomos_ledger::SCHEMA_VERSION: u32
 pub enum nomos_ledger::AddRefusal
 pub enum nomos_ledger::Blocker
@@ -22,6 +23,7 @@ pub enum nomos_ledger::ItemKind
 pub enum nomos_ledger::ItemOrigin
 pub enum nomos_ledger::ItemState
 pub enum nomos_ledger::LedgerError
+pub enum nomos_ledger::OptionalStepOutcome
 pub enum nomos_ledger::RefusalLayer
 pub enum nomos_ledger::ReleaseOutcome
 pub enum nomos_ledger::StepExecution
@@ -79,6 +81,8 @@ pub enum variant nomos_ledger::LedgerError::Locked { cause: String, }
 pub enum variant nomos_ledger::LedgerError::Malformed { cause: String, }
 pub enum variant nomos_ledger::LedgerError::Unreadable { cause: String, }
 pub enum variant nomos_ledger::LedgerError::Unrecognized { understood: u32, found: u32, cause: String, }
+pub enum variant nomos_ledger::OptionalStepOutcome::NotDeclared
+pub enum variant nomos_ledger::OptionalStepOutcome::Ran(GateOutcome)
 pub enum variant nomos_ledger::RefusalLayer::Dispatch
 pub enum variant nomos_ledger::RefusalLayer::Readiness
 pub enum variant nomos_ledger::ReleaseOutcome::Abandoned { reason: String, }
@@ -196,6 +200,7 @@ pub struct field nomos_ledger::VerificationRecord::exit_code: i32
 pub struct field nomos_ledger::VerificationRecord::gate: Option<GateOutcome>
 pub struct field nomos_ledger::VerificationRecord::output_tail: String
 pub struct field nomos_ledger::VerificationRecord::revision: Option<String>
+pub struct field nomos_ledger::VerificationRecord::rules: Option<OptionalStepOutcome>
 pub struct field nomos_ledger::VerificationRecord::verified_at: Timestamp
 pub struct field nomos_ledger::Widening::added: Vec<String>
 pub struct field nomos_ledger::Widening::holder: String

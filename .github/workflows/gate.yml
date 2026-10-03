@@ -95,7 +95,8 @@ jobs:
       #
       # The `if:` does not disturb `work finish`. `nomos_ledger::Derive_Step` moves between
       # steps on `- name:` / `name:` and returns the first `run:` inside the one it wants,
-      # ignoring every other key, so this step still yields the same argv.
+      # ignoring every other key, so this step still yields the same argv -- and so does
+      # `Rules` below, the second step a finish derives and runs.
       # Installed here rather than beside the `Supply chain` step it was written for, because
       # `Test` below runs `nomos-lang-rust-deny`'s own provider against a real `cargo deny`,
       # and a step cannot use a tool installed after it. It was ordered after `Test` until
@@ -324,11 +325,14 @@ jobs:
       # nothing exits 6 and is not one -- a gate treating 6 as green would be
       # OD-GATE-001's defect installed one level up from where that record found it.
       #
-      # The `run:` line stays one bare command with no shell metacharacters, and this step
-      # must never be named `Lint`: `work finish` derives the gate's lint argv by scanning
-      # this file for the step named `Lint` (nomos_ledger::Derive_Step), so that name here
-      # would make finishing run this command instead of clippy, silently. A scripted
-      # `run:` is refused outright. See OD-GATE-004.
+      # `work finish` runs this step too, after `Lint` and before an item's predicate, and
+      # refuses the finish on any nonzero exit (OD-GATE-036). It derives both steps by
+      # scanning this file for their names (nomos_ledger::Derive_Step), so the `run:` line
+      # stays one bare command with no shell metacharacters and the name stays exactly
+      # `Rules`. Named `Lint`, this step would make finishing run it instead of clippy,
+      # silently. Renamed to anything else, finishing would find no `Rules` step and record
+      # it as not declared, which is what a workflow without one gets. A scripted `run:` is
+      # refused outright, here and by every finish. See OD-GATE-004.
       #
       # Linux only. It judges code content, and code content does not vary with the host --
       # measured green on Windows while this item was open, 830 files examined and the same

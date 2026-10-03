@@ -238,6 +238,16 @@ apart — the predicate failed (the work is not done), the predicate could not b
 or timed out (nobody found out), and there is no predicate at all (nothing was checked,
 which must never read like everything checked out).
 
+Before the predicate, `finish` runs two of the gate's own steps: `Lint`, then `Rules`, each
+taken by name from `.github/workflows/gate.yml` rather than written down beside it, and each
+under the item's own timeout. The first nonzero exit refuses the finish as a failed gate step
+that names the command and the tail of what it printed, and nothing after it runs — so a
+Blocking finding anywhere in the tree refuses a finish whose own predicate passed. A workflow
+that declares no `Rules` step, as KWB's does not, finishes with the step recorded as not
+declared, never as passed; one whose `Lint` or `Rules` step is a script refuses before
+anything runs. The gate's `Test` step is not run: the predicate stays the scoped test its
+author wrote. `OD-LEDGER-003` and `OD-GATE-036` record why each step is in and that one is out.
+
 Exit codes are a contract, because agents branch on them rather than parsing output:
 
 | Code | Meaning |

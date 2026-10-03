@@ -699,6 +699,7 @@ mod tests
             output_tail: String::new(),
             verified_at: Timestamp::From_Unix_Seconds(HISTORY_VERIFIED_AT),
             gate: None,
+            rules: None,
             revision: Some("abc123".to_owned()),
         });
 

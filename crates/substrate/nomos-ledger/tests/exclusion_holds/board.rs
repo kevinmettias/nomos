@@ -11,7 +11,7 @@ mod scratch;
 pub(crate) use nomos_ledger::{
     Finishing,
     Abandonment, AddRefusal, Blocker, Claim, ClaimRefusal, Declination, ExclusionLedger, FileLedger, Finish_Item,
-    FinishRefusal, GateOutcome, ItemId, ItemKind, ItemOrigin, ItemState, LedgerDocument, LedgerError, LedgerItem,
+    FinishRefusal, GateOutcome, ItemId, ItemKind, ItemOrigin, ItemState, LedgerDocument, LedgerError, LedgerItem, OptionalStepOutcome,
     ReleaseOutcome, Reservation, SCHEMA_VERSION, Territory as ItemTerritory, Validate_Document, VerificationPredicate,
     VerificationRecord,
 };
@@ -176,6 +176,7 @@ pub(crate) fn Item_Finished_With_Evidence(id: &str, files: &[&str]) -> LedgerIte
         output_tail: "ok".to_owned(),
         verified_at: Timestamp_From_Seconds(NOW),
         gate: None,
+        rules: None,
         revision: None,
     });
 
@@ -209,6 +210,7 @@ pub(crate) fn Release_As_Finished<Ledger: ExclusionLedger>(ledger: &mut Ledger, 
                 output_tail: "ok".to_owned(),
                 verified_at: Timestamp_From_Seconds(NOW),
                 gate: None,
+                rules: None,
                 revision: None,
             }),
         )

@@ -84,6 +84,7 @@ pub(crate) fn Finished_Item(id: &str, files: &[&str]) -> LedgerItem
         output_tail: String::new(),
         verified_at: Timestamp_From_Seconds(NOW),
         gate: None,
+        rules: None,
         revision: None,
     });
     return item;

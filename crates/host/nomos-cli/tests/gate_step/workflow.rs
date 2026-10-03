@@ -4,7 +4,11 @@ use std::path::{Path, PathBuf};
 
 /// The step `OD-GATE-004` added. Deliberately not `Lint`, and
 /// `Test_The_Derived_Lint_Step_Should_Still_Be_Clippy` is why.
-pub(crate) const RULES_STEP: &str = "Rules";
+///
+/// The ledger's own name for it rather than a second spelling here: `work finish` derives this
+/// step by that name under `OD-GATE-036`, so these assertions are about the step a finish
+/// runs, and a rename on either side cannot leave them checking a different one.
+pub(crate) const RULES_STEP: &str = nomos_ledger::RULES_STEP;
 
 /// The three ways a step is told to run and not be believed.
 ///

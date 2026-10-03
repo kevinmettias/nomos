@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:83cdc930a54e0b8215687a951417b31546c9f1fb8ba84194d8399325d1aa747d",
-  "inputs_digest": "sha256:29cc90b315a9059c5530f146704613ae6729a0cfa99c665f51b94d669314ba54",
+  "content_digest": "sha256:8592e4d4bb74e9227fd27b078523b6e4edd8ce09014df0b70c8e5a0e3c381243",
+  "inputs_digest": "sha256:d12ca1c0b97c3c48e3bd09a7f1277e24901c0d14e75aad9309e181000486ae8e",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2602
+      2603
     ],
     [
       "Source blocks",
-      9559
+      9572
     ]
   ],
   "inputs": [
@@ -713,7 +713,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md@authored",
-      "hash": "sha256:2cf8d6b1587d929c2ba23a6e8f5107d2b3934b8dc3fe05202aefccb6530386c6"
+      "hash": "sha256:1ea9e32513c083e8f2a3aa69000315149c6f3279c6e8ff9aa5fb4b01163b9af6"
     },
     {
       "content": "documents",
@@ -7628,7 +7628,7 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#1",
-      "hash": "sha256:d6ca7c5d994b5bf1602f73772d87f92a65f71125714a989ff169c9ae83091a70"
+      "hash": "sha256:c17b81baf42dae435c67aa3cbc4243b11b3701ca1317d0c58bd49e88284574b6"
     },
     {
       "content": "headings",
@@ -7647,13 +7647,18 @@
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#18",
-      "hash": "sha256:655019cc94263b07d32d2d12ddfc30a8aacfc2e02319656dccf4741fcbd26b86"
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#19",
+      "hash": "sha256:e10a57e71be781de702f3c0dcc062d69546c21aaf46ec4c385249d1b037af0fc"
     },
     {
       "content": "headings",
-      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#22",
-      "hash": "sha256:42e6c402be0add2f3a81ee0b9071ccaadee0bb0ad3aae34370051bdcfe04029e"
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#23",
+      "hash": "sha256:6fe9b2ab7105cdd70a46328c5e39eee904625540d3bf5a870b667345588201c0"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#27",
+      "hash": "sha256:3bc141ab07a1861b7651de76f0d48e8e53acef02342b42a1df5616d00983dae4"
     },
     {
       "content": "headings",
@@ -37413,7 +37418,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#1",
-      "hash": "sha256:946efbeea94a1e9cd6c74a868610d440aef5dfa494c0cb8f3408fe6ff3a26d1e"
+      "hash": "sha256:28801d417aad0064effa14256e76d926ad7bbb82a1746085f05ace1d7ec0f565"
     },
     {
       "content": "blocks",
@@ -37473,67 +37478,132 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#13",
-      "hash": "sha256:39802007c6c2d315b8ba1b86eadabfc7fae3f941edf1a4120dc359da1b18c627"
+      "hash": "sha256:f1adb4495efb2b989a2127223961c91a0d244fdc93a91a959e622a0c9fc6b235"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#14",
-      "hash": "sha256:5bc4b71ae99483833a271754f5954ec68e5530678a81569391743a7f99c8dee3"
+      "hash": "sha256:39802007c6c2d315b8ba1b86eadabfc7fae3f941edf1a4120dc359da1b18c627"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#15",
-      "hash": "sha256:5030f4a16b3648730c16f72f2b50ba48e677b063dd373f3129c6ea27c76ed1b9"
+      "hash": "sha256:5bc4b71ae99483833a271754f5954ec68e5530678a81569391743a7f99c8dee3"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#16",
-      "hash": "sha256:c399ad37011250f1d09acc9827a18c17dcd3f43add7a35c9854a8902d043b74c"
+      "hash": "sha256:5030f4a16b3648730c16f72f2b50ba48e677b063dd373f3129c6ea27c76ed1b9"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#17",
-      "hash": "sha256:90943392f4ed5e32c410aece0638d4c1b7d72d77a8cd0c6102dc39229c3aad9f"
+      "hash": "sha256:c399ad37011250f1d09acc9827a18c17dcd3f43add7a35c9854a8902d043b74c"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#18",
-      "hash": "sha256:5f891ada093827ab281b174d014148afa1dc6497e50566170c23f281bd6eb72f"
+      "hash": "sha256:90943392f4ed5e32c410aece0638d4c1b7d72d77a8cd0c6102dc39229c3aad9f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#19",
-      "hash": "sha256:0b26d05b9b58a06f15ebdeefc405478c66ff603adc1c5cd078b88c14ccf1e00f"
+      "hash": "sha256:5f891ada093827ab281b174d014148afa1dc6497e50566170c23f281bd6eb72f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#20",
-      "hash": "sha256:65bd379729d55f65cc78213bab5b1d7fbac1789df8419a98cc2bd0857e2d0fd9"
+      "hash": "sha256:0b26d05b9b58a06f15ebdeefc405478c66ff603adc1c5cd078b88c14ccf1e00f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#21",
-      "hash": "sha256:a4fff2ea751e6620e8fa1079525084fee3acf36d2f482104c6464d365f3e1508"
+      "hash": "sha256:65bd379729d55f65cc78213bab5b1d7fbac1789df8419a98cc2bd0857e2d0fd9"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#22",
-      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
+      "hash": "sha256:a4fff2ea751e6620e8fa1079525084fee3acf36d2f482104c6464d365f3e1508"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#23",
-      "hash": "sha256:18336959cc12a79ce4aa9bda817cd2106d12d09df224c359e1d4638083d62bc8"
+      "hash": "sha256:89452c3c3f042e75cb1c74f2df2a941f9dbbbad6127f3d11c1fb606337059416"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#24",
-      "hash": "sha256:1a81a375f25fd7419a2b7a718886199dc71f51763b66dad5c1563269f8ea70f5"
+      "hash": "sha256:18336959cc12a79ce4aa9bda817cd2106d12d09df224c359e1d4638083d62bc8"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#25",
+      "hash": "sha256:1a81a375f25fd7419a2b7a718886199dc71f51763b66dad5c1563269f8ea70f5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#26",
       "hash": "sha256:fc36e595b270db3667fdb1bbc16e1bef7d79b434bae737cab63658a30dceef39"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#27",
+      "hash": "sha256:a9cf637e6698306b7ed009fa9e0df668fed6ea674bce75a066872cecb0e54617"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#28",
+      "hash": "sha256:998452e85dbddac9dcb327699fcb0f4448b3501728099374931df0162c642980"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#29",
+      "hash": "sha256:f87bfcae3f9dbb7f48b91642482740f5a005b2ead450cdec9bd443ef9610fcfb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#30",
+      "hash": "sha256:6e763dffdb4a4fb093ad82cbec9227facafee2e74bcd0e17d8752bceb82d5ef8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#31",
+      "hash": "sha256:928b5d578a86c67f3f63040635057936eafdd444929bf666abb86d4f42851cda"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#32",
+      "hash": "sha256:309cd27197649d22706c8dbd80ac5bdda3f3b0c435113f6daeeba1dea315ebd6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#33",
+      "hash": "sha256:1e8c4a4d2c9ff851975b6293efdb13bd42c4a513bfa6471294d6e402551162f4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#34",
+      "hash": "sha256:3de13024ebf1469dce58b1a009a492df7308169cf7b16c8dd0b95c31348b84d6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#35",
+      "hash": "sha256:48a513e492e94e0e7b4a7063a172944e82f215b8df531944f614e1aa80f06c20"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#36",
+      "hash": "sha256:0a4f60e252dfa2306a14779640777cdea74aa50850f80303b366fdeb3e509003"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#37",
+      "hash": "sha256:0eef4cc925452932bafcd751f85d2cd52074e7a5aa0c3f8bfbb55f208611490c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md#38",
+      "hash": "sha256:5d791e214e09208ce343cfd746b23baeb44894cec960d72091a9648ecfdde610"
     },
     {
       "content": "blocks",

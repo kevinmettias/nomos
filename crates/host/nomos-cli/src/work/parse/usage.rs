@@ -69,10 +69,12 @@ pub(super) const VERBS: &str = "\x20 list     [--state ready|waiting|held|lapsed
 
 /// What holds across every verb: the predicate, and the codes an agent branches on.
 pub(super) const NOTES: &str = "\neverything after `--` is the verification predicate, run directly \
-     with no shell. `finish` runs the gate's own lint step first, derived from \
-     .github/workflows/gate.yml rather than written here, then the item's predicate, and \
-     records the item done only if both exit zero. An item whose predicate passes while the \
-     gate is red is not finished.\n\
+     with no shell. `finish` runs the gate's own `Lint` step first and its `Rules` step \
+     second, each derived by name from .github/workflows/gate.yml rather than written here, \
+     then the item's predicate, and records the item done only if every one of them exits \
+     zero. An item whose predicate passes while the gate is red is not finished. A workflow \
+     that declares no `Rules` step runs none, and the item's record says the step was not \
+     declared rather than that it passed.\n\
      \n\
      exit codes: 0 ok, 1 validation error, 2 usage, 3 claim unavailable (retryable), \
      4 conflict, 5 store error";

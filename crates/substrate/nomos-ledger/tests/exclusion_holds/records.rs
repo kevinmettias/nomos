@@ -465,6 +465,7 @@ fn Closed_Reserving(record: &str, state: ItemState) -> LedgerItem
             output_tail: "test result: ok".to_owned(),
             verified_at: Timestamp_From_Seconds(NOW),
             gate: None,
+            rules: None,
             revision: None,
         });
     }

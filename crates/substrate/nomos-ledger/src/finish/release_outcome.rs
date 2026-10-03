@@ -98,6 +98,7 @@ mod tests
             output_tail: String::new(),
             verified_at: Timestamp::From_Unix_Seconds(VERIFIED_AT_SECONDS),
             gate: None,
+            rules: None,
             revision: None,
         };
 

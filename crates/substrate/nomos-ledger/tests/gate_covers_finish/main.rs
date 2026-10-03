@@ -12,6 +12,10 @@
 //! So the instances are reproduced here in the shape they actually had: a predicate that
 //! exits zero while the gate's own step does not.
 //!
+//! The gate's `Rules` step joined the finish later, under `OD-GATE-036`, for the same reason
+//! one level up: two landings passed their own predicate with a Blocking finding in the tree.
+//! `rules_step.rs` holds its cases, including the workflow that declares no such step.
+//!
 //! Every test has a negative control, because a guard that has never been watched failing
 //! is not a guard.
 
@@ -21,4 +25,5 @@ mod derivation;
 mod ordering;
 mod red_gate;
 mod repository_gate;
+mod rules_step;
 mod unknown;

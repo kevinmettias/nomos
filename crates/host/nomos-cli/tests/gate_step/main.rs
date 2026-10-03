@@ -21,6 +21,10 @@
 //! `crates/substrate/nomos-ledger/tests/gate_covers_finish.rs`. Deriving it means a step
 //! rewritten as a shell script fails these assertions instead of satisfying them by
 //! containing the right words.
+//!
+//! Since `OD-GATE-036` the step has a second reader: `work finish` derives it by the same name
+//! and runs it after `Lint`, before an item's predicate. So a step these assertions refuse is
+//! also a step every finish here would refuse on, or record as not declared.
 
 
 mod workflow;
