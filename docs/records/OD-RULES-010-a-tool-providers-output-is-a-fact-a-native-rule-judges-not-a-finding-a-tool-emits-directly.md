@@ -3,7 +3,7 @@ id: OD-RULES-010
 type: decision
 title: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - rules
@@ -52,7 +52,7 @@ against a capability, and on success judges the decoded payload and emits a `Fin
 `Applicability::Supported`, `EvidenceClass::Derived`. `nomos-lang-rust-cargo`
 (`crates/languages/nomos-lang-rust-cargo/src/metadata.rs`) is the worked precedent for a
 subprocess-backed provider: it runs an external tool (`cargo metadata`) through
-`nomos_platform::ProcessLauncher`, parses its output, and returns facts for the
+`nomos_platform::ProgramLauncher`, parses its output, and returns facts for the
 composition root to materialize into the store via `nomos_capability::Registry::
 Declare_And_Offer` -- it does not itself construct a `Finding`, `Applicability`, or any
 judgment. `cargo clippy`'s own diagnostics are, unlike `cargo metadata`'s package graph,
@@ -106,6 +106,17 @@ It does not decide anything about `MetricProvider`, `RepositoryProvider` or
 beside `ToolProvider`. Each is a distinct capability shape with its own real first case to
 measure against, not a case this record's reasoning is assumed to generalize to
 automatically.
+
+## Amendment, Version 3: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the worked
+precedent for a subprocess-backed provider in "What Was Measured", now gives its current name.
+The five `nomos-rules` constants that cite this record's version move to 3 with it, and what
+each of those rules judges is unchanged.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
 
 ## Status
 

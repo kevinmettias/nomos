@@ -374,7 +374,7 @@ members = [
     "crates/agent/nomos-agent-contracts",
 
     # Zone: Agent. The Claude Code AgentExecutor adapter: dispatches a TaskEnvelope's goal to
-    # Claude Code as a subprocess through nomos-platform's ProcessLauncher, bounded by
+    # Claude Code as a subprocess through nomos-platform's ProgramLauncher, bounded by
     # `OD-EXECUTOR-001`'s structural capability boundary. Above nomos-agent-contracts,
     # whose TaskEnvelope/WorkResult it depends on; does not assemble a WorkResult. Renamed
     # from nomos-agent-executor by `OD-EXECUTOR-001`'s own amendment: one concrete adapter
@@ -383,7 +383,7 @@ members = [
 
     # Zone: Agent. The first real ModelBackend adapter (OD-PACKAGE-013), not a second
     # AgentExecutor: dispatches a TaskEnvelope's goal to a local Ollama model as a subprocess
-    # through nomos-platform's ProcessLauncher, bounded by `OD-EXECUTOR-004`'s structural
+    # through nomos-platform's ProgramLauncher, bounded by `OD-EXECUTOR-004`'s structural
     # capability boundary -- measured against its own mechanism, not inherited from
     # `OD-EXECUTOR-001` by analogy. Same band as nomos-agent-executor-claude-code; neither
     # may name the other, and there is no dispatch trait generic over both.

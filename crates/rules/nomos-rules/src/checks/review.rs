@@ -39,7 +39,7 @@ pub const REVIEW_FINDING: &str = "review-finding";
 pub const REVIEW_CONTRACT_RECORD: &str = "OD-RULES-010";
 
 /// The version of [`REVIEW_CONTRACT_RECORD`] this implementation was written against.
-pub const REVIEW_CONTRACT_RECORD_VERSION: u32 = 2;
+pub const REVIEW_CONTRACT_RECORD_VERSION: u32 = 3;
 
 /// Judges every `nomos.cap.review.finding` fact `sources` names against the reviewing
 /// tool's own reported severity, category and message.

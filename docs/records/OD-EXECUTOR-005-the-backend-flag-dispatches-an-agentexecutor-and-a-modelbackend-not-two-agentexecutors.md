@@ -3,7 +3,7 @@ id: OD-EXECUTOR-005
 type: decision
 title: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - agent
@@ -64,14 +64,14 @@ boundary, not because it is structurally the same kind of thing Claude Code's cr
 `AgentExecutor`s sharing real, extractable behavior — has a different, weaker explanation
 once the premise is corrected.** `Isolated_Working_Directory`, `Command_For`'s subprocess
 shape, and `Require_Clean_Exit` are duplicated because both crates dispatch a subprocess
-through the same `nomos_platform::ProcessLauncher` seam, not because both are `AgentExecutor`s.
+through the same `nomos_platform::ProgramLauncher` seam, not because both are `AgentExecutor`s.
 A `ModelBackend` and an `AgentExecutor` invoked as local subprocesses would share exactly this
 much structure regardless of which package kinds they are — process launch, working-directory
-isolation, exit-code discipline are properties of `ProcessLauncher`-based dispatch, not
+isolation, exit-code discipline are properties of `ProgramLauncher`-based dispatch, not
 properties `AgentExecutorPackage` specifically confers. `nomos-lang-rust-cargo` and
 `nomos-lang-rust-deny` — two `ToolProvider`s, an entirely different package kind — share the
 identical `Require_Clean_Exit` shape with both agent crates, which is evidence for a possible
-future `ProcessLauncher`-dispatch convenience shared across *all* subprocess-based providers,
+future `ProgramLauncher`-dispatch convenience shared across *all* subprocess-based providers,
 not evidence specific to `AgentExecutor`.
 
 **No second real `AgentExecutor` exists to justify an `AgentExecutor` trait today.** With
@@ -97,10 +97,10 @@ once `nomos-agent-executor-ollama` is renamed and reclassified — not this reco
 ## What This Record Does Not Do
 
 It does not decide whether a `ModelBackend` trait, or a lower-level shared
-`ProcessLauncher`-dispatch convenience beneath both package kinds, is warranted — that
+`ProgramLauncher`-dispatch convenience beneath both package kinds, is warranted — that
 question was not asked here and has its own, separate evidence (`nomos-lang-rust-cargo`,
 `nomos-lang-rust-deny`, both agent crates) that a future record can measure on its own terms,
-should a second real `ModelBackend` or a third `ProcessLauncher`-dispatched crate arrive.
+should a second real `ModelBackend` or a third `ProgramLauncher`-dispatched crate arrive.
 
 It does not change `nomos agent execute`/`judge-role`'s CLI surface, rename
 `nomos-agent-executor-ollama`, or touch `crates/host/nomos-cli/src/agent.rs`'s dispatch. It
@@ -206,6 +206,20 @@ crate: `nomos-agent-orchestration` and `nomos-workflow-orchestration` name neith
 manifest or in a line of source, and each host's own `agent` module is the composition root
 that offers the pair.
 
+## Amendment, Version 4: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The five places this record names the port as the seam
+both crates dispatch through, in the third finding of "What Was Measured" and in "What This
+Record Does Not Do", now give its current name. The `Execute` signature "Question" and "What
+Was Measured" quote keeps the name it had: it is the two crates' signature as this record
+measured it, and both functions had already been renamed `Execute_Task`, with a type parameter
+named `Launcher`, before the port was renamed, so substituting the bound alone would quote a
+signature no commit ever held.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
 ## Status
 
 Accepted. `OD-EXECUTOR-004`'s shared-`AgentExecutor`-trait trigger has not fired; the evidence
@@ -219,3 +233,8 @@ Amended to version 3 by `P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-I
 under `OD-ROADMAP-005` decision 2: a port per package kind stands where this record declined a
 trait, and the two-kind measurement that decline rested on is what decided there are two ports
 rather than one.
+
+Amended to version 4 by
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+to give `nomos-platform`'s launch port its current name, `ProgramLauncher`; nothing this record
+measured or decided changed.

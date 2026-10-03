@@ -3,7 +3,7 @@ id: OD-EXECUTOR-006
 type: decision
 title: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - executor
@@ -78,7 +78,7 @@ That is evidence about code, produced externally, exactly `ToolProvider`'s own s
 bounded actor doing work on Nomos's behalf.
 
 **Why it is closer to a connector than a same-band `ToolProvider`.** `nomos-lang-rust-clippy`
-runs a local subprocess the caller's own `ProcessLauncher` controls end to end. CodeRabbit is
+runs a local subprocess the caller's own `ProgramLauncher` controls end to end. CodeRabbit is
 a genuine external peer system reached over its own API/webhook surface, carrying vendor
 identity and vendor-shaped payloads that need translation before Nomos can read them —
 `nomos-connector-github`'s own shape, not `nomos-lang-rust-clippy`'s. `ARC-CONNECTOR-001`
@@ -99,7 +99,7 @@ review evidence as a fact, and a native Nomos rule judges it into a `Finding`. I
 take `AgentExecutor` shape.** The concrete mechanism is `nomos-connector-github`'s own
 precedent, not `nomos-lang-rust-clippy`'s: a peer system reached over a real transport,
 requiring vendor-to-canonical translation and its own identity/evidence handling under
-`ARC-CONNECTOR-001`, rather than a local subprocess a `ProcessLauncher` runs directly. What
+`ARC-CONNECTOR-001`, rather than a local subprocess a `ProgramLauncher` runs directly. What
 it shares with `nomos-lang-rust-clippy` is the boundary that actually matters here —
 `OD-RULES-010`'s fact-not-finding split — not the transport.
 
@@ -135,6 +135,20 @@ on a repository — choosing tools, respecting `scope` and `prohibited_changes` 
 measured against `AgentExecutor` shape the way this record measured CodeRabbit against it and
 found no match; a future record makes that measurement when a real candidate exists to check,
 not this one in advance of it.
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The two places this record names the port as what runs a
+local subprocess, the last finding of "What Was Measured" and the first paragraph of "The
+Decision", now give its current name. The `Execute` signature the first finding quotes keeps the
+name it had: it is the two implementations' signature as this record measured it, and both
+functions had already been renamed `Execute_Task`, with a type parameter named `Launcher`,
+before the port was renamed, so substituting the bound alone would quote a signature no commit
+ever held.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
 
 ## Status
 

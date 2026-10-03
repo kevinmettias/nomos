@@ -3,7 +3,7 @@ id: OD-EXECUTOR-010
 type: decision
 title: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - agent
@@ -84,7 +84,7 @@ Measured from the two crates directly rather than inferred from their docs.
 **Shared, and therefore the contract:**
 
 - The envelope going in (`TaskEnvelope`) and a refusal type going out, both with an
-  `Execute_Task`/`Execute_In` pair over an injected `ProcessLauncher`.
+  `Execute_Task`/`Execute_In` pair over an injected `ProgramLauncher`.
 - `AgentCapability::Isolated` with `ToolGrant::Nothing` — neither grants any capability, and
   neither has ever dispatched under anything wider.
 - `AgentExecutionError::UnsupportedTools` for a declared `available_tools` neither can grant,
@@ -153,6 +153,15 @@ ahead-of-the-evidence move this record declines elsewhere.
 
 It does not change any code. `P91` and `P92` already landed the behaviour this record
 measures.
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the first row of
+what the two adapters share, now gives its current name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
 
 ## Status
 

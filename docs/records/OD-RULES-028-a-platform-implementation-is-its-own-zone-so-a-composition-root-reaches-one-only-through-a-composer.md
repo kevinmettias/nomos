@@ -3,7 +3,7 @@ id: OD-RULES-028
 type: decision
 title: A platform implementation is its own zone, so a composition root reaches one only through a composer
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -25,7 +25,7 @@ relations:
 
 `P88` built `nomos-composer-std` — the std backend set named once — and migrated all four
 hosts onto it, so that no host names `StdFileSystem`, `SystemClock`, `FileLock`,
-`StdProcessLauncher` or `StdEnvironment` any more. Nothing keeps them migrated.
+`StdProgramLauncher` or `StdEnvironment` any more. Nothing keeps them migrated.
 
 `ZONES` put `nomos-platform`, `nomos-platform-std` and `nomos-composer-std` all in
 `Zone::Substrate`, and `Permits` lets `Host` reach `Substrate` — it must, for
@@ -63,7 +63,7 @@ composer *in*.
 
 **`nomos-platform-xvpe` is not a backend, measured rather than assumed.** It was the
 obvious second member of any such zone, and it is not one. `XvpeLauncher` is
-`XvpeLauncher<'a, Launcher: ProcessLauncher>` — generic over an *injected* launcher,
+`XvpeLauncher<'a, Launcher: ProgramLauncher>` — generic over an *injected* launcher,
 implementing `xvpe`'s `ProcessLauncherStrategy` over whatever it is handed. It implements
 no `nomos-platform` port and can hand no caller a platform; `README.md` already called it
 "one adapter, not a replacement for the port." Two Agent-zone crates
@@ -129,8 +129,22 @@ It does not make the composer mandatory by type. A host could still declare its 
 that, and nothing should, because a host that writes its own platform has made a visible
 decision rather than an invisible one.
 
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher`, and its std implementation from `StdProcessLauncher` to
+`StdProgramLauncher`, on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The two places this record names them now give their
+current names: the std implementation among the backends "Question" says no host names any
+more, which still holds under the new name, and the port `XvpeLauncher` is generic over in
+"What Was Measured". `ProcessLauncherStrategy`, which the same sentence names, is `xvpe`'s
+own trait and keeps its name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
 ## Status
 
 Accepted, version 1. Twelve named zones; `nomos-platform-std` moves from `Substrate` to
 `Backend`. Amends `OD-RULES-020`, whose own "What This Does Not Do" left open whether the
-eleven zones it named were the final set.
+eleven zones it named were the final set. Amended at version 2 only to give
+`nomos-platform`'s launch port and its std implementation their current names.

@@ -3,7 +3,7 @@ id: OD-WORKFLOW-001
 type: decision
 title: The workflow tier's first real increment is RunId's first real consumer, not the engine
 status: accepted
-version: 5
+version: 6
 authority: canonical-normative-record
 tags:
   - workflow
@@ -84,7 +84,7 @@ failure mode `identity.rs`'s own module doc calls out for path-and-line identity
 distinction with no key to carry it.
 
 Concretely, for the follow-up this record unblocks: `nomos_gate_orchestration::Run_Gate` gains a
-`nomos_platform::Clock` parameter alongside its existing `ProcessLauncher` one -- a composition-
+`nomos_platform::Clock` parameter alongside its existing `ProgramLauncher` one -- a composition-
 root-supplied dependency, the same shape `variant` and `launcher` already are, not a
 `SystemTime::now()` read buried in the crate -- and `GateRunResult` gains a `pub run: RunId`
 field, computed once per call from the clock reading (and nothing else content-addressed,
@@ -92,7 +92,7 @@ because content-addressing it would silently re-introduce the collapse this reco
 out). Every existing caller of `Run_Gate` -- `nomos-cli`'s `gate.rs` and `nomos-api`'s
 `Handle_Gate_Run`, the only two; `nomos-ledger`'s own `Run_Gate_Steps` is a distinct function
 (`crates/substrate/nomos-ledger/src/finish/gate_step.rs`) that runs the workflow's own
-`Lint`-step argv and then its `Rules`-step argv through a `ProcessLauncher`, `OD-LEDGER-003`
+`Lint`-step argv and then its `Rules`-step argv through a `ProgramLauncher`, `OD-LEDGER-003`
 version 2 saying what a finish runs, and never calls `nomos_gate_orchestration::Run_Gate`
 at all, a conflation an earlier draft of this paragraph made from a substring grep rather than
 reading the file -- supplies a real clock the same way each already supplies a real build
@@ -193,3 +193,13 @@ routes to `OD-LEDGER-003` version 2 for what a finish runs rather than restating
 `P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS`
 made the change. The paragraph's point stands exactly: the function is distinct from
 `nomos_gate_orchestration::Run_Gate` and never calls it. Nothing this record decides changed.
+
+## Amendment, Version 6: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The two places the "Concretely, for the follow-up"
+paragraph names the port, `Run_Gate`'s existing launcher and the launcher `Run_Gate_Steps`
+runs its steps through, now give its current name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.

@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:11352386017d5971e75cf26eb0b6158757c59890de31a7a85d0c18037bb326b5",
-  "inputs_digest": "sha256:36d23aeb96e5a67126da17caa7e268a1ae89efeef8eaf9da834ccd5f99873172",
+  "content_digest": "sha256:5c178394644699996f55ae4d2ca62f582a5bddf2ef0e5e0c76ecf88da982231d",
+  "inputs_digest": "sha256:3098fa0e5574ac69c483e9e2fa16438f43398f636cd548791ab9d7351c4d1697",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2609
+      2624
     ],
     [
       "Source blocks",
-      9602
+      9634
     ]
   ],
   "inputs": [
@@ -258,7 +258,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md@authored",
-      "hash": "sha256:88d25ef06103ea7b630b4cf9e09748244421ae9d293d1030f63bed54f2be8850"
+      "hash": "sha256:ccd6466a3be4ee5a9b4f87f5030e73a22d28e5e4a1c2677dee4c6ab1919df880"
     },
     {
       "content": "documents",
@@ -273,7 +273,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored",
-      "hash": "sha256:c73b6568e987da09a2256a0e13c66b1d768911f443b0fa014c71ff319d11591f"
+      "hash": "sha256:a055889e6b1536992abe2fc7ad5b0e0c497881a0cba9c22c235ef7881b4198e9"
     },
     {
       "content": "documents",
@@ -383,12 +383,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored",
-      "hash": "sha256:332c3b7ae159ba13d0b1d176726607b8369f9b5af249de17d98d9507254ce7bb"
+      "hash": "sha256:674d306b325289576b7177647fb389a9b2717cc189538c185f765e76bbab44ca"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored",
-      "hash": "sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a"
+      "hash": "sha256:7bc9ad7b7b532630fd3a5eab25962f7192ec08c8f889187c9077b340dc1937b6"
     },
     {
       "content": "documents",
@@ -403,12 +403,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored",
-      "hash": "sha256:916a39a52f82246093b826b001599901d077eb7c8411f1f9f3ca26a54919ff0e"
+      "hash": "sha256:429a77822a0e20360498f264b3e8d9e678f0ab0ae8f4ed1c20a4c262e3f976f3"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored",
-      "hash": "sha256:0c2b9021270c0e484742945479352a8b2d9d573056158e27d377c6f56433545d"
+      "hash": "sha256:a29dc79123b403794efe92f2463e1e25f1e59c501fe0c7c9a4ace538660346ff"
     },
     {
       "content": "documents",
@@ -428,7 +428,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md@authored",
-      "hash": "sha256:dba922686a9cf559ae030ecfdf641ba31655c6d3f805eb49ea32ab74fd1a7cc0"
+      "hash": "sha256:b2d83d0e292146cc9b2c2b99c71f3c06e1dc1aa5bd0708b17bc5da22e6b86a96"
     },
     {
       "content": "documents",
@@ -513,7 +513,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored",
-      "hash": "sha256:6b6d9f41076761c1a5af15719547c1b28ab365e7b4e46ba305c59bc4de3a71b5"
+      "hash": "sha256:de9b25c004d64f0a585ad1b78ffae21cf8aaaa15e7771b4fca9a18b938dc8f8a"
     },
     {
       "content": "documents",
@@ -603,7 +603,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored",
-      "hash": "sha256:0336dd5172d90b1888f06079931f9a27993ad8b74311d418f72176a48313e4b6"
+      "hash": "sha256:fe9653cce306810856ebecedc4344abc0c63a756a272dd3a10b2b83a7d7eddad"
     },
     {
       "content": "documents",
@@ -1008,7 +1008,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored",
-      "hash": "sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0"
+      "hash": "sha256:eaba3df0bc0e83a8c0babf7e555ec6179be7d951551d1a58a0072b2c7174fa18"
     },
     {
       "content": "documents",
@@ -1153,7 +1153,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored",
-      "hash": "sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560"
+      "hash": "sha256:eccd7012cfcc37ef71a560a30c899793a94664240fea8a2586541833a95156a4"
     },
     {
       "content": "documents",
@@ -1223,7 +1223,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md@authored",
-      "hash": "sha256:66d2427694c21ad26b870820393f14285fbb1678448d0a33f4490a61fd0f1118"
+      "hash": "sha256:b6c26baef5e4788ebd3dd78fae27e9cf60633c27bce96a050e0a7b1742fcb270"
     },
     {
       "content": "documents",
@@ -1233,7 +1233,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md@authored",
-      "hash": "sha256:eef4a3f365ef12f634f1fee88c3cf1b2ad45aad74e471e1daf8c8c26603a4228"
+      "hash": "sha256:bd8350594de254f0a5c7a976359572f70018df0b0dc957e3c1d08d6f6000dc58"
     },
     {
       "content": "documents",
@@ -1398,12 +1398,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored",
-      "hash": "sha256:9bb7ed13803fe54b5bfeff62f658f5c56c9640e58314353494e1450bfefca7e8"
+      "hash": "sha256:23557413d12bd93d096a0643a0f8ec22b68b56da79049d4ff7e7b1570c26bff9"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored",
-      "hash": "sha256:bfc56548ea46e02b123076c8c0763be25b958a643b1eca56f02f8308b173ccab"
+      "hash": "sha256:46aca666e0b6d340fd94e41c5ffebe52f77d1b0cc825e5aa10b2f06e4f69e4c3"
     },
     {
       "content": "documents",
@@ -3428,7 +3428,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#19",
-      "hash": "sha256:b41f856b8b7774d669d86f86d628b87f9c6b694d5c6827e7db542d09891a640c"
+      "hash": "sha256:941c91e78fe7dc93f896cb564af12defff8185cdf0478dd66d355bad9ac9ba45"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#21",
+      "hash": "sha256:281e9aafb0adab82d1cd22f69cc9d2e5adafcb37c6ef593d411362a2d1c4e655"
     },
     {
       "content": "headings",
@@ -3533,7 +3538,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#21",
-      "hash": "sha256:89e58c5a8dca4b2131792183be62dcf419d3c0cb50adc3979efee156b988ee1a"
+      "hash": "sha256:ce78e2385261376a53869991ba5c36af42828101834184a22698966f91635af9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#23",
+      "hash": "sha256:60a1c6a9776dcfbe0ddc94ece884daebab0d8d1af8727ad2685fafac7715b73d"
     },
     {
       "content": "headings",
@@ -4518,7 +4528,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#31",
-      "hash": "sha256:820a34d0689ece540a87159fe2c7848720f2c269f932e792441dcf0039425669"
+      "hash": "sha256:ff6ae5f4677cde0019ddea1dab516d03811a7c7bc8f96fef9a0095fe03791db9"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#33",
+      "hash": "sha256:2c96d9d937cd08c77a1f9c32c3cd98fe818a0c2d28289bb908134f31d2a921a7"
     },
     {
       "content": "headings",
@@ -4558,7 +4573,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25",
-      "hash": "sha256:cdb711ac2f013b40dede5599be0a43ff4061621fd8304e4869c3ddd19e09f356"
+      "hash": "sha256:3f15dfefbf8eade448a1a21daad7b00c69f140af9579426745894b0b1dae245e"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#27",
+      "hash": "sha256:0e49755802e59ecf1f94473a3556b3e60b1201c8dc2da7a00315ad618f655e57"
     },
     {
       "content": "headings",
@@ -4678,7 +4698,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#28",
-      "hash": "sha256:9d0216e4cade62c7abd676e357df5344b1daeb1abf11264cf8cb9c4398e98746"
+      "hash": "sha256:7ffe0f9ba1ccaeae577eb093ddce370fc43a4e963a92a22fbb1dadf5074a917a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#30",
+      "hash": "sha256:efb1976870a279ee2901ed1ac78038923a26d8e50b7f936f0966b32156c7756e"
     },
     {
       "content": "headings",
@@ -4708,7 +4733,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#18",
-      "hash": "sha256:4e041d27514b96db11abf64559b51962f9b78f84b1af3777eb7c4847a24cb561"
+      "hash": "sha256:d83f1876c4cced67d89c4fa802216e493a6fb60d110d4d588d96cd496da0fc02"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#20",
+      "hash": "sha256:822798776809f40300a71fb68a5137465e3ce89bd3644536f8b66ea9a68b97ff"
     },
     {
       "content": "headings",
@@ -4883,7 +4913,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#27",
-      "hash": "sha256:c03380ec000b16a3c9e1942d414a573202557981d3091ec0891ad38b8a8555da"
+      "hash": "sha256:0d1739d9f166fbcd5ac546ee420388ba4d83cf5641043571a60fdc150f4fc9a2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#29",
+      "hash": "sha256:9921aaf378575673310de58ea0ba3c5144f5af1bae08607047aa182957075b65"
     },
     {
       "content": "headings",
@@ -5678,7 +5713,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#24",
-      "hash": "sha256:6b3714073168bef372e8a2fa6f9e8ee047d8bd5d73cf6669fb50ff041b8f1078"
+      "hash": "sha256:f9507dbfef4abbef52941e0840c8eff1085a75eaa526137e6176a056c9bcf580"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#26",
+      "hash": "sha256:522360016d0ac3e9beb130a0918d9fe7137dfcba84266c7f1246830200ca73c8"
     },
     {
       "content": "headings",
@@ -6549,6 +6589,11 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#17",
       "hash": "sha256:861b584e2cc9c8a646d999e6cf7d0e59c87f8c05c16f03ec748729ba608fcb3c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#22",
+      "hash": "sha256:977df22e3217ddb5fff403d7efd6bea873614a18dd4b402fa0ece3196624a176"
     },
     {
       "content": "headings",
@@ -10533,7 +10578,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#33",
-      "hash": "sha256:009196650b4507cc90e7782b209765af896faa1492051dee35a432c9afbdd01e"
+      "hash": "sha256:ca3fe72de1c9764d676c63720a802e93da35d5077740fe3b6a5e9a203e67b4e7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#35",
+      "hash": "sha256:8570c17438b9cad49d6b45c627ef0f803e7328f29e7130d42ec5d14a96c7746b"
     },
     {
       "content": "headings",
@@ -12063,7 +12113,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#14",
-      "hash": "sha256:6d16468ae57c18412176323505905b2a6100675cf47b5ca3013317d2e8d6f114"
+      "hash": "sha256:37fc3bbff6e296e8a26f24aeb7410072e43fe18d164e6bf880a448e371c05c4d"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#16",
+      "hash": "sha256:18d6ae58edc68f53f619d05f47d3228a49ae4f17cacc8bf0915d754338619965"
     },
     {
       "content": "headings",
@@ -12563,7 +12618,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#15",
-      "hash": "sha256:0a572a0bea627e7cf59cdd91b47f651fff081974091e095253bd3002b457862b"
+      "hash": "sha256:39efbda6b8f7024653ce60e6cd837a86d8ce2522bb43a637e3cc998ec084aa2a"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#17",
+      "hash": "sha256:fbc3da93e553189bda3c75d776215bed61b02cdfe60346361fd7380fbc91cfb7"
     },
     {
       "content": "headings",
@@ -12638,7 +12698,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#21",
-      "hash": "sha256:c8a0feb3e2ca0085782e66191825ff62dbf977c40d290a6ebdbc33e50c53da74"
+      "hash": "sha256:bfdce8e7a44e4b19245d0c9b71270ed849283238b0dac14eb952efbb6d0e9cb4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#23",
+      "hash": "sha256:08ee27fd4fee5a7c148ad20985a600c2fa3e6e62315f3380afe71bb48c592613"
     },
     {
       "content": "headings",
@@ -14287,6 +14352,11 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#27",
+      "hash": "sha256:96a682aa0381ace1801d52d3da9d065e85d1dc6b292c2ef27169f25ee9392a03"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#1",
       "hash": "sha256:a94a015f57343ab0ef4fc2feae5730f8a377439af41f453e81c7f04d5afe6e99"
     },
@@ -14343,7 +14413,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#28",
-      "hash": "sha256:84f82c88b69cd7198c81a2102aa99a5f9e607ce0d54f0a70af1ef6d6bb30bc0a"
+      "hash": "sha256:a47bf167e398abb0d8c0fa3e2deb48051a19fcd76baa526cbbd4bfc5f858040b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#30",
+      "hash": "sha256:1a43bbe5fa3688bf2553ce914fd97c44e794f69a7c3a841a6d18ddda516a6bc0"
     },
     {
       "content": "headings",
@@ -22048,7 +22123,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#6",
-      "hash": "sha256:6ff64db68e20329b5ad07a99c6bebc3cfc579bf1f89eba407dfa7e13b4be0c14"
+      "hash": "sha256:a2352fe19539bd478f435b47c5ed4459ad4eaf5b27e0c686877da1325064ccd2"
     },
     {
       "content": "blocks",
@@ -22068,7 +22143,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#10",
-      "hash": "sha256:2eb39d4c79859c336e42ae58b0b4cd0f5bce6f39cc14d1352537db0c6caa8a85"
+      "hash": "sha256:aa1ad13a86bf1bd09f13429eb09d7a64a113d5033245907e9b48975811a5d756"
     },
     {
       "content": "blocks",
@@ -22113,11 +22188,21 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#19",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#20",
+      "hash": "sha256:499244746cc52d578c70a2437b4ee4dcf8bcb7d097e7fed30e5c49f9d405e4e3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#21",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#22",
       "hash": "sha256:cb0901e93279e531d39368618e025e54e22e1fc8a43de5b197c1a5a23ae2c6c7"
     },
     {
@@ -22468,12 +22553,12 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#6",
-      "hash": "sha256:afb27b2f9fc66349690b33927aa98aeac92ad2b1068d114d59c30c883dd8f2dd"
+      "hash": "sha256:85eeb4597624a2d3b206fbdbefa28213b2e5c09364d6e6935e1a7dd8b1a73312"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#7",
-      "hash": "sha256:de83d5cfc7ab48c6f67eb1fbee40259ba2e344a28d57f39644eccafa753d908b"
+      "hash": "sha256:833948aa4d407c85713a82de43497b6a467edc717a4686d5e2cedb28238042ba"
     },
     {
       "content": "blocks",
@@ -22543,11 +22628,21 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#21",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#22",
+      "hash": "sha256:8745dff1ece35682010d7fada9d5a23ccb5f67d05d2e2e2bad74b24ed5a3a177"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#23",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#24",
       "hash": "sha256:2c7613e110e6bd36a471654cd8f8900008c4f862f20cda5e4848d3e60ea734c6"
     },
     {
@@ -25938,7 +26033,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#25",
-      "hash": "sha256:ece0a7c605894f39ab631704d8be4bf344575ba13c784ac3e9ddcb25ac4abb27"
+      "hash": "sha256:1c3cda95500ba0703a1d898e616a183b4398b442eccacdd0591dec15f270afd4"
     },
     {
       "content": "blocks",
@@ -25968,12 +26063,22 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#31",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:f44747cb2e9506def151f1dd0921425109e4fa701d3774182719cc73b6f380ca"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#32",
-      "hash": "sha256:f056a06ebec4bf3bd95010acd869d356fedc2fdea9a76a8efeeb96d5b2cdad28"
+      "hash": "sha256:3dbdbe257a807edbcf117a77e5e180b2cee8c36019c8a34ec08ab42b9508f7bd"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#33",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#34",
+      "hash": "sha256:f3baf6c90040ed979e2440973f67ef5c4d1a8660eec2290ba726b604b5a41917"
     },
     {
       "content": "blocks",
@@ -26008,7 +26113,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#7",
-      "hash": "sha256:9f61772cc12f028926c446d3c1a4f7443aae2e6552eb6314e5b8af4bb156289b"
+      "hash": "sha256:fd6b267c3e906178ee42a752912f8b4f5f3e6484adc7840174c7bbd39f59b488"
     },
     {
       "content": "blocks",
@@ -26083,7 +26188,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#22",
-      "hash": "sha256:acd57357bebf96b553af8f945290921c4556b3b09bc56ea1f995b045dc77a6aa"
+      "hash": "sha256:8e143520173e202b3f36e8e9e78008b5495c3c8cf19fc81dfcd90e33827b9aea"
     },
     {
       "content": "blocks",
@@ -26098,11 +26203,21 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#26",
+      "hash": "sha256:614754a9742e4477458fabc9a9d36761921800a54b37b51967e2c9befdb0b190"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#27",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#28",
       "hash": "sha256:2e9df8a4850da939095a46f03c3f4340ee18a3c84053d23353d9a98efce0eb05"
     },
     {
@@ -26448,7 +26563,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#8",
-      "hash": "sha256:69d468110d366e359be8d348c86fa2ffafb949abd2128c712431e50cf65014f1"
+      "hash": "sha256:4b5e224e51e80879bbee4a03599ae8f05f2eaf91b2e153581764e4d39c338ab2"
     },
     {
       "content": "blocks",
@@ -26478,7 +26593,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#14",
-      "hash": "sha256:e5134fe3e4459ace17ba3ffb718cac8e5d037c678d95544eda443ccddbe0a0e6"
+      "hash": "sha256:c6236d7c19080ea608a652317e8690c0fbbc6658e7b8cc08e1fb835815ea4cb6"
     },
     {
       "content": "blocks",
@@ -26548,17 +26663,32 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#28",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:f44747cb2e9506def151f1dd0921425109e4fa701d3774182719cc73b6f380ca"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#29",
-      "hash": "sha256:2dc713fc577fb07d4996b69def9b5c58a0b6ba9bb014bdcfb5e20a5e899a0116"
+      "hash": "sha256:c5d7ffa400f4bd31deaa64d2a24bf6e14c74bc84aab1491f67efa4ba5dc62f5c"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#30",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#31",
+      "hash": "sha256:2dc713fc577fb07d4996b69def9b5c58a0b6ba9bb014bdcfb5e20a5e899a0116"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#32",
       "hash": "sha256:77c78db7a24e9c18f2d6df12497742ec91c1ef3aa4ce9bbcae04a86003e111c5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#33",
+      "hash": "sha256:d87a929171000758abbf911429fcabe62a2ef3fe1c629edec23a7fc198ec8e81"
     },
     {
       "content": "blocks",
@@ -26603,7 +26733,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#9",
-      "hash": "sha256:631084376c609e4b555eda2da79812679ce807f28e14e679227b2b18854169ea"
+      "hash": "sha256:09dbffb950663a14736f01794fd77a70118e6016931f3c91ebede30600b85113"
     },
     {
       "content": "blocks",
@@ -26613,7 +26743,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#11",
-      "hash": "sha256:8e2301c2f88e5f8b9dbb6af1940c9bd7effd5f6dd115574aa9f33139ea1ceb24"
+      "hash": "sha256:b0711d2c5682ad2f36f9a1e57d24a3e7d98d35a11469818aa7d636f007d40303"
     },
     {
       "content": "blocks",
@@ -26648,11 +26778,21 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#18",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#19",
+      "hash": "sha256:a907daa04dc80107f3e4d09a0a51efb35e44843debf4ca443ef127c9c5ee1b4e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#20",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#21",
       "hash": "sha256:9e1f1bba7473ae1d51568db28cf1853074c501640026b1d95f09b90c302a9cdb"
     },
     {
@@ -27258,7 +27398,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#13",
-      "hash": "sha256:60c2fd3e00346abb851afad88902f7fa315fe5d50fda5bcd7d60566948138ded"
+      "hash": "sha256:10775413e77c73d441610f9b2c37cce6839a05c99d225e2151b81cd9d24bdf7a"
     },
     {
       "content": "blocks",
@@ -27328,11 +27468,21 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#27",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#28",
+      "hash": "sha256:f9cb0290e4aeb6f30c7ec8d2c59d4136e60dd01bd9348193ff40d8aab1e35cdf"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#29",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#30",
       "hash": "sha256:0485c480fbaa4e25e5c05a61538c9b0285efb0353c47ee34c9f72d52acf8d444"
     },
     {
@@ -30198,7 +30348,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#21",
-      "hash": "sha256:a5ffa27d316e000a515bbdd1699c8bd805b7ac6102863e2a627cc57650d7c22f"
+      "hash": "sha256:418770f12a272ca122dee77844b3e641be379fdbecddfbe2807d03915ea118d0"
     },
     {
       "content": "blocks",
@@ -30213,11 +30363,21 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#24",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:21517c84c62b23e80c32319d40f5c9fe1e1fad0b05e70b105efb16f079f58391"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#25",
+      "hash": "sha256:6ccd87adc55944bdce117849873b15f171efbd32d5fe6e7730a4276173f3f1ef"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#26",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#27",
       "hash": "sha256:dd0803705b8dd7b9997548e4dde4d1dea135a498b69a8ceafae30000a6576e5c"
     },
     {
@@ -33448,7 +33608,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#5",
-      "hash": "sha256:cf872b938b0f7c4e67157464b73db5ee920516c2a39239d0117bab09167e4844"
+      "hash": "sha256:f9fcb51864d7a4bfb8ed8e7b17eefd414daedd8196201d5952fd30865b3abe32"
     },
     {
       "content": "blocks",
@@ -33529,6 +33689,21 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#21",
       "hash": "sha256:f2f758564d15e77791dc5c15ac6e96d52e4bffaef79b3a02b9df7287d054aa32"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#22",
+      "hash": "sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#23",
+      "hash": "sha256:6a88b81db7d15b8dedc74c7c3be3c865bd63e8ff9f8f88daad3b4f5f4b3a9c7b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#24",
+      "hash": "sha256:e32f60d197f17528e527e8a9d35c8da240b044a9656b1fa79ecd8acde94a4bc3"
     },
     {
       "content": "blocks",
@@ -48043,7 +48218,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#20",
-      "hash": "sha256:7367545990db54cd737ee866dc1c12cb28ce778130257212e3c1e7260d456caf"
+      "hash": "sha256:e8f3fae9cffb4189eed16e07f3be1eee677b645bd2a79218862a81c0d62e0822"
     },
     {
       "content": "blocks",
@@ -48108,11 +48283,21 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#33",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:21517c84c62b23e80c32319d40f5c9fe1e1fad0b05e70b105efb16f079f58391"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#34",
+      "hash": "sha256:ad9a5bdf87ce02151fa2412131887d3efa2dbb5c6a88878cc32dbf5a2ce5199d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#35",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#36",
       "hash": "sha256:03a85d752702f84e2ce9f7ec78da6eba1bb9baff36382862b6777d6f1565029f"
     },
     {
@@ -53813,7 +53998,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#6",
-      "hash": "sha256:ab52330f2214e8be9b387c4cdcf4504b1d8a1b7c70ca35c3e2744aa43f002ac8"
+      "hash": "sha256:6381a6b599a26b253ac2cca15b508ab883e6f42cdca845a00114d8b770f839dd"
     },
     {
       "content": "blocks",
@@ -53853,11 +54038,21 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#14",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:21517c84c62b23e80c32319d40f5c9fe1e1fad0b05e70b105efb16f079f58391"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#15",
+      "hash": "sha256:cfbe66dc523a866215d4d4bf3df5148d7d0cab995c9db5e3a7321ec54b1a404d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#16",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#17",
       "hash": "sha256:8695c30d14efc5702f335eb5ab7273105dbd0c887570774122c042a96a9e27bd"
     },
     {
@@ -55533,7 +55728,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#6",
-      "hash": "sha256:bbabbe6fe60ec01225cb62993c007e83e7103eff93fc22d320c05439e502632a"
+      "hash": "sha256:a3e22c92cb909777d98d5e2132134beaee9e39a3a7865253a12bda259baf1aef"
     },
     {
       "content": "blocks",
@@ -55578,11 +55773,21 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#15",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#16",
+      "hash": "sha256:cd7d9a5f658217025754774b3cb29890dad05b24e8aff934965b8d617af0a503"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#17",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#18",
       "hash": "sha256:c0d2e9482b993beebbee813f801d24e18320e86a63d7a258d43c0c0ca445e14b"
     },
     {
@@ -55738,7 +55943,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#3",
-      "hash": "sha256:79fc6356e96e662dcec09a0814fa9c59c38132460c23c4002fd05887dfbe01c8"
+      "hash": "sha256:31e1f466e5d58864fdde3cf184a60f7a3e9c49f541e4e103fcd74451a224158e"
     },
     {
       "content": "blocks",
@@ -55768,7 +55973,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#9",
-      "hash": "sha256:148cda94ba713c0687c95477f68c75a3d41dc34f0e8ad16d8210ad869537adeb"
+      "hash": "sha256:1fc420708f6fb9e1edc8cf0361c69c1c5727a4aa56da6c49100561d7f976bc57"
     },
     {
       "content": "blocks",
@@ -55828,12 +56033,22 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#21",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#22",
-      "hash": "sha256:b3a2b3505e31ee9fcf45053e5afadfa8c25844a1b8e32eda8d5176abfcf8fd64"
+      "hash": "sha256:846b61de0a4ded0a0fcf6f00b1a1ecaa915f36c5ca90fd50376e272552afde0d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#23",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#24",
+      "hash": "sha256:8cb2e7d2a828660afc29713f59b8e053e20e289dca7b39480701d0d182b48c20"
     },
     {
       "content": "blocks",
@@ -61778,7 +61993,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#10",
-      "hash": "sha256:3730477590d9dbd4995f47a7e80301223141ca7002b24e016f68967b391dca86"
+      "hash": "sha256:6eb6522d48dfc59f7c7a1a77d5c7e52d26e7bc81eea9cc18d83a2802dbc2f77d"
     },
     {
       "content": "blocks",
@@ -61862,6 +62077,16 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#27",
+      "hash": "sha256:0c82e6acc9d722548847ff9ddb90b4e07af410f8db120ed1b1f4a9b163c6eab0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#28",
+      "hash": "sha256:1b7bdb125d5bf9f1613555e339a64ff4c76d62eb0fdd797928c907d6f54b8c15"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#1",
       "hash": "sha256:18bde830e47457a54d9ed472b7bf7164b3f784bfd5abb6ac4bfafeeb778b8dd8"
     },
@@ -61888,7 +62113,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#6",
-      "hash": "sha256:95e6c7560cde29161b1faf078076d5453c15c8d285498646b543c0074049bbae"
+      "hash": "sha256:1e8a1ec749c7132e797ef603d43ca7a43c3f08ef5d49d02407c1c8ae132fb5e7"
     },
     {
       "content": "blocks",
@@ -61998,12 +62223,22 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#28",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:07b51aea2c1084dec077f5bb8d7042f36c532c5d7e0237880919b05dee3318b6"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#29",
-      "hash": "sha256:873d0fb024c147c4fff23631c488e79bbc0cedf7f5ce970e0f028259538b4e1e"
+      "hash": "sha256:8a6de8e7ef0392e64b2e582c393379ef696d3609657f64d4ea239dddee316ede"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#30",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#31",
+      "hash": "sha256:4bbd400b82020f84abc97479b5bd71191390245dff48921f4dedafaec3a9ac19"
     },
     {
       "content": "blocks",

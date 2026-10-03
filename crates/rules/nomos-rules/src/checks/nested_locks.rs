@@ -32,7 +32,7 @@ pub const NESTED_LOCKS: &str = "nested-locks";
 pub const NESTED_LOCKS_CONTRACT_RECORD: &str = "OD-RULES-010";
 
 /// The version of [`NESTED_LOCKS_CONTRACT_RECORD`] this implementation was written against.
-pub const NESTED_LOCKS_CONTRACT_RECORD_VERSION: u32 = 2;
+pub const NESTED_LOCKS_CONTRACT_RECORD_VERSION: u32 = 3;
 
 /// Judges each analyzed crate's one `nomos.cap.rust.nested_locks` fact, if `sources` names
 /// one, against the real compiler-backed analysis that produced it.

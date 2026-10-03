@@ -3,7 +3,7 @@ id: OD-GATE-017
 type: decision
 title: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - gate
@@ -168,7 +168,7 @@ were updated: `Run_Gate` passes `command.rules.include`, and `Explain_Gate` pass
 preserving its documented independence from `command.rules` now that a non-empty selection
 narrows computation and not only disposition.
 
-A counting `ProcessLauncher` test (`Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_
+A counting `ProgramLauncher` test (`Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_
 Metadata`) proves the skip is structural: zero launches when `DEPENDENCY_DIRECTION` is not
 selected, exactly one when it is. This is the evidence a findings-only test could not give,
 since a healthy repository's `cargo metadata` call raises no finding on success — "deselected"
@@ -184,6 +184,16 @@ from `check_outcome` entirely, because `Run` was never asked to compute it.
 be "a separate, larger item, not this one," was corrected by `P14-RULE-SELECTOR-DOC-STALE-2` to
 describe `RuleSelector`'s real, current role: naming the same selection `Run` itself now reads,
 plus the narrower disposition filter it still applies on top for whichever rules did run.
+
+## Amendment, Version 3: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the counting
+test in "Built: Verified Directly Against The Real Code", now gives its current name; the
+double that test counts launches through implements it under that name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
 
 ## Status
 

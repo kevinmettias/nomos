@@ -3,7 +3,7 @@ id: OD-WORKFLOW-002
 type: decision
 title: The workflow tier's second increment has not arrived since RunId's first consumer shipped
 status: accepted
-version: 6
+version: 7
 authority: canonical-normative-record
 tags:
   - workflow
@@ -58,7 +58,7 @@ Read directly from the live tree, not from `OD-WORKFLOW-001`'s own description o
   function `OD-WORKFLOW-001`'s own amendment already corrected an earlier draft for
   conflating; read in full, it runs the workflow's own `Lint`-step argv and then its
   `Rules`-step argv, `OD-LEDGER-003` version 2 saying what a finish runs, through a bare
-  `ProcessLauncher` with no persisted or correlated executions anywhere to give an identity
+  `ProgramLauncher` with no persisted or correlated executions anywhere to give an identity
   meaning against. Giving it a `RunId` now would manufacture a second consumer rather than
   find a real one.
 - `nomos-cli`'s `gate/report.rs` still does not print `result.run` -- the same boundary
@@ -232,6 +232,16 @@ made the change. Both points stand exactly: the function is distinct from and un
 `Run_Gate`, and giving it a `RunId` would manufacture a second consumer rather than find a real
 one. Nothing else here is changed.
 
+## Amendment, Version 7
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the launcher
+the second bullet of "What Was Measured" says `Run_Gate_Steps` runs through, now gives its
+current name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing else here is changed.
+
 ## Status
 
 Accepted. Re-surveys the workflow tier against the live tree and the v14 corpus a second
@@ -249,6 +259,9 @@ withdrew rather than replaced what this record's earlier amendments said about c
 2. Amended a fifth time, at version 6, by
 `P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS`,
 which gives `nomos-ledger`'s runner its current name and says what it runs, and changes no
+finding. Amended a sixth time, at version 7, by
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`,
+which gives `nomos-platform`'s launch port its current name, `ProgramLauncher`, and changes no
 finding. This record's title is version 1's question and version 1's answer, and it is left as
 written: what has arrived since is recorded in the amendments, each dated to the record that
 made it.

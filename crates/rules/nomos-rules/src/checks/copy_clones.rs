@@ -39,7 +39,7 @@ pub const COPY_CLONES: &str = "copy-clones";
 pub const COPY_CLONES_CONTRACT_RECORD: &str = "OD-RULES-010";
 
 /// The version of [`COPY_CLONES_CONTRACT_RECORD`] this implementation was written against.
-pub const COPY_CLONES_CONTRACT_RECORD_VERSION: u32 = 2;
+pub const COPY_CLONES_CONTRACT_RECORD_VERSION: u32 = 3;
 
 /// Judges each analyzed crate's one `nomos.cap.rust.copy_clones` fact, if `sources` names
 /// one, against the real compiler-backed analysis that produced it.

@@ -57,10 +57,10 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md@authored | docs/records/OD-CAPABILITY-009-whether-registry-resolve-owes-subject-partitioned-same-capability-providers-a-rule-beyond-guarantee-strength-ranking.md | authored | 36 | 10 | sha256:ebe2fe7a455f06f27dc6a52e573aa98fa57e7b1eb29feb90173c84a3ff266dee |
 | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md@authored | docs/records/OD-CAPABILITY-010-the-first-cross-language-capability-compares-two-providers-declared-fields-against-a-doc-comment-declared-correspondence.md | authored | 23 | 6 | sha256:49347b91e13b7f953160008054dc9e028aef8b1893f14bafbc8e4121ee8b623c |
 | docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md@authored | docs/records/OD-CAPABILITY-011-whether-the-syntax-payload-carries-a-typed-tree-or-a-flat-item-index.md | authored | 21 | 8 | sha256:97fc27d295d43e88affe791ed4c4facc80e3328cf91125949ee80de1e1bff5c7 |
-| docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md@authored | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md | authored | 20 | 6 | sha256:88d25ef06103ea7b630b4cf9e09748244421ae9d293d1030f63bed54f2be8850 |
+| docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md@authored | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md | authored | 22 | 7 | sha256:ccd6466a3be4ee5a9b4f87f5030e73a22d28e5e4a1c2677dee4c6ab1919df880 |
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md@authored | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md | authored | 41 | 7 | sha256:7a5af04266fb486d5a88e9fae2faf7e8f0e5f8d8095f03bcc1aef804a4950ded |
 | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md@authored | docs/records/OD-CAPABILITY-014-an-impl-blocks-own-generic-parameters-and-the-syntax-payload.md | authored | 23 | 8 | sha256:33f282b8156d4f3dd172d5ee4c250a2cb2d4efb04987e2efcae89ba263371d43 |
-| docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md | authored | 22 | 6 | sha256:c73b6568e987da09a2256a0e13c66b1d768911f443b0fa014c71ff319d11591f |
+| docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md | authored | 24 | 7 | sha256:a055889e6b1536992abe2fc7ad5b0e0c497881a0cba9c22c235ef7881b4198e9 |
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md@authored | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md | authored | 27 | 7 | sha256:cae971023f2e38fc400fcb48c0f851cf958af99faf124d0caaba5d34226ee492 |
 | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md@authored | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md | authored | 54 | 15 | sha256:5469cacb65cde974eea5a5afa21dcf4f8d376eea74c7bbabc3abd161709b3c66 |
 | docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md@authored | docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md | authored | 74 | 19 | sha256:2f152113620ebb40f7225e157c243f2cdba4da69eedf4ce541de843391ee67b9 |
@@ -82,16 +82,16 @@ profile: domain-specification
 | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md@authored | docs/records/OD-CORRECTIONS-002-validatedplan-commit-requires-attached-evidence-closing-agt-exec-004s-real-gap.md | authored | 14 | 6 | sha256:e55bd46b259be4c661ac4bb95475cd427ad66c783465edae129bac816f1ababf |
 | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md@authored | docs/records/OD-DETERMINISM-001-a-declaration-proven-only-behind-a-corpus-gate.md | authored | 26 | 7 | sha256:b080a464d0e59ac731e8b78eb0104aeed978958713f99969d1506ebbee92802e |
 | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md@authored | docs/records/OD-DETERMINISM-002-the-last-two-rows-declare-and-the-guard-stops-asking-about-facts.md | authored | 35 | 10 | sha256:14dba5ba489a39e4b5605d97a5eb1389a55a6f0efa07f1aa076ccd5dece46428 |
-| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md | authored | 32 | 8 | sha256:332c3b7ae159ba13d0b1d176726607b8369f9b5af249de17d98d9507254ce7bb |
-| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md | authored | 26 | 8 | sha256:8ab68673889fed19383159068abd89c4b4dbbd6a59aaa336cba463bab3dfa96a |
+| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md@authored | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md | authored | 34 | 9 | sha256:674d306b325289576b7177647fb389a9b2717cc189538c185f765e76bbab44ca |
+| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md@authored | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md | authored | 28 | 9 | sha256:7bc9ad7b7b532630fd3a5eab25962f7192ec08c8f889187c9077b340dc1937b6 |
 | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md@authored | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md | authored | 20 | 6 | sha256:7df87ca12c60f9dd7d6ae9fcaf59727dc8f7784a93c1ea13c4424fb80603050c |
 | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md@authored | docs/records/OD-EXECUTOR-004-a-second-real-agentexecutor-backends-capability-boundary-is-measured-against-its-own-mechanism.md | authored | 41 | 10 | sha256:4d758b7adfe3567f1a598ae3420e6d6456f8f599c4cd77a70e5aaa1ee1b88677 |
-| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md | authored | 30 | 8 | sha256:916a39a52f82246093b826b001599901d077eb7c8411f1f9f3ca26a54919ff0e |
-| docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md | authored | 19 | 6 | sha256:0c2b9021270c0e484742945479352a8b2d9d573056158e27d377c6f56433545d |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md@authored | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md | authored | 33 | 9 | sha256:429a77822a0e20360498f264b3e8d9e678f0ab0ae8f4ed1c20a4c262e3f976f3 |
+| docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md@authored | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md | authored | 21 | 7 | sha256:a29dc79123b403794efe92f2463e1e25f1e59c501fe0c7c9a4ace538660346ff |
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md@authored | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md | authored | 33 | 10 | sha256:18f2bcc0477037187c4a722ef94ad4fa8b00ccd599e4379efa8fe014e95b84c2 |
 | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md@authored | docs/records/OD-EXECUTOR-008-a-canonical-workresult-carries-only-the-fields-a-bare-prompt-executor-can-honestly-populate.md | authored | 19 | 6 | sha256:2b4a9d2bb3daa50e11f78a921b819c109cbcab767766c84970181f3873081454 |
 | docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md@authored | docs/records/OD-EXECUTOR-009-knowledge-context-cannot-bridge-to-a-peer-that-has-not-exposed-an-interface-yet.md | authored | 56 | 11 | sha256:a015f8c96844d5f3d7728441fe03d437be9e643334eb68b138b233a5f2504fb3 |
-| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md@authored | docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md | authored | 28 | 8 | sha256:dba922686a9cf559ae030ecfdf641ba31655c6d3f805eb49ea32ab74fd1a7cc0 |
+| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md@authored | docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md | authored | 30 | 9 | sha256:b2d83d0e292146cc9b2c2b99c71f3c06e1dc1aa5bd0708b17bc5da22e6b86a96 |
 | docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md@authored | docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md | authored | 38 | 7 | sha256:c38636cd2f8d85b5879ccd0ec228067815e3aa00855bf6a86df74aa146414f88 |
 | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md@authored | docs/records/OD-GATE-001-a-skipped-test-reports-ok.md | authored | 30 | 8 | sha256:ede1d73ff937b80913dd5c6fd4d7d5cc70cb8158b29e13bfe003ae5cd5f805d5 |
 | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md@authored | docs/records/OD-GATE-002-the-surface-check-is-derived-here-rather-than-by-a-tool-nobody-has.md | authored | 40 | 10 | sha256:f575d9c0d6aa6db2583119e05e1bf80eeecbbd0ae74cbc984f681a1677b77409 |
@@ -108,7 +108,7 @@ profile: domain-specification
 | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md@authored | docs/records/OD-GATE-014-whether-gates-scopeselector-and-ruleselector-are-built-now-or-wait-for-a-caller-that-needs-to-select-less-than-everything.md | authored | 21 | 8 | sha256:fde76ddb443213fdd5c253144550e72aa60a127201be1c067156bd52c9a071dd |
 | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md@authored | docs/records/OD-GATE-015-whether-gates-baselinepolicy-suppressionpolicy-and-adoption-configuration-are-built-now-or-wait-for-a-run-verb-that-can-observe-their-effect.md | authored | 34 | 12 | sha256:3f9a8dc63ea44ae7b2ced612ba58b62590e3240954555ba9ce43331f6157366b |
 | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md@authored | docs/records/OD-GATE-016-whether-gate-needs-a-coveragepolicy-that-lets-unsupported-or-unanalyzed-scope-affect-disposition.md | authored | 20 | 7 | sha256:0c813c23245ff0e95b51d6914c67d7ab36ae6d18b05e2bd82bd69892016f969e |
-| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md | authored | 25 | 7 | sha256:6b6d9f41076761c1a5af15719547c1b28ab365e7b4e46ba305c59bc4de3a71b5 |
+| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md@authored | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md | authored | 27 | 8 | sha256:de9b25c004d64f0a585ad1b78ffae21cf8aaaa15e7771b4fca9a18b938dc8f8a |
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md@authored | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md | authored | 28 | 7 | sha256:d7c3436fe262ca6a9eaa4ceb5dc835f3e134a390855992f4ccea26a1dbf156f3 |
 | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md@authored | docs/records/OD-GATE-020-what-the-gate-rule-registry-means-now-that-run-composes-fifty-six-rules-and-the-registry-offers-eight.md | authored | 24 | 6 | sha256:a1950bc3193e80ab3048937686ee5af16afe5f70f160c318aa0fad2915067313 |
 | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md@authored | docs/records/OD-GATE-022-a-compare-caller-needs-a-decided-shape-for-the-two-runs-it-diffs.md | authored | 21 | 6 | sha256:5e4ffc056879a2325a78cf957dd7e176cd0a0ebc73c27b1b2a8d90553bd65891 |
@@ -126,7 +126,7 @@ profile: domain-specification
 | docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md@authored | docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md | authored | 58 | 14 | sha256:528219d58bda1a9efeb7425b58b3b50c2cb4c07248e24ef4831d025437ac5fb0 |
 | docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md@authored | docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md | authored | 53 | 19 | sha256:d5215058d7f65cec946dfe10df3d3ee35775ac02c55a286a39fcbd70754f507a |
 | docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md@authored | docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md | authored | 69 | 21 | sha256:9512544fdc340597ae13de790c71bf864407d37633b2876b44830c8fab9e17e5 |
-| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:0336dd5172d90b1888f06079931f9a27993ad8b74311d418f72176a48313e4b6 |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 24 | 7 | sha256:fe9653cce306810856ebecedc4344abc0c63a756a272dd3a10b2b83a7d7eddad |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:094b9b669979aa12c48d67b684633c326aa16c9e9977fc7ad53cef019da16204 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 28 | 7 | sha256:dc4dc8bcc47a33cb7bff0b99a6e4b37ac79e0de64b9d77d8d1f3ec561e0b2b88 |
@@ -207,7 +207,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md@authored | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md | authored | 82 | 22 | sha256:61ddb46fc6dbd488b1eb221ac07a3dbcfb009b06fedb1b7b4533dbb3c66057d9 |
 | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md@authored | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md | authored | 56 | 14 | sha256:0ffc8479136943b0a3335a0042a996e0a028e3811b1ebcdca9228da7bd7e458c |
 | docs/records/OD-PACKAGE-018-a-language-package-declares-its-recognizers-and-a-tool-package-declares-every-other-language-provider.md@authored | docs/records/OD-PACKAGE-018-a-language-package-declares-its-recognizers-and-a-tool-package-declares-every-other-language-provider.md | authored | 33 | 6 | sha256:41f36a3dde922dc64b8660e8431d635c31516742bbbf65aa1deb205bcdf2d34c |
-| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 34 | 9 | sha256:871e1ada836924e8fad8d9f05a7badd9349eefb18e90e0157a28ac34879555d0 |
+| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 36 | 10 | sha256:eaba3df0bc0e83a8c0babf7e555ec6179be7d951551d1a58a0072b2c7174fa18 |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 35 | 11 | sha256:b3ab7e036dc1ddb881cefaa3f9187a2d3c886e0e0102d94a48b4dba487ae17f7 |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md | authored | 40 | 8 | sha256:54dd8e341f63882f74fca31d11cc939e8bfec1033fe8ba3e6fcbf6a156689166 |
@@ -236,7 +236,7 @@ profile: domain-specification
 | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md@authored | docs/records/OD-RULES-007-whether-heterogeneous-rule-populations-justify-a-rule-program-ir-and-global-compilation-or-wait-for-two-that-need-one.md | authored | 19 | 6 | sha256:7f6c05ffa09f693ecfe8e7c14699257a1fe01da3a07c0614b09f227fd5be986b |
 | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md@authored | docs/records/OD-RULES-008-which-semantic-domain-the-next-production-rule-needs-and-what-it-forces.md | authored | 32 | 6 | sha256:335f2ed03def8b979a66bf55ff3278c706fbc7e1105bc01a4fd5a1a75cedfe0a |
 | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md@authored | docs/records/OD-RULES-009-whether-an-external-reviews-case-for-building-the-shared-analysis-planner-now-at-p0-overrides-the-trigger-this-workspace-already-recorded-for-it.md | authored | 86 | 19 | sha256:820ad2b4fddaf0f7cae2b107793ae31355a0b6dcf4a4d06240ffc768517ec79a |
-| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 15 | 6 | sha256:a7d5a93cd32ab0b63cbd4218801091e23d8136b7230b0990277a8dcff0f16560 |
+| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md@authored | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md | authored | 17 | 7 | sha256:eccd7012cfcc37ef71a560a30c899793a94664240fea8a2586541833a95156a4 |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md@authored | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md | authored | 69 | 17 | sha256:aa4a8723a0f39f214e7ccea90ee87ef196a4f3fa6db4f6042cc68cf04ee1ecf6 |
 | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md@authored | docs/records/OD-RULES-014-how-a-text-only-rule-states-a-language-restriction-without-naming-a-provider.md | authored | 38 | 10 | sha256:740a2ca81a0ba769b2370b32a0b5af4aeb3647f2c9a141f1ebaf058f08f9f6c1 |
 | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md@authored | docs/records/OD-RULES-015-a-filename-rule-judges-a-module-of-types-and-not-a-module-named-for-an-operation.md | authored | 23 | 6 | sha256:4b0bd63773267478c66835f887728ff0cedb4892a98e85291ed631e1665b53c8 |
@@ -250,9 +250,9 @@ profile: domain-specification
 | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md@authored | docs/records/OD-RULES-023-write-authority-is-a-declared-allow-list-over-an-existing-fact-ownership-needs-its-own-declaration-first.md | authored | 16 | 6 | sha256:ce866cdba1b609d99736475258c51c1342b6274867a9c2e8f8703946cec253c3 |
 | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md@authored | docs/records/OD-RULES-024-architecture-drift-and-representation-leakage-both-need-a-fact-this-workspace-does-not-yet-produce.md | authored | 23 | 7 | sha256:7b0928d6ad02fa3bc89f07460d314ab0a71f65ce0fe9287353bf859b671c5f9a |
 | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md@authored | docs/records/OD-RULES-025-duplicate-authority-needs-a-value-comparison-fact-and-a-canonical-projection-convention.md | authored | 18 | 6 | sha256:5fae2912afd63e5b972bfb20c5579f9d7c0b92ff19a6b4713057b14d3dcb8032 |
-| docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md@authored | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md | authored | 16 | 6 | sha256:66d2427694c21ad26b870820393f14285fbb1678448d0a33f4490a61fd0f1118 |
+| docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md@authored | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md | authored | 18 | 7 | sha256:b6c26baef5e4788ebd3dd78fae27e9cf60633c27bce96a050e0a7b1742fcb270 |
 | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md@authored | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md | authored | 28 | 8 | sha256:39117d389c23989af29c2e24ab96602354fab84b1aecd92e24b19f576eccdfda |
-| docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md@authored | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md | authored | 22 | 7 | sha256:eef4a3f365ef12f634f1fee88c3cf1b2ad45aad74e471e1daf8c8c26603a4228 |
+| docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md@authored | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md | authored | 24 | 8 | sha256:bd8350594de254f0a5c7a976359572f70018df0b0dc957e3c1d08d6f6000dc58 |
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md@authored | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md | authored | 52 | 14 | sha256:194a79f00c4934f15b88c83b104b3eb2e9db06f8b1d94e94886ed5ed9daf9c70 |
 | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md@authored | docs/records/OD-RULES-030-why-the-discovered-source-type-stays-in-the-rules-package.md | authored | 29 | 9 | sha256:c7d51d0052bf5bf9d6198fe75095c23e3079efba7af49973d3e12360dbae7606 |
 | docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md@authored | docs/records/OD-RULES-031-whether-a-bench-to-correctness-oracle-rule-is-built-when-the-population-is-zero-here-and-corpus-only-there.md | authored | 28 | 6 | sha256:178c45747a9bfc80be65983afb89cd9b8caa6f49345f3e8dd5a8c01080a90d4b |
@@ -285,8 +285,8 @@ profile: domain-specification
 | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md@authored | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md | authored | 19 | 8 | sha256:09379db6f9c710a7de0de6a1cb9d749fbdcb23ecbd7f6e25323adb946c14d741 |
 | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md@authored | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md | authored | 21 | 8 | sha256:20584da07fdc54fcdca104e7137bc67b265954ba3734fc8b2d17a9036b2806b1 |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md | authored | 29 | 11 | sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685 |
-| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 26 | 9 | sha256:9bb7ed13803fe54b5bfeff62f658f5c56c9640e58314353494e1450bfefca7e8 |
-| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md | authored | 29 | 12 | sha256:bfc56548ea46e02b123076c8c0763be25b958a643b1eca56f02f8308b173ccab |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 28 | 10 | sha256:23557413d12bd93d096a0643a0f8ec22b68b56da79049d4ff7e7b1570c26bff9 |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md | authored | 31 | 13 | sha256:46aca666e0b6d340fd94e41c5ffebe52f77d1b0cc825e5aa10b2f06e4f69e4c3 |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md@authored | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md | authored | 15 | 6 | sha256:e067ed756ffd159cb17a6fdc76092fd0f3ff664bcc77349204ce572497711c6e |
 | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md@authored | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md | authored | 30 | 8 | sha256:3b219e4bcbe3b032bc1200918f681c31178c8e314636b4283aceff14c9c0cfac |
 | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md@authored | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md | authored | 49 | 10 | sha256:ffe4fe8d9b042b9f639a19983bddbef6c8c38a7550ffe1c21a49055749669ea1 |
@@ -696,7 +696,8 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#8 | authored | 2 | The Decision |
 | docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#15 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#19 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#19 | authored | 2 | Amendment, Version 2: The Launch Port Is `ProgramLauncher` |
+| docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#21 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#1 | authored | 1 | A rule names a tool family and never a tool |
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-013-a-rule-names-a-tool-family-and-never-a-tool.md#4 | authored | 2 | What Was Measured |
@@ -717,7 +718,8 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#5 | authored | 2 | What Was Measured |
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#11 | authored | 2 | The Decision |
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#17 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#21 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#21 | authored | 2 | Amendment, Version 2: The Launch Port Is `ProgramLauncher` |
+| docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#23 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#1 | authored | 1 | The two-direction guarantee check is a requirement, and a declaration names what exercises it or says it cannot be exercised |
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md#5 | authored | 2 | The census |
@@ -914,7 +916,8 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#14 | authored | 2 | Amendment: The Deny-List Was Tested Empirically And Found To Leak |
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#22 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#26 | authored | 2 | Amendment: The Crate Renamed From `nomos-agent-executor` To `nomos-agent-executor-claude-code` |
-| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#31 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#31 | authored | 2 | Amendment, Version 4: The Launch Port Is `ProgramLauncher` |
+| docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#33 | authored | 2 | Status |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#1 | authored | 1 | Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#2 | authored | 2 | Question |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#5 | authored | 2 | What Was Measured |
@@ -922,7 +925,8 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#12 | authored | 3 | A plugin loaded into this workspace |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#15 | authored | 3 | A transport under `OD-SPEC-009` |
 | docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#19 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25 | authored | 2 | Amendment, Version 2: The Launch Port Is `ProgramLauncher` |
+| docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#27 | authored | 2 | Status |
 | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#1 | authored | 1 | The first real WorkResult is judge-role's own verdict, built from an identity Claude Code never has to invent |
 | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#2 | authored | 2 | Question |
 | docs/records/OD-EXECUTOR-003-the-first-real-workresult-is-judge-roles-own-verdict-built-from-an-identity-claude-code-never-has-to-invent.md#4 | authored | 2 | What Was Measured |
@@ -946,13 +950,15 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#13 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#16 | authored | 2 | Amendment: `--backend` Splits Into `--executor` And `--model-backend` |
 | docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#22 | authored | 2 | Amendment: Two Ports, One Per Package Kind, Because This Record Measured Two Kinds |
-| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#28 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#28 | authored | 2 | Amendment, Version 4: The Launch Port Is `ProgramLauncher` |
+| docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#30 | authored | 2 | Status |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#1 | authored | 1 | A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#2 | authored | 2 | Question |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#5 | authored | 2 | What Was Measured |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#10 | authored | 2 | The Decision |
 | docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#13 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#18 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#18 | authored | 2 | Amendment, Version 2: The Launch Port Is `ProgramLauncher` |
+| docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#20 | authored | 2 | Status |
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#1 | authored | 1 | A TaskEnvelope's four unenforced fields each get a decided mechanism, verified against the real CLI |
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#2 | authored | 2 | Question |
 | docs/records/OD-EXECUTOR-007-a-taskenvelopes-four-unenforced-fields-each-get-a-decided-mechanism-verified-against-the-real-cli.md#5 | authored | 2 | What Was Measured |
@@ -987,7 +993,8 @@ profile: domain-specification
 | docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#17 | authored | 2 | The Decision |
 | docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#20 | authored | 2 | What Would License A Third Adapter |
 | docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#23 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#27 | authored | 2 | Status |
+| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#27 | authored | 2 | Amendment, Version 2: The Launch Port Is `ProgramLauncher` |
+| docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#29 | authored | 2 | Status |
 | docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#1 | authored | 1 | A WorkResult cannot say which absence it carries |
 | docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#2 | authored | 2 | Question |
 | docs/records/OD-EXECUTOR-011-a-workresult-cannot-say-which-absence-it-carries.md#6 | authored | 2 | What Was Measured |
@@ -1146,7 +1153,8 @@ profile: domain-specification
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#10 | authored | 2 | Decision |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#14 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#19 | authored | 2 | Built: Verified Directly Against The Real Code |
-| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#24 | authored | 2 | Status |
+| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#24 | authored | 2 | Amendment, Version 3: The Launch Port Is `ProgramLauncher` |
+| docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#26 | authored | 2 | Status |
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#1 | authored | 1 | Adopting code-standards' waiver mechanism for a nine-phase remediation campaign |
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#2 | authored | 2 | Question |
 | docs/records/OD-GATE-018-adopting-code-standards-waiver-mechanism-for-a-nine-phase-remediation-campaign.md#4 | authored | 2 | What Was Measured |
@@ -1321,6 +1329,7 @@ profile: domain-specification
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#12 | authored | 2 | What this costs |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#15 | authored | 2 | What would make this wrong |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#17 | authored | 2 | Amendment: The Port Gained Directory Enumeration, And This Record's Stated Reason Did Not Survive It |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#22 | authored | 2 | Amendment, Version 2: The Launch Port Is `ProgramLauncher` |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1 | authored | 1 | A surface holds no state its canonical services cannot reconstruct |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#9 | authored | 2 | The state families this applies to |
@@ -2117,7 +2126,8 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#19 | authored | 2 | What The Port Still Does Not Say |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#22 | authored | 2 | Consequences |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#26 | authored | 2 | Amendment: One Non-Verdict Was Two Facts Wearing The Same Name |
-| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#33 | authored | 2 | Status |
+| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#33 | authored | 2 | Amendment, Version 3: The Launch Port Is `ProgramLauncher` |
+| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#35 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#1 | authored | 1 | A port that cannot enumerate a directory forces every caller past it |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#4 | authored | 2 | What Was Measured |
@@ -2423,7 +2433,8 @@ profile: domain-specification
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#4 | authored | 2 | What Was Measured |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#8 | authored | 2 | The Decision |
 | docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#10 | authored | 2 | What This Does Not Do |
-| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#14 | authored | 2 | Status |
+| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#14 | authored | 2 | Amendment, Version 3: The Launch Port Is `ProgramLauncher` |
+| docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#16 | authored | 2 | Status |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#1 | authored | 1 | A rule's parameters are a fact a repository declares, not a constant the rule compiles with |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md#4 | authored | 2 | What Was Measured |
@@ -2523,7 +2534,8 @@ profile: domain-specification
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#4 | authored | 2 | What was measured |
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#10 | authored | 2 | The verdict |
 | docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#12 | authored | 2 | What this record does not do |
-| docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#15 | authored | 2 | Status |
+| docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#15 | authored | 2 | Amendment, Version 2: The Launch Port Is `ProgramLauncher` |
+| docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#17 | authored | 2 | Status |
 | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#1 | authored | 1 | Whether Run can derive its composed rule array the way the gate registry already does, or whether that derivation is the planner |
 | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-027-whether-run-can-derive-its-composed-rule-array-the-way-the-gate-registry-already-does-or-whether-that-derivation-is-the-planner.md#5 | authored | 2 | What Was Measured |
@@ -2538,7 +2550,8 @@ profile: domain-specification
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#10 | authored | 2 | The Decision |
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#14 | authored | 2 | What It Costs |
 | docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#18 | authored | 2 | What This Does Not Do |
-| docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#21 | authored | 2 | Status |
+| docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#21 | authored | 2 | Amendment, Version 2: The Launch Port Is `ProgramLauncher` |
+| docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#23 | authored | 2 | Status |
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#1 | authored | 1 | Whether the layering declaration a rule judges against is read from the repository under check |
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#2 | authored | 2 | Question |
 | docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#5 | authored | 2 | What Was Measured |
@@ -2868,6 +2881,7 @@ profile: domain-specification
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#20 | authored | 2 | Status |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#22 | authored | 2 | Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts` |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#25 | authored | 2 | Amendment, Version 5: The Ledger's Runner Is `Run_Gate_Steps` |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#27 | authored | 2 | Amendment, Version 6: The Launch Port Is `ProgramLauncher` |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#1 | authored | 1 | The workflow tier's second increment has not arrived since RunId's first consumer shipped |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#2 | authored | 2 | Question |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#4 | authored | 2 | What Was Measured |
@@ -2879,7 +2893,8 @@ profile: domain-specification
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#19 | authored | 2 | Amendment (OD-WORKFLOW-005) |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#21 | authored | 2 | Amendment (OD-WORKFLOW-004, version 2) |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#26 | authored | 2 | Amendment, Version 6 |
-| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#28 | authored | 2 | Status |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#28 | authored | 2 | Amendment, Version 7 |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#30 | authored | 2 | Status |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#1 | authored | 1 | WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#2 | authored | 2 | Question |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#6 | authored | 2 | What Was Measured |
@@ -17715,10 +17730,10 @@ whether resolved semantics can be had at all.
 
 ### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#6
 
-*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / What Was Measured · hash: sha256:6ff64db68e20329b5ad07a99c6bebc3cfc579bf1f89eba407dfa7e13b4be0c14*
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / What Was Measured · hash: sha256:a2352fe19539bd478f435b47c5ed4459ad4eaf5b27e0c686877da1325064ccd2*
 
 **A language server is not, in fact, the same subprocess shape its siblings are.**
-`nomos_platform::ProcessLauncher`'s one method, `Run`, is documented precisely: "runs the
+`nomos_platform::ProgramLauncher`'s one method, `Run`, is documented precisely: "runs the
 command to completion and captures its output." Every real provider today —
 `nomos-lang-rust-cargo`'s `cargo metadata`, `nomos-lang-rust-clippy`'s `cargo clippy`,
 `nomos-lang-rust-deny`'s `cargo deny` — is exactly that: spawn, run to completion, parse
@@ -17726,7 +17741,7 @@ stdout, exit. A language server is the opposite shape on purpose: a long-lived p
 initialized once, holding an incrementally-maintained index, answering many requests over
 one session through a bidirectional JSON-RPC channel that is never expected to close between
 queries. Nothing in `nomos_platform` spawns a process, holds it open, and exchanges more than
-one message with it. Forcing a language server into `ProcessLauncher::Run` would mean
+one message with it. Forcing a language server into `ProgramLauncher::Run` would mean
 spawning a fresh server, paying its full workspace index cold-start, for every single query —
 discarding the one property that makes a language server worth using instead of a direct
 compiler call, and answering the query more slowly and less honestly than
@@ -17764,13 +17779,13 @@ buildable today, on two concrete grounds rather than a preference.**
 
 ### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#10
 
-*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / The Decision · hash: sha256:2eb39d4c79859c336e42ae58b0b4cd0f5bce6f39cc14d1352537db0c6caa8a85*
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / The Decision · hash: sha256:aa1ad13a86bf1bd09f13429eb09d7a64a113d5033245907e9b48975811a5d756*
 
 First, `nomos_platform` has no port for a long-lived, bidirectionally-communicating process.
 Building one is a real platform-layer design question of its own weight — what a session
 lifecycle looks like, how many concurrent sessions a run may hold, how a session outlives or
 does not outlive one `nomos check` invocation — not a detail a provider's own implementation
-could improvise past `ProcessLauncher::Run`'s existing one-shot contract.
+could improvise past `ProgramLauncher::Run`'s existing one-shot contract.
 
 ### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#11
 
@@ -17853,11 +17868,29 @@ reaches — rather than leaving "maybe someday" standing in for either.
 
 ### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#19
 
+*revision: authored · kind: heading · heading: Whether a language server is a provider, and of what / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220*
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#20
+
+*revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:499244746cc52d578c70a2437b4ee4dcf8bcb7d097e7fed30e5c49f9d405e4e3*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The three places this record names the port now give its
+current name. Its one method is still `Run`, and the doc comment "What Was Measured" quotes
+still reads as quoted.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#21
+
 *revision: authored · kind: heading · heading: Whether a language server is a provider, and of what / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#20
+### docs/records/OD-CAPABILITY-012-whether-a-language-server-is-a-provider-and-of-what.md#22
 
 *revision: authored · kind: prose · heading: Whether a language server is a provider, and of what / Status · hash: sha256:cb0901e93279e531d39368618e025e54e22e1fc8a43de5b197c1a5a23ae2c6c7*
 
@@ -18567,22 +18600,22 @@ not a population of one.
 
 ### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#6
 
-*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What Was Measured · hash: sha256:afb27b2f9fc66349690b33927aa98aeac92ad2b1068d114d59c30c883dd8f2dd*
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What Was Measured · hash: sha256:85eeb4597624a2d3b206fbdbefa28213b2e5c09364d6e6935e1a7dd8b1a73312*
 
 **The two crates violate no rule.** `Permits` grants
 `Specification | CapabilityContract => matches!(to, Protocol | Substrate)`, and
-`nomos-platform` — which declares `FileSystem` and `ProcessLauncher` — is `Zone::Substrate`.
+`nomos-platform` — which declares `FileSystem` and `ProgramLauncher` — is `Zone::Substrate`.
 A Capability Contract crate reaching a platform port is therefore already permitted,
 zone-wide, and was before either of these crates existed. Neither is smuggling anything past
 the zone model.
 
 ### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#7
 
-*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What Was Measured · hash: sha256:de83d5cfc7ab48c6f67eb1fbee40259ba2e344a28d57f39644eccafa753d908b*
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / What Was Measured · hash: sha256:833948aa4d407c85713a82de43497b6a467edc717a4686d5e2cedb28238042ba*
 
 **The zone's other members do not use that permission.** Sampled `nomos-cap-syntax`,
 `nomos-cap-naming-policy`, `nomos-cap-limits-policy` and `nomos-cap-dependency-policy`: zero
-files in each name `nomos_platform::FileSystem` or `nomos_platform::ProcessLauncher`.
+files in each name `nomos_platform::FileSystem` or `nomos_platform::ProgramLauncher`.
 
 ### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#8
 
@@ -18708,11 +18741,30 @@ on rather than amends.
 
 ### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#21
 
+*revision: authored · kind: heading · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220*
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#22
+
+*revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:8745dff1ece35682010d7fada9d5a23ccb5f67d05d2e2e2bad74b24ed5a3a177*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The two places "What Was Measured" names the port now give
+its current name, and the sample's finding holds under it: read again for this amendment,
+none of the four crates names `nomos_platform::FileSystem` or
+`nomos_platform::ProgramLauncher`.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#23
+
 *revision: authored · kind: heading · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#22
+### docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md#24
 
 *revision: authored · kind: prose · heading: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone / Status · hash: sha256:2c7613e110e6bd36a471654cd8f8900008c4f862f20cda5e4848d3e60ea734c6*
 
@@ -25032,11 +25084,11 @@ measured against a real need rather than designed ahead of one.
 
 ### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#25
 
-*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / What This Record Does Not Do · hash: sha256:ece0a7c605894f39ab631704d8be4bf344575ba13c784ac3e9ddcb25ac4abb27*
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / What This Record Does Not Do · hash: sha256:1c3cda95500ba0703a1d898e616a183b4398b442eccacdd0591dec15f270afd4*
 
 It does not touch `nomos-corrections`'s own stage/validate/commit chain, `OD-CORRECTIONS-001`,
 or any `AGT-*` contract type. It adds one constraint at one seam: what the subprocess a
-`ProcessLauncher`-based executor starts is permitted to do, decided before its own response is
+`ProgramLauncher`-based executor starts is permitted to do, decided before its own response is
 ever read rather than inferred from what that response later claims.
 
 ### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#26
@@ -25096,20 +25148,38 @@ amendment only stops the first one from squatting on the name a class would need
 
 ### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#31
 
+*revision: authored · kind: heading · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Amendment, Version 4: The Launch Port Is `ProgramLauncher` · hash: sha256:f44747cb2e9506def151f1dd0921425109e4fa701d3774182719cc73b6f380ca*
+
+## Amendment, Version 4: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#32
+
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Amendment, Version 4: The Launch Port Is `ProgramLauncher` · hash: sha256:3dbdbe257a807edbcf117a77e5e180b2cee8c36019c8a34ec08ab42b9508f7bd*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the last
+paragraph of "What This Record Does Not Do", now gives its current name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#33
+
 *revision: authored · kind: heading · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#32
+### docs/records/OD-EXECUTOR-001-an-agent-executors-capability-boundary-is-structural-absence-before-the-first-real-executor-decides-it-by-default.md#34
 
-*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Status · hash: sha256:f056a06ebec4bf3bd95010acd869d356fedc2fdea9a76a8efeeb96d5b2cdad28*
+*revision: authored · kind: prose · heading: An agent executor's capability boundary is structural absence, before the first real executor decides it by default / Status · hash: sha256:f3baf6c90040ed979e2440973f67ef5c4d1a8660eec2290ba726b604b5a41917*
 
 Accepted. Amended to version 2 after the rule's own mechanism was tested empirically, before
 any Rust was written against it: the deny-list it originally prescribed is replaced with an
 allow-list naming no real tool, and reading a process's structural denials rather than its
 self-reported narration is now part of the rule. Amended to version 3 to rename the crate this
 rule governs from `nomos-agent-executor` to `nomos-agent-executor-claude-code`, per the
-amendment above; the rule itself is unchanged.
+amendment above; the rule itself is unchanged. Amended to version 4 to give `nomos-platform`'s
+launch port its current name, `ProgramLauncher`; the rule is unchanged.
 
 ### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#1
 
@@ -25162,9 +25232,9 @@ repeating in the other direction.
 
 ### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#7
 
-*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / An executor invoking a subprocess, for a fixed, non-agentic purpose · hash: sha256:9f61772cc12f028926c446d3c1a4f7443aae2e6552eb6314e5b8af4bb156289b*
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What Was Measured / An executor invoking a subprocess, for a fixed, non-agentic purpose · hash: sha256:fd6b267c3e906178ee42a752912f8b4f5f3e6484adc7840174c7bbd39f59b488*
 
-This is not hypothetical. `nomos_platform::ProcessLauncher` — the same trait `nomos-agent-
+This is not hypothetical. `nomos_platform::ProgramLauncher` — the same trait `nomos-agent-
 executor` dispatches Claude Code through — has three other real callers today, verified
 directly:
 
@@ -25330,10 +25400,10 @@ workspace.
 
 ### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#22
 
-*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What This Record Does Not Do · hash: sha256:acd57357bebf96b553af8f945290921c4556b3b09bc56ea1f995b045dc77a6aa*
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / What This Record Does Not Do · hash: sha256:8e143520173e202b3f36e8e9e78008b5495c3c8cf19fc81dfcd90e33827b9aea*
 
 It does not add enforcement to `nomos-lang-rust-cargo`, `nomos-ledger`, or `nomos-surface-
-provenance`. Their existing, unrestricted `ProcessLauncher` use is the shape this record found
+provenance`. Their existing, unrestricted `ProgramLauncher` use is the shape this record found
 correct, not a gap it closes.
 
 ### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#23
@@ -25355,11 +25425,29 @@ record, if its shape genuinely differs), not an inference from this one.
 
 ### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#25
 
+*revision: authored · kind: heading · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220*
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#26
+
+*revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:614754a9742e4477458fabc9a9d36761921800a54b37b51967e2c9befdb0b190*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The two places this record names the port, the first
+finding under "An executor invoking a subprocess, for a fixed, non-agentic purpose" and the
+third paragraph of "What This Record Does Not Do", now give its current name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#27
+
 *revision: authored · kind: heading · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#26
+### docs/records/OD-EXECUTOR-002-generalizing-an-agent-executors-capability-boundary-to-the-class-od-connector-001-named.md#28
 
 *revision: authored · kind: prose · heading: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide / Status · hash: sha256:2e9df8a4850da939095a46f03c3f4340ee18a3c84053d23353d9a98efce0eb05*
 
@@ -26076,20 +26164,20 @@ boundary, not because it is structurally the same kind of thing Claude Code's cr
 
 ### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#8
 
-*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / What Was Measured · hash: sha256:69d468110d366e359be8d348c86fa2ffafb949abd2128c712431e50cf65014f1*
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / What Was Measured · hash: sha256:4b5e224e51e80879bbee4a03599ae8f05f2eaf91b2e153581764e4d39c338ab2*
 
 **The structural duplication `OD-EXECUTOR-004`'s trigger would be evidence of — two
 `AgentExecutor`s sharing real, extractable behavior — has a different, weaker explanation
 once the premise is corrected.** `Isolated_Working_Directory`, `Command_For`'s subprocess
 shape, and `Require_Clean_Exit` are duplicated because both crates dispatch a subprocess
-through the same `nomos_platform::ProcessLauncher` seam, not because both are `AgentExecutor`s.
+through the same `nomos_platform::ProgramLauncher` seam, not because both are `AgentExecutor`s.
 A `ModelBackend` and an `AgentExecutor` invoked as local subprocesses would share exactly this
 much structure regardless of which package kinds they are — process launch, working-directory
-isolation, exit-code discipline are properties of `ProcessLauncher`-based dispatch, not
+isolation, exit-code discipline are properties of `ProgramLauncher`-based dispatch, not
 properties `AgentExecutorPackage` specifically confers. `nomos-lang-rust-cargo` and
 `nomos-lang-rust-deny` — two `ToolProvider`s, an entirely different package kind — share the
 identical `Require_Clean_Exit` shape with both agent crates, which is evidence for a possible
-future `ProcessLauncher`-dispatch convenience shared across *all* subprocess-based providers,
+future `ProgramLauncher`-dispatch convenience shared across *all* subprocess-based providers,
 not evidence specific to `AgentExecutor`.
 
 ### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#9
@@ -26136,13 +26224,13 @@ once `nomos-agent-executor-ollama` is renamed and reclassified — not this reco
 
 ### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#14
 
-*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / What This Record Does Not Do · hash: sha256:e5134fe3e4459ace17ba3ffb718cac8e5d037c678d95544eda443ccddbe0a0e6*
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / What This Record Does Not Do · hash: sha256:c6236d7c19080ea608a652317e8690c0fbbc6658e7b8cc08e1fb835815ea4cb6*
 
 It does not decide whether a `ModelBackend` trait, or a lower-level shared
-`ProcessLauncher`-dispatch convenience beneath both package kinds, is warranted — that
+`ProgramLauncher`-dispatch convenience beneath both package kinds, is warranted — that
 question was not asked here and has its own, separate evidence (`nomos-lang-rust-cargo`,
 `nomos-lang-rust-deny`, both agent crates) that a future record can measure on its own terms,
-should a second real `ModelBackend` or a third `ProcessLauncher`-dispatched crate arrive.
+should a second real `ModelBackend` or a third `ProgramLauncher`-dispatched crate arrive.
 
 ### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#15
 
@@ -26302,11 +26390,33 @@ that offers the pair.
 
 ### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#28
 
+*revision: authored · kind: heading · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment, Version 4: The Launch Port Is `ProgramLauncher` · hash: sha256:f44747cb2e9506def151f1dd0921425109e4fa701d3774182719cc73b6f380ca*
+
+## Amendment, Version 4: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#29
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Amendment, Version 4: The Launch Port Is `ProgramLauncher` · hash: sha256:c5d7ffa400f4bd31deaa64d2a24bf6e14c74bc84aab1491f67efa4ba5dc62f5c*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The five places this record names the port as the seam
+both crates dispatch through, in the third finding of "What Was Measured" and in "What This
+Record Does Not Do", now give its current name. The `Execute` signature "Question" and "What
+Was Measured" quote keeps the name it had: it is the two crates' signature as this record
+measured it, and both functions had already been renamed `Execute_Task`, with a type parameter
+named `Launcher`, before the port was renamed, so substituting the bound alone would quote a
+signature no commit ever held.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#30
+
 *revision: authored · kind: heading · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#29
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#31
 
 *revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Status · hash: sha256:2dc713fc577fb07d4996b69def9b5c58a0b6ba9bb014bdcfb5e20a5e899a0116*
 
@@ -26317,7 +26427,7 @@ Claude Code's. Amended to version 2 by `P14-EXECUTOR-006-OLLAMA-RENAME-AND-BACKE
 `--backend` is replaced by `--executor`/`--model-backend`, naming which family a caller
 chooses from rather than presenting one flag whose values silently span two package kinds.
 
-### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#30
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#32
 
 *revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Status · hash: sha256:77c78db7a24e9c18f2d6df12497742ec91c1ef3aa4ce9bbcae04a86003e111c5*
 
@@ -26325,6 +26435,15 @@ Amended to version 3 by `P126-A-PORT-STANDS-BETWEEN-THE-GENERIC-AGENT-PATH-AND-I
 under `OD-ROADMAP-005` decision 2: a port per package kind stands where this record declined a
 trait, and the two-kind measurement that decline rested on is what decided there are two ports
 rather than one.
+
+### docs/records/OD-EXECUTOR-005-the-backend-flag-dispatches-an-agentexecutor-and-a-modelbackend-not-two-agentexecutors.md#33
+
+*revision: authored · kind: prose · heading: The --backend flag dispatches an AgentExecutor and a ModelBackend, not two AgentExecutors, so OD-EXECUTOR-004's shared-trait trigger has not fired / Status · hash: sha256:d87a929171000758abbf911429fcabe62a2ef3fe1c629edec23a7fc198ec8e81*
+
+Amended to version 4 by
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+to give `nomos-platform`'s launch port its current name, `ProgramLauncher`; nothing this record
+measured or decided changed.
 
 ### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#1
 
@@ -26412,10 +26531,10 @@ bounded actor doing work on Nomos's behalf.
 
 ### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#9
 
-*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / What Was Measured · hash: sha256:631084376c609e4b555eda2da79812679ce807f28e14e679227b2b18854169ea*
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / What Was Measured · hash: sha256:09dbffb950663a14736f01794fd77a70118e6016931f3c91ebede30600b85113*
 
 **Why it is closer to a connector than a same-band `ToolProvider`.** `nomos-lang-rust-clippy`
-runs a local subprocess the caller's own `ProcessLauncher` controls end to end. CodeRabbit is
+runs a local subprocess the caller's own `ProgramLauncher` controls end to end. CodeRabbit is
 a genuine external peer system reached over its own API/webhook surface, carrying vendor
 identity and vendor-shaped payloads that need translation before Nomos can read them —
 `nomos-connector-github`'s own shape, not `nomos-lang-rust-clippy`'s. `ARC-CONNECTOR-001`
@@ -26437,14 +26556,14 @@ ahead of a second connector needing it would be designing from a population of o
 
 ### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#11
 
-*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / The Decision · hash: sha256:8e2301c2f88e5f8b9dbb6af1940c9bd7effd5f6dd115574aa9f33139ea1ceb24*
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / The Decision · hash: sha256:b0711d2c5682ad2f36f9a1e57d24a3e7d98d35a11469818aa7d636f007d40303*
 
 **A CodeRabbit-style review adapter takes connector/`ToolProvider` shape: it establishes
 review evidence as a fact, and a native Nomos rule judges it into a `Finding`. It does not
 take `AgentExecutor` shape.** The concrete mechanism is `nomos-connector-github`'s own
 precedent, not `nomos-lang-rust-clippy`'s: a peer system reached over a real transport,
 requiring vendor-to-canonical translation and its own identity/evidence handling under
-`ARC-CONNECTOR-001`, rather than a local subprocess a `ProcessLauncher` runs directly. What
+`ARC-CONNECTOR-001`, rather than a local subprocess a `ProgramLauncher` runs directly. What
 it shares with `nomos-lang-rust-clippy` is the boundary that actually matters here —
 `OD-RULES-010`'s fact-not-finding split — not the transport.
 
@@ -26507,11 +26626,33 @@ not this one in advance of it.
 
 ### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#18
 
+*revision: authored · kind: heading · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220*
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#19
+
+*revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:a907daa04dc80107f3e4d09a0a51efb35e44843debf4ca443ef127c9c5ee1b4e*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The two places this record names the port as what runs a
+local subprocess, the last finding of "What Was Measured" and the first paragraph of "The
+Decision", now give its current name. The `Execute` signature the first finding quotes keeps the
+name it had: it is the two implementations' signature as this record measured it, and both
+functions had already been renamed `Execute_Task`, with a type parameter named `Launcher`,
+before the port was renamed, so substituting the bound alone would quote a signature no commit
+ever held.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#20
+
 *revision: authored · kind: heading · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#19
+### docs/records/OD-EXECUTOR-006-a-coderabbit-style-review-adapter-takes-toolprovider-shape-not-agentexecutor-shape.md#21
 
 *revision: authored · kind: prose · heading: A CodeRabbit-style review adapter takes ToolProvider/connector shape, not AgentExecutor shape / Status · hash: sha256:9e1f1bba7473ae1d51568db28cf1853074c501640026b1d95f09b90c302a9cdb*
 
@@ -27705,10 +27846,10 @@ Measured from the two crates directly rather than inferred from their docs.
 
 ### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#13
 
-*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured / What the two adapters agree about, and what they do not · hash: sha256:60c2fd3e00346abb851afad88902f7fa315fe5d50fda5bcd7d60566948138ded*
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / What Was Measured / What the two adapters agree about, and what they do not · hash: sha256:10775413e77c73d441610f9b2c37cce6839a05c99d225e2151b81cd9d24bdf7a*
 
 - The envelope going in (`TaskEnvelope`) and a refusal type going out, both with an
-  `Execute_Task`/`Execute_In` pair over an injected `ProcessLauncher`.
+  `Execute_Task`/`Execute_In` pair over an injected `ProgramLauncher`.
 - `AgentCapability::Isolated` with `ToolGrant::Nothing` — neither grants any capability, and
   neither has ever dispatched under anything wider.
 - `AgentExecutionError::UnsupportedTools` for a declared `available_tools` neither can grant,
@@ -27832,11 +27973,28 @@ measures.
 
 ### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#27
 
+*revision: authored · kind: heading · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220*
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#28
+
+*revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:f9cb0290e4aeb6f30c7ec8d2c59d4136e60dd01bd9348193ff40d8aab1e35cdf*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the first row of
+what the two adapters share, now gives its current name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#29
+
 *revision: authored · kind: heading · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#28
+### docs/records/OD-EXECUTOR-010-a-second-taskenvelope-adapter-already-exists-and-what-the-two-disagree-about-is-now-measured.md#30
 
 *revision: authored · kind: prose · heading: A second TaskEnvelope adapter already exists, and what the two disagree about is now measured / Status · hash: sha256:0485c480fbaa4e25e5c05a61538c9b0285efb0353c47ee34c9f72d52acf8d444*
 
@@ -33190,9 +33348,9 @@ narrows computation and not only disposition.
 
 ### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#21
 
-*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Built: Verified Directly Against The Real Code · hash: sha256:a5ffa27d316e000a515bbdd1699c8bd805b7ac6102863e2a627cc57650d7c22f*
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Built: Verified Directly Against The Real Code · hash: sha256:418770f12a272ca122dee77844b3e641be379fdbecddfbe2807d03915ea118d0*
 
-A counting `ProcessLauncher` test (`Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_
+A counting `ProgramLauncher` test (`Test_A_Deselected_Dependency_Rule_Should_Not_Launch_Cargo_
 Metadata`) proves the skip is structural: zero launches when `DEPENDENCY_DIRECTION` is not
 selected, exactly one when it is. This is the evidence a findings-only test could not give,
 since a healthy repository's `cargo metadata` call raises no finding on success — "deselected"
@@ -33219,11 +33377,29 @@ plus the narrower disposition filter it still applies on top for whichever rules
 
 ### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#24
 
+*revision: authored · kind: heading · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Amendment, Version 3: The Launch Port Is `ProgramLauncher` · hash: sha256:21517c84c62b23e80c32319d40f5c9fe1e1fad0b05e70b105efb16f079f58391*
+
+## Amendment, Version 3: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#25
+
+*revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Amendment, Version 3: The Launch Port Is `ProgramLauncher` · hash: sha256:6ccd87adc55944bdce117849873b15f171efbd32d5fe6e7730a4276173f3f1ef*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the counting
+test in "Built: Verified Directly Against The Real Code", now gives its current name; the
+double that test counts launches through implements it under that name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#26
+
 *revision: authored · kind: heading · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#25
+### docs/records/OD-GATE-017-whether-run-gains-a-real-per-call-rule-subset-now-or-waits-for-a-caller-that-needs-it.md#27
 
 *revision: authored · kind: prose · heading: Whether Run gains a real per-call rule subset now, or waits for a caller that needs one / Status · hash: sha256:dd0803705b8dd7b9997548e4dde4d1dea135a498b69a8ceafae30000a6576e5c*
 
@@ -39190,13 +39366,13 @@ to notice.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#5
 
-*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / The decision · hash: sha256:cf872b938b0f7c4e67157464b73db5ee920516c2a39239d0117bab09167e4844*
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / The decision · hash: sha256:f9fcb51864d7a4bfb8ed8e7b17eefd414daedd8196201d5952fd30865b3abe32*
 
 A seam exists. `nomos-work-orchestration` (band 40, `crates/orchestration/nomos-work-
 orchestration`) is the middle of the three: it owns the request vocabulary
 (`WorkCommand`, `ClaimRequest`, `EndingRequest` — moved from `nomos-cli::work` verbatim)
 and one function, `Run`, generic over the four traits `nomos-platform` declares
-(`FileSystem`, `Clock`, `CrossProcessLock`, `ProcessLauncher`) rather than over
+(`FileSystem`, `Clock`, `CrossProcessLock`, `ProgramLauncher`) rather than over
 `nomos-platform-std`'s implementations of them. `Run` takes a command and an
 already-constructed, caller-owned `FileLedger<F, C, L>` and process launcher, and hands
 back `WorkOutcome` — a typed value carrying exactly what `nomos-ledger`'s own API already
@@ -39374,6 +39550,37 @@ recommendation produced directly by this record's stale clause, and the cleanest
 this repository has of what `OD-GATE-011`'s defect class actually costs.
 `P72-STALE-PLATFORM-DIRECTORY-CLAIM` and its two follow-ups corrected all fifteen sites;
 `OD-AGENT-004` weighs whether restating a reason instead of routing to it is itself the defect.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#22
+
+*revision: authored · kind: heading · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220*
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#23
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:6a88b81db7d15b8dedc74c7c3be3c865bd63e8ff9f8f88daad3b4f5f4b3a9c7b*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher`, and its std implementation from `StdProcessLauncher` to
+`StdProgramLauncher`, on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port as one of the
+traits `Run` is generic over, the first paragraph of "The decision", now gives its current
+name. The same commit renamed `CrossProcessLock`, which that list also names, to
+`FilesystemLock`; this amendment corrects the launch port's name only.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#24
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:e32f60d197f17528e527e8a9d35c8da240b044a9656b1fa79ecd8acde94a4bc3*
+
+The two places this record names the std implementation keep the name it had. The opening
+paragraph says what `work.rs` imported before this record, in the past tense. The second
+paragraph of "The decision" says what `work.rs` built the platform from as this record left it,
+and `OD-RULES-028` records that every host has since reached the platform through
+`nomos-composer-std` instead, which happened before the rename, so substituting the new name
+would describe a `work.rs` that never existed.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1
 
@@ -65676,9 +65883,9 @@ smaller scale, as the one this record is about.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#20
 
-*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / What The Port Still Does Not Say · hash: sha256:7367545990db54cd737ee866dc1c12cb28ce778130257212e3c1e7260d456caf*
+*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / What The Port Still Does Not Say · hash: sha256:e8f3fae9cffb4189eed16e07f3be1eee677b645bd2a79218862a81c0d62e0822*
 
-`ProcessLauncher` is a one-method trait whose doc comment carefully distinguishes "we
+`ProgramLauncher` is a one-method trait whose doc comment carefully distinguishes "we
 could not ask" from "we asked and the answer was no". It says nothing about draining,
 because there is nothing in a signature that could say it. The requirement that makes its
 outcomes true now lives in the tests of one implementation.
@@ -65847,11 +66054,32 @@ would be a claim rather than a finding.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#33
 
+*revision: authored · kind: heading · heading: A port that names its outcomes says nothing about how they are obtained / Amendment, Version 3: The Launch Port Is `ProgramLauncher` · hash: sha256:21517c84c62b23e80c32319d40f5c9fe1e1fad0b05e70b105efb16f079f58391*
+
+## Amendment, Version 3: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#34
+
+*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Amendment, Version 3: The Launch Port Is `ProgramLauncher` · hash: sha256:ad9a5bdf87ce02151fa2412131887d3efa2dbb5c6a88878cc32dbf5a2ce5199d*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher`, and its std implementation from `StdProcessLauncher` to
+`StdProgramLauncher`, on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the first
+paragraph of "What The Port Still Does Not Say", now gives its current name; its doc comment
+still draws the distinction that paragraph quotes. The opening sentence of "What Was Measured"
+keeps the std implementation's old name: it says, in the past tense, what that implementation
+did before this record fixed it, under the name it had then.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#35
+
 *revision: authored · kind: heading · heading: A port that names its outcomes says nothing about how they are obtained / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#34
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#36
 
 *revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Status · hash: sha256:03a85d752702f84e2ce9f7ec78da6eba1bb9baff36382862b6777d6f1565029f*
 
@@ -76952,7 +77180,7 @@ materialization) or `Derived` (a native rule's judgment over a materialized fact
 
 ### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#6
 
-*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / What Was Measured · hash: sha256:ab52330f2214e8be9b387c4cdcf4504b1d8a1b7c70ca35c3e2744aa43f002ac8*
+*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / What Was Measured · hash: sha256:6381a6b599a26b253ac2cca15b508ab883e6f42cdca845a00114d8b770f839dd*
 
 `Check_Dependency_Direction` (`crates/rules/nomos-rules/src/dependency.rs`) is the
 worked precedent for the only shape that exists today: it calls `FactReader::Require`
@@ -76960,7 +77188,7 @@ against a capability, and on success judges the decoded payload and emits a `Fin
 `Applicability::Supported`, `EvidenceClass::Derived`. `nomos-lang-rust-cargo`
 (`crates/languages/nomos-lang-rust-cargo/src/metadata.rs`) is the worked precedent for a
 subprocess-backed provider: it runs an external tool (`cargo metadata`) through
-`nomos_platform::ProcessLauncher`, parses its output, and returns facts for the
+`nomos_platform::ProgramLauncher`, parses its output, and returns facts for the
 composition root to materialize into the store via `nomos_capability::Registry::
 Declare_And_Offer` -- it does not itself construct a `Finding`, `Applicability`, or any
 judgment. `cargo clippy`'s own diagnostics are, unlike `cargo metadata`'s package graph,
@@ -77045,11 +77273,30 @@ automatically.
 
 ### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#14
 
+*revision: authored · kind: heading · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / Amendment, Version 3: The Launch Port Is `ProgramLauncher` · hash: sha256:21517c84c62b23e80c32319d40f5c9fe1e1fad0b05e70b105efb16f079f58391*
+
+## Amendment, Version 3: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#15
+
+*revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / Amendment, Version 3: The Launch Port Is `ProgramLauncher` · hash: sha256:cfbe66dc523a866215d4d4bf3df5148d7d0cab995c9db5e3a7321ec54b1a404d*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the worked
+precedent for a subprocess-backed provider in "What Was Measured", now gives its current name.
+The five `nomos-rules` constants that cite this record's version move to 3 with it, and what
+each of those rules judges is unchanged.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#16
+
 *revision: authored · kind: heading · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#15
+### docs/records/OD-RULES-010-a-tool-providers-output-is-a-fact-a-native-rule-judges-not-a-finding-a-tool-emits-directly.md#17
 
 *revision: authored · kind: prose · heading: A ToolProvider's output is a fact a native rule judges, not a Finding a tool emits directly / Status · hash: sha256:8695c30d14efc5702f335eb5ab7273105dbd0c887570774122c042a96a9e27bd*
 
@@ -80380,10 +80627,10 @@ historical claim needs; it supplies the opposite guarantee.
 
 ### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#6
 
-*revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / What was measured · hash: sha256:bbabbe6fe60ec01225cb62993c007e83e7103eff93fc22d320c05439e502632a*
+*revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / What was measured · hash: sha256:a3e22c92cb909777d98d5e2132134beaee9e39a3a7865253a12bda259baf1aef*
 
 **Runtime allocation evidence has no observation mechanism to build on, and collides with
-an already-drawn boundary.** `nomos_platform::ProcessLauncher::Run`
+an already-drawn boundary.** `nomos_platform::ProgramLauncher::Run`
 (`crates/platform/nomos-platform/src/process_launcher.rs`) runs a command to completion and
 captures its output — one-shot, no attach, no stream, no instrumentation hook. Every
 provider crate under `crates/languages/` (`nomos-lang-rust`, `-scan`, `-cargo`, `-clippy`,
@@ -80495,11 +80742,32 @@ record only names what already exists and traces the item's own examples against
 
 ### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#15
 
+*revision: authored · kind: heading · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220*
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#16
+
+*revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:cd7d9a5f658217025754774b3cb29890dad05b24e8aff934965b8d617af0a503*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the finding on
+runtime allocation evidence in "What was measured", now gives its current name; its `Run` still
+runs a command to completion and captures its output. The path cited beside it is where the
+port's file was when this record was written and stays as written, because `OD-SPEC-017`
+decides a path citation is dated history; the same commit moved the file to
+`program_launcher.rs`.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#17
+
 *revision: authored · kind: heading · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#16
+### docs/records/OD-RULES-026-runtime-evidence-and-benchmark-history-are-deferred-infrastructure-a-reappearing-dependency-is-already-a-live-check.md#18
 
 *revision: authored · kind: prose · heading: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check / Status · hash: sha256:c0d2e9482b993beebbee813f801d24e18320e86a63d7a258d43c0c0ca445e14b*
 
@@ -80746,11 +81014,11 @@ decline that never addressed it.
 
 ### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#3
 
-*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / Question · hash: sha256:79fc6356e96e662dcec09a0814fa9c59c38132460c23c4002fd05887dfbe01c8*
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / Question · hash: sha256:31e1f466e5d58864fdde3cf184a60f7a3e9c49f541e4e103fcd74451a224158e*
 
 `P88` built `nomos-composer-std` — the std backend set named once — and migrated all four
 hosts onto it, so that no host names `StdFileSystem`, `SystemClock`, `FileLock`,
-`StdProcessLauncher` or `StdEnvironment` any more. Nothing keeps them migrated.
+`StdProgramLauncher` or `StdEnvironment` any more. Nothing keeps them migrated.
 
 ### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#4
 
@@ -80808,11 +81076,11 @@ composer *in*.
 
 ### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#9
 
-*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What Was Measured · hash: sha256:148cda94ba713c0687c95477f68c75a3d41dc34f0e8ad16d8210ad869537adeb*
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / What Was Measured · hash: sha256:1fc420708f6fb9e1edc8cf0361c69c1c5727a4aa56da6c49100561d7f976bc57*
 
 **`nomos-platform-xvpe` is not a backend, measured rather than assumed.** It was the
 obvious second member of any such zone, and it is not one. `XvpeLauncher` is
-`XvpeLauncher<'a, Launcher: ProcessLauncher>` — generic over an *injected* launcher,
+`XvpeLauncher<'a, Launcher: ProgramLauncher>` — generic over an *injected* launcher,
 implementing `xvpe`'s `ProcessLauncherStrategy` over whatever it is handed. It implements
 no `nomos-platform` port and can hand no caller a platform; `README.md` already called it
 "one adapter, not a replacement for the port." Two Agent-zone crates
@@ -80924,17 +81192,39 @@ decision rather than an invisible one.
 
 ### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#21
 
+*revision: authored · kind: heading · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:23654436e07a2703406c5b2c59c033b1fb08d5a1710961ea1c4fd4ae7f346220*
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#22
+
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / Amendment, Version 2: The Launch Port Is `ProgramLauncher` · hash: sha256:846b61de0a4ded0a0fcf6f00b1a1ecaa915f36c5ca90fd50376e272552afde0d*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher`, and its std implementation from `StdProcessLauncher` to
+`StdProgramLauncher`, on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The two places this record names them now give their
+current names: the std implementation among the backends "Question" says no host names any
+more, which still holds under the new name, and the port `XvpeLauncher` is generic over in
+"What Was Measured". `ProcessLauncherStrategy`, which the same sentence names, is `xvpe`'s
+own trait and keeps its name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#23
+
 *revision: authored · kind: heading · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#22
+### docs/records/OD-RULES-028-a-platform-implementation-is-its-own-zone-so-a-composition-root-reaches-one-only-through-a-composer.md#24
 
-*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / Status · hash: sha256:b3a2b3505e31ee9fcf45053e5afadfa8c25844a1b8e32eda8d5176abfcf8fd64*
+*revision: authored · kind: prose · heading: A platform implementation is its own zone, so a composition root reaches one only through a composer / Status · hash: sha256:8cb2e7d2a828660afc29713f59b8e053e20e289dca7b39480701d0d182b48c20*
 
 Accepted, version 1. Twelve named zones; `nomos-platform-std` moves from `Substrate` to
 `Backend`. Amends `OD-RULES-020`, whose own "What This Does Not Do" left open whether the
-eleven zones it named were the final set.
+eleven zones it named were the final set. Amended at version 2 only to give
+`nomos-platform`'s launch port and its std implementation their current names.
 
 ### docs/records/OD-RULES-029-whether-the-layering-declaration-a-rule-judges-against-is-read-from-the-repository-under-check.md#1
 
@@ -91275,10 +91565,10 @@ distinction with no key to carry it.
 
 ### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#10
 
-*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / The Decision · hash: sha256:3730477590d9dbd4995f47a7e80301223141ca7002b24e016f68967b391dca86*
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / The Decision · hash: sha256:6eb6522d48dfc59f7c7a1a77d5c7e52d26e7bc81eea9cc18d83a2802dbc2f77d*
 
 Concretely, for the follow-up this record unblocks: `nomos_gate_orchestration::Run_Gate` gains a
-`nomos_platform::Clock` parameter alongside its existing `ProcessLauncher` one -- a composition-
+`nomos_platform::Clock` parameter alongside its existing `ProgramLauncher` one -- a composition-
 root-supplied dependency, the same shape `variant` and `launcher` already are, not a
 `SystemTime::now()` read buried in the crate -- and `GateRunResult` gains a `pub run: RunId`
 field, computed once per call from the clock reading (and nothing else content-addressed,
@@ -91286,7 +91576,7 @@ because content-addressing it would silently re-introduce the collapse this reco
 out). Every existing caller of `Run_Gate` -- `nomos-cli`'s `gate.rs` and `nomos-api`'s
 `Handle_Gate_Run`, the only two; `nomos-ledger`'s own `Run_Gate_Steps` is a distinct function
 (`crates/substrate/nomos-ledger/src/finish/gate_step.rs`) that runs the workflow's own
-`Lint`-step argv and then its `Rules`-step argv through a `ProcessLauncher`, `OD-LEDGER-003`
+`Lint`-step argv and then its `Rules`-step argv through a `ProgramLauncher`, `OD-LEDGER-003`
 version 2 saying what a finish runs, and never calls `nomos_gate_orchestration::Run_Gate`
 at all, a conflation an earlier draft of this paragraph made from a substring grep rather than
 reading the file -- supplies a real clock the same way each already supplies a real build
@@ -91452,6 +91742,24 @@ routes to `OD-LEDGER-003` version 2 for what a finish runs rather than restating
 made the change. The paragraph's point stands exactly: the function is distinct from
 `nomos_gate_orchestration::Run_Gate` and never calls it. Nothing this record decides changed.
 
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#27
+
+*revision: authored · kind: heading · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Amendment, Version 6: The Launch Port Is `ProgramLauncher` · hash: sha256:0c82e6acc9d722548847ff9ddb90b4e07af410f8db120ed1b1f4a9b163c6eab0*
+
+## Amendment, Version 6: The Launch Port Is `ProgramLauncher`
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#28
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Amendment, Version 6: The Launch Port Is `ProgramLauncher` · hash: sha256:1b7bdb125d5bf9f1613555e339a64ff4c76d62eb0fdd797928c907d6f54b8c15*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The two places the "Concretely, for the follow-up"
+paragraph names the port, `Run_Gate`'s existing launcher and the launcher `Run_Gate_Steps`
+runs its steps through, now give its current name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#1
 
 *revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped · hash: sha256:18bde830e47457a54d9ed472b7bf7164b3f784bfd5abb6ac4bfafeeb778b8dd8*
@@ -91494,7 +91802,7 @@ Read directly from the live tree, not from `OD-WORKFLOW-001`'s own description o
 
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#6
 
-*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Was Measured · hash: sha256:95e6c7560cde29161b1faf078076d5453c15c8d285498646b543c0074049bbae*
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Was Measured · hash: sha256:1e8a1ec749c7132e797ef603d43ca7a43c3f08ef5d49d02407c1c8ae132fb5e7*
 
 - `git log` confirms `P13-WORKFLOW-001-RUNID-FRESH-AND-RUN-GATE` (`9358f9b`) is the tip of
   what this tier has built. No `OD-WORKFLOW-002` existed in `docs/records/` or
@@ -91509,7 +91817,7 @@ Read directly from the live tree, not from `OD-WORKFLOW-001`'s own description o
   function `OD-WORKFLOW-001`'s own amendment already corrected an earlier draft for
   conflating; read in full, it runs the workflow's own `Lint`-step argv and then its
   `Rules`-step argv, `OD-LEDGER-003` version 2 saying what a finish runs, through a bare
-  `ProcessLauncher` with no persisted or correlated executions anywhere to give an identity
+  `ProgramLauncher` with no persisted or correlated executions anywhere to give an identity
   meaning against. Giving it a `RunId` now would manufacture a second consumer rather than
   find a real one.
 - `nomos-cli`'s `gate/report.rs` still does not print `result.run` -- the same boundary
@@ -91769,13 +92077,31 @@ one. Nothing else here is changed.
 
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#28
 
+*revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment, Version 7 · hash: sha256:07b51aea2c1084dec077f5bb8d7042f36c532c5d7e0237880919b05dee3318b6*
+
+## Amendment, Version 7
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#29
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment, Version 7 · hash: sha256:8a6de8e7ef0392e64b2e582c393379ef696d3609657f64d4ea239dddee316ede*
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the launcher
+the second bullet of "What Was Measured" says `Run_Gate_Steps` runs through, now gives its
+current name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing else here is changed.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#30
+
 *revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#29
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#31
 
-*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:873d0fb024c147c4fff23631c488e79bbc0cedf7f5ce970e0f028259538b4e1e*
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:4bbd400b82020f84abc97479b5bd71191390245dff48921f4dedafaec3a9ac19*
 
 Accepted. Re-surveys the workflow tier against the live tree and the v14 corpus a second
 time, after `OD-WORKFLOW-001`'s first increment shipped, and finds no genuine second
@@ -91792,6 +92118,9 @@ withdrew rather than replaced what this record's earlier amendments said about c
 2. Amended a fifth time, at version 6, by
 `P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS`,
 which gives `nomos-ledger`'s runner its current name and says what it runs, and changes no
+finding. Amended a sixth time, at version 7, by
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`,
+which gives `nomos-platform`'s launch port its current name, `ProgramLauncher`, and changes no
 finding. This record's title is version 1's question and version 1's answer, and it is left as
 written: what has arrived since is recorded in the amendments, each dated to the record that
 made it.

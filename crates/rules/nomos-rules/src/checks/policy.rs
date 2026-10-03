@@ -38,7 +38,7 @@ pub const DEPENDENCY_POLICY_CONTRACT_RECORD: &str = "OD-RULES-010";
 
 /// The version of [`DEPENDENCY_POLICY_CONTRACT_RECORD`] this implementation was written
 /// against.
-pub const DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION: u32 = 2;
+pub const DEPENDENCY_POLICY_CONTRACT_RECORD_VERSION: u32 = 3;
 
 /// Judges the workspace's one `nomos.cap.dependency.policy` fact, if `sources` names one,
 /// against `cargo deny`'s own reported violations.

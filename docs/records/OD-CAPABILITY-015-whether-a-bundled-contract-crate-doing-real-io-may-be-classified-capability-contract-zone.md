@@ -3,7 +3,7 @@ id: OD-CAPABILITY-015
 type: decision
 title: Whether a bundled contract crate doing real I/O may be classified Capability Contract zone
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - capability
@@ -37,14 +37,14 @@ not a population of one.
 
 **The two crates violate no rule.** `Permits` grants
 `Specification | CapabilityContract => matches!(to, Protocol | Substrate)`, and
-`nomos-platform` — which declares `FileSystem` and `ProcessLauncher` — is `Zone::Substrate`.
+`nomos-platform` — which declares `FileSystem` and `ProgramLauncher` — is `Zone::Substrate`.
 A Capability Contract crate reaching a platform port is therefore already permitted,
 zone-wide, and was before either of these crates existed. Neither is smuggling anything past
 the zone model.
 
 **The zone's other members do not use that permission.** Sampled `nomos-cap-syntax`,
 `nomos-cap-naming-policy`, `nomos-cap-limits-policy` and `nomos-cap-dependency-policy`: zero
-files in each name `nomos_platform::FileSystem` or `nomos_platform::ProcessLauncher`.
+files in each name `nomos_platform::FileSystem` or `nomos_platform::ProgramLauncher`.
 
 **The split this would otherwise owe already exists, five times, in the same zone.** The five
 `nomos-cap-*-policy` contracts are pure payload declarations; `nomos-repo-policy` is
@@ -115,6 +115,17 @@ here.
 
 It does not revisit `OD-CAPABILITY-002`'s one-provider criterion, which this record depends
 on rather than amends.
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The two places "What Was Measured" names the port now give
+its current name, and the sample's finding holds under it: read again for this amendment,
+none of the four crates names `nomos_platform::FileSystem` or
+`nomos_platform::ProgramLauncher`.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
 
 ## Status
 

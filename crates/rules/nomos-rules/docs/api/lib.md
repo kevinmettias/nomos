@@ -418,7 +418,7 @@ rule's whole judgment is "the tool already decided," the identical relay shape
 through: `nomos.cap.review.finding` is materialized by `nomos-connector-coderabbit`, a
 connector under `ARC-CONNECTOR-001` reaching a genuine external peer system (GitHub,
 carrying CodeRabbit's own posted judgment) rather than a local subprocess this
-workspace's own `ProcessLauncher` runs end to end — `OD-EXECUTOR-006` measured that
+workspace's own `ProgramLauncher` runs end to end — `OD-EXECUTOR-006` measured that
 difference and found it does not change which shape this rule takes, because the
 boundary that actually matters is `OD-RULES-010`'s fact-not-finding split, not the
 transport. Its contract lives in `nomos-cap-review-finding`, one crate away

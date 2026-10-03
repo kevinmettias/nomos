@@ -3,7 +3,7 @@ id: OD-EXECUTOR-001
 type: decision
 title: An agent executor's capability boundary is structural absence, before the first real executor decides it by default
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - agent
@@ -168,7 +168,7 @@ measured against a real need rather than designed ahead of one.
 
 It does not touch `nomos-corrections`'s own stage/validate/commit chain, `OD-CORRECTIONS-001`,
 or any `AGT-*` contract type. It adds one constraint at one seam: what the subprocess a
-`ProcessLauncher`-based executor starts is permitted to do, decided before its own response is
+`ProgramLauncher`-based executor starts is permitted to do, decided before its own response is
 ever read rather than inferred from what that response later claims.
 
 ## Amendment: The Crate Renamed From `nomos-agent-executor` To `nomos-agent-executor-claude-code`
@@ -206,6 +206,15 @@ has specified yet, and doing so here would be exactly the shape ahead of a real 
 executor arrive, its own crate earns its own name the same way this one now does; this
 amendment only stops the first one from squatting on the name a class would need.
 
+## Amendment, Version 4: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the last
+paragraph of "What This Record Does Not Do", now gives its current name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
 ## Status
 
 Accepted. Amended to version 2 after the rule's own mechanism was tested empirically, before
@@ -213,4 +222,5 @@ any Rust was written against it: the deny-list it originally prescribed is repla
 allow-list naming no real tool, and reading a process's structural denials rather than its
 self-reported narration is now part of the rule. Amended to version 3 to rename the crate this
 rule governs from `nomos-agent-executor` to `nomos-agent-executor-claude-code`, per the
-amendment above; the rule itself is unchanged.
+amendment above; the rule itself is unchanged. Amended to version 4 to give `nomos-platform`'s
+launch port its current name, `ProgramLauncher`; the rule is unchanged.

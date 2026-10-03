@@ -3,7 +3,7 @@ id: OD-EXECUTOR-002
 type: decision
 title: Generalizing an agent executor's capability boundary to the class OD-CONNECTOR-001 named and OD-EXECUTOR-001 explicitly declined to decide
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - agent
@@ -49,7 +49,7 @@ repeating in the other direction.
 
 ### An executor invoking a subprocess, for a fixed, non-agentic purpose
 
-This is not hypothetical. `nomos_platform::ProcessLauncher` — the same trait `nomos-agent-
+This is not hypothetical. `nomos_platform::ProgramLauncher` — the same trait `nomos-agent-
 executor` dispatches Claude Code through — has three other real callers today, verified
 directly:
 
@@ -158,7 +158,7 @@ of that condition, the same restraint `OD-HOST-004` and `D-135` both already nam
 workspace.
 
 It does not add enforcement to `nomos-lang-rust-cargo`, `nomos-ledger`, or `nomos-surface-
-provenance`. Their existing, unrestricted `ProcessLauncher` use is the shape this record found
+provenance`. Their existing, unrestricted `ProgramLauncher` use is the shape this record found
 correct, not a gap it closes.
 
 It does not revisit `OD-SPEC-009`'s own rule or extend it — it cites what that record already
@@ -169,6 +169,16 @@ criterion it states — agentic (interprets a goal, decides its own actions) ver
 (fixed argv, no interpretive latitude) — is what a new subprocess caller checks itself against;
 one that is agentic needs `OD-EXECUTOR-001`'s own rule applied to it directly (or a successor
 record, if its shape genuinely differs), not an inference from this one.
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The two places this record names the port, the first
+finding under "An executor invoking a subprocess, for a fixed, non-agentic purpose" and the
+third paragraph of "What This Record Does Not Do", now give its current name.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
 
 ## Status
 

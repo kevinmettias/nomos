@@ -3,7 +3,7 @@ id: OD-CAPABILITY-012
 type: decision
 title: Whether a language server is a provider, and of what
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - capability
@@ -42,7 +42,7 @@ open is only whether an *language-server-shaped* route is also warranted beside 
 whether resolved semantics can be had at all.
 
 **A language server is not, in fact, the same subprocess shape its siblings are.**
-`nomos_platform::ProcessLauncher`'s one method, `Run`, is documented precisely: "runs the
+`nomos_platform::ProgramLauncher`'s one method, `Run`, is documented precisely: "runs the
 command to completion and captures its output." Every real provider today —
 `nomos-lang-rust-cargo`'s `cargo metadata`, `nomos-lang-rust-clippy`'s `cargo clippy`,
 `nomos-lang-rust-deny`'s `cargo deny` — is exactly that: spawn, run to completion, parse
@@ -50,7 +50,7 @@ stdout, exit. A language server is the opposite shape on purpose: a long-lived p
 initialized once, holding an incrementally-maintained index, answering many requests over
 one session through a bidirectional JSON-RPC channel that is never expected to close between
 queries. Nothing in `nomos_platform` spawns a process, holds it open, and exchanges more than
-one message with it. Forcing a language server into `ProcessLauncher::Run` would mean
+one message with it. Forcing a language server into `ProgramLauncher::Run` would mean
 spawning a fresh server, paying its full workspace index cold-start, for every single query —
 discarding the one property that makes a language server worth using instead of a direct
 compiler call, and answering the query more slowly and less honestly than
@@ -78,7 +78,7 @@ First, `nomos_platform` has no port for a long-lived, bidirectionally-communicat
 Building one is a real platform-layer design question of its own weight — what a session
 lifecycle looks like, how many concurrent sessions a run may hold, how a session outlives or
 does not outlive one `nomos check` invocation — not a detail a provider's own implementation
-could improvise past `ProcessLauncher::Run`'s existing one-shot contract.
+could improvise past `ProgramLauncher::Run`'s existing one-shot contract.
 
 Second, whatever capability a language-server-backed fact would answer — `nomos.cap.lsp.
 definition`, `nomos.cap.lsp.references`, `nomos.cap.lsp.symbol_hierarchy`, one per LSP request
@@ -126,6 +126,16 @@ that would have to be true first — a real platform capability for a long-lived
 bidirectional process, and a real rule whose own question is honestly answered at
 `Assurance::Unknown` rather than needing the `Sound` ceiling a direct compiler call already
 reaches — rather than leaving "maybe someday" standing in for either.
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The three places this record names the port now give its
+current name. Its one method is still `Run`, and the doc comment "What Was Measured" quotes
+still reads as quoted.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
 
 ## Status
 

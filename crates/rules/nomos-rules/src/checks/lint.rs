@@ -37,7 +37,7 @@ pub const LINT_DIAGNOSTICS: &str = "lint-diagnostics";
 pub const LINT_CONTRACT_RECORD: &str = "OD-RULES-010";
 
 /// The version of [`LINT_CONTRACT_RECORD`] this implementation was written against.
-pub const LINT_CONTRACT_RECORD_VERSION: u32 = 2;
+pub const LINT_CONTRACT_RECORD_VERSION: u32 = 3;
 
 /// Judges every workspace member `sources` names against `cargo clippy`'s own reported
 /// diagnostics for it.

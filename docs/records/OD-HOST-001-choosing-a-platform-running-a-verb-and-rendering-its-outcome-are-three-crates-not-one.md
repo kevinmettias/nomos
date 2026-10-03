@@ -3,7 +3,7 @@ id: OD-HOST-001
 type: decision
 title: Choosing a platform, running a verb and rendering its outcome are three crates, not one
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - host
@@ -38,7 +38,7 @@ A seam exists. `nomos-work-orchestration` (band 40, `crates/orchestration/nomos-
 orchestration`) is the middle of the three: it owns the request vocabulary
 (`WorkCommand`, `ClaimRequest`, `EndingRequest` — moved from `nomos-cli::work` verbatim)
 and one function, `Run`, generic over the four traits `nomos-platform` declares
-(`FileSystem`, `Clock`, `CrossProcessLock`, `ProcessLauncher`) rather than over
+(`FileSystem`, `Clock`, `CrossProcessLock`, `ProgramLauncher`) rather than over
 `nomos-platform-std`'s implementations of them. `Run` takes a command and an
 already-constructed, caller-owned `FileLedger<F, C, L>` and process launcher, and hands
 back `WorkOutcome` — a typed value carrying exactly what `nomos-ledger`'s own API already
@@ -152,3 +152,22 @@ recommendation produced directly by this record's stale clause, and the cleanest
 this repository has of what `OD-GATE-011`'s defect class actually costs.
 `P72-STALE-PLATFORM-DIRECTORY-CLAIM` and its two follow-ups corrected all fifteen sites;
 `OD-AGENT-004` weighs whether restating a reason instead of routing to it is itself the defect.
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher`, and its std implementation from `StdProcessLauncher` to
+`StdProgramLauncher`, on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port as one of the
+traits `Run` is generic over, the first paragraph of "The decision", now gives its current
+name. The same commit renamed `CrossProcessLock`, which that list also names, to
+`FilesystemLock`; this amendment corrects the launch port's name only.
+
+The two places this record names the std implementation keep the name it had. The opening
+paragraph says what `work.rs` imported before this record, in the past tense. The second
+paragraph of "The decision" says what `work.rs` built the platform from as this record left it,
+and `OD-RULES-028` records that every host has since reached the platform through
+`nomos-composer-std` instead, which happened before the rename, so substituting the new name
+would describe a `work.rs` that never existed.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.

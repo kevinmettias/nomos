@@ -3,7 +3,7 @@ id: OD-RULES-026
 type: decision
 title: Runtime evidence and benchmark history are deferred infrastructure; a reappearing dependency is already a live check
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - rules
@@ -53,7 +53,7 @@ reaches back across a git revision boundary." The fact substrate supplies none o
 historical claim needs; it supplies the opposite guarantee.
 
 **Runtime allocation evidence has no observation mechanism to build on, and collides with
-an already-drawn boundary.** `nomos_platform::ProcessLauncher::Run`
+an already-drawn boundary.** `nomos_platform::ProgramLauncher::Run`
 (`crates/platform/nomos-platform/src/process_launcher.rs`) runs a command to completion and
 captures its output — one-shot, no attach, no stream, no instrumentation hook. Every
 provider crate under `crates/languages/` (`nomos-lang-rust`, `-scan`, `-cargo`, `-clippy`,
@@ -130,6 +130,19 @@ such a decision would need to satisfy.
 It does not touch `crates/rules/nomos-rules/src/checks/policy.rs`, `deny.toml`, or any
 composed rule. Nothing described as already built here needed a change to be found; this
 record only names what already exists and traces the item's own examples against it.
+
+## Amendment, Version 2: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher` on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the finding on
+runtime allocation evidence in "What was measured", now gives its current name; its `Run` still
+runs a command to completion and captures its output. The path cited beside it is where the
+port's file was when this record was written and stays as written, because `OD-SPEC-017`
+decides a path citation is dated history; the same commit moved the file to
+`program_launcher.rs`.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
 
 ## Status
 

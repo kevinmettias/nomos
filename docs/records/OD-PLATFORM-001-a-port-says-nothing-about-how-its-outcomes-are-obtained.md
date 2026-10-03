@@ -3,7 +3,7 @@ id: OD-PLATFORM-001
 type: decision
 title: A port that names its outcomes says nothing about how they are obtained
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - platform
@@ -92,7 +92,7 @@ smaller scale, as the one this record is about.
 
 ## What The Port Still Does Not Say
 
-`ProcessLauncher` is a one-method trait whose doc comment carefully distinguishes "we
+`ProgramLauncher` is a one-method trait whose doc comment carefully distinguishes "we
 could not ask" from "we asked and the answer was no". It says nothing about draining,
 because there is nothing in a signature that could say it. The requirement that makes its
 outcomes true now lives in the tests of one implementation.
@@ -210,6 +210,19 @@ property does not yet have a precedent for threading through cleanly, and is not
 for the same reason the original conformance-suite gap above is not closed: one
 implementation was measured, and a mechanism written for a platform nobody tested it against
 would be a claim rather than a finding.
+
+## Amendment, Version 3: The Launch Port Is `ProgramLauncher`
+
+`P114-CLARITY-PLATFORM` renamed `nomos-platform`'s launch port from `ProcessLauncher` to
+`ProgramLauncher`, and its std implementation from `StdProcessLauncher` to
+`StdProgramLauncher`, on 2026-09-16, at `7e33c1f6`, which is not an ancestor of `f2fe3dd5`, the
+fresh root this history starts from. The one place this record names the port, the first
+paragraph of "What The Port Still Does Not Say", now gives its current name; its doc comment
+still draws the distinction that paragraph quotes. The opening sentence of "What Was Measured"
+keeps the std implementation's old name: it says, in the past tense, what that implementation
+did before this record fixed it, under the name it had then.
+`P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
 
 ## Status
 
