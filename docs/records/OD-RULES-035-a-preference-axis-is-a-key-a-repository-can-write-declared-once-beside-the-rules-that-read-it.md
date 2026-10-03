@@ -3,7 +3,7 @@ id: OD-RULES-035
 type: decision
 title: A preference axis is a key a repository can write, declared once beside the rules that read it
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - rules
@@ -187,9 +187,9 @@ one axis, which is not a reason to reshape it.
 
 **It does not decide whether a defaulted value is visible in a report.** Decision 3 makes the
 meaning declared. Whether a verdict reached against a stated default says so is a separate
-question, and no governing record decides it yet. It is not an empty population, because the
-rule judged real subjects. The amendment below names the records that come nearest and says why
-none of them owns it.
+question, and `OD-RULES-011` version 3 decides it. It is not an empty population, because the
+rule judged real subjects. The version 2 amendment below says why none of the records it read
+owned the question then, and the version 3 amendment records where it is decided now.
 
 **It does not touch waivers.** That is M5, and `ARC-CONFORMANCE-003` already says where it
 starts.
@@ -207,7 +207,7 @@ resolver per family, with every existing row-shaped read site moved onto it; the
 family's source moved to `nomos-limits.json`; and the finding for an undeclared key in a file
 Nomos owns.
 
-## Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owns Its Visibility Yet
+## Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owned Its Visibility Then
 
 **What was wrong.** Version 1's "What This Does Not Do" sent the visibility of a verdict
 reached against a default to `OD-ANALYSIS-012`, as the empty-population question that record
@@ -221,8 +221,8 @@ real subjects, so its population is not empty, and the per-rule report that reco
 name it. The item was declined, because its `done_when` computed the population from the slice
 `run_context` holds, which is not the population of any rule that narrows its own subjects.
 
-**Where the question stands, read from the records.** Four records come near it, and none of
-them decides it.
+**Where the question stood at version 2, read from the records.** Four records came near it,
+and none of them decided it.
 
 - `OD-ANALYSIS-012` version 2 excludes it, as above.
 - `OD-RULES-011` version 2 decides what a rule does when an optional read finds nothing. It
@@ -242,16 +242,39 @@ them decides it.
   of their fields, and none has. It carries the provenance of a policy, not of a verdict judged
   under that policy. And it leaves rendering undecided.
 
-So no record owns the question yet. `OD-RULES-011` is the record `OD-ANALYSIS-012` hands it to,
-and its answer covers one family by an argument it does not extend. Nothing decides whether that
-argument carries to the other families, or whether a verdict reached against a value the
-repository never declared owes its reader the provenance of that value.
+So no record owned the question at version 2. `OD-RULES-011` is the record `OD-ANALYSIS-012`
+hands it to, and its version 2 answer covered one family by an argument it did not extend.
+Nothing then decided whether that argument carried to the other families, or whether a verdict
+reached against a value the repository never declared owes its reader the provenance of that
+value.
 `P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO`
-is boarded to decide it.
+was boarded to decide it, and `OD-RULES-011` version 3 is where it is decided. The version 3
+amendment below says so.
 
 **What this changes in the decision.** Nothing. Decisions 1 to 6 and the bound stand as
-accepted. Only the sentence that routed an open question changed, and it now says the question
-is open.
+accepted. Only the sentence that routed an open question changed, and at version 2 it said the
+question was open.
+
+## Amendment, Version 3: The Visibility Of A Verdict Reached Against A Default Is Decided In OD-RULES-011
+
+**What was wrong.** Version 2 said, in "What This Does Not Do", in its amendment and in its
+status, that no governing record decides whether a verdict reached against a value the
+repository never declared says so, and it named
+`P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO`
+as the item that would. That item landed at `457f1e2d`, and `OD-RULES-011` version 3 decides the
+question. A reader following this record was told the question was open and sent to an item that
+was done.
+
+**What changed.** Each of those three places now names `OD-RULES-011` version 3 as where the
+question is decided. The version 2 amendment keeps its account of what the records said at
+version 2, in the tense of version 2.
+
+**What this does not do.** It does not restate `OD-RULES-011`'s decision, which is read there:
+a second statement here would be a copy that could drift from it. It does not change decision 3,
+so what an undeclared axis means is still declared on the axis.
+
+**What this changes in the decision.** Nothing. Decisions 1 to 6 and the bound stand as
+accepted.
 
 ## Status
 
@@ -261,4 +284,9 @@ record says so.
 Amended at version 2 by
 `P172-OD-RULES-035-SENDS-A-DEFAULTED-VERDICT-TO-A-POPULATION-QUESTION-OD-ANALYSIS-012-NO-LONGER-ANSWERS`,
 which corrected where the record sent the visibility of a verdict reached against a default. No
-governing record decides that question yet. Nothing the record decided changed.
+governing record decided that question then.
+
+Amended at version 3 by
+`P193-OD-RULES-035-STILL-SAYS-NO-RECORD-DECIDES-WHAT-OD-RULES-011-VERSION-3-NOW-DECIDES`, which
+points that question at `OD-RULES-011` version 3, the record that decides it. Nothing the record
+decided changed at either version.

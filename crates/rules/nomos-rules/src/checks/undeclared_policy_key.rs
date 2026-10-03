@@ -49,10 +49,13 @@ pub const UNDECLARED_POLICY_KEY_CONTRACT_RECORD: &str = "OD-RULES-035";
 /// against.
 ///
 /// Version 2 corrected where the record sent the visibility of a verdict reached against a
-/// default, which it now says no record decides yet; decision 5, which this rule implements,
+/// default, which it then said no record decided yet; decision 5, which this rule implements,
 /// did not move, so the citation follows the record rather than the implementation following
 /// a change.
-pub const UNDECLARED_POLICY_KEY_CONTRACT_RECORD_VERSION: u32 = 2;
+///
+/// Version 3 points that question at `OD-RULES-011` version 3, the record that now decides it;
+/// decision 5 did not move again, so the citation follows the record for the same reason.
+pub const UNDECLARED_POLICY_KEY_CONTRACT_RECORD_VERSION: u32 = 3;
 
 /// Reports every key a repository declares in `nomos-limits.json`, repository-wide or under a
 /// language, that no limits axis names -- one `Blocking` finding per key.

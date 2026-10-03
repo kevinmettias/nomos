@@ -258,7 +258,7 @@ profile: domain-specification
 | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md@authored | docs/records/OD-RULES-032-which-nomos-rules-answer-a-rule-a-second-repository-declares-must-hold.md | authored | 28 | 8 | sha256:93292451f2a6cee3903cec80729f1f4a648933089166dd3a055febcb80d71eba |
 | docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md@authored | docs/records/OD-RULES-033-a-rules-subsystem-is-the-reading-its-judgment-needs-and-the-rules-level-is-already-that-partition.md | authored | 53 | 13 | sha256:621c2cbb9a9451c6783988f8ebb57822f772e79c82430d1bf9b1223f2afb06ce |
 | docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md@authored | docs/records/OD-RULES-034-a-declared-form-is-owed-for-the-archetype-forty-four-of-seventy-one-rules-share-and-the-detector-stays-rust.md | authored | 53 | 12 | sha256:a7aae0f562a885695f97bd2fe9beb2b97a2cf8c2d0a34315302531b7a3a3d667 |
-| docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md@authored | docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md | authored | 40 | 8 | sha256:112fae92b7e80030d3f0b0729a3409c2b6a2f535cde9850f7ffef0f052efb664 |
+| docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md@authored | docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md | authored | 46 | 9 | sha256:aace126740b137a92b7243b5ded837a808686422d9b4ccb0fcde4b8a9ff3ec64 |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md@authored | docs/records/OD-SPEC-001-the-storage-backend-question.md | authored | 11 | 5 | sha256:e4feddab256024ea38e21849120fdd52d0ddf17d4e3f69cfb24eb4c8e766c8ae |
 | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md@authored | docs/records/OD-SPEC-002-the-regression-headline-counts-lines-not-blocks.md | authored | 20 | 7 | sha256:2c45051e43390556bfd68865152580e1ae09c2e82dc94bb20e65cdbf60d69a10 |
 | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md@authored | docs/records/OD-SPEC-004-the-filler-blocklist-misses-the-wording-that-hollowed-v15.md | authored | 52 | 13 | sha256:5e4290d3ee59d8a31ed54db9a8101edfe3af703650bf304bed6dff68755ced63 |
@@ -2580,8 +2580,9 @@ profile: domain-specification
 | docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#16 | authored | 2 | The Decision |
 | docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#24 | authored | 2 | What This Does Not Do |
 | docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#30 | authored | 2 | The Items That Build It |
-| docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#32 | authored | 2 | Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owns Its Visibility Yet |
-| docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#38 | authored | 2 | Status |
+| docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#32 | authored | 2 | Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owned Its Visibility Then |
+| docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#38 | authored | 2 | Amendment, Version 3: The Visibility Of A Verdict Reached Against A Default Is Decided In OD-RULES-011 |
+| docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#43 | authored | 2 | Status |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#1 | authored | 1 | Whether the specification store gains a second backend, and what would decide it |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#2 | authored | 2 | Question |
 | docs/records/OD-SPEC-001-the-storage-backend-question.md#4 | authored | 2 | Current Position |
@@ -82446,13 +82447,13 @@ one axis, which is not a reason to reshape it.
 
 ### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#27
 
-*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / What This Does Not Do · hash: sha256:a044aa99fed077ad6295d50f215d7d9823081c131a19ef74a69587ea1adb80be*
+*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / What This Does Not Do · hash: sha256:4ee5ab18d80d34b78fad2d284fb77059c51210781d08b3a19a19eca392be227f*
 
 **It does not decide whether a defaulted value is visible in a report.** Decision 3 makes the
 meaning declared. Whether a verdict reached against a stated default says so is a separate
-question, and no governing record decides it yet. It is not an empty population, because the
-rule judged real subjects. The amendment below names the records that come nearest and says why
-none of them owns it.
+question, and `OD-RULES-011` version 3 decides it. It is not an empty population, because the
+rule judged real subjects. The version 2 amendment below says why none of the records it read
+owned the question then, and the version 3 amendment records where it is decided now.
 
 ### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#28
 
@@ -82488,13 +82489,13 @@ Nomos owns.
 
 ### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#32
 
-*revision: authored · kind: heading · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owns Its Visibility Yet · hash: sha256:05d14f64f44a621638119fef074eb4ff8dc7429d306da06d70bcdcad777066d5*
+*revision: authored · kind: heading · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owned Its Visibility Then · hash: sha256:4e09a92a7296549255380ec1b2cacb48626350cf18002206974d3d4e4a47edb1*
 
-## Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owns Its Visibility Yet
+## Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owned Its Visibility Then
 
 ### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#33
 
-*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owns Its Visibility Yet · hash: sha256:67150f2c210ed6c5b0a4028416ba7f89ed379e12bc79ed08f15805fd4d843bf8*
+*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owned Its Visibility Then · hash: sha256:67150f2c210ed6c5b0a4028416ba7f89ed379e12bc79ed08f15805fd4d843bf8*
 
 **What was wrong.** Version 1's "What This Does Not Do" sent the visibility of a verdict
 reached against a default to `OD-ANALYSIS-012`, as the empty-population question that record
@@ -82510,14 +82511,14 @@ name it. The item was declined, because its `done_when` computed the population 
 
 ### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#34
 
-*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owns Its Visibility Yet · hash: sha256:6f3bf65b5214dd379c66ff2046357f1d9ef1bfb220b6412a07a8ac2d1d47e467*
+*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owned Its Visibility Then · hash: sha256:9fafab3145525ee7ca3a80e5bba1988d3b881277103f4369aa296938bab787a3*
 
-**Where the question stands, read from the records.** Four records come near it, and none of
-them decides it.
+**Where the question stood at version 2, read from the records.** Four records came near it,
+and none of them decided it.
 
 ### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#35
 
-*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owns Its Visibility Yet · hash: sha256:0be8f0e3b14eae125ca214a2925a16fa209e0031e5c34fcf988db5d0d2e528b3*
+*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owned Its Visibility Then · hash: sha256:0be8f0e3b14eae125ca214a2925a16fa209e0031e5c34fcf988db5d0d2e528b3*
 
 - `OD-ANALYSIS-012` version 2 excludes it, as above.
 - `OD-RULES-011` version 2 decides what a rule does when an optional read finds nothing. It
@@ -82539,44 +82540,96 @@ them decides it.
 
 ### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#36
 
-*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owns Its Visibility Yet · hash: sha256:802fa1e6f85a82bff30c3d1c9827db54a4572f1413d87858942a98c7f78531c2*
+*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owned Its Visibility Then · hash: sha256:25cc8517f9e666e5c127a366bfab3d96973cdc01847c7d14dad902cff279ff5a*
 
-So no record owns the question yet. `OD-RULES-011` is the record `OD-ANALYSIS-012` hands it to,
-and its answer covers one family by an argument it does not extend. Nothing decides whether that
-argument carries to the other families, or whether a verdict reached against a value the
-repository never declared owes its reader the provenance of that value.
+So no record owned the question at version 2. `OD-RULES-011` is the record `OD-ANALYSIS-012`
+hands it to, and its version 2 answer covered one family by an argument it did not extend.
+Nothing then decided whether that argument carried to the other families, or whether a verdict
+reached against a value the repository never declared owes its reader the provenance of that
+value.
 `P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO`
-is boarded to decide it.
+was boarded to decide it, and `OD-RULES-011` version 3 is where it is decided. The version 3
+amendment below says so.
 
 ### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#37
 
-*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owns Its Visibility Yet · hash: sha256:e0400eaa8fff23d04eac6beb80b543400e053e4bb82374e922b8c41dc280b9e9*
+*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 2: A Verdict Reached Against A Default Is Not An Empty Population, And No Record Owned Its Visibility Then · hash: sha256:a6f157c4fb8b56c15256a999f14183770cdd4fc2719c835612c534c7fce335a5*
 
 **What this changes in the decision.** Nothing. Decisions 1 to 6 and the bound stand as
-accepted. Only the sentence that routed an open question changed, and it now says the question
-is open.
+accepted. Only the sentence that routed an open question changed, and at version 2 it said the
+question was open.
 
 ### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#38
+
+*revision: authored · kind: heading · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 3: The Visibility Of A Verdict Reached Against A Default Is Decided In OD-RULES-011 · hash: sha256:97ba37e7af72ecfe747ba661160ca249a456290af0084a4d32b066757ecd8f68*
+
+## Amendment, Version 3: The Visibility Of A Verdict Reached Against A Default Is Decided In OD-RULES-011
+
+### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#39
+
+*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 3: The Visibility Of A Verdict Reached Against A Default Is Decided In OD-RULES-011 · hash: sha256:e622f9f0c516a2995c4917804560b895d5f1ee23165049479b4528bb0d482fa3*
+
+**What was wrong.** Version 2 said, in "What This Does Not Do", in its amendment and in its
+status, that no governing record decides whether a verdict reached against a value the
+repository never declared says so, and it named
+`P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO`
+as the item that would. That item landed at `457f1e2d`, and `OD-RULES-011` version 3 decides the
+question. A reader following this record was told the question was open and sent to an item that
+was done.
+
+### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#40
+
+*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 3: The Visibility Of A Verdict Reached Against A Default Is Decided In OD-RULES-011 · hash: sha256:eb8e4bf3ad1caa4975e72ec6a0fd5891d4d2bb418fda2aebcaf373beb38e1da7*
+
+**What changed.** Each of those three places now names `OD-RULES-011` version 3 as where the
+question is decided. The version 2 amendment keeps its account of what the records said at
+version 2, in the tense of version 2.
+
+### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#41
+
+*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 3: The Visibility Of A Verdict Reached Against A Default Is Decided In OD-RULES-011 · hash: sha256:59df95a1529292c8466f16a28cd15b1ab28a975e0bcc639e0a76d2f640d50ac3*
+
+**What this does not do.** It does not restate `OD-RULES-011`'s decision, which is read there:
+a second statement here would be a copy that could drift from it. It does not change decision 3,
+so what an undeclared axis means is still declared on the axis.
+
+### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#42
+
+*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Amendment, Version 3: The Visibility Of A Verdict Reached Against A Default Is Decided In OD-RULES-011 · hash: sha256:0cbf504f5d61097363595c923cbaa4b24fa1c41bae1ee979c15f741a54859db6*
+
+**What this changes in the decision.** Nothing. Decisions 1 to 6 and the bound stand as
+accepted.
+
+### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#43
 
 *revision: authored · kind: heading · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#39
+### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#44
 
 *revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Status · hash: sha256:b685ba2450fb7b030b3cd27dad39b8984933eb4e9c02e4de8326cea850dd83e7*
 
 Accepted. `ARC-CONFORMANCE-003`'s M2 is re-stated by this record, and the amendment to that
 record says so.
 
-### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#40
+### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#45
 
-*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Status · hash: sha256:81e10bfc10cf6ad547e6908e32cf925496a562bd23bed7a6a342e8d7240f397a*
+*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Status · hash: sha256:e409ef81b2227f6e18d8f32a2361855aa6e2a98e3dc97a99d852ad614e063210*
 
 Amended at version 2 by
 `P172-OD-RULES-035-SENDS-A-DEFAULTED-VERDICT-TO-A-POPULATION-QUESTION-OD-ANALYSIS-012-NO-LONGER-ANSWERS`,
 which corrected where the record sent the visibility of a verdict reached against a default. No
-governing record decides that question yet. Nothing the record decided changed.
+governing record decided that question then.
+
+### docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md#46
+
+*revision: authored · kind: prose · heading: A preference axis is a key a repository can write, declared once beside the rules that read it / Status · hash: sha256:d37b50f89f05af2da03a7dc31492577369fa74eaaf960ac5ff1c170e6a1dd3b2*
+
+Amended at version 3 by
+`P193-OD-RULES-035-STILL-SAYS-NO-RECORD-DECIDES-WHAT-OD-RULES-011-VERSION-3-NOW-DECIDES`, which
+points that question at `OD-RULES-011` version 3, the record that decides it. Nothing the record
+decided changed at either version.
 
 ### docs/records/OD-SPEC-001-the-storage-backend-question.md#1
 
