@@ -3,7 +3,7 @@ id: OD-RULES-011
 type: decision
 title: A rule's parameters are a fact a repository declares, not a constant the rule compiles with
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - rules
@@ -444,8 +444,8 @@ reads as is not decided here.
   files, is `OD-RULES-035` decision 3's question for that axis. The list makes it visible and does
   not answer it. code-standards' own resolver says "Which case a name takes is a house style, not
   a property of the language".
-- **Which naming keys a rule reads.** Whether `function-naming-convention` should read the
-  visibility-refined keys code-standards reads first is not decided here.
+- **Which naming keys a rule reads.** `OD-RULES-035` decides it, from its decision 7 on, and
+  this record does not.
 - **Whether a rule parameter's value enters a gate run's provenance**, so that `gate compare` can
   tell a loosened limit from fixed code, which is code-standards' `configidentity`'s own question.
 - **What `requirement-trace-staleness` does with a corpus it cannot read.**
@@ -480,6 +480,16 @@ decision 3 on the other three surfaces, after it and after
 4 for the nine rules, after the population item, whose territory holds most of them. Each item's
 territory was grepped at `c131760d`.
 
+## Amendment, Version 4
+
+Version 3 said, among what it does not decide, that whether `function-naming-convention` reads the
+visibility-refined keys code-standards reads first "is not decided here". That was accurate, and it
+named only where the question was not decided.
+`P194-THE-RUST-FUNCTION-NAMING-RULE-NEVER-READS-THE-KEYS-XVPE-DECLARES-ITS-FUNCTION-CASE-UNDER`
+then decided it for the Rust function rule, as `OD-RULES-035` version 4 decision 7, and that record
+is where any later decision about which naming keys a rule reads is made. The bullet now points
+there. Nothing this record decides changed.
+
 ## Status
 
 Accepted. `nomos-cap-naming-policy` is this decision's first capability contract,
@@ -489,6 +499,10 @@ Version 2 adds the read-side rule this record's own text needed before the six r
 could be refactored: how a rule reacts to an absent *optional* capability, settled by
 citing `OD-CAPABILITY-004` rather than re-deciding it, once refactoring the first rule
 onto this capability made the gap in version 1 concrete.
+
+Version 4 was amended by
+`P199-OD-RULES-011-VERSION-3-SAYS-WHICH-NAMING-KEYS-A-RULE-READS-IS-NOT-DECIDED-HERE-AND-NOT-WHERE`,
+which points the question of which naming keys a rule reads at `OD-RULES-035` and decides nothing.
 
 Version 3 was amended by
 `P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO`,
