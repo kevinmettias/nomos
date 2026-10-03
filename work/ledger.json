@@ -102322,7 +102322,8 @@
           "crates/host/nomos-api/src/response/gate_run_response.rs",
           "tests/contract/surface/nomos-api.txt",
           "tests/contract/surface/nomos-gate-orchestration.txt",
-          "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md"
+          "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md",
+          "crates/host/nomos-api/src/check.rs"
         ],
         "patterns": []
       },
@@ -102364,7 +102365,15 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "opus-p186-render",
+          "added": [
+            "crates/host/nomos-api/src/check.rs"
+          ],
+          "widened_at": 1791045910
+        }
+      ]
     },
     {
       "id": "P187-NOTHING-CHECKS-THAT-THE-WALK-REACHES-EVERY-SOURCE-THE-REPOSITORY-TRACKS",
@@ -103479,6 +103488,45 @@
           "--no-fail-fast",
           "-p",
           "nomos-ledger"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS",
+      "title": "Three records and nomos-api name Run_Gate_Step as a lint runner, and since a370a004 it is Run_Gate_Steps and runs the Rules step too",
+      "why": "P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP (a370a004) renamed nomos-ledger's Run_Gate_Step to Run_Gate_Steps and made it run the workflow's Rules step after Lint. Found by P200's claimant and measured 2026-10-03: four places still name the old function and describe it as running only the lint. crates/host/nomos-api/src/lib.rs line 8 calls it a lint-argv runner. OD-WORKFLOW-001 line 93 and OD-WORKFLOW-002 lines 56 and 117 name Run_Gate_Step as distinct from the workflow engine. OD-LEDGER-036 line 67 calls it the internal argv runner nomos work finish uses to run the gate's lint. The lib.rs line cites the records, so correcting it alone would leave it disagreeing with its own citation, which is why P200 left it alone and this item takes all four together.",
+      "done_when": "All four places name the function by its current name and say what it runs now, the workflow's Lint and then its Rules step, routing to OD-LEDGER-003 version 2 for what a finish runs rather than restating it. Each record's point, that this runner is not the workflow engine and not a convergence target, is kept exactly; only the name and the description of what it runs change. Each record carries a version bump, and any code constant pinning one of their versions moves with it (rule_contract_citation catches it). No behaviour changes. Both projections are re-rendered from the tree the commit publishes, and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-api/src/lib.rs",
+          "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md",
+          "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md",
+          "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
         ],
         "timeout_seconds": 3600
       },
