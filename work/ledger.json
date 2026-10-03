@@ -103515,14 +103515,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "opus-p201-tail",
-        "acquired_at": 1791044993,
-        "lease_expires_at": 1791059393
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -103533,7 +103529,47 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger"
+        ],
+        "exit_code": 0,
+        "output_tail": "(outcome) = Already_Exited(child, program)?\n...  ||\n69 | ||         std::thread::sleep(super::POLL_INTERVAL);\n70 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:79:5\n   |\n79 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n80 | ||     {\n81 | ||         Ok(Some(status)) =>\n...  ||\n88 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n89 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.59s\n     Running unittests src\\lib.rs (F:/repos/nomos-p201-target\\debug\\deps\\nomos_ledger-ee96e1975b0f8622.exe)\n     Running tests\\declining_ends_an_item\\main.rs (F:/repos/nomos-p201-target\\debug\\deps\\declining_ends_an_item-95a57980dd42f27c.exe)\n     Running tests\\exclusion_holds\\main.rs (F:/repos/nomos-p201-target\\debug\\deps\\exclusion_holds-0ddd988d039a0283.exe)\n     Running tests\\gate_covers_finish\\main.rs (F:/repos/nomos-p201-target\\debug\\deps\\gate_covers_finish-5d9d1d7a81e52f82.exe)\n     Running tests\\local_gate_execution.rs (F:/repos/nomos-p201-target\\debug\\deps\\local_gate_execution-b268a8793a07b08f.exe)\n     Running tests\\records_do_not_serialize\\main.rs (F:/repos/nomos-p201-target\\debug\\deps\\records_do_not_serialize-fca8f241a5a0b1b3.exe)\n     Running tests\\scope_verification_integration.rs (F:/repos/nomos-p201-target\\debug\\deps\\scope_verification_integration-37bb169c22863f86.exe)\n     Running tests\\widening_is_recorded\\main.rs (F:/repos/nomos-p201-target\\debug\\deps\\widening_is_recorded-1a18e936c3c40296.exe)\n   Doc-tests nomos_ledger\n",
+        "verified_at": 1791047149,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "a6ebb874fdd488da16f332b7f36d449ec846648e"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -103638,12 +103674,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p203-count",
+        "acquired_at": 1791047179,
+        "lease_expires_at": 1791057979
+      },
       "verification": {
         "argv": [
           "cargo",

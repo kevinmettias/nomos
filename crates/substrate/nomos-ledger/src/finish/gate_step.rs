@@ -1,6 +1,37 @@
 //! Running the shared gate steps the predicate does not cover.
 
-use super::{FileSystem, Clock, FilesystemLock, FileLedger, ItemId, Path, FinishRefusal, Workflow_Path, GateUnknown, Derive_Step, LINT_STEP, RULES_STEP, OptionalStepOutcome, StepName, WorkflowText, ProgramLauncher, Runner, GateOutcome, Command_From_Argv, Ran_To_Completion};
+use super::{FileSystem, Clock, FilesystemLock, FileLedger, ItemId, Path, FinishRefusal, Workflow_Path, GateUnknown, Derive_Step, LINT_STEP, RULES_STEP, OptionalStepOutcome, StepName, WorkflowText, ProgramLauncher, Runner, GateOutcome, Command_From_Argv};
+use super::running::{Combined_Tail, Exited_With_A_Code};
+use nomos_platform::ProgramOutput;
+
+/// How a line of `nomos gate run`'s report begins when the finding on it is in the Blocking
+/// gate category: `Finding::Describe` puts `GateCategory::Label` in brackets at the head of
+/// every finding line it renders.
+///
+/// This is matching rendered text, which is the last resort, and it is here because no
+/// structured signal says which finding blocked:
+///
+/// - The finish runs the workflow's own command, derived and never copied (`OD-LEDGER-003`),
+///   and in this repository that command prints a report for people: one line per finding on
+///   standard output and nothing machine-readable beside it. Its machine-readable form, the
+///   SARIF log, sits behind a flag the workflow does not pass, and a finish that added it would
+///   be running a command the gate does not.
+/// - The streams are structured, and they are used: only standard output, the step's own
+///   report, is searched, so nothing cargo prints on standard error is lifted. But they separate
+///   the report from the toolchain, not one finding from another, and the report's own end is
+///   no place to rely on. In the case that showed the gap, the report's last 2,000 bytes alone
+///   would have held the Blocking line with 199 to spare, and the same tree judged without
+///   `GOROOT` set reports two more advisory findings after it, 760 bytes, which push it out.
+/// - Inside the report a finding's gate category exists only as this rendered label. This
+///   crate does not depend on the one that owns it, and a finish should not have to, because
+///   the same ledger serves repositories whose `Rules` step is not `nomos` at all.
+///
+/// A step that prints no such line, whether because it is not `nomos` or because the spelling
+/// changed, has nothing lifted and refuses with exactly the tail it carried before. The label
+/// names the category and not the disposition, so a Blocking finding a declared policy
+/// tolerated still carries it; what is lifted is every line labelled Blocking, which holds every
+/// finding that refused the run, and the refusal says "labelled" for that reason.
+const BLOCKING_LINE_PREFIX: &str = "[Blocking] ";
 
 /// What the gate's own steps answered, before the item's predicate was asked.
 pub(super) struct GateSteps
@@ -119,8 +150,8 @@ pub(super) fn Run_Gate_Steps<Files: FileSystem, TimeSource: Clock, Lock: Filesys
 /// Both steps go through this, so the `Rules` step is bounded by exactly the patience the
 /// lint step is. Any nonzero exit -- a Blocking finding's 1, a run that judged nothing's 6, a
 /// run that could not be assembled's 5 -- refuses as [`FinishRefusal::GateFailed`], carrying
-/// the step's argv and the tail of what it printed. Zero is the only success, which
-/// `OD-GATE-004` decided for the step and nothing here relaxes.
+/// the step's argv and what [`Refused_Step_Output`] keeps of what it printed. Zero is the only
+/// success, which `OD-GATE-004` decided for the step and nothing here relaxes.
 fn Run_Derived_Step(
     launcher: &impl ProgramLauncher,
     item: &ItemId,
@@ -129,22 +160,52 @@ fn Run_Derived_Step(
 ) -> Result<GateOutcome, FinishRefusal>
 {
     let command = Command_From_Argv(argv.clone(), runner);
-    let ran = Ran_To_Completion(launcher, &command, item)?;
+    let exited = Exited_With_A_Code(launcher, &command, item)?;
 
-    if ran.code != 0
+    if exited.code != 0
     {
         return Err(FinishRefusal::GateFailed {
             item: item.clone(),
             argv,
-            exit_code: ran.code,
-            output_tail: ran.tail,
+            exit_code: exited.code,
+            output_tail: Refused_Step_Output(&exited.output),
         });
     }
 
     return Ok(GateOutcome {
         argv,
-        exit_code: ran.code,
+        exit_code: exited.code,
     });
+}
+
+/// What a refused step's refusal carries of what it printed: every line its report labelled
+/// Blocking, lifted out of wherever it fell, and then the same tail every refusal carried
+/// before.
+///
+/// The tail alone was not enough. It joins standard error after standard output, and `cargo run`
+/// writes the toolchain's warnings on standard error, so they fill the tail first; and the
+/// report does not put its Blocking findings last. The line that refused the finish sat outside
+/// what the refusal kept, and its reader re-ran the whole gate to learn which finding it was.
+/// [`BLOCKING_LINE_PREFIX`] says why the lines are found by their label.
+///
+/// The tail comes after the lifted lines, unchanged, so nothing a refusal showed before is
+/// lost: a step that printed no such line -- a clippy lint step, or a `Rules` step that refused
+/// for a reason other than a Blocking finding -- refuses with exactly the tail it always did.
+fn Refused_Step_Output(output: &ProgramOutput) -> String
+{
+    let tail = Combined_Tail(output);
+    let labelled: Vec<&str> =
+        output.stdout.lines().filter(|line| return line.starts_with(BLOCKING_LINE_PREFIX)).collect();
+    if labelled.is_empty()
+    {
+        return tail;
+    }
+
+    return format!(
+        "every line its report labelled Blocking, lifted from wherever it fell in the report:\n{}\n\n\
+         the end of what it printed:\n{tail}",
+        labelled.join("\n")
+    );
 }
 
 #[cfg(test)]
@@ -317,6 +378,218 @@ mod tests
             matches!(refusal, FinishRefusal::GateFailed { exit_code: LINT_EXIT_CODE, .. }),
             "got {refusal:?}"
         );
+    }
+
+    /// The exit code `gate run` gives a run with a finding that can fail a build.
+    const BLOCKING_EXIT_CODE: i32 = 1;
+
+    /// The word that tells [`WORKFLOW`]'s lint command from its `Rules` command.
+    const LINT_PROGRAM_WORD: &str = "clippy";
+
+    /// The rule, the subject, the summary and the location of the Blocking finding
+    /// `OD-GATE-036` reintroduced at `0000e0e3`, as `gate run` rendered it when this change
+    /// reintroduced it again in a scratch copy of the tree.
+    const BLOCKING_RULE: &str = "abbreviations";
+    const BLOCKING_SUBJECT: &str = "Assert_Well_Formed_GraphML";
+    const BLOCKING_SUMMARY: &str =
+        "`Assert_Well_Formed_GraphML` contains the word `ml`, no vowels — an abbreviation; spell it out";
+    const BLOCKING_LOCATION: &str = "crates/orchestration/nomos-gate-orchestration/src/export/supporting_fact_graph.rs";
+
+    /// A second Blocking finding, so "every" is asked of more than one line.
+    const SECOND_BLOCKING_LINE: &str =
+        "[Blocking] single-letter-names: x (`x` is a single-letter name) — crates/substrate/nomos-ledger/src/holder.rs:12:9";
+
+    /// How many Blocking lines [`Report_With_Blocking_Lines_Far_From_Its_End`] carries.
+    const BLOCKING_LINES_IN_THE_REPORT: usize = 2;
+
+    /// A line on standard error that begins as a Blocking report line does. Cargo's stream is
+    /// the toolchain's and not the step's report, so nothing on it is lifted, however it begins.
+    const TOOLCHAIN_LOOKALIKE_LINE: &str = "[Blocking] not-a-finding: printed by the toolchain on standard error";
+
+    /// How many advisory findings follow each Blocking one in the report, and how many warnings
+    /// cargo replays: enough that either group alone runs past the 2,000 bytes a refusal kept
+    /// of everything together. The cases assert that of the text they build rather than trust
+    /// this count for it.
+    const LINES_OF_OTHER_OUTPUT: usize = 24;
+
+    /// The Blocking finding as one rendered line, built from its parts so each part's presence
+    /// in a refusal is asserted against the same text the report carried.
+    fn Blocking_Line() -> String
+    {
+        return format!("[Blocking] {BLOCKING_RULE}: {BLOCKING_SUBJECT} ({BLOCKING_SUMMARY}) — {BLOCKING_LOCATION}");
+    }
+
+    /// Advisory findings as `gate run` renders them, numbered so no two are the same line.
+    fn Advisory_Lines(first: usize) -> Vec<String>
+    {
+        return (first..first.saturating_add(LINES_OF_OTHER_OUTPUT))
+            .map(|number| {
+                return format!(
+                    "[Advisory] lint-diagnostics: crates/substrate/nomos-ledger (warning [clippy::needless_pass_by_value]: \
+                     this argument is passed by value) — crates/substrate/nomos-ledger/src/store/reservation.rs:{number}"
+                );
+            })
+            .collect();
+    }
+
+    /// A report whose two Blocking lines each sit behind more than 2,000 bytes of advisory
+    /// findings, closed by the summary line `gate run` prints last.
+    fn Report_With_Blocking_Lines_Far_From_Its_End() -> String
+    {
+        let mut lines = vec!["run: 0123456789abcdef".to_owned(), Blocking_Line()];
+        lines.extend(Advisory_Lines(0));
+        lines.push(SECOND_BLOCKING_LINE.to_owned());
+        lines.extend(Advisory_Lines(LINES_OF_OTHER_OUTPUT));
+        lines.push(String::new());
+        lines.push("50 finding(s), 2 of which can fail a build, 0 below the evidence floor, 0 calibrated, 0 suppressed, 0 baselined".to_owned());
+
+        return lines.join("\n") + "\n";
+    }
+
+    /// What `cargo run` writes on standard error ahead of the run: the workspace's compiler
+    /// warnings, replayed from cache, led by a line that merely looks like a Blocking one.
+    fn Cargo_Replay() -> String
+    {
+        let warnings = (0..LINES_OF_OTHER_OUTPUT).map(|number| {
+            return format!(
+                "warning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:{number}:5\n"
+            );
+        });
+
+        return format!("{TOOLCHAIN_LOOKALIKE_LINE}\n{}", warnings.collect::<String>());
+    }
+
+    /// What a refusal kept of a step's output before the report was read apart from it: the
+    /// last 2,000 bytes of standard output followed by standard error. Spelled out here rather
+    /// than borrowed from the code under test, so the code cannot move the expectation with it.
+    fn Tail_Before_The_Report_Was_Read_Apart(output: &ProgramOutput) -> String
+    {
+        return super::super::Tail_Of(&format!("{}{}", output.stdout, output.stderr), super::super::refusal::OUTPUT_TAIL_LIMIT);
+    }
+
+    /// A step that exited with `code` having printed `stdout` and `stderr`.
+    fn Printed(code: i32, stdout: String, stderr: String) -> ProgramOutput
+    {
+        return ProgramOutput { outcome: ExitOutcome::Exited { code }, stdout, stderr };
+    }
+
+    /// A launcher whose lint step and `Rules` step each answer with their own output.
+    struct PerStep
+    {
+        lint: ProgramOutput,
+        rules: ProgramOutput,
+    }
+
+    /// Answers from fixed data, so its outputs reproduce byte for byte.
+    impl Strategy for PerStep
+    {
+        const STRENGTH: DeterminismStrength = DeterminismStrength::State;
+        const SCOPE: ReproducibilityScope = ReproducibilityScope::SingleRun;
+        const TRACE: TraceEquivalence = TraceEquivalence::BitIdentical;
+    }
+
+    impl ProgramLauncher for &PerStep
+    {
+        fn Run(&self, command: &Command) -> Result<ProgramOutput, String>
+        {
+            let is_lint = command.argv.iter().any(|word| return word == LINT_PROGRAM_WORD);
+
+            return Ok(if is_lint { self.lint.clone() } else { self.rules.clone() });
+        }
+    }
+
+    /// The refusal [`Run_Gate_Steps`] answers `launcher` with, in a tree of its own named
+    /// `name`, and the tail it carries.
+    fn Refused_Output_Tail(launcher: &PerStep, name: &str) -> (FinishRefusal, String)
+    {
+        let directory = Tree_With_Workflow(name, WORKFLOW);
+        let clock = FixedClock(NOW_SECONDS);
+        let ledger = Ledger_At(&directory, &clock);
+        let runner = Runner {
+            working_directory: Some(directory.as_path()),
+            timeout: std::time::Duration::from_secs(GATE_TIMEOUT_SECONDS),
+        };
+
+        let Err(refusal) = Run_Gate_Steps(&ledger, &launcher, &ItemId::New("G-3"), runner)
+        else
+        {
+            panic!("a step that exits nonzero must refuse");
+        };
+        let FinishRefusal::GateFailed { output_tail, .. } = &refusal
+        else
+        {
+            panic!("expected GateFailed, got {refusal:?}");
+        };
+        let tail = output_tail.clone();
+
+        return (refusal, tail);
+    }
+
+    /// The gap `OD-LEDGER-003` version 2 recorded. A `Rules` step refuses for two Blocking
+    /// findings that each sit behind more than 2,000 bytes of the report, with cargo's replay
+    /// behind them both, so the tail a refusal kept before holds neither; the refusal its
+    /// reader sees still names each by rule, location and summary.
+    #[test]
+    fn Test_A_Refused_Rules_Step_Should_Show_Every_Blocking_Finding_However_Far_From_The_End_It_Fell()
+    {
+        let rules = Printed(BLOCKING_EXIT_CODE, Report_With_Blocking_Lines_Far_From_Its_End(), Cargo_Replay());
+        let before = Tail_Before_The_Report_Was_Read_Apart(&rules);
+        assert!(
+            !before.contains(&Blocking_Line()) && !before.contains(SECOND_BLOCKING_LINE),
+            "the case is only a case if the old tail reached neither line: {before}"
+        );
+        let launcher = PerStep { lint: Printed(0, String::new(), String::new()), rules };
+
+        let (refusal, _) = Refused_Output_Tail(&launcher, "rules-lifts-blocking");
+
+        let described = refusal.Describe();
+        for shown in [Blocking_Line().as_str(), SECOND_BLOCKING_LINE, BLOCKING_RULE, BLOCKING_LOCATION, BLOCKING_SUMMARY]
+        {
+            assert!(described.contains(shown), "the refusal must show `{shown}`: {described}");
+        }
+    }
+
+    /// What is lifted is the report's own Blocking lines and nothing else: not its advisory
+    /// findings, and not a line on cargo's stream that merely begins the same way. Everything
+    /// the refusal carried before still follows, unchanged, at its end.
+    #[test]
+    fn Test_A_Refused_Rules_Step_Should_Lift_Only_The_Reports_Blocking_Lines_And_Keep_The_Old_Tail()
+    {
+        let rules = Printed(BLOCKING_EXIT_CODE, Report_With_Blocking_Lines_Far_From_Its_End(), Cargo_Replay());
+        let before = Tail_Before_The_Report_Was_Read_Apart(&rules);
+        assert!(!before.contains(TOOLCHAIN_LOOKALIKE_LINE), "the lookalike must sit outside the old tail: {before}");
+        let launcher = PerStep { lint: Printed(0, String::new(), String::new()), rules };
+
+        let (_, tail) = Refused_Output_Tail(&launcher, "rules-lifts-only-blocking");
+
+        let Some(lifted) = tail.strip_suffix(before.as_str())
+        else
+        {
+            panic!("the old tail must close the refusal unchanged: {tail}");
+        };
+        let lifted_count = lifted.lines().filter(|line| return line.starts_with(BLOCKING_LINE_PREFIX)).count();
+        assert_eq!(lifted_count, BLOCKING_LINES_IN_THE_REPORT, "{lifted}");
+        assert!(!lifted.contains("[Advisory]"), "an advisory finding is not lifted: {lifted}");
+        assert!(!tail.contains(TOOLCHAIN_LOOKALIKE_LINE), "cargo's stream is not the report: {tail}");
+    }
+
+    /// The lint step's refusal is not made worse. It prints no report line labelled Blocking,
+    /// so it refuses with exactly the tail it carried before, byte for byte, whatever it wrote
+    /// on either stream.
+    #[test]
+    fn Test_A_Refused_Lint_Step_Should_Carry_Exactly_The_Tail_It_Carried_Before()
+    {
+        let errors: String = (0..LINES_OF_OTHER_OUTPUT)
+            .map(|number| return format!("error: this argument is passed by value\n  --> crates/a/src/lib.rs:{number}:1\n"))
+            .collect();
+        let lint = Printed(LINT_EXIT_CODE, "clippy's own standard output\n".to_owned(), errors);
+        let before = Tail_Before_The_Report_Was_Read_Apart(&lint);
+        let launcher = PerStep { lint, rules: Printed(0, String::new(), String::new()) };
+
+        let (refusal, tail) = Refused_Output_Tail(&launcher, "lint-tail-unchanged");
+
+        assert!(matches!(refusal, FinishRefusal::GateFailed { exit_code: LINT_EXIT_CODE, .. }), "got {refusal:?}");
+        assert_eq!(tail, before);
     }
 
     /// A command line as the argv a bare `run:` line splits into.

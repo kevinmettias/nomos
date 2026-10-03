@@ -1,6 +1,8 @@
 //! Running a command to a verdict, and refusing one that did not reach one.
 
 use super::{ItemId, FinishRefusal, Path, LedgerDocument, VerificationPredicate, ClaimRefusal, ProgramLauncher, Command, Tail_Of, ExitOutcome};
+use super::refusal::OUTPUT_TAIL_LIMIT;
+use nomos_platform::ProgramOutput;
 
 /// A predicate that ran and said no.
 ///
@@ -87,6 +89,17 @@ pub(super) struct Ran
     pub(super) tail: String,
 }
 
+/// One command that reached a verdict, with what it printed on each stream still apart.
+///
+/// A gate step needs the streams apart and the predicate does not: a step run through
+/// `cargo run` writes its own report on standard output while cargo writes the toolchain's
+/// warnings on standard error, and only the first is the step's answer.
+pub(super) struct Exited
+{
+    pub(super) code: i32,
+    pub(super) output: ProgramOutput,
+}
+
 /// Runs a command to a verdict.
 ///
 /// Both callers need the same three answers — the launcher would not start it, it ended
@@ -98,15 +111,28 @@ pub(super) fn Ran_To_Completion(
     item: &ItemId,
 ) -> Result<Ran, FinishRefusal>
 {
-    use super::refusal::OUTPUT_TAIL_LIMIT;
+    let exited = Exited_With_A_Code(launcher, command, item)?;
 
+    return Ok(Ran {
+        code: exited.code,
+        tail: Combined_Tail(&exited.output),
+    });
+}
+
+/// Runs a command to a verdict and keeps both of its streams, for a caller that reads them
+/// apart. [`Ran_To_Completion`] is this, reduced to the one tail a predicate keeps.
+pub(super) fn Exited_With_A_Code(
+    launcher: &impl ProgramLauncher,
+    command: &Command,
+    item: &ItemId,
+) -> Result<Exited, FinishRefusal>
+{
     let output = launcher
         .Run(command)
         .map_err(|cause| FinishRefusal::CouldNotRun {
             item: item.clone(),
             cause,
         })?;
-    let tail = Tail_Of(&format!("{}{}", output.stdout, output.stderr), OUTPUT_TAIL_LIMIT);
 
     let ExitOutcome::Exited { code } = output.outcome
     else
@@ -117,7 +143,17 @@ pub(super) fn Ran_To_Completion(
         });
     };
 
-    return Ok(Ran { code, tail });
+    return Ok(Exited { code, output });
+}
+
+/// The last [`OUTPUT_TAIL_LIMIT`] bytes of standard output followed by standard error.
+///
+/// The whole of what a predicate keeps, and the whole of what every refused gate step carried
+/// before a step's report was read apart from it -- which is why a refused step still carries
+/// exactly this, after anything lifted out of the report.
+pub(super) fn Combined_Tail(output: &ProgramOutput) -> String
+{
+    return Tail_Of(&format!("{}{}", output.stdout, output.stderr), OUTPUT_TAIL_LIMIT);
 }
 
 /// A command as this module builds them: what to run, where, and how long to wait.
@@ -171,7 +207,6 @@ mod tests
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use super::*;
     use crate::{ItemKind, ItemOrigin, ItemState, LedgerItem, Territory};
-    use nomos_platform::ProgramOutput;
 
     /// A nonzero exit code, which is all [`Refuse_Nonzero`] asks about. The case reads the
     /// number back out of the refusal.
