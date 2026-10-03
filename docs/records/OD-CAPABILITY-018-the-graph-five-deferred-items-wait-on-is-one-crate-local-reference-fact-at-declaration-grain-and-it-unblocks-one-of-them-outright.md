@@ -3,7 +3,7 @@ id: OD-CAPABILITY-018
 type: decision
 title: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - capability
@@ -119,10 +119,13 @@ and there is still nothing observed below it.
 It is. `crates/languages/nomos-lang-rust-compiler` depends on `ra_ap_hir`, `ra_ap_ide_db`,
 `ra_ap_load-cargo`, `ra_ap_project_model` and `ra_ap_syntax`, and `src/reading.rs` loads a real
 Cargo project with a discovered sysroot and hands back a `RootDatabase` with every file of the
-one crate under the root. Its own module doc states that the loader was factored out for
-exactly the reason that matters here: "[`Load_Crate`] is that shared part, factored out so
-`crate::nested_lock_reading::Discover_Nested_Locks` asks the same loaded [`Semantics`] a
-different question rather than re-solving sysroot discovery a second time."
+one crate under the root. The loader is one function, `Load_Crate`, factored out so that each
+family that asks the engine a question reaches a loaded `Semantics` through the same honest steps
+rather than solving sysroot discovery in code of its own. It is shared as code and not as a load:
+each family calls it for itself, so a run demanding both loads the crate graph twice. That cost
+was measured and accepted at two families, and the module doc of `src/reading.rs` records the
+numbers and what reopens it. The first trigger it names is a third family over the same crate
+graph being composed, which `nomos.cap.reference.edges` below would be.
 `Test_Discover_Crate_Should_Find_Exactly_The_Real_Clone_On_Copy_Call` holds that this load
 resolves for real against a fixture crate, and the two questions already asked of it —
 `Type::is_copy` on a resolved call expression, and a resolved generic argument read through a
@@ -459,9 +462,42 @@ the product drives invalidation today.
 **It does not add a `FactVariant` level, reorder the five, or introduce an epistemic type.**
 `OD-ANALYSIS-004`'s vocabulary rule is applied, not extended.
 
+## Amendment, Version 2
+
+**What was wrong.** Version 1 supported "the engine is already linked" by quoting the module doc
+of `crates/languages/nomos-lang-rust-compiler/src/reading.rs`: `Load_Crate` was factored out so
+`Discover_Nested_Locks` "asks the same loaded `Semantics` a different question rather than
+re-solving sysroot discovery a second time." That was true of the code and false at run time.
+Each family calls `Load_Crate` itself, and no run has ever handed one family's database to the
+other.
+`P146-THE-SEVENFOLD-SELF-CHECK-COST-IS-INSIDE-EVERY-PREDICATE-THAT-RUNS-A-REAL-GATE-AND-IT-HAS-ALREADY-SERIALIZED-THE-BOARD-2`
+measured the difference at `5dcf6f62`, three processes each, with dependencies at opt-level 2:
+- copy-clones took 16.3 s and nested-locks 18.2 s on loads of their own, 34.5 s of process wall;
+- on one shared load they took 19.0 s, mostly because the second family found its types already
+  resolved;
+- a real gate run took 54.0 s.
+
+That item accepted the separate loads at two families and corrected the module doc, so the quote
+named a sentence the code no longer carries.
+
+**What replaces it.** The paragraph now says what is true at this revision: one loader function,
+called by each family, loading once per family. It also carries forward the trigger that item
+recorded.
+
+**What this changes for the decision below.** Nothing about `nomos.cap.reference.edges` itself.
+Its grain, its levels, its invalidation route, its zone constraint and its three refusals stand
+as accepted. The argument that the engine is linked never depended on the run-time sharing, only
+on `ra_ap_hir` being a dependency and a loader existing. What the builder of this capability now
+knows is that composing it makes three families over one crate graph, and that this reopens the
+shared-load decision. A family on a load of its own pays the load and its own type resolution
+again, and whether families may answer from one resolution is a governing record's question, to
+be decided when that happens rather than here.
+
 ## Status
 
-Accepted, drawn by `P125-THE-FACT-FIVE-DEFERRED-ITEMS-WAIT-ON`. The fact five deferred items
+Accepted, drawn by `P125-THE-FACT-FIVE-DEFERRED-ITEMS-WAIT-ON`, and amended at version 2 by
+`P180-OD-CAPABILITY-018-QUOTES-A-LOADER-SENTENCE-THAT-CLAIMED-A-RUN-TIME-SHARING-NO-RUN-PERFORMS`,
+which corrected what the record said of the loader and changed nothing it decided. The fact five deferred items
 were reported to share is decided as one capability at declaration grain, with its levels, its
 invalidation route and its zone constraint fixed; three sibling facts are refused with named
 triggers, and the per-item mapping records that the one decision moves one deferred item

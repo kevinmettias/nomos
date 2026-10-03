@@ -63,7 +63,7 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md@authored | docs/records/OD-CAPABILITY-015-whether-a-bundled-contract-crate-doing-real-io-may-be-classified-capability-contract-zone.md | authored | 22 | 6 | sha256:c73b6568e987da09a2256a0e13c66b1d768911f443b0fa014c71ff319d11591f |
 | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md@authored | docs/records/OD-CAPABILITY-016-whether-the-two-direction-guarantee-check-is-a-requirement-every-provider-owes-or-a-practice-two-crates-chose.md | authored | 27 | 7 | sha256:cae971023f2e38fc400fcb48c0f851cf958af99faf124d0caaba5d34226ee492 |
 | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md@authored | docs/records/OD-CAPABILITY-017-whether-bundling-a-provider-with-its-contract-lets-a-rule-compile-link-an-external-system.md | authored | 54 | 15 | sha256:5469cacb65cde974eea5a5afa21dcf4f8d376eea74c7bbabc3abd161709b3c66 |
-| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md@authored | docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md | authored | 69 | 18 | sha256:c78c7459d7a5197f685e1069a6d4418615719b6ea90d757c2e6ea9dd017a024b |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md@authored | docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md | authored | 74 | 19 | sha256:2f152113620ebb40f7225e157c243f2cdba4da69eedf4ce541de843391ee67b9 |
 | docs/records/OD-CAPABILITY-019-a-syntactic-projection-is-a-kind-one-family-carries-declared-once-in-the-syntax-contract-and-not-a-capability-of-its-own.md@authored | docs/records/OD-CAPABILITY-019-a-syntactic-projection-is-a-kind-one-family-carries-declared-once-in-the-syntax-contract-and-not-a-capability-of-its-own.md | authored | 35 | 7 | sha256:78d1ad284dc65d23e720fdf0c8ca77c14f5b872ed54fa072684cfa21bbad81fe |
 | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md@authored | docs/records/OD-COMPLETENESS-001-a-completeness-guard-is-only-as-complete-as-its-universe.md | authored | 33 | 9 | sha256:26a4c8c8e217e97e0c147d846441c33d854347e490c3757345f06a4021b6d7ff |
 | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md@authored | docs/records/OD-COMPLETENESS-002-a-universe-claims-its-mirror-in-one-place.md | authored | 54 | 10 | sha256:fc95b7901fc9e920666e8f04eb01c6436a96d16fc63f94e0599114d5cfa5928b |
@@ -755,7 +755,8 @@ profile: domain-specification
 | docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#53 | authored | 3 | 6. What a rule in the Rules zone may read, which `OD-RULES-024` surfaced and left open |
 | docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#58 | authored | 2 | What Is Refused, And On What Trigger |
 | docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#61 | authored | 2 | What This Record Does Not Do |
-| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#68 | authored | 2 | Status |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#68 | authored | 2 | Amendment, Version 2 |
+| docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#73 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-019-a-syntactic-projection-is-a-kind-one-family-carries-declared-once-in-the-syntax-contract-and-not-a-capability-of-its-own.md#1 | authored | 1 | A syntactic projection is a kind one family carries, declared once in the syntax contract, and not a capability of its own |
 | docs/records/OD-CAPABILITY-019-a-syntactic-projection-is-a-kind-one-family-carries-declared-once-in-the-syntax-contract-and-not-a-capability-of-its-own.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-019-a-syntactic-projection-is-a-kind-one-family-carries-declared-once-in-the-syntax-contract-and-not-a-capability-of-its-own.md#5 | authored | 2 | What Was Measured |
@@ -19466,15 +19467,18 @@ and there is still nothing observed below it.
 
 ### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#14
 
-*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / Whether the engine for a graph is already linked, which changes what is being decided · hash: sha256:4bef2b0f6c9219968837600f5cd999eee448a1f581a1de8f529d493f4c9c271c*
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / What Was Measured / Whether the engine for a graph is already linked, which changes what is being decided · hash: sha256:a725334375b300744bcd034c70959d6f32c43bd73e4342002ad866a78bae1dab*
 
 It is. `crates/languages/nomos-lang-rust-compiler` depends on `ra_ap_hir`, `ra_ap_ide_db`,
 `ra_ap_load-cargo`, `ra_ap_project_model` and `ra_ap_syntax`, and `src/reading.rs` loads a real
 Cargo project with a discovered sysroot and hands back a `RootDatabase` with every file of the
-one crate under the root. Its own module doc states that the loader was factored out for
-exactly the reason that matters here: "[`Load_Crate`] is that shared part, factored out so
-`crate::nested_lock_reading::Discover_Nested_Locks` asks the same loaded [`Semantics`] a
-different question rather than re-solving sysroot discovery a second time."
+one crate under the root. The loader is one function, `Load_Crate`, factored out so that each
+family that asks the engine a question reaches a loaded `Semantics` through the same honest steps
+rather than solving sysroot discovery in code of its own. It is shared as code and not as a load:
+each family calls it for itself, so a run demanding both loads the crate graph twice. That cost
+was measured and accepted at two families, and the module doc of `src/reading.rs` records the
+numbers and what reopens it. The first trigger it names is a third family over the same crate
+graph being composed, which `nomos.cap.reference.edges` below would be.
 `Test_Discover_Crate_Should_Find_Exactly_The_Real_Clone_On_Copy_Call` holds that this load
 resolves for real against a fixture crate, and the two questions already asked of it —
 `Type::is_copy` on a resolved call expression, and a resolved generic argument read through a
@@ -20025,15 +20029,68 @@ the product drives invalidation today.
 
 ### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#68
 
+*revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Amendment, Version 2 · hash: sha256:5cb944a4a1301e8ad3517f1765a04a3f16c2d31cb5ec1b14acf903dbfedfe51e*
+
+## Amendment, Version 2
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#69
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Amendment, Version 2 · hash: sha256:cc3233784fa02893461aa93514dd1a32c8e0743763a100705a44bb2af5b38920*
+
+**What was wrong.** Version 1 supported "the engine is already linked" by quoting the module doc
+of `crates/languages/nomos-lang-rust-compiler/src/reading.rs`: `Load_Crate` was factored out so
+`Discover_Nested_Locks` "asks the same loaded `Semantics` a different question rather than
+re-solving sysroot discovery a second time." That was true of the code and false at run time.
+Each family calls `Load_Crate` itself, and no run has ever handed one family's database to the
+other.
+`P146-THE-SEVENFOLD-SELF-CHECK-COST-IS-INSIDE-EVERY-PREDICATE-THAT-RUNS-A-REAL-GATE-AND-IT-HAS-ALREADY-SERIALIZED-THE-BOARD-2`
+measured the difference at `5dcf6f62`, three processes each, with dependencies at opt-level 2:
+- copy-clones took 16.3 s and nested-locks 18.2 s on loads of their own, 34.5 s of process wall;
+- on one shared load they took 19.0 s, mostly because the second family found its types already
+  resolved;
+- a real gate run took 54.0 s.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#70
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Amendment, Version 2 · hash: sha256:9003879a03f01da15311678e26036037f20d2e0b0878d80a9461552cf266bb9e*
+
+That item accepted the separate loads at two families and corrected the module doc, so the quote
+named a sentence the code no longer carries.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#71
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Amendment, Version 2 · hash: sha256:f13ef580ce1a339232efb2e0931b46a0156e2a87b0a19cd8e2dc71c11c938eb9*
+
+**What replaces it.** The paragraph now says what is true at this revision: one loader function,
+called by each family, loading once per family. It also carries forward the trigger that item
+recorded.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#72
+
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Amendment, Version 2 · hash: sha256:0c7db73b9eee50ba3bc9c2526a9740c600387966662a694a42141830f01d94e8*
+
+**What this changes for the decision below.** Nothing about `nomos.cap.reference.edges` itself.
+Its grain, its levels, its invalidation route, its zone constraint and its three refusals stand
+as accepted. The argument that the engine is linked never depended on the run-time sharing, only
+on `ra_ap_hir` being a dependency and a loader existing. What the builder of this capability now
+knows is that composing it makes three families over one crate graph, and that this reopens the
+shared-load decision. A family on a load of its own pays the load and its own type resolution
+again, and whether families may answer from one resolution is a governing record's question, to
+be decided when that happens rather than here.
+
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#73
+
 *revision: authored · kind: heading · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#69
+### docs/records/OD-CAPABILITY-018-the-graph-five-deferred-items-wait-on-is-one-crate-local-reference-fact-at-declaration-grain-and-it-unblocks-one-of-them-outright.md#74
 
-*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Status · hash: sha256:af7a3cdc33bf6a153606576ee74364c3908ecf2482d4aa60603cf0b8da07b4a8*
+*revision: authored · kind: prose · heading: The graph five deferred items wait on is one crate-local reference fact at declaration grain, and it unblocks one of them outright / Status · hash: sha256:a7e745f1716b92008b7d160ef5872700e2b7137eafa708a210511ddf8b6bcf95*
 
-Accepted, drawn by `P125-THE-FACT-FIVE-DEFERRED-ITEMS-WAIT-ON`. The fact five deferred items
+Accepted, drawn by `P125-THE-FACT-FIVE-DEFERRED-ITEMS-WAIT-ON`, and amended at version 2 by
+`P180-OD-CAPABILITY-018-QUOTES-A-LOADER-SENTENCE-THAT-CLAIMED-A-RUN-TIME-SHARING-NO-RUN-PERFORMS`,
+which corrected what the record said of the loader and changed nothing it decided. The fact five deferred items
 were reported to share is decided as one capability at declaration grain, with its levels, its
 invalidation route and its zone constraint fixed; three sibling facts are refused with named
 triggers, and the per-item mapping records that the one decision moves one deferred item
