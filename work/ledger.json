@@ -101935,6 +101935,88 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P198-NAMING-KEYS-REPOSITORIES-DECLARE-THAT-NO-RULE-READS-FOR-THE-LANGUAGE-THEY-WROTE-THEM-FOR",
+      "title": "Naming keys repositories declare that no rule reads for the language they wrote them for",
+      "why": "Found by P194-THE-RUST-FUNCTION-NAMING-RULE-NEVER-READS-THE-KEYS-XVPE-DECLARES-ITS-FUNCTION-CASE-UNDER's claimant, measured 2026-10-03 at 718fa76d, and recorded in OD-RULES-035 version 4 decision 7 as left undecided. P194 made the Rust function-naming rule read the function.exported and function.unexported refinements before the plain function key, in code-standards' own order. Three gaps of the same kind remain. First, the Go function rules read only the refinements and never fall back to the plain function key, as code-standards' Override_Case does. This repository declares only function (upper-snake), as do kwb and the hex fixture, and since P178 this repository holds a Go file (crates/languages/nomos-lang-go-types/helper/main.go), so its declared function case is not what its Go file is judged against. Second, function-naming-convention judges every language other than Rust against the repository-wide function key only, never a languages.<lang> scope. Third, nomos, kwb and xvpe each declare a method key in their naming block, and no rule reads it. A declared convention that nothing reads is invisible: it can be changed or mis-typed with every test green, and once P190-A-RUN-NAMES-EVERY-VALUE-ITS-RULES-READ-THAT-THE-REPOSITORY-NEVER-DECLARED-BESIDE-ITS-CLAIM lands, a run will say which values were never declared while staying silent about values declared and never read.",
+      "done_when": "For each of the three gaps the claimant measures which repositories in reach declare which keys (this workspace, kwb, xvpe, the hex fixture, and the code-standards corpus when reachable) and decides, in OD-RULES-035 as a numbered decision beside decision 7, whether a rule reads the key, in what order against the keys it already reads, and why. Refusing to read a key is a legitimate decision if the reason is stated, including for method, if no rule judges a method's name as distinct from a function's. Each key a rule starts reading is proven by a test where the declaration differs from what the rule would otherwise judge against, shown able to fail by a mutation restored byte-identically. This repository's own nomos check findings and the hex calibration are compared before and after, and every change is explained. If the Go file in this repository changes verdict, say so plainly, since it is judged by this repository's own declaration. The record carries a version bump, the citation constant that pins it moves with it, both projections are re-rendered from the tree the commit publishes, and the predicate passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming.rs",
+          "crates/rules/nomos-rules/src/checks/naming",
+          "crates/rules/nomos-rules/src/rule_descriptor/policy_axis.rs",
+          "crates/rules/nomos-rules/src/checks/undeclared_policy_key.rs",
+          "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P199-OD-RULES-011-VERSION-3-SAYS-WHICH-NAMING-KEYS-A-RULE-READS-IS-NOT-DECIDED-HERE-AND-NOT-WHERE",
+      "title": "OD-RULES-011 says which naming keys a rule reads is not decided there, and not where it is",
+      "why": "OD-RULES-011 version 3 says which naming keys a rule reads is not decided there, which is accurate. Since P194-THE-RUST-FUNCTION-NAMING-RULE-NEVER-READS-THE-KEYS-XVPE-DECLARES-ITS-FUNCTION-CASE-UNDER landed at 718fa76d, OD-RULES-035 version 4 decision 7 decides it for the Rust function rule, and OD-RULES-011 does not say so. A reader who meets the sentence is told where the decision is not, and not where it is. P194's claimant found this and did not reach into a record outside its territory.",
+      "done_when": "OD-RULES-011 says where the naming keys a rule reads are decided, OD-RULES-035 from its decision 7 on, without restating that decision, and cites items by full id. It carries a version bump, and any citation constant pinning OD-RULES-011's version moves with it (rule_contract_citation catches it); widen for that constant if needed. No behaviour changes. Both projections are re-rendered from the tree the commit publishes, and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "-p",
+          "nomos-rules"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
