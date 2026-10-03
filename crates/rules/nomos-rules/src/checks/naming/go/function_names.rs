@@ -20,7 +20,7 @@
 //! here, the same way every casing rule in this crate now resolves its case from a
 //! repository's own `nomos.cap.naming.policy` rather than a hand-rolled predicate.
 
-use crate::checks::naming::Resolve_Case;
+use crate::checks::naming::{Case_Judged_Against, Resolve_Case};
 use crate::rule_descriptor::policy_axis::{EXPORTED_FUNCTION_CASE, UNEXPORTED_FUNCTION_CASE};
 use crate::SourceFile;
 use nomos_analysis::FactReader;
@@ -92,7 +92,7 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> Vec<Finding
         .iter()
         .filter(|item| return Is_Exported_Go_Function(item))
         .filter(|item| return !case.Is_The_Shape_Of(item.Own_Name()))
-        .map(|item| return Violation_Finding(path, item))
+        .map(|item| return Violation_Finding(path, item, case))
         .collect();
 }
 
@@ -101,10 +101,10 @@ fn Is_Exported_Go_Function(item: &PayloadItem) -> bool
     return item.kind == FUNCTION && item.Is_Public();
 }
 
-fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
+fn Violation_Finding(path: &str, item: &PayloadItem, case: Case) -> Finding
 {
     let name = item.Own_Name();
-    let summary = format!("exported Go function `{name}` is not Upper_Snake_Case");
+    let summary = format!("exported Go function `{name}` is not {}", Case_Judged_Against(case));
     return Function_Naming_Finding(EXPORTED_FUNCTIONS_USE_UPPER_SNAKE_CASE, path, item, summary);
 }
 
@@ -115,7 +115,7 @@ fn Unexported_Violations_In(payload: &SyntaxPayload, path: &str, case: Case) -> 
         .iter()
         .filter(|item| return Is_Unexported_Go_Function(item))
         .filter(|item| return !case.Is_The_Shape_Of(item.Own_Name()))
-        .map(|item| return Unexported_Violation_Finding(path, item))
+        .map(|item| return Unexported_Violation_Finding(path, item, case))
         .collect();
 }
 
@@ -124,10 +124,10 @@ fn Is_Unexported_Go_Function(item: &PayloadItem) -> bool
     return item.kind == FUNCTION && !item.Is_Public();
 }
 
-fn Unexported_Violation_Finding(path: &str, item: &PayloadItem) -> Finding
+fn Unexported_Violation_Finding(path: &str, item: &PayloadItem, case: Case) -> Finding
 {
     let name = item.Own_Name();
-    let summary = format!("unexported Go function `{name}` lowercases more than its first letter from Upper_Snake_Case");
+    let summary = format!("unexported Go function `{name}` is not {}", Case_Judged_Against(case));
     return Function_Naming_Finding(UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER, path, item, summary);
 }
 

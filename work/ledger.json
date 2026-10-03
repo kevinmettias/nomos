@@ -102751,17 +102751,13 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM",
         "P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "opus-p192-value",
-        "acquired_at": 1791044099,
-        "lease_expires_at": 1791058499
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -102774,7 +102770,49 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "    Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n89 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: `nomos-rules` (lib test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.46s\n     Running unittests src\\lib.rs (F:/repos/nomos-p192-target\\debug\\deps\\nomos_integration_tests-d41870b422a07b8b.exe)\n     Running tests\\analysis_slice\\main.rs (F:/repos/nomos-p192-target\\debug\\deps\\analysis_slice-7a8e52e4da48cbd2.exe)\n     Running tests\\calibration.rs (F:/repos/nomos-p192-target\\debug\\deps\\calibration-ecf0938929045c32.exe)\n     Running tests\\determinism\\main.rs (F:/repos/nomos-p192-target\\debug\\deps\\determinism-90312f3974ae38d6.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p192-target\\debug\\deps\\nomos_rules-8f9f4cdb33820fc9.exe)\n     Running tests\\integration_seams.rs (F:/repos/nomos-p192-target\\debug\\deps\\integration_seams-d9394d4149bb615a.exe)\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_rules\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: 1 warning emitted\n\n",
+        "verified_at": 1791046930,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "a370a0042f00211e88cc30298e9fff8f54bbf977"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -103514,7 +103552,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -103529,6 +103567,129 @@
           "nomos-contract-tests"
         ],
         "timeout_seconds": 3600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "baa8c0679ce59d.exe)\n     Running tests\\corpus_gates.rs (F:/repos/nomos-p202-target\\debug\\deps\\corpus_gates-da4a75d3d309d3ef.exe)\n     Running tests\\crossing_cold.rs (F:/repos/nomos-p202-target\\debug\\deps\\crossing_cold-0f9de3a884be5761.exe)\n     Running tests\\determinism_declarations.rs (F:/repos/nomos-p202-target\\debug\\deps\\determinism_declarations-bc6752ca6e73573c.exe)\n     Running tests\\determinism_vocabulary.rs (F:/repos/nomos-p202-target\\debug\\deps\\determinism_vocabulary-f4b3bb9fc86abd5f.exe)\n     Running tests\\public_surface\\main.rs (F:/repos/nomos-p202-target\\debug\\deps\\public_surface-0af8fb56f8a4a91f.exe)\n     Running tests\\record_citation.rs (F:/repos/nomos-p202-target\\debug\\deps\\record_citation-e19eef83b69a6f12.exe)\n     Running tests\\requirement_trace\\main.rs (F:/repos/nomos-p202-target\\debug\\deps\\requirement_trace-009de64f7282120e.exe)\n     Running tests\\rule_composition.rs (F:/repos/nomos-p202-target\\debug\\deps\\rule_composition-25a45331b893b875.exe)\n     Running tests\\rule_contract_citation.rs (F:/repos/nomos-p202-target\\debug\\deps\\rule_contract_citation-002e0e5a5c7c36ab.exe)\n     Running tests\\rule_descriptors.rs (F:/repos/nomos-p202-target\\debug\\deps\\rule_descriptors-b0eaaf57c3a31217.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/nomos-p202-target\\debug\\deps\\toolchain_floor-f83c22963bb3653d.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p202-target\\debug\\deps\\nomos_spec_store-06e6aa6a481bd8b1.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/nomos-p202-target\\debug\\deps\\governing_records_are_present-00262ca1fd3972b5.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/nomos-p202-target\\debug\\deps\\round_trip_holds-186543f7685a6a84.exe)\n     Running tests\\store_holds.rs (F:/repos/nomos-p202-target\\debug\\deps\\store_holds-9ca0a8b8a7346719.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/nomos-p202-target\\debug\\deps\\table_rows-8e18e4b8c31c2df5.exe)\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_spec_store\n",
+        "verified_at": 1791046905,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "a6ebb874fdd488da16f332b7f36d449ec846648e"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P203-OD-RULES-011-COUNTS-NINE-RULES-WHOSE-FINDINGS-MISSTATED-THEIR-VALUE-AND-THERE-WERE-TEN",
+      "title": "OD-RULES-011 counts nine rules whose findings misstated their value, and there were ten",
+      "why": "OD-RULES-011 version 3, under What the findings themselves say, counts nine composed rules whose findings misstate or omit the value they were judged against, and its decision 4 says the nine rules measured above break the first half today. There were ten. types-use-upper-camel-case-lower-camel-case resolves type.exported and type.unexported through Resolve_Case and judges each Go type against the resolved case, but at a370a004 its finding named UpperCamelCase or lowerCamelCase by visibility alone, through Expected_Case_Label in crates/rules/nomos-rules/src/checks/naming/go/type_names.rs. A repository declaring type.exported as lower-snake would have been told that an exported OrderBook is not UpperCamelCase, which is false. The text was right only while the resolved case was the default, which is exactly the condition the measurement ran under, so nothing in the hex calibration or this workspace's self-check showed it. P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM repeated the omission in its own why, found the defect while implementing decision 4, widened to that file and corrected it with the other nine. The record's count is a measured claim, and it is wrong by one.",
+      "done_when": "OD-RULES-011 carries a version bump whose amendment says the count of rules whose findings misstated their value was ten, names types-use-upper-camel-case-lower-camel-case as the tenth, says why the measurement missed it (its text named the default case, which only a declaration of another case could falsify), and says P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM corrected all ten. No decision of the record changes, and Status records the amendment by full item id. Both projections are re-rendered from the tree the commit publishes, and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "diagrams/relations.mmd",
+          "diagrams/relations.mmd.nomos-projection.json",
+          "spec/domain-specification.md",
+          "spec/domain-specification.md.nomos-projection.json",
+          "docs/records/OD-RULES-011-a-rules-parameters-are-a-fact-a-repository-declares-not-a-constant-the-rule-compiles-with.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P204-TWO-DOCS-STILL-QUOTE-THE-FINDING-TEXT-P192-RETIRED",
+      "title": "Two docs still quote the finding text P192 retired",
+      "why": "P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM changed what ten casing and limit rules write in a finding, so that each states the value it judged against and nothing about where that value came from. Two pieces of prose outside its territory still describe the old text. The module doc of tests/integration/tests/calibration.rs says the README citation function-naming-convention's summary still hardcodes is real, inert once a repository declares its convention, and flagged as a latent wording defect; after P192 the summary names the case it judged against, as function from_hex is not upper-snake case, and cites no file. The doc of Own_Name_Finding in crates/rules/nomos-rules/src/checks/finding_shape.rs quotes a summary saying Helper is not UpperCamelCase, which no rule writes any longer: the Go type rule now says Go type Helper is not upper-camel case. calibration.rs was in P176-A-LABELED-JUMP-IS-THE-FIRST-SYNTAX-SITE-AND-THE-FAMILY-THAT-CARRIES-IT-2's live claim when P192 found it, and P190-A-RUN-NAMES-EVERY-VALUE-ITS-RULES-READ-THAT-THE-REPOSITORY-NEVER-DECLARED-BESIDE-ITS-CLAIM reserves it as well, so P192 boarded it rather than widening.",
+      "done_when": "The calibration module doc says what function-naming-convention's finding states since P192, the case it judged against, and no longer that a README citation is still hardcoded or that a latent wording defect remains; its measured history of the 13 findings may stay. The Own_Name_Finding doc quotes a summary a rule in this crate can produce. Only prose changes: no test, finding, summary or identity moves. The predicate passes.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration/tests/calibration.rs",
+          "crates/rules/nomos-rules/src/checks/finding_shape.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "timeout_seconds": 7200
       },
       "verified": null,
       "abandoned": [],

@@ -231,7 +231,7 @@ impl<'a> NestingWalk<'a>
         };
         if let Some(breach) = finished.breach
         {
-            let finding = Nesting_Finding(self.source, &breach);
+            let finding = Nesting_Finding(self.source, &breach, self.limit);
             self.findings.push(finding);
         }
     }
@@ -250,8 +250,13 @@ impl<'a> NestingWalk<'a>
     }
 }
 
-/// The one finding a too-deeply-nested function produces.
-fn Nesting_Finding(source: &SourceFile, breach: &Breach) -> Finding
+/// The one finding a too-deeply-nested function produces, naming both the depth it reached and
+/// `limit`, the deepest nesting it was judged against.
+///
+/// It named the depth alone once, so a reader could not tell from the finding what the function
+/// had passed. `OD-RULES-011` version 3 decision 4 asks a finding to state the value it was judged
+/// against, and nothing about where that value came from.
+fn Nesting_Finding(source: &SourceFile, breach: &Breach, limit: usize) -> Finding
 {
     let location = format!("{}:{}", source.path, breach.line_number);
     let depth = breach.depth;
@@ -265,7 +270,7 @@ fn Nesting_Finding(source: &SourceFile, breach: &Breach) -> Finding
         evidence: EvidenceClass::Derived,
         gate: GateCategory::Blocking,
         summary: format!(
-            "{location} nests control flow {depth} levels deep; by this level a reader holds every enclosing condition in their head to know whether the line runs at all -- flatten it with a guard clause and an early return, or extract the inner levels into a named helper"
+            "{location} nests control flow {depth} levels deep, past the limit of {limit}; by this level a reader holds every enclosing condition in their head to know whether the line runs at all -- flatten it with a guard clause and an early return, or extract the inner levels into a named helper"
         ),
         locations: vec![location],
     };

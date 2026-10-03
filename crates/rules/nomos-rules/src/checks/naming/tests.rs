@@ -387,6 +387,133 @@ fn Test_Check_Naming_Convention_Should_Not_Read_A_Refinement_For_A_Function_In_A
     assert_eq!(Judged_Names(&findings), vec!["run_With_Backend"], "{findings:?}");
 }
 
+// The tests below hold each casing rule's finding to `OD-RULES-011` version 3 decision 4: it states
+// the case it was judged against, and nothing about where that case came from. Each judges one
+// subject three times -- in a repository that declares nothing, in one that declares exactly the
+// case the rule would otherwise judge against, and in one that declares another -- and requires the
+// first two to report identical findings, so identical identities, and the third to name its own
+// case. The exact text is asserted, so a summary that names a source again fails here.
+
+#[test]
+fn Test_Check_Naming_Convention_Should_State_The_Case_It_Judged_Against_And_Not_Where_It_Came_From()
+{
+    Assert_States_The_Case_It_Judged_Against(&CaseStatement {
+        check: Check_Naming_Convention,
+        path: Path("src/lib.rs"),
+        payload: "unexpanded\t0\nitem\t0\tFunction\tPublic\tbad_name\t.\t+fn/0\n",
+        symbol: "function",
+        undeclared: (Case::UpperSnake, "function `bad_name` is not upper-snake case"),
+        declared: (Case::ScreamingSnake, "function `bad_name` is not screaming-snake case"),
+    });
+}
+
+/// The same judgment under the code-standards id carries the same text.
+#[test]
+fn Test_Check_Project_Owned_Function_Names_Use_Upper_Snake_Case_Should_State_The_Case_It_Judged_Against()
+{
+    Assert_States_The_Case_It_Judged_Against(&CaseStatement {
+        check: Check_Project_Owned_Function_Names_Use_Upper_Snake_Case,
+        path: Path("src/lib.rs"),
+        payload: "unexpanded\t0\nitem\t0\tFunction\tPrivate\tbad_name\t.\t+fn/0\n",
+        symbol: "function",
+        undeclared: (Case::UpperSnake, "function `bad_name` is not upper-snake case"),
+        declared: (Case::UpperCamel, "function `bad_name` is not upper-camel case"),
+    });
+}
+
+#[test]
+fn Test_Check_Module_And_Field_Names_Stay_Lower_Snake_Should_State_The_Case_It_Judged_Against()
+{
+    Assert_States_The_Case_It_Judged_Against(&CaseStatement {
+        check: Check_Module_And_Field_Names_Stay_Lower_Snake,
+        path: Path("src/lib.rs"),
+        payload: "unexpanded\t0\nitem\t0\tStruct\tPublic\tConfig\t.\t+fields\\nBadField\\tString\n",
+        symbol: "field",
+        undeclared: (Case::LowerSnake, "`BadField` is a data name that is not lower-snake case"),
+        declared: (Case::ScreamingSnake, "`BadField` is a data name that is not screaming-snake case"),
+    });
+}
+
+#[test]
+fn Test_Check_Exported_Go_Functions_Use_Upper_Snake_Case_Should_State_The_Case_It_Judged_Against()
+{
+    Assert_States_The_Case_It_Judged_Against(&CaseStatement {
+        check: Check_Exported_Go_Functions_Use_Upper_Snake_Case,
+        path: Path("main.go"),
+        payload: "unexpanded\t0\nitem\t0\tFunction\tPublic\trun_With_Backend\t.\t+fn/0\n",
+        symbol: "function.exported",
+        undeclared: (Case::UpperSnake, "exported Go function `run_With_Backend` is not upper-snake case"),
+        declared: (Case::LowerSnake, "exported Go function `run_With_Backend` is not lower-snake case"),
+    });
+}
+
+#[test]
+fn Test_Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter_Should_State_The_Case_It_Judged_Against()
+{
+    Assert_States_The_Case_It_Judged_Against(&CaseStatement {
+        check: Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter,
+        path: Path("main.go"),
+        payload: "unexpanded\t0\nitem\t0\tFunction\tPrivate\trowBreaches\t.\t+fn/0\n",
+        symbol: "function.unexported",
+        undeclared: (Case::MixedSnake, "unexported Go function `rowBreaches` is not mixed-snake case"),
+        declared: (Case::LowerSnake, "unexported Go function `rowBreaches` is not lower-snake case"),
+    });
+}
+
+/// The exported side. The old text named upper camel case by visibility alone, so a declared lower
+/// snake case would have been reported as upper camel case, which is false of `OrderBook` and of
+/// every other name upper camel case accepts.
+#[test]
+fn Test_Check_Go_Type_Names_Use_Camel_Case_Should_State_The_Case_It_Judged_Against()
+{
+    Assert_States_The_Case_It_Judged_Against(&CaseStatement {
+        check: Check_Go_Type_Names_Use_Camel_Case,
+        path: Path("types.go"),
+        payload: "unexpanded\t0\nitem\t0\tStruct\tPublic\tOrder_Book\t.\t.\n",
+        symbol: "type.exported",
+        undeclared: (Case::UpperCamel, "Go type `Order_Book` is not upper-camel case"),
+        declared: (Case::LowerSnake, "Go type `Order_Book` is not lower-snake case"),
+    });
+}
+
+/// One casing rule and one subject it reports, judged in three repositories by
+/// [`Assert_States_The_Case_It_Judged_Against`].
+struct CaseStatement<'a>
+{
+    check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>,
+    path: Path<'a>,
+    payload: &'a str,
+    /// The key the two declarations are written under, repository-wide.
+    symbol: &'a str,
+    /// The case the rule judges against when nothing is declared, and the one summary it reports.
+    undeclared: (Case, &'a str),
+    /// A case that differs from it, declared, and the one summary that reports.
+    declared: (Case, &'a str),
+}
+
+/// Declaring nothing and declaring the undeclared case report identical findings, which therefore
+/// hash to identical identities, with exactly the expected text; declaring another case reports
+/// that case.
+fn Assert_States_The_Case_It_Judged_Against(statement: &CaseStatement<'_>)
+{
+    let judged_under = |rows: Vec<PolicyRow>| return Judged_Under_Policy(statement.check, statement.path, statement.payload, rows);
+    let (undeclared_case, undeclared_text) = statement.undeclared;
+    let (declared_case, declared_text) = statement.declared;
+
+    let undeclared = judged_under(Vec::new());
+    let restated = judged_under(vec![Row(Scope::Repository, statement.symbol, undeclared_case)]);
+    let declared = judged_under(vec![Row(Scope::Repository, statement.symbol, declared_case)]);
+
+    assert_eq!(Summaries(&undeclared), vec![undeclared_text], "{undeclared:?}");
+    assert_eq!(restated, undeclared, "declaring the case the rule already judged against must not change its finding");
+    assert_eq!(Summaries(&declared), vec![declared_text], "{declared:?}");
+}
+
+fn Summaries(findings: &[Finding]) -> Vec<&str>
+{
+    return findings.iter().map(|finding| return finding.summary.as_str()).collect();
+}
+
 fn Row(scope: Scope, symbol: &str, case: Case) -> PolicyRow
 {
     return PolicyRow { scope, symbol: symbol.to_owned(), case };
@@ -398,9 +525,16 @@ fn Judged_Names(findings: &[Finding]) -> Vec<&str>
 }
 
 /// What [`Check_Naming_Convention`] finds in one source whose syntax fact is `payload`, in a
-/// repository whose `standards.json` declares `rows` -- the naming policy fact filed beside the
-/// syntax fact, under its own provider, the way a real run materializes both.
+/// repository whose `standards.json` declares `rows`.
 fn Findings_Under_Policy(path: Path<'_>, payload: &str, rows: Vec<PolicyRow>) -> Vec<Finding>
+{
+    return Judged_Under_Policy(Check_Naming_Convention, path, payload, rows);
+}
+
+/// What `check` finds in one source whose syntax fact is `payload`, in a repository whose
+/// `standards.json` declares `rows` -- the naming policy fact filed beside the syntax fact, under
+/// its own provider, the way a real run materializes both.
+fn Judged_Under_Policy(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, path: Path<'_>, payload: &str, rows: Vec<PolicyRow>) -> Vec<Finding>
 {
     let source = Source_File(path, Text("// the payload is the fixture"));
     let TestOffering { mut store, mut registry, offer } = Offering();
@@ -419,7 +553,7 @@ fn Findings_Under_Policy(path: Path<'_>, payload: &str, rows: Vec<PolicyRow>) ->
     test_support::Materialize_Fact(&mut store, fact).expect("the fixture's store holds no fact under this key at a newer generation");
 
     let mut reader = Reader::On(&store, &registry, Test_Context());
-    return Check_Naming_Convention(&[source], &mut reader);
+    return check(&[source], &mut reader);
 }
 
 /// Builds `path`/`text` into a source, materializes `payload` as its syntax fact, and

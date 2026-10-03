@@ -30,9 +30,10 @@ pub(super) fn Violations_In(payload: &SyntaxPayload, path: &str, cases: Function
             continue;
         }
 
-        if !Is_The_Shape_Of(cases.For(item), item.Own_Name())
+        let case = cases.For(item);
+        if !Is_The_Shape_Of(case, item.Own_Name())
         {
-            let violation = Violation_Finding(path, item);
+            let violation = Violation_Finding(path, item, case);
             findings.push(violation);
         }
     }
@@ -62,20 +63,19 @@ fn Is_Trait_Method(payload: &SyntaxPayload, ordinal: usize) -> bool
     return owner.kind == IMPLEMENTATION && Impl_Serves_A_Trait(&owner.shape) == Some(true);
 }
 
-/// A finding for one function whose name does not conform.
-fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
+/// A finding for one function whose name does not conform to `case`, the case it was judged
+/// against.
+///
+/// It names that case and nothing else about it. It once cited this workspace's `README.md` and
+/// `Cargo.toml` whatever case had been resolved, and so told a repository that never declared one
+/// that its own files required a convention they do not mention.
+fn Violation_Finding(path: &str, item: &PayloadItem, case: Case) -> Finding
 {
     return Qualified_Name_Finding(
         Finding_Shape {
             rule: super::NAMING_CONVENTION,
             path,
-            summary: format!(
-                "`{}` is not Pascal_Snake_Case: README.md's Conventions section requires \
-                 function names to be Pascal_Snake_Case, and Cargo.toml disables rustc's own \
-                 non_snake_case lint specifically because this workspace uses a different \
-                 convention — nothing else was checking it.",
-                item.Own_Name()
-            ),
+            summary: format!("function `{}` is not {}", item.Own_Name(), super::Case_Judged_Against(case)),
         },
         item,
         GateCategory::Advisory,
@@ -258,6 +258,24 @@ mod tests
 
             let judged: Vec<&str> = findings.iter().map(|finding| return finding.subject_name.as_str()).collect();
             assert_eq!(judged, vec!["to_text"], "{findings:?}");
+        }
+
+        /// Each finding names the case its own side of visibility was judged against, so two
+        /// functions in one file, judged against two cases, are reported against two cases.
+        #[test]
+        fn Test_Violations_In_Should_Name_The_Case_Each_Function_Was_Judged_Against()
+        {
+            let payload = Payload_From_Text(
+                "unexpanded\t0\n\
+                 item\t0\tFunction\tPublic\tAsStr\t.\t+fn/1\n\
+                 item\t1\tFunction\tPrivate\tto_text\t.\t+fn/1\n",
+            );
+            let cases = FunctionCases { exported: Case::LowerSnake, unexported: Case::UpperSnake };
+
+            let findings = Violations_In(&payload, "src/lib.rs", cases);
+
+            let summaries: Vec<&str> = findings.iter().map(|finding| return finding.summary.as_str()).collect();
+            assert_eq!(summaries, vec!["function `AsStr` is not lower-snake case", "function `to_text` is not upper-snake case"]);
         }
 
         /// `OD-CAPABILITY-014` put a variable-length body behind an `impl` block's own

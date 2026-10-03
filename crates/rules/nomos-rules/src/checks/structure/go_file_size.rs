@@ -1,4 +1,9 @@
 //! Go's own, lower pair of the same two line-count triggers `structure.rs` states for Rust.
+//!
+//! The numbers are the axes' undeclared values for Go, and a repository may declare either one,
+//! for Go or for every language. So a finding names its threshold by value and not as Go's:
+//! `OD-RULES-011` version 3 decision 4 keeps a finding's text, and the two identities hashed from
+//! it, the same whichever source supplied the value it was judged against.
 
 use super::{FIVE_HUNDRED_LINE_REVIEW_TRIGGER, Findings_For_Threshold, GO, LineThreshold, ONE_THOUSAND_LINE_HARD_TRIGGER, Resolve_Count, Undeclared_Limit};
 use crate::rule_descriptor::policy_axis::{FILE_SIZE_HARD_LINES, FILE_SIZE_REVIEW_LINES};
@@ -15,7 +20,7 @@ pub fn Check_Go_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn
     {
         return vec![Undeclared_Limit(FIVE_HUNDRED_LINE_REVIEW_TRIGGER, &FILE_SIZE_REVIEW_LINES)];
     };
-    let because = format!("exceeds Go's {threshold}-line review trigger for splitting");
+    let because = format!("exceeds the {threshold}-line review trigger for splitting");
     return Findings_For_Threshold(
         sources,
         LineThreshold { rule: FIVE_HUNDRED_LINE_REVIEW_TRIGGER, lines: threshold, because: &because },
@@ -32,7 +37,7 @@ pub fn Check_Go_File_Size_Hard_Trigger(sources: &[SourceFile], facts: &mut dyn F
     {
         return vec![Undeclared_Limit(ONE_THOUSAND_LINE_HARD_TRIGGER, &FILE_SIZE_HARD_LINES)];
     };
-    let because = format!("exceeds Go's {threshold}-line trigger and needs decomposition or a documented locality justification");
+    let because = format!("exceeds the {threshold}-line trigger and needs decomposition or a documented locality justification");
     return Findings_For_Threshold(
         sources,
         LineThreshold { rule: ONE_THOUSAND_LINE_HARD_TRIGGER, lines: threshold, because: &because },

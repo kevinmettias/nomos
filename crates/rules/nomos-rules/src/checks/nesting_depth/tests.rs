@@ -168,6 +168,37 @@ fn Test_Check_Nesting_Depth_Should_Resolve_A_Declared_Limit()
     assert_eq!(findings.len(), 1, "{findings:?}");
 }
 
+/// `OD-RULES-011` version 3 decision 4: a finding states the limit it was judged against, and
+/// nothing about where that limit came from. It named the depth it found and no limit at all.
+/// Declaring exactly the limit the rule would otherwise judge against must report the finding
+/// declaring nothing does, so the same identities; declaring another names that one. The exact text
+/// is asserted, so a finding that says where its limit came from fails here.
+#[test]
+fn Test_Check_Nesting_Depth_Should_State_The_Limit_It_Judged_Against_And_Not_Where_It_Came_From()
+{
+    const DECLARED_LIMIT: u32 = 1;
+    const WHY: &str = "by this level a reader holds every enclosing condition in their head to know whether the line runs at all -- flatten it with a guard clause and an early return, or extract the inner levels into a named helper";
+    let source = || return Source("demo/src/a.rs", Nested(MAX_NESTING_DEPTH.saturating_add(1)));
+
+    let undeclared = Judge(&[source()]);
+    let restated = Judged_Under_Declared_Limit(source(), u32::try_from(MAX_NESTING_DEPTH).expect("3 fits in u32"));
+    let declared = Judged_Under_Declared_Limit(source(), DECLARED_LIMIT);
+
+    let summary_of = |findings: &[Finding]| return findings.iter().map(|finding| return finding.summary.clone()).collect::<Vec<_>>();
+    assert_eq!(summary_of(&undeclared), vec![format!("demo/src/a.rs:9 nests control flow 4 levels deep, past the limit of 3; {WHY}")]);
+    assert_eq!(restated, undeclared, "declaring the limit the rule already judged against must not change its finding");
+    assert_eq!(summary_of(&declared), vec![format!("demo/src/a.rs:5 nests control flow 2 levels deep, past the limit of 1; {WHY}")]);
+}
+
+/// What [`Check_Nesting_Depth`] finds in `source`, in a repository that declares `limit`.
+fn Judged_Under_Declared_Limit(source: SourceFile, limit: u32) -> Vec<Finding>
+{
+    let test_support::TestOffering { store, registry, .. } = Offering_With_Declared_Limit(limit);
+    let mut facts = Reader::On(&store, &registry, test_support::Test_Context());
+
+    return Check_Nesting_Depth(&[source], &mut facts);
+}
+
 /// A declared-and-offered limits capability whose one repository-wide row sets
 /// the [`NESTING_DEPTH_MAX`] axis to `value` — the policy source the declared-limit test reads.
 fn Offering_With_Declared_Limit(value: u32) -> test_support::TestOffering

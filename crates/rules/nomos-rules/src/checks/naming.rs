@@ -57,6 +57,16 @@
 //! [`Resolve_Most_Specific_Case`] is that read, and [`function_cases`] is the split. A function
 //! in any other language this rule judges still reads `function` repository-wide and nothing
 //! else, because the decision is about Rust alone.
+//!
+//! # A finding names the case it judged against, and not where that case came from
+//!
+//! `OD-RULES-011` version 3 decision 4: a finding states the value it was judged against, and
+//! nothing about that value that only one of its sources makes true. This rule's finding once
+//! cited the `README.md` and `Cargo.toml` above whatever case it had resolved, which was false in
+//! every repository but this one, and false here too for any case but the default. Every casing
+//! rule in this family now writes the case through [`Case_Judged_Against`], so a repository that
+//! declares the default reads the same text, and the same two identities hashed from it, as one
+//! that declares nothing.
 
 mod abbreviations;
 mod boolean_predicates;
@@ -141,6 +151,17 @@ pub(super) fn Resolve_Most_Specific_Case(facts: &mut dyn FactReader, language: O
     };
 
     return axes.iter().find_map(|axis| return Case_For_Symbol(&payload, language, axis.key)).or(undeclared);
+}
+
+/// How a finding names the case a name was judged against: the spelling a repository writes for
+/// it in `standards.json`, as `upper-snake case`, and nothing about whether a repository wrote it.
+///
+/// Every casing rule in this family writes its case through this one function, so the text a
+/// finding carries, and both identities `nomos-model` hashes from it, are the same whether the
+/// case was declared or is the axis's undeclared value -- `OD-RULES-011` version 3 decision 4.
+pub(super) fn Case_Judged_Against(case: Case) -> String
+{
+    return format!("{} case", case.Label());
 }
 
 /// The cases a Rust function is judged against, one per side of visibility, each read through the
@@ -300,6 +321,16 @@ mod self_tests
             findings.first().expect("asserted len 1 above").rule,
             nomos_contracts::RuleId::New(PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE)
         );
+    }
+
+    /// The spelling a repository writes in `standards.json`, and not a name this crate made up
+    /// for it: the vocabulary a reader would declare a different case in.
+    #[test]
+    fn Test_Case_Judged_Against_Should_Name_A_Case_By_The_Spelling_A_Repository_Declares_It_In()
+    {
+        assert_eq!(Case_Judged_Against(Case::UpperSnake), "upper-snake case");
+        assert_eq!(Case_Judged_Against(Case::MixedSnake), "mixed-snake case");
+        assert_eq!(Case_Judged_Against(Case::LowerCamel), "lower-camel case");
     }
 
     /// What this file's own checks do with a subject no provider answered for.

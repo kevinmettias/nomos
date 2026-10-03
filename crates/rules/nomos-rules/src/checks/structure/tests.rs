@@ -218,6 +218,73 @@ fn Test_Check_File_Size_Review_Trigger_Should_Honor_A_Real_Materialized_Override
     assert_eq!(findings.len(), 1, "a repository declaring a 10-line ceiling must judge an 11-line file against it: {findings:?}");
 }
 
+// The two tests below hold Go's two line-count triggers to `OD-RULES-011` version 3 decision 4: a
+// finding states the threshold it was judged against, and nothing about where that threshold came
+// from. Both called it Go's, which a repository may declare for Go or for every language. Each
+// judges one Go file with no threshold declared, with exactly the threshold it would otherwise judge
+// against declared for Go, and with another declared; the first two must report identical findings,
+// so identical identities, and the exact text is asserted.
+
+#[test]
+fn Test_Check_Go_File_Size_Review_Trigger_Should_State_The_Threshold_It_Judged_Against_And_Not_Where_It_Came_From()
+{
+    const DECLARED_FOR_GO: u32 = 200;
+    let key = FILE_SIZE_REVIEW_LINES.key;
+    let lines = GO_REVIEW_TRIGGER_LINES.saturating_add(1);
+    let restating = vec![Go_Row(key, u32::try_from(GO_REVIEW_TRIGGER_LINES).expect("500 fits in u32"))];
+
+    let undeclared = Go_File_Judged(Check_Go_File_Size_Review_Trigger, lines, Vec::new());
+    let restated = Go_File_Judged(Check_Go_File_Size_Review_Trigger, lines, restating);
+    let declared = Go_File_Judged(Check_Go_File_Size_Review_Trigger, lines, vec![Go_Row(key, DECLARED_FOR_GO)]);
+
+    assert_eq!(Summaries(&undeclared), vec!["index.go has 501 lines and exceeds the 500-line review trigger for splitting"]);
+    assert_eq!(restated, undeclared, "declaring the threshold the rule already judged against must not change its finding");
+    assert_eq!(Summaries(&declared), vec!["index.go has 501 lines and exceeds the 200-line review trigger for splitting"]);
+}
+
+/// The declared threshold here is repository-wide, so no part of it is Go's: the case in which
+/// calling it Go's was false outright.
+#[test]
+fn Test_Check_Go_File_Size_Hard_Trigger_Should_State_The_Threshold_It_Judged_Against_And_Not_Where_It_Came_From()
+{
+    const DECLARED_FOR_EVERY_LANGUAGE: u32 = 800;
+    let key = FILE_SIZE_HARD_LINES.key;
+    let lines = GO_HARD_TRIGGER_LINES.saturating_add(1);
+    let restating = vec![Go_Row(key, u32::try_from(GO_HARD_TRIGGER_LINES).expect("1000 fits in u32"))];
+    let declaring = vec![PolicyRow { scope: Scope::Repository, key: key.to_owned(), value: DECLARED_FOR_EVERY_LANGUAGE }];
+
+    let undeclared = Go_File_Judged(Check_Go_File_Size_Hard_Trigger, lines, Vec::new());
+    let restated = Go_File_Judged(Check_Go_File_Size_Hard_Trigger, lines, restating);
+    let declared = Go_File_Judged(Check_Go_File_Size_Hard_Trigger, lines, declaring);
+
+    let because = "trigger and needs decomposition or a documented locality justification";
+    assert_eq!(Summaries(&undeclared), vec![format!("index.go has 1001 lines and exceeds the 1000-line {because}")]);
+    assert_eq!(restated, undeclared, "declaring the threshold the rule already judged against must not change its finding");
+    assert_eq!(Summaries(&declared), vec![format!("index.go has 1001 lines and exceeds the 800-line {because}")]);
+}
+
+/// One limits row declared for Go alone.
+fn Go_Row(key: &str, value: u32) -> PolicyRow
+{
+    return PolicyRow { scope: Scope::Language(GO.to_owned()), key: key.to_owned(), value };
+}
+
+fn Summaries(findings: &[Finding]) -> Vec<String>
+{
+    return findings.iter().map(|finding| return finding.summary.clone()).collect();
+}
+
+/// What `check` finds in a Go file of `lines` lines, in a repository whose limits file declares
+/// `rows`.
+fn Go_File_Judged(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, lines: usize, rows: Vec<PolicyRow>) -> Vec<Finding>
+{
+    let TestOffering { mut store, registry, offer } = Limits_Offering();
+    Materialize_Limits_Fact(&mut store, &offer, rows);
+    let mut facts = Facts_Reader(&store, &registry);
+
+    return check(&[Source("index.go", Lines(lines))], &mut facts);
+}
+
 /// The shape [`Test_Check_Go_File_Size_Review_Trigger_Should_Report_A_Go_File_Over_500_Lines`]
 /// and [`Test_Check_Go_File_Size_Hard_Trigger_Should_Report_A_Go_File_Over_1000_Lines`] both
 /// need: a `.go` file one line over `threshold`, judged by `check`, reporting exactly one

@@ -5,7 +5,7 @@
 //! so this check is exact for source files recognized as Go by path.
 
 use crate::checks::finding_shape::{Finding_Shape, Own_Name_Finding};
-use crate::checks::naming::Resolve_Case;
+use crate::checks::naming::{Case_Judged_Against, Resolve_Case};
 use crate::rule_descriptor::policy_axis::{EXPORTED_TYPE_CASE, UNEXPORTED_TYPE_CASE};
 use crate::SourceFile;
 use nomos_analysis::FactReader;
@@ -77,8 +77,9 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, exported_case: Case, unexp
         .items
         .iter()
         .filter(|item| return Is_Go_Type_Like(item))
-        .filter(|item| return !Has_Go_Type_Case(item, exported_case, unexported_case))
-        .map(|item| return Violation_Finding(path, item))
+        .map(|item| return (item, Go_Type_Case(item, exported_case, unexported_case)))
+        .filter(|(item, case)| return !case.Is_The_Shape_Of(item.Own_Name()))
+        .map(|(item, case)| return Violation_Finding(path, item, case))
         .collect();
 }
 
@@ -87,38 +88,32 @@ fn Is_Go_Type_Like(item: &PayloadItem) -> bool
     return matches!(item.kind.as_str(), INTERFACE | STRUCT | TYPE_ALIAS | TYPE_DEFINITION);
 }
 
-fn Has_Go_Type_Case(item: &PayloadItem, exported_case: Case, unexported_case: Case) -> bool
+/// The case `item`'s visibility selects: the one its name is judged against, and the one its
+/// finding names.
+fn Go_Type_Case(item: &PayloadItem, exported_case: Case, unexported_case: Case) -> Case
 {
-    let name = item.Own_Name();
-
     if item.Is_Public()
     {
-        return exported_case.Is_The_Shape_Of(name);
+        return exported_case;
     }
 
-    return unexported_case.Is_The_Shape_Of(name);
+    return unexported_case;
 }
 
-/// One Go type whose name does not carry the case its visibility requires.
-fn Violation_Finding(path: &str, item: &PayloadItem) -> Finding
+/// One Go type whose name is not `case`, the case its visibility selected.
+///
+/// The finding names the case the type was judged against. It once named `UpperCamelCase` or
+/// `lowerCamelCase` by visibility alone, so a repository that declared another case for a side
+/// was told its types missed a case nobody had held them to.
+fn Violation_Finding(path: &str, item: &PayloadItem, case: Case) -> Finding
 {
     let name = item.Own_Name();
-    let expected = Expected_Case_Label(item);
+    let case = Case_Judged_Against(case);
 
     return Own_Name_Finding(
-        Finding_Shape { rule: TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, path, summary: format!("Go type `{name}` is not {expected}") },
+        Finding_Shape { rule: TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE, path, summary: format!("Go type `{name}` is not {case}") },
         item,
     );
-}
-
-fn Expected_Case_Label(item: &PayloadItem) -> &'static str
-{
-    if item.Is_Public()
-    {
-        return "UpperCamelCase";
-    }
-
-    return "lowerCamelCase";
 }
 
 fn Unread_As_This_Rule(mut finding: Finding) -> Finding
@@ -169,6 +164,24 @@ mod tests
         let findings = Violations_In(&payload, "orders.go", Case::UpperCamel, Case::LowerCamel);
 
         assert!(findings.is_empty(), "{findings:?}");
+    }
+
+    /// `OrderBook` is upper camel case, and judged against lower snake case it is reported:
+    /// the finding has to say lower snake case, because saying the type is not upper camel case
+    /// would be false. Each side of visibility names its own case.
+    #[test]
+    fn Test_Violations_In_Should_Name_The_Case_Each_Side_Of_Visibility_Was_Judged_Against()
+    {
+        let payload = Payload_From_Text(
+            "unexpanded\t0\n\
+             item\t0\tStruct\tPublic\tOrderBook\t.\t.\n\
+             item\t1\tTypeDefinition\tPrivate\torderState\t.\t.\n",
+        );
+
+        let findings = Violations_In(&payload, "orders.go", Case::LowerSnake, Case::ScreamingSnake);
+
+        let summaries: Vec<&str> = findings.iter().map(|finding| return finding.summary.as_str()).collect();
+        assert_eq!(summaries, vec!["Go type `OrderBook` is not lower-snake case", "Go type `orderState` is not screaming-snake case"]);
     }
 
     fn Payload_From_Text(text: &str) -> SyntaxPayload

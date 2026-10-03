@@ -162,8 +162,11 @@ fn Violation_Finding(policy: FunctionArityPolicy, path: &str, item: &PayloadItem
         applicability: Applicability::Supported,
         evidence: EvidenceClass::Derived,
         gate: policy.gate,
+        // The cap is named by its value alone: it was "the configured" cap whether or not anything
+        // configured it, and `OD-RULES-011` version 3 decision 4 keeps a finding's text, and the
+        // identities hashed from it, the same whichever source supplied the value.
         summary: format!(
-            "`{}` has arity {arity}, which exceeds the configured value parameter cap of {}",
+            "`{}` has arity {arity}, which exceeds the value parameter cap of {}",
             item.qualified_name, policy.max_value_parameters
         ),
         locations: vec![path.to_owned()],

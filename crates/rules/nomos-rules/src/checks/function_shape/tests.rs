@@ -218,6 +218,69 @@ fn Repository_And_Go_Rows(repository_max: u32, go_max: u32) -> Vec<nomos_cap_lim
     ];
 }
 
+// The two tests below hold both arity rules' finding to `OD-RULES-011` version 3 decision 4: it
+// states the cap it was judged against, and nothing about where that cap came from. It said "the
+// configured" cap whether or not anything was configured. Each judges one five-parameter `Build`
+// in a repository that declares no cap, in one that declares exactly the cap it would otherwise
+// judge against, and in one that declares another; the first two must report identical findings,
+// so identical identities, and the exact text is asserted.
+
+#[test]
+fn Test_Check_Parameter_Count_Should_State_The_Cap_It_Judged_Against_And_Not_Where_It_Came_From()
+{
+    Assert_States_The_Cap_It_Judged_Against(Check_Parameter_Count, Path("src/build.rs"));
+}
+
+#[test]
+fn Test_Check_Go_Parameter_Count_Should_State_The_Cap_It_Judged_Against_And_Not_Where_It_Came_From()
+{
+    Assert_States_The_Cap_It_Judged_Against(Check_Go_Parameter_Count, Path("builder.go"));
+}
+
+/// `check` over [`FIVE_PARAMETER_BUILD_FACT`] at `path`, with no cap declared, with
+/// [`MAX_VALUE_PARAMETERS`] declared, and with a lower cap declared.
+fn Assert_States_The_Cap_It_Judged_Against(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, path: Path<'_>)
+{
+    const DECLARED_CAP: u32 = 3;
+
+    let undeclared = Judged_Under_Limits(check, path, Vec::new());
+    let restated = Judged_Under_Limits(check, path, vec![Parameter_Cap_Row(MAX_VALUE_PARAMETERS)]);
+    let declared = Judged_Under_Limits(check, path, vec![Parameter_Cap_Row(DECLARED_CAP)]);
+
+    let summary_of = |findings: &[Finding]| return findings.iter().map(|finding| return finding.summary.clone()).collect::<Vec<_>>();
+    assert_eq!(summary_of(&undeclared), vec!["`Build` has arity 5, which exceeds the value parameter cap of 4"], "{undeclared:?}");
+    assert_eq!(restated, undeclared, "declaring the cap the rule already judged against must not change its finding");
+    assert_eq!(summary_of(&declared), vec!["`Build` has arity 5, which exceeds the value parameter cap of 3"], "{declared:?}");
+}
+
+/// One repository-wide `parameter-count-max` row.
+fn Parameter_Cap_Row(value: u32) -> nomos_cap_limits_policy::PolicyRow
+{
+    return nomos_cap_limits_policy::PolicyRow { scope: Scope::Repository, key: PARAMETER_COUNT_MAX.key.to_owned(), value };
+}
+
+/// What `check` finds in a five-parameter `Build` at `path`, in a repository whose limits file
+/// declares `rows`: the syntax fact and the limits fact filed side by side, each under its own
+/// provider, the way a real run materializes both.
+fn Judged_Under_Limits(check: fn(&[SourceFile], &mut dyn FactReader) -> Vec<Finding>, path: Path<'_>, rows: Vec<nomos_cap_limits_policy::PolicyRow>) -> Vec<Finding>
+{
+    let source = Source(path, Text("// the payload is the fixture"));
+    let TestOffering { mut store, mut registry, .. } = Offering_With_A_Five_Parameter_Build(&source);
+    let limits = ProviderOffer {
+        provider: nomos_contracts::ProviderId::New("nomos.test.parameter-count.limits"),
+        capability: nomos_cap_limits_policy::Capability(),
+        version: nomos_cap_limits_policy::CONTRACT_VERSION,
+        guarantee: nomos_cap_limits_policy::Ceiling(),
+    };
+    registry
+        .Declare_And_Offer(nomos_cap_limits_policy::Capability_Contract(), limits.clone())
+        .expect("the registry holds only the syntax contract and its provider");
+    Materialize_Limits_Fact(&mut store, &limits, rows);
+
+    let mut reader = Reader::On(&store, &registry, Test_Context());
+    return check(&[source], &mut reader);
+}
+
 fn Limits_Offering() -> TestOffering
 {
     return test_support::Offered_Registry(

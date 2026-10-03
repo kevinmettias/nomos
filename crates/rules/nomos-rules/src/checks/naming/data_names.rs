@@ -61,7 +61,7 @@ fn Violations_In(payload: &SyntaxPayload, path: &str, module_case: Case, field_c
     {
         if item.kind == MODULE && !module_case.Is_The_Shape_Of(Unescaped_Name(item.Own_Name()))
         {
-            let finding = Violation_Finding(path, item, item.Own_Name());
+            let finding = Violation_Finding(path, item, item.Own_Name(), module_case);
             findings.push(finding);
         }
 
@@ -86,7 +86,7 @@ fn Field_Violations_In(path: &str, item: &PayloadItem, field_case: Case) -> Vec<
     return fields
         .iter()
         .filter(|(name, _type_name)| return !field_case.Is_The_Shape_Of(Unescaped_Name(name)))
-        .map(|(name, _type_name)| return Violation_Finding(path, item, name))
+        .map(|(name, _type_name)| return Violation_Finding(path, item, name, field_case))
         .collect();
 }
 
@@ -118,11 +118,14 @@ fn Unescaped_Name(name: &str) -> &str
     return name.strip_prefix("r#").unwrap_or(name);
 }
 
-/// One data name that is not lower snake case.
-fn Violation_Finding(path: &str, item: &PayloadItem, name: &str) -> Finding
+/// One data name that is not `case`, the case its kind of name was judged against -- named as
+/// that case, whichever source supplied it, and never as lower snake case when it is not.
+fn Violation_Finding(path: &str, item: &PayloadItem, name: &str, case: Case) -> Finding
 {
+    let case = super::Case_Judged_Against(case);
+
     return Member_Finding(
-        Finding_Shape { rule: MODULE_AND_FIELD_NAMES_STAY_LOWER_SNAKE, path, summary: format!("`{name}` is a data name that is not lower snake case") },
+        Finding_Shape { rule: MODULE_AND_FIELD_NAMES_STAY_LOWER_SNAKE, path, summary: format!("`{name}` is a data name that is not {case}") },
         item,
         name,
     );
@@ -196,6 +199,26 @@ mod tests
 
         assert_eq!(findings.len(), 1, "{findings:?}");
         assert_eq!(findings.first().expect("asserted len 1 above").subject_name, "r#BadRef");
+    }
+
+    /// A module and a field judged against two cases are reported against two cases: each
+    /// finding names the case its own kind of name was judged against.
+    #[test]
+    fn Test_Violations_In_Should_Name_The_Case_Each_Kind_Of_Name_Was_Judged_Against()
+    {
+        let payload = Payload_From_Text(
+            "unexpanded\t0\n\
+             item\t0\tModule\tPrivate\tbad_module\t.\t.\n\
+             item\t1\tStruct\tPublic\tConfig\t.\t+fields\\nBadField\\tString\n",
+        );
+
+        let findings = Violations_In(&payload, "src/lib.rs", Case::ScreamingSnake, Case::LowerSnake);
+
+        let summaries: Vec<&str> = findings.iter().map(|finding| return finding.summary.as_str()).collect();
+        assert_eq!(
+            summaries,
+            vec!["`bad_module` is a data name that is not screaming-snake case", "`BadField` is a data name that is not lower-snake case"]
+        );
     }
 
     #[test]
