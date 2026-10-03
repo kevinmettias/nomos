@@ -103740,6 +103740,88 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER",
+      "title": "nomos-platform's port is ProgramLauncher, and nineteen records and three files still call it ProcessLauncher",
+      "why": "Found by the claimant of P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS (d6cf925e) and measured 2026-10-03. nomos-platform's launch port is the trait ProgramLauncher (crates/platform/nomos-platform/src/program_launcher.rs), and nomos-ledger's gate runner takes a ProgramLauncher. No type named ProcessLauncher exists in this workspace's own code. The one code occurrence of the string is XVPE's ProcessLauncherStrategy, which nomos-platform-xvpe implements for its bridge, and that is a different trait in another product. Yet git grep finds ProcessLauncher in 19 records under docs/records (OD-CAPABILITY-008, -012 and -015, OD-EXECUTOR-001, -002, -005, -006 and -010, OD-GATE-017, OD-HOST-001 and -013, OD-PLATFORM-001, OD-RULES-010, -024, -026 and -028, OD-WORKFLOW-001, -002 and -005). It is also in two comments in the root Cargo.toml (\"nomos-platform's ProcessLauncher\"), in eight suppression reasons in suppressions.json (ProcessLauncher and StdProcessLauncher), and in crates/rules/nomos-rules/docs/api/lib.md. Some mentions may legitimately mean XVPE's trait, and some may be history that should stay as written, so the count is not the defect. The defect is every mention that names this workspace's port by a name it no longer has: a reader who searches for ProcessLauncher finds no such type and cannot tell a rename from a fabrication.",
+      "done_when": "Every occurrence of ProcessLauncher (and StdProcessLauncher) across the 19 records, the root Cargo.toml, suppressions.json and nomos-rules' API doc is classified, with the classification reported in the commit message: it names XVPE's ProcessLauncherStrategy and stays; it is dated history that says what the port was called then and stays; or it names this workspace's port by its old name. Only the third kind is corrected, to ProgramLauncher (or the std implementation's current name, read from the code). Each corrected record carries a version bump and a short amendment saying the port was renamed, citing the rename commit if it can be found, and changes nothing it decided. Any code constant pinning a corrected record's version moves with it. The item reserves the two records already known to misname the port (OD-WORKFLOW-001 and OD-WORKFLOW-002) and the three non-record files; every other record is widened by file path only after it is classified as needing a change, so records that stay are never reserved. A suppression reason changes only in its prose, never in what it suppresses, and the suppression contract tests still pass. Both projections are re-rendered from the tree the commit publishes, and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "Cargo.toml",
+          "suppressions.json",
+          "crates/rules/nomos-rules/docs/api/lib.md",
+          "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md",
+          "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P206-THE-LEDGER-LIFTS-BLOCKING-LINES-BY-A-COPIED-LABEL-AND-OD-LEDGER-003-STILL-SAYS-THE-GAP-IS-OPEN",
+      "title": "The ledger lifts Blocking lines by a copied label nothing ties to the label rendered, and OD-LEDGER-003 still says the gap is open",
+      "why": "P201-A-FINISH-REFUSED-BY-THE-RULES-STEP-DOES-NOT-SHOW-THE-FINDING-THAT-REFUSED-IT landed at 96938b90. A finish refused by the gate's Rules step now leads its refusal with every standard-output line that begins \"[Blocking] \", found by BLOCKING_LINE_PREFIX, a private const in crates/substrate/nomos-ledger/src/finish/gate_step.rs. Its claimant measured that matching text is the only signal the workflow's verbatim command offers, and stated why. But the prefix is a copy of the label nomos-contracts renders: GateCategory::Blocking renders BLOCKING_LABEL in reporting/enforcement/gate_category.rs, and Finding's Describe formats it as \"[{}] \" in reporting/finding.rs. No test ties the two. If the label's spelling or its brackets ever change, nothing is lifted, the refusal quietly falls back to the old tail, which hides the finding behind cargo's replayed warnings, and every test stays green, because the lifting tests use a fixture of today's spelling. Separately, OD-LEDGER-003 version 2's gap paragraph still describes the refusal as it was at a370a004, before P201 closed the gap. The cleaner structured fix, gate run printing its Blocking findings apart, was considered by P201's claimant; it is report territory, and the lifting plus a guard on the label is sufficient while the workflow's command stays a human report.",
+      "done_when": "A test fails when the prefix nomos-ledger lifts by and the label nomos-contracts renders for a Blocking finding disagree, and it is shown able to fail by a mutation of either spelling, restored byte-identically. Where the test lives and how it reaches a private const is the claimant's to decide, within the workspace's band rules, which may not let nomos-ledger depend on nomos-contracts. A contract test that reads both values through a published accessor, or that renders a real Blocking finding and asserts the ledger's lifting finds it, are both acceptable. Re-typing the label in the test is refused, since that is a third copy. Any surface the change moves is re-blessed with the diff read. OD-LEDGER-003 carries a version bump whose amendment says P201 closed the gap and how, citing it by full id, without restating the mechanism the code documents. Both projections are re-rendered from the tree the commit publishes, and the predicate passes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger/src/finish",
+          "tests/contract/tests/blocking_label.rs",
+          "tests/contract/Cargo.toml",
+          "tests/contract/surface/nomos-ledger.txt",
+          "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
