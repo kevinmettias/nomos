@@ -59,6 +59,15 @@
 //! beside its only provider rather than under `crates/capabilities`. The third capability's
 //! own contract, unlike the second's, lives under `crates/capabilities` from the start —
 //! `nomos-cap-controlflow`'s own crate doc says why.
+//!
+//! # A fourth, and the family every later projection joins
+//!
+//! [`sites::Materialize_Sites_Fact`] answers `nomos.cap.syntax.sites` about one file, from its
+//! bytes: the family `OD-CAPABILITY-019` declared in `nomos-cap-syntax` beside the items
+//! contract, carrying each projection a rule reads as a kind rather than as a capability of its
+//! own. It walks into function bodies, which the items reading deliberately does not, and today
+//! offers one kind, the labeled jump. A later kind is offered by extending [`sites`], not by
+//! adding a capability here.
 
 #![forbid(unsafe_code)]
 
@@ -71,6 +80,7 @@ mod provider;
 #[path = "reachability_reading.rs"]
 pub mod reachability;
 pub mod rollup;
+pub mod sites;
 mod syntax;
 
 pub use determinism::SyntaxFactProduction;

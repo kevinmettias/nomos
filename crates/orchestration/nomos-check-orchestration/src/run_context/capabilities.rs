@@ -28,7 +28,7 @@ use crate::composed_providers::{ProjectFactProvider, WalkFactsProvider, WalkRead
 use crate::facts::{
     WalkMaterialization, CompilerMaterialization, DependencyMaterialization, LintMaterialization, Materialize_Walk_Facts, Materialize_Compiler_Family,
     Materialize_Dependencies, Materialize_Lint, Materialize_Policy, Materialize_Policy_Fact,
-    Materialize_Complexity, Materialize_Reachability, Materialize_Review, PolicyMaterialization, PolicyReading, ProjectReading,
+    Materialize_Complexity, Materialize_Reachability, Materialize_Review, Materialize_Sites, PolicyMaterialization, PolicyReading, ProjectReading,
     ReviewMaterialization, Subprocess, WorkspaceReading,
 };
 
@@ -92,6 +92,7 @@ pub(super) fn Materialize_Capabilities<Launcher: ProgramLauncher, Fs: FileSystem
     let lint = Materialization_Tracking(env, changed, RequiredFact::LintDiagnostics, |env| return Materialize_Lint_Section(sources, env, demanded));
     let policy = Materialization_Tracking(env, changed, RequiredFact::DependencyPolicy, |env| return Materialize_Policy_Section(env, demanded));
 
+    Materialization_Tracking(env, changed, RequiredFact::SyntaxSites, |env| Materialize_Sites_Section(sources, env, demanded));
     Materialization_Tracking(env, changed, RequiredFact::Reachability, |env| Materialize_Reachability_Section(sources, env, demanded));
     Materialization_Tracking(env, changed, RequiredFact::Complexity, |env| Materialize_Complexity_Section(sources, env, demanded));
 
@@ -369,6 +370,22 @@ fn Workspace_Reading<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environ
     };
 }
 
+/// The syntax sites section: [`Materialize_Sites`] through the composed rows when `selected`
+/// feeds on the family. Every offered kind is computed for every recognized source once any rule
+/// reading any kind is selected -- `OD-CAPABILITY-019` leaves demand below the family to a later
+/// item, should its cost ever be measured to matter.
+fn Materialize_Sites_Section<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
+    sources: &[SourceFile],
+    env: &mut MaterializationEnvironment<'_, Launcher, Fs, Env>,
+    demanded: &[RequiredFact],
+)
+{
+    if demanded.contains(&RequiredFact::SyntaxSites)
+    {
+        Materialize_Sites(sources, env.context, env.store, &env.providers.sites);
+    }
+}
+
 /// The reachability section: [`Materialize_Reachability`] through the composed provider when
 /// `selected` feeds on it -- writes into `env.store` directly and produces no return value of
 /// its own, the same shape the call it wraps already has.
@@ -473,11 +490,12 @@ fn Policy_Families() -> Vec<RequiredFact>
 /// materialization section to be: one row per family, naming a provider the composition
 /// supplied, reading no store state, no cost and no prior materialization. It replaced eight
 /// section functions that differed only in which provider crate they called, and the
-/// difference moved here because here is where it can be checked -- the nine variants that
-/// are not repository-declared policies are named as answering `None` deliberately.
-/// `Reachability` and `Complexity` are each their own section above, because each reads
-/// `sources`, which the policy families do not; the remaining seven belong to the three
-/// sections that return a value, which [`Materialize_Capabilities`] calls directly.
+/// difference moved here because here is where it can be checked -- every variant that is not
+/// a repository-declared policy is named as answering `None` deliberately.
+/// `SyntaxSites`, `Reachability` and `Complexity` are each their own section above, because
+/// each reads `sources`, which the policy families do not; `SyntaxItems` is written before any
+/// section runs, and the rest belong to the sections that return a value, which
+/// [`Materialize_Capabilities`] calls directly.
 fn Policy_Provider_For<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(
     env: &MaterializationEnvironment<'_, Launcher, Fs, Env>,
     family: RequiredFact,
@@ -495,6 +513,7 @@ fn Policy_Provider_For<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environme
         RequiredFact::RequirementTrace => Some(env.providers.requirement_trace),
         RequiredFact::StandardsCorpusPolicy => Some(env.providers.standards_corpus_policy),
         RequiredFact::SyntaxItems
+        | RequiredFact::SyntaxSites
         | RequiredFact::DependencyEdges
         | RequiredFact::LintDiagnostics
         | RequiredFact::DependencyPolicy

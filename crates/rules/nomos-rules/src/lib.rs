@@ -94,6 +94,8 @@ pub use checks::{
     Check_Parameters_Borrow_Unless_Ownership_Is_Taken, PARAMETERS_BORROW_UNLESS_OWNERSHIP_IS_TAKEN,
     Check_Lifetimes_Follow_The_Descriptive_Naming_Rule, Check_Static_Bounds_Are_Justified,
     LIFETIMES_FOLLOW_THE_DESCRIPTIVE_NAMING_RULE, STATIC_BOUNDS_ARE_JUSTIFIED,
+    Check_A_Labeled_Jump_Leaves_One_Loop, A_LABELED_JUMP_LEAVES_ONE_LOOP, A_LABELED_JUMP_LEAVES_ONE_LOOP_CONTRACT_RECORD,
+    A_LABELED_JUMP_LEAVES_ONE_LOOP_CONTRACT_RECORD_VERSION,
     Check_Prefer_Macro_Rules_Over_Procedural_Macros, PREFER_MACRO_RULES_OVER_PROCEDURAL_MACROS,
     Check_Boxed_Closures_Are_Justified_And_Off_Hot_Paths, Check_Closure_Bounds_Are_Minimal,
     BOXED_CLOSURES_ARE_JUSTIFIED_AND_OFF_HOT_PATHS, CLOSURE_BOUNDS_ARE_MINIMAL,

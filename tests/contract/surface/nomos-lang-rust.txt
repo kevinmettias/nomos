@@ -5,6 +5,7 @@ pub const fn nomos_lang_rust::rollup::Ceiling() -> Guarantee
 pub const fn nomos_lang_rust::rollup::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_rust::rollup::Outcome::Is_Answered(self) -> bool
 pub const fn nomos_lang_rust::rollup::Outcome::Label(self) -> &'static str
+pub const fn nomos_lang_rust::sites::Declared_Guarantee() -> Guarantee
 pub const nomos_lang_rust::LANGUAGE: &str
 pub const nomos_lang_rust::PROVIDER: &str
 pub const nomos_lang_rust::RUST_EXTENSION: &str
@@ -25,6 +26,7 @@ pub enum nomos_lang_rust::Recognition
 pub enum nomos_lang_rust::Visibility
 pub enum nomos_lang_rust::reachability::ReachabilityReading
 pub enum nomos_lang_rust::rollup::Outcome
+pub enum nomos_lang_rust::sites::SitesReading
 pub enum variant nomos_lang_rust::ItemKind::Constant
 pub enum variant nomos_lang_rust::ItemKind::Enum
 pub enum variant nomos_lang_rust::ItemKind::ExternCrate
@@ -55,6 +57,8 @@ pub enum variant nomos_lang_rust::reachability::ReachabilityReading::Unparseable
 pub enum variant nomos_lang_rust::rollup::Outcome::Approximate
 pub enum variant nomos_lang_rust::rollup::Outcome::Read
 pub enum variant nomos_lang_rust::rollup::Outcome::Unreachable
+pub enum variant nomos_lang_rust::sites::SitesReading::Parsed(Vec<LabeledJump>)
+pub enum variant nomos_lang_rust::sites::SitesReading::Unparseable(ParseFailure)
 pub fn nomos_lang_rust::Encode_Payload(facts: &Facts) -> Vec<u8>
 pub fn nomos_lang_rust::Facts::Has_No_Declarations(&self) -> bool
 pub fn nomos_lang_rust::Item::Qualified_Name(&self) -> String
@@ -81,6 +85,9 @@ pub fn nomos_lang_rust::rollup::Member::Of(subject: SubjectId, source: &str) -> 
 pub fn nomos_lang_rust::rollup::Parse_Index(payload: &[u8]) -> Result<Index, String>
 pub fn nomos_lang_rust::rollup::Payload_Schema() -> SchemaId
 pub fn nomos_lang_rust::rollup::Provider_Offer() -> ProviderOffer
+pub fn nomos_lang_rust::sites::Materialize_Sites_Fact(subject: SubjectId, source: &str, context: FactContext) -> Materialization
+pub fn nomos_lang_rust::sites::Provider_Offer() -> ProviderOffer
+pub fn nomos_lang_rust::sites::Read_Sites(source: &str) -> SitesReading
 pub impl nomos_lang_rust::ItemKind implements core::fmt::Display
 pub impl nomos_lang_rust::ParseFailure implements core::fmt::Display
 pub impl nomos_lang_rust::ParseFailure implements std::error::Error

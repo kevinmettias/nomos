@@ -105,6 +105,7 @@ pub(crate) fn Test_Name_For(domain: &str) -> &'static str
         {
             "domains::Test_The_Reachability_Offer_Should_Meet_Its_Declared_Strategy"
         }
+        "syntax-sites-production" => "domains::Test_The_Sites_Offer_Should_Meet_Its_Declared_Strategy",
         "scan-fact-production" => "domains::Test_The_Scanner_Should_Meet_Its_Declared_Strategy",
         "complexity-fact-production" => "domains::Test_The_Complexity_Provider_Should_Meet_Its_Declared_Strategy",
         "conditional-fact-production" => "domains::Test_The_Conditional_Provider_Should_Meet_Its_Declared_Strategy",

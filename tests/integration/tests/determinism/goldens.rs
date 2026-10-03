@@ -32,6 +32,12 @@ pub(crate) const ROLLED_GOLDEN: &str = "a9dc834595e753e498f3a981020b2214";
 /// The reachability offer's golden, over the fixture that finds no site to flag.
 pub(crate) const REACHABILITY_GOLDEN: &str = "45ad5b30ad5a0a0299749b362f65fe83";
 
+/// The `nomos.cap.syntax.sites` offer's golden, over its own fixture of labeled jumps: every
+/// stance, every site's line and every declared field of it, in source order. It moves if the walk,
+/// the resolution of a label, the payload grammar or a kind's declared fields change -- and adding a
+/// kind this provider offers moves it too, because every payload states the new kind's stance.
+pub(crate) const SITES_GOLDEN: &str = "1204e5cfdd4e290bff604b0674ad58d1";
+
 /// The complexity provider's golden, over the same fixture: every function it defines, its
 /// line and its count, and the descriptor every answer carries. It moves if the counting rule,
 /// the descriptor's text or the function order changes.

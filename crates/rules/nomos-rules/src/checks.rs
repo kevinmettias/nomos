@@ -57,6 +57,7 @@ mod flakiness_text;
 mod formatting;
 mod goals;
 mod function_shape;
+mod labeled_jump;
 mod lifetime_discipline;
 mod go_text;
 mod lint;
@@ -159,6 +160,10 @@ pub use naming::{
     ONE_PUBLIC_TYPE_PER_FILE, PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE, SINGLE_LETTER_NAMES,
     TEST_NAME_DESCRIBES_BEHAVIOR, TYPES_USE_UPPER_CAMEL_CASE_LOWER_CAMEL_CASE,
     UNEXPORTED_FUNCTIONS_LOWERCASE_ONLY_THE_FIRST_LETTER,
+};
+pub use labeled_jump::{
+    Check_A_Labeled_Jump_Leaves_One_Loop, A_LABELED_JUMP_LEAVES_ONE_LOOP, A_LABELED_JUMP_LEAVES_ONE_LOOP_CONTRACT_RECORD,
+    A_LABELED_JUMP_LEAVES_ONE_LOOP_CONTRACT_RECORD_VERSION,
 };
 pub use lifetime_discipline::{
     Check_Lifetimes_Follow_The_Descriptive_Naming_Rule, Check_Static_Bounds_Are_Justified,

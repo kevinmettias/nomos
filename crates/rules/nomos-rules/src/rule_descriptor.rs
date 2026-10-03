@@ -354,6 +354,7 @@ pub const DESCRIPTORS: &[RuleDescriptor] = &[
     Descriptor_For(crate::STANDARDS_CORPUS, SubjectKind::Workspace, &[RequiredFact::StandardsCorpusPolicy], |_sources, reader| return crate::Check_Standards_Corpus(reader)).Citing(crate::STANDARDS_CORPUS_CONTRACT_RECORD, crate::STANDARDS_CORPUS_CONTRACT_RECORD_VERSION),
     Descriptor_For(crate::UNDECLARED_POLICY_KEY, SubjectKind::Workspace, &[RequiredFact::LimitsPolicy], |_sources, reader| return crate::Check_Undeclared_Policy_Key(reader)).Citing(crate::UNDECLARED_POLICY_KEY_CONTRACT_RECORD, crate::UNDECLARED_POLICY_KEY_CONTRACT_RECORD_VERSION),
     Descriptor_For(crate::UNCOMPILED_CONDITIONAL_BRANCH, SubjectKind::SourceFacts, &[RequiredFact::CsharpConditional], crate::Check_Uncompiled_Conditional_Branch).Citing(crate::UNCOMPILED_CONDITIONAL_BRANCH_CONTRACT_RECORD, crate::UNCOMPILED_CONDITIONAL_BRANCH_CONTRACT_RECORD_VERSION),
+    Descriptor_For(crate::A_LABELED_JUMP_LEAVES_ONE_LOOP, SubjectKind::SourceFacts, &[RequiredFact::SyntaxSites], crate::Check_A_Labeled_Jump_Leaves_One_Loop).Citing(crate::A_LABELED_JUMP_LEAVES_ONE_LOOP_CONTRACT_RECORD, crate::A_LABELED_JUMP_LEAVES_ONE_LOOP_CONTRACT_RECORD_VERSION).Judging(crate::checks::populations::LABELED_JUMP_POPULATION),
 ];
 
 #[cfg(test)]

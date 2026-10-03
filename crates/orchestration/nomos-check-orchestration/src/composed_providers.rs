@@ -75,6 +75,21 @@ pub struct SyntaxProvider
     pub materialize: fn(SubjectId, &str, &Context) -> Option<Box<MaterializedFact>>,
 }
 
+/// One `nomos.cap.syntax.sites` provider as this run holds it: whether it recognizes a path, and
+/// how it turns one source's text into that source's sites.
+///
+/// The family's offers partition by language the way the syntax items family's do, so a run
+/// narrows by recognition here too: a source is materialized by the first row that recognizes it,
+/// and a source no row recognizes gets no sites at all -- every kind unanswered, which the rule
+/// reading them reports as a gap rather than a pass (`OD-CAPABILITY-019`, sixth decision). It is
+/// two fields rather than [`SyntaxProvider`]'s five because nothing here rebuilds a sites key
+/// before the provider answers: the write goes through `crate::facts::currency` after it does.
+pub struct SitesProvider
+{
+    pub recognizes: fn(&str) -> bool,
+    pub materialize: SubjectFactProvider,
+}
+
 /// One fact a whole-workspace provider produced, addressed to the subject it belongs to.
 ///
 /// The neutral carrier for what `nomos_lang_rust_cargo::PackageFact`,
@@ -239,6 +254,10 @@ pub struct ComposedProviders<Launcher: ProgramLauncher, Fs: FileSystem, Env: Env
     /// capability rather than `Registry::Resolve` ranking it, and first-match is how that
     /// narrowing is spelled.
     pub syntax: Vec<SyntaxProvider>,
+    /// Every `nomos.cap.syntax.sites` offer, one row per language that offers any kind, in the
+    /// order a recognition question consults them -- the same first-match narrowing as
+    /// [`Self::syntax`].
+    pub sites: Vec<SitesProvider>,
     pub reachability: SubjectFactProvider,
     /// The `nomos.cap.metric.complexity` provider, at the same per-source port as the row
     /// above: one source's text in, one fact or a refusal out.

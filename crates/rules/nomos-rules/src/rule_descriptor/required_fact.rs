@@ -60,6 +60,11 @@ pub enum RequiredFact
     /// resolved for it -- one fact per file, so a rule can tell a discarded error from any other
     /// discarded value, which a reading of the text cannot.
     GoDiscardedValues,
+    /// Every construct of a declared kind each source's syntax holds, one fact per file, with the
+    /// kinds its provider offers and declines -- the family `OD-CAPABILITY-019` made every
+    /// syntactic projection a kind of, so a rule over a new projection reads this variant rather
+    /// than adding one.
+    SyntaxSites,
 }
 
 impl RequiredFact
@@ -90,6 +95,7 @@ impl RequiredFact
             Self::Complexity => nomos_cap_complexity::Capability(),
             Self::CsharpConditional => nomos_cap_csharp_semantics::Capability(),
             Self::GoDiscardedValues => nomos_cap_go_types::Capability(),
+            Self::SyntaxSites => nomos_cap_syntax::Sites_Capability(),
         };
     }
 }

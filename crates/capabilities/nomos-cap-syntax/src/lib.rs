@@ -1,4 +1,6 @@
-//! Zone: Capability Contract — the `nomos.cap.syntax.items` contract, owned by neither provider of it.
+//! Zone: Capability Contract — the `nomos.cap.syntax.items` contract, owned by neither provider of it,
+//! and beside it the `nomos.cap.syntax.sites` family whose kinds are declared here
+//! (`OD-CAPABILITY-019`; the grammar is in `src/sites.rs`).
 //!
 //! # Why a contract has a home of its own
 //!
@@ -58,6 +60,7 @@ mod payload;
 mod payload_item;
 mod payload_refusal;
 mod payload_refusal_kind;
+mod sites;
 mod syntax_payload;
 
 pub use contract::{CAPABILITY, Capability, Capability_Contract, Ceiling, CONTRACT_VERSION, Payload_Schema, SCHEMA};
@@ -70,4 +73,9 @@ pub use payload::{
 pub use payload_item::PayloadItem;
 pub use payload_refusal::PayloadRefusal;
 pub use payload_refusal_kind::PayloadRefusalKind;
+pub use sites::{
+    KindDecline, KindStance, LABELED_JUMP, LabeledJump, Parse_Sites_Payload, Render_Sites_Payload, SITE_KINDS, SITES_CAPABILITY,
+    SITES_CONTRACT_VERSION, SITES_SCHEMA, SiteField, SiteKind, SiteRecord, SiteValue, SiteValueType, Site_Kind, Sites_Capability,
+    Sites_Capability_Contract, Sites_Ceiling, Sites_Payload_Schema, SitesPayload, SitesRefusal, SitesRefusalKind,
+};
 pub use syntax_payload::SyntaxPayload;

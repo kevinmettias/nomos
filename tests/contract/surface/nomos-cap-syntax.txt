@@ -1,22 +1,39 @@
 pub const fn nomos_cap_syntax::Ceiling() -> Guarantee
 pub const fn nomos_cap_syntax::PayloadRefusal::At(line: usize, kind: PayloadRefusalKind) -> Self
 pub const fn nomos_cap_syntax::PayloadRefusal::Whole(kind: PayloadRefusalKind) -> Self
+pub const fn nomos_cap_syntax::SiteValue::Type(&self) -> SiteValueType
+pub const fn nomos_cap_syntax::SiteValueType::Label(self) -> &'static str
+pub const fn nomos_cap_syntax::SitesRefusal::At(line: usize, kind: SitesRefusalKind) -> Self
+pub const fn nomos_cap_syntax::SitesRefusal::Whole(kind: SitesRefusalKind) -> Self
+pub const fn nomos_cap_syntax::Sites_Ceiling() -> Guarantee
 pub const nomos_cap_syntax::CAPABILITY: &str
 pub const nomos_cap_syntax::CONTRACT_VERSION: ContractVersion
 pub const nomos_cap_syntax::FUNCTION: &str
 pub const nomos_cap_syntax::IMPLEMENTATION: &str
 pub const nomos_cap_syntax::INHERENT: &str
+pub const nomos_cap_syntax::LABELED_JUMP: SiteKind
 pub const nomos_cap_syntax::NOT_APPLICABLE: &str
 pub const nomos_cap_syntax::PUBLIC: &str
 pub const nomos_cap_syntax::SCHEMA: &str
+pub const nomos_cap_syntax::SITES_CAPABILITY: &str
+pub const nomos_cap_syntax::SITES_CONTRACT_VERSION: ContractVersion
+pub const nomos_cap_syntax::SITES_SCHEMA: &str
+pub const nomos_cap_syntax::SITE_KINDS: &[SiteKind]
 pub const nomos_cap_syntax::SLICE: &str
 pub const nomos_cap_syntax::TRAIT: &str
 pub const nomos_cap_syntax::VALUE: &str
 pub enum nomos_cap_syntax::ImplLabel
+pub enum nomos_cap_syntax::KindStance<'payload>
 pub enum nomos_cap_syntax::Observation
 pub enum nomos_cap_syntax::PayloadRefusalKind
+pub enum nomos_cap_syntax::SiteValue
+pub enum nomos_cap_syntax::SiteValueType
+pub enum nomos_cap_syntax::SitesRefusalKind
 pub enum variant nomos_cap_syntax::ImplLabel::Inherent
 pub enum variant nomos_cap_syntax::ImplLabel::Trait
+pub enum variant nomos_cap_syntax::KindStance::Declined(&'payload str)
+pub enum variant nomos_cap_syntax::KindStance::Offered
+pub enum variant nomos_cap_syntax::KindStance::Unanswered
 pub enum variant nomos_cap_syntax::Observation::Absent
 pub enum variant nomos_cap_syntax::Observation::NotObserved
 pub enum variant nomos_cap_syntax::Observation::Present(String)
@@ -27,6 +44,27 @@ pub enum variant nomos_cap_syntax::PayloadRefusalKind::UnknownRecord { tag: Stri
 pub enum variant nomos_cap_syntax::PayloadRefusalKind::UnreadableNumber { field: &'static str, value: String, cause: String, }
 pub enum variant nomos_cap_syntax::PayloadRefusalKind::UnreadableObservation { field: &'static str, value: String, }
 pub enum variant nomos_cap_syntax::PayloadRefusalKind::WrongFieldCount { tag: String, expected: usize, found: usize, }
+pub enum variant nomos_cap_syntax::SiteValue::Integer(i64)
+pub enum variant nomos_cap_syntax::SiteValue::Text(String)
+pub enum variant nomos_cap_syntax::SiteValue::TextList(Vec<String>)
+pub enum variant nomos_cap_syntax::SiteValue::Truth(bool)
+pub enum variant nomos_cap_syntax::SiteValueType::Integer
+pub enum variant nomos_cap_syntax::SiteValueType::Text
+pub enum variant nomos_cap_syntax::SiteValueType::TextList
+pub enum variant nomos_cap_syntax::SiteValueType::Truth
+pub enum variant nomos_cap_syntax::SitesRefusalKind::MalformedField { field: String, }
+pub enum variant nomos_cap_syntax::SitesRefusalKind::MissingField { kind: String, field: String, }
+pub enum variant nomos_cap_syntax::SitesRefusalKind::NotUtf8
+pub enum variant nomos_cap_syntax::SitesRefusalKind::RepeatedField { kind: String, field: String, }
+pub enum variant nomos_cap_syntax::SitesRefusalKind::RepeatedStance { kind: String, }
+pub enum variant nomos_cap_syntax::SitesRefusalKind::UndeclaredField { kind: String, field: String, }
+pub enum variant nomos_cap_syntax::SitesRefusalKind::UndeclaredKind { kind: String, }
+pub enum variant nomos_cap_syntax::SitesRefusalKind::UnexplainedDecline { kind: String, }
+pub enum variant nomos_cap_syntax::SitesRefusalKind::UnknownRecord { tag: String, }
+pub enum variant nomos_cap_syntax::SitesRefusalKind::UnofferedSite { kind: String, }
+pub enum variant nomos_cap_syntax::SitesRefusalKind::UnreadableLine { value: String, cause: String, }
+pub enum variant nomos_cap_syntax::SitesRefusalKind::UnreadableValue { field: String, value: String, expected: SiteValueType, }
+pub enum variant nomos_cap_syntax::SitesRefusalKind::WrongFieldCount { tag: String, expected: usize, found: usize, }
 pub fn nomos_cap_syntax::Capability() -> CapabilityId
 pub fn nomos_cap_syntax::Capability_Contract() -> CapabilityContract
 pub fn nomos_cap_syntax::Escape_Text(value: &str) -> String
@@ -36,6 +74,9 @@ pub fn nomos_cap_syntax::ImplLabel::Label(self) -> &'static str
 pub fn nomos_cap_syntax::Impl_Generics(shape: &Observation) -> Option<Vec<String>>
 pub fn nomos_cap_syntax::Impl_Serves_A_Trait(shape: &Observation) -> Option<bool>
 pub fn nomos_cap_syntax::Impl_Shape(label: ImplLabel, generics: &[String]) -> String
+pub fn nomos_cap_syntax::LabeledJump::All_In(payload: &SitesPayload) -> Option<Vec<Self>>
+pub fn nomos_cap_syntax::LabeledJump::From_Record(record: &SiteRecord) -> Option<Self>
+pub fn nomos_cap_syntax::LabeledJump::Record(&self) -> SiteRecord
 pub fn nomos_cap_syntax::Language::As_Str(&self) -> &str
 pub fn nomos_cap_syntax::Language::New(value: impl Into<String>) -> Self
 pub fn nomos_cap_syntax::Language::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
@@ -43,6 +84,7 @@ pub fn nomos_cap_syntax::Observation::Encode(&self) -> String
 pub fn nomos_cap_syntax::Observation::Value(&self) -> Option<&str>
 pub fn nomos_cap_syntax::Observation::Was_Observed(&self) -> bool
 pub fn nomos_cap_syntax::Parse_Payload(bytes: &[u8]) -> Result<SyntaxPayload, PayloadRefusal>
+pub fn nomos_cap_syntax::Parse_Sites_Payload(bytes: &[u8]) -> Result<SitesPayload, SitesRefusal>
 pub fn nomos_cap_syntax::PayloadItem::Declares_No_Visibility(&self) -> bool
 pub fn nomos_cap_syntax::PayloadItem::Is_Public(&self) -> bool
 pub fn nomos_cap_syntax::PayloadItem::Own_Name(&self) -> &str
@@ -50,10 +92,35 @@ pub fn nomos_cap_syntax::PayloadRefusal::Describe(&self) -> String
 pub fn nomos_cap_syntax::PayloadRefusalKind::Describe(&self) -> String
 pub fn nomos_cap_syntax::Payload_Schema() -> SchemaId
 pub fn nomos_cap_syntax::Render_Payload(payload: &SyntaxPayload) -> Vec<u8>
+pub fn nomos_cap_syntax::Render_Sites_Payload(payload: &SitesPayload) -> Vec<u8>
+pub fn nomos_cap_syntax::SiteKind::Field(&self, name: &str) -> Option<SiteField>
+pub fn nomos_cap_syntax::SiteRecord::Integer(&self, name: &str) -> Option<i64>
+pub fn nomos_cap_syntax::SiteRecord::Text(&self, name: &str) -> Option<&str>
+pub fn nomos_cap_syntax::SiteRecord::Text_List(&self, name: &str) -> Option<&[String]>
+pub fn nomos_cap_syntax::SiteRecord::Truth(&self, name: &str) -> Option<bool>
+pub fn nomos_cap_syntax::Site_Kind(name: &str) -> Option<&'static SiteKind>
+pub fn nomos_cap_syntax::SitesPayload::Records_Of<'payload>(&'payload self, kind: &'payload str) -> impl Iterator<Item = &'payload SiteRecord>
+pub fn nomos_cap_syntax::SitesPayload::Stance(&self, kind: &str) -> KindStance<'_>
+pub fn nomos_cap_syntax::SitesRefusal::Describe(&self) -> String
+pub fn nomos_cap_syntax::SitesRefusal::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_cap_syntax::SitesRefusalKind::Describe(&self) -> String
+pub fn nomos_cap_syntax::Sites_Capability() -> CapabilityId
+pub fn nomos_cap_syntax::Sites_Capability_Contract() -> CapabilityContract
+pub fn nomos_cap_syntax::Sites_Payload_Schema() -> SchemaId
 pub fn nomos_cap_syntax::Struct_Fields(shape: &Observation) -> Option<Vec<(String, String)>>
 pub fn nomos_cap_syntax::Struct_Shape(fields: &[(String, String)]) -> Option<String>
 pub fn nomos_cap_syntax::SyntaxPayload::Enclosing(&self, ordinal: usize) -> Option<&PayloadItem>
 pub impl nomos_cap_syntax::Language implements core::fmt::Display
+pub impl nomos_cap_syntax::SitesRefusal implements core::fmt::Display
+pub struct field nomos_cap_syntax::KindDecline::kind: String
+pub struct field nomos_cap_syntax::KindDecline::reason: String
+pub struct field nomos_cap_syntax::LabeledJump::has_same_target_unlabeled: bool
+pub struct field nomos_cap_syntax::LabeledJump::is_inside_break_capture: bool
+pub struct field nomos_cap_syntax::LabeledJump::keyword: String
+pub struct field nomos_cap_syntax::LabeledJump::label: String
+pub struct field nomos_cap_syntax::LabeledJump::label_line: usize
+pub struct field nomos_cap_syntax::LabeledJump::line: usize
+pub struct field nomos_cap_syntax::LabeledJump::text: String
 pub struct field nomos_cap_syntax::PayloadItem::documentation: Observation
 pub struct field nomos_cap_syntax::PayloadItem::kind: String
 pub struct field nomos_cap_syntax::PayloadItem::ordinal: u32
@@ -62,9 +129,29 @@ pub struct field nomos_cap_syntax::PayloadItem::shape: Observation
 pub struct field nomos_cap_syntax::PayloadItem::visibility: String
 pub struct field nomos_cap_syntax::PayloadRefusal::kind: PayloadRefusalKind
 pub struct field nomos_cap_syntax::PayloadRefusal::line: Option<usize>
+pub struct field nomos_cap_syntax::SiteField::name: &'static str
+pub struct field nomos_cap_syntax::SiteField::value: SiteValueType
+pub struct field nomos_cap_syntax::SiteKind::construct: &'static str
+pub struct field nomos_cap_syntax::SiteKind::fields: &'static [SiteField]
+pub struct field nomos_cap_syntax::SiteKind::name: &'static str
+pub struct field nomos_cap_syntax::SiteRecord::kind: String
+pub struct field nomos_cap_syntax::SiteRecord::line: usize
+pub struct field nomos_cap_syntax::SiteRecord::values: BTreeMap<String, SiteValue>
+pub struct field nomos_cap_syntax::SitesPayload::declined: Vec<KindDecline>
+pub struct field nomos_cap_syntax::SitesPayload::offered: Vec<String>
+pub struct field nomos_cap_syntax::SitesPayload::records: Vec<SiteRecord>
+pub struct field nomos_cap_syntax::SitesRefusal::kind: SitesRefusalKind
+pub struct field nomos_cap_syntax::SitesRefusal::line: Option<usize>
 pub struct field nomos_cap_syntax::SyntaxPayload::items: Vec<PayloadItem>
 pub struct field nomos_cap_syntax::SyntaxPayload::unexpanded: u32
+pub struct nomos_cap_syntax::KindDecline
+pub struct nomos_cap_syntax::LabeledJump
 pub struct nomos_cap_syntax::Language(String)
 pub struct nomos_cap_syntax::PayloadItem
 pub struct nomos_cap_syntax::PayloadRefusal
+pub struct nomos_cap_syntax::SiteField
+pub struct nomos_cap_syntax::SiteKind
+pub struct nomos_cap_syntax::SiteRecord
+pub struct nomos_cap_syntax::SitesPayload
+pub struct nomos_cap_syntax::SitesRefusal
 pub struct nomos_cap_syntax::SyntaxPayload

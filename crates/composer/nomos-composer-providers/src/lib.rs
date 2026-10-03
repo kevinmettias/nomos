@@ -73,7 +73,7 @@ use nomos_contracts::{ProviderId, SubjectId};
 use nomos_platform::{Environment, FileSystem, ProgramLauncher};
 use std::path::Path;
 
-use nomos_check_orchestration::{ComposedProviders, SubjectFact, SyntaxProvider};
+use nomos_check_orchestration::{ComposedProviders, SitesProvider, SubjectFact, SyntaxProvider};
 
 /// Every analysis provider a run materializes through, composed.
 ///
@@ -88,6 +88,7 @@ pub fn Standard_Providers<Launcher: ProgramLauncher, Fs: FileSystem, Env: Enviro
 {
     return ComposedProviders {
         syntax: Composed_Syntax_Providers(),
+        sites: vec![SitesProvider { recognizes: Rust_Recognizes, materialize: Rust_Sites_Fact }],
         reachability: Rust_Reachability_Fact,
         complexity: Rust_Complexity_Fact,
         dependencies: Cargo_Facts,
@@ -135,6 +136,7 @@ pub fn Standard_Offers(registry: &mut Registry) -> Result<(), RegistryError>
     registry.Offer(nomos_lang_csharp::Provider_Offer())?;
     registry.Offer(nomos_lang_rust_cargo::Provider_Offer())?;
     registry.Offer(nomos_lang_go_modules::Provider_Offer())?;
+    registry.Offer(nomos_lang_rust::sites::Provider_Offer())?;
     registry.Offer(nomos_lang_rust::reachability::Provider_Offer())?;
     registry.Offer(nomos_lang_rust_complexity::Provider_Offer())?;
     registry.Offer(nomos_lang_rust_clippy::Provider_Offer())?;
@@ -257,6 +259,19 @@ fn Rust_Syntax_Fact(subject: SubjectId, source: &str, context: &Context) -> Opti
 fn Go_Syntax_Fact(subject: SubjectId, source: &str, context: &Context) -> Option<Box<MaterializedFact>>
 {
     let nomos_lang_go::Materialization::Materialized(fact) = nomos_lang_go::Materialize_Syntax_Fact(subject, source, Go_Production(context))
+    else
+    {
+        return None;
+    };
+
+    return Some(fact);
+}
+
+/// One source's `nomos.cap.syntax.sites` fact from `nomos_lang_rust`, or `None` if that provider
+/// refused to parse it.
+fn Rust_Sites_Fact(subject: SubjectId, source: &str, context: &Context) -> Option<Box<MaterializedFact>>
+{
+    let nomos_lang_rust::Materialization::Materialized(fact) = nomos_lang_rust::sites::Materialize_Sites_Fact(subject, source, Rust_Production(context))
     else
     {
         return None;

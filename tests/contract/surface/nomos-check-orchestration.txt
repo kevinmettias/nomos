@@ -54,6 +54,7 @@ pub struct field nomos_check_orchestration::ComposedProviders::offer: RegistryOf
 pub struct field nomos_check_orchestration::ComposedProviders::reachability: SubjectFactProvider
 pub struct field nomos_check_orchestration::ComposedProviders::requirement_trace: WorkspacePolicyProvider<Fs>
 pub struct field nomos_check_orchestration::ComposedProviders::scripting_policy: WorkspacePolicyProvider<Fs>
+pub struct field nomos_check_orchestration::ComposedProviders::sites: Vec<SitesProvider>
 pub struct field nomos_check_orchestration::ComposedProviders::standards_corpus_policy: WorkspacePolicyProvider<Fs>
 pub struct field nomos_check_orchestration::ComposedProviders::syntax: Vec<SyntaxProvider>
 pub struct field nomos_check_orchestration::ComposedProviders::test_material_policy: WorkspacePolicyProvider<Fs>
@@ -80,6 +81,7 @@ pub struct field nomos_check_orchestration::RunContext::root: &'a Path
 pub struct field nomos_check_orchestration::RunContext::store: &'a mut MemoryFactStore
 pub struct field nomos_check_orchestration::RunContext::variant: BuildVariant
 pub struct field nomos_check_orchestration::RunContext::workspace: &'a mut Option<Workspace>
+pub struct field nomos_check_orchestration::SitesProvider::recognizes: fn(&str) -> bool, pub materialize: SubjectFactProvider,
 pub struct field nomos_check_orchestration::SubjectFact::fact: MaterializedFact
 pub struct field nomos_check_orchestration::SubjectFact::path: String
 pub struct field nomos_check_orchestration::SubjectFact::subject: SubjectId
@@ -112,6 +114,7 @@ pub struct nomos_check_orchestration::Populations
 pub struct nomos_check_orchestration::RuleReassessmentCache
 pub struct nomos_check_orchestration::RuleResolution
 pub struct nomos_check_orchestration::RunContext<'a, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
+pub struct nomos_check_orchestration::SitesProvider
 pub struct nomos_check_orchestration::SubjectFact
 pub struct nomos_check_orchestration::SupportingFactTrail
 pub struct nomos_check_orchestration::SyntaxProvider

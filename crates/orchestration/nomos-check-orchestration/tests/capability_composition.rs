@@ -75,6 +75,19 @@ fn Test_Registered_Should_Offer_The_Reachability_Providers_Own_Real_Offer()
     assert!(offers.contains(&nomos_lang_rust::reachability::Provider_Offer()), "the reachability offer must match nomos_lang_rust::reachability's own offer");
 }
 
+/// The syntax sites family: declared as `nomos_cap_syntax` publishes it, with the offer
+/// `nomos_lang_rust::sites` publishes -- one contract for every kind there will be, and one offer
+/// per language that offers any.
+#[test]
+fn Test_Registered_Should_Declare_The_Sites_Family_And_Offer_The_Rust_Sites_Providers_Own_Real_Offer()
+{
+    let registry = Registered(nomos_composer_providers::Standard_Offers).expect("this crate's own composition must not be self-contradictory");
+
+    assert!(registry.Declared().any(|contract| return *contract == nomos_cap_syntax::Sites_Capability_Contract()), "the sites family must match nomos_cap_syntax's own contract");
+    let offers = registry.Offers(&nomos_cap_syntax::Sites_Capability());
+    assert!(offers.contains(&nomos_lang_rust::sites::Provider_Offer()), "the Rust sites offer must match nomos_lang_rust::sites's own offer");
+}
+
 /// The complexity capability's one offer, checked against `nomos_lang_rust_complexity`'s own real
 /// offer -- the offer the composer selects, not a copy of it.
 #[test]

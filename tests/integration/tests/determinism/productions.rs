@@ -185,6 +185,69 @@ fn Rendered_Reachability_Fact(path: &str, source: &str, context: nomos_lang_rust
     return rendered;
 }
 
+/// The source the sites offer is measured over: its own, because the shared [`FIXTURE`] holds no
+/// labeled jump and a golden over a family that recorded nothing would pin the stances and not
+/// one record. Each file carries what could make a walk's order unstable -- jumps at three loop
+/// depths, two labels sharing a name in two functions, a labeled block and a closure the outer
+/// label does not cross.
+const SITES_FIXTURE: [(&str, &str); 2] = [
+    (
+        "src/search.rs",
+        "pub fn search(grid: &[Vec<i32>], needle: i32) -> bool {\n\
+         \x20   'rows: for row in grid {\n\
+         \x20       'cells: for cell in row {\n\
+         \x20           if *cell < 0 { continue 'rows; }\n\
+         \x20           if *cell == needle { break 'rows; }\n\
+         \x20           if *cell == 0 { continue 'cells; }\n\
+         \x20       }\n\
+         \x20   }\n\
+         \x20   false\n\
+         }\n",
+    ),
+    (
+        "src/drain.rs",
+        "pub fn first(kinds: &[i32]) {\n\
+         \x20   'l: for kind in kinds {\n\
+         \x20       match kind { 0 => break 'l, _ => continue }\n\
+         \x20   }\n\
+         }\n\
+         pub fn second(kinds: &[i32]) -> i32 {\n\
+         \x20   'l: loop {\n\
+         \x20       let skip = || loop { break 'l; };\n\
+         \x20       'blk: { if kinds.is_empty() { break 'blk; } }\n\
+         \x20       break 'l;\n\
+         \x20   }\n\
+         \x20   0\n\
+         }\n",
+    ),
+];
+
+/// The sites offer's facts over [`SITES_FIXTURE`], rendered the way [`Reachability_Production`]
+/// renders its own: the path, the key, the payload.
+pub(crate) fn Sites_Production() -> Vec<u8>
+{
+    let context = Fact_Context();
+    let mut rendered = Vec::new();
+
+    for (path, source) in SITES_FIXTURE
+    {
+        let fact = match nomos_lang_rust::sites::Materialize_Sites_Fact(Subject_Of(path), source, context)
+        {
+            nomos_lang_rust::Materialization::Materialized(fact) => fact,
+            nomos_lang_rust::Materialization::Unparseable(failure) =>
+            {
+                panic!("the fixture must parse; {path} did not: {failure}");
+            }
+        };
+
+        rendered.extend_from_slice(format!("file\t{path}\n").as_bytes());
+        rendered.extend_from_slice(format!("key\t{}\n", fact.Key().Digest()).as_bytes());
+        rendered.extend_from_slice(&fact.payload.bytes);
+    }
+
+    return rendered;
+}
+
 /// The complexity provider's facts over the same fixture, rendered the way
 /// [`Reachability_Production`] renders its own: the path, the key, the payload.
 pub(crate) fn Complexity_Production() -> Vec<u8>

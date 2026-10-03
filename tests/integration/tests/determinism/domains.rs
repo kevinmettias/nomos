@@ -9,13 +9,13 @@
 use crate::harness::Assert_Meets_Declared_Strategy;
 use crate::goldens::{
     BUNDLE_GOLDEN, COMPLEXITY_GOLDEN, CONDITIONAL_GOLDEN, GO_GOLDEN, PARSED_GOLDEN, PROJECTION_GOLDEN, REACHABILITY_GOLDEN, ROLLED_GOLDEN,
-    SCANNED_GOLDEN, SNAPSHOT_GOLDEN,
+    SCANNED_GOLDEN, SITES_GOLDEN, SNAPSHOT_GOLDEN,
 };
 use crate::productions::{
     Coderabbit_Review_Finding_Production, Complexity_Production, Conditional_Production, Copy_Clones_Production, Correction_Production, Dependency_Policy_Production,
     Dependency_Production, Go_Dependency_Production, Go_Production, Limits_Policy_Production, Lint_Production,
     Naming_Policy_Production, Nested_Locks_Production, Parsed_Production, Reachability_Production,
-    Requirement_Trace_Production, Reuse_Production, Rolled_Production, Scanned_Production, Scripting_Policy_Production,
+    Requirement_Trace_Production, Reuse_Production, Rolled_Production, Scanned_Production, Scripting_Policy_Production, Sites_Production,
     Goals_Policy_Production, Snapshot_Production, Words_Policy_Production,
 };
 use crate::spec_productions::{Alternating, Bundle_Bytes, Projection_Bytes};
@@ -55,6 +55,15 @@ fn Test_The_Reachability_Offer_Should_Meet_Its_Declared_Strategy()
         &Reachability_Production,
         REACHABILITY_GOLDEN,
     );
+}
+
+/// The fourth producer covered by `nomos-lang-rust`'s declaration, the `nomos.cap.syntax.sites`
+/// offer, discharged separately for the reason the rollup's test gives -- and over a fixture of
+/// its own, because the shared one holds no construct of any kind the family declares.
+#[test]
+fn Test_The_Sites_Offer_Should_Meet_Its_Declared_Strategy()
+{
+    Assert_Meets_Declared_Strategy::<SyntaxFactProduction>("syntax-sites-production", &Sites_Production, SITES_GOLDEN);
 }
 
 #[test]

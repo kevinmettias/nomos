@@ -1,9 +1,9 @@
-//! Syntax and reachability facts, materialized per source from already-walked text.
+//! Syntax, sites and reachability facts, materialized per source from already-walked text.
 
 use nomos_analysis::{Context, FactKey, FactStore, GuaranteeDigest, InputDigest, MemoryFactStore};
 use nomos_rules::SourceFile;
 
-use crate::composed_providers::{Recognized_Syntax_Provider, SubjectFactProvider, SyntaxProvider};
+use crate::composed_providers::{Recognized_Syntax_Provider, SitesProvider, SubjectFactProvider, SyntaxProvider};
 use crate::facts::currency::Materialized_Or_Already_Current;
 
 /// Produces one syntax fact per source and returns how many sources now have a current
@@ -167,6 +167,42 @@ pub fn Materialize_Reachability(sources: &[SourceFile], context: &Context, store
 pub fn Materialize_Complexity(sources: &[SourceFile], context: &Context, store: &mut MemoryFactStore, provider: SubjectFactProvider) -> usize
 {
     return Materialize_Per_Source(sources, context, store, provider);
+}
+
+/// Materializes a `nomos.cap.syntax.sites` fact for every source a composed sites provider
+/// recognizes, through the first that does, and returns how many sources now have a current one.
+///
+/// Narrowed by recognition rather than asking one provider of every source, because the family's
+/// offers partition by language: one row per language that offers any kind, the way
+/// [`Materialize_Syntax`] narrows the items family. A source no row recognizes gets no sites,
+/// which the rule reading them reports as a gap, and a recognized source its provider refuses to
+/// parse gets none either, which the rule reports as unread -- neither is dropped silently. The
+/// write goes through [`crate::facts::currency`] as [`Materialize_Reachability`]'s does, so a
+/// source whose sites have not moved since a reused store last saw them is not filed twice.
+pub fn Materialize_Sites(sources: &[SourceFile], context: &Context, store: &mut MemoryFactStore, providers: &[SitesProvider]) -> usize
+{
+    let mut current = 0_usize;
+
+    for source in sources
+    {
+        let Some(provider) = providers.iter().find(|provider| return (provider.recognizes)(&source.path))
+        else
+        {
+            continue;
+        };
+        let Some(fact) = (provider.materialize)(source.subject, &source.text, context)
+        else
+        {
+            continue;
+        };
+
+        if Materialized_Or_Already_Current(*fact, context, store)
+        {
+            current = current.saturating_add(1);
+        }
+    }
+
+    return current;
 }
 
 /// The body both per-source families share: ask the provider for each source's fact, file it

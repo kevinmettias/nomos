@@ -56,7 +56,7 @@ mod tests;
 pub use check_command::CheckCommand;
 pub use composed_providers::{
     WalkFacts, WalkFactsProvider, WalkReading, ComposedProviders, ProjectFactProvider, Recognized_Language, Recognized_Syntax_Provider,
-    RegistryOffers, SubjectFact, SubjectFactProvider, SubjectFactsProvider, SyntaxProvider, Unanswered, WalkedSource, WorkspaceFactProvider,
+    RegistryOffers, SitesProvider, SubjectFact, SubjectFactProvider, SubjectFactsProvider, SyntaxProvider, Unanswered, WalkedSource, WorkspaceFactProvider,
     WorkspacePolicyProvider,
 };
 pub use declared_rules::Declared_Rules;

@@ -15,7 +15,7 @@ mod policy_materialization;
 pub use dependency_materialization::{
     WalkMaterialization, CompilerMaterialization, DependencyMaterialization, LintMaterialization, Materialize_Walk_Facts, Materialize_Compiler_Family,
     Materialize_Complexity, Materialize_Dependencies, Materialize_Lint, Materialize_Policy, Materialize_Reachability,
-    Materialize_Review, Materialize_Syntax, PolicyMaterialization, ProjectReading, ReviewMaterialization,
+    Materialize_Review, Materialize_Sites, Materialize_Syntax, PolicyMaterialization, ProjectReading, ReviewMaterialization,
     Subprocess, WorkspaceReading,
 };
 pub use policy_materialization::{Materialize_Policy_Fact, PolicyReading};

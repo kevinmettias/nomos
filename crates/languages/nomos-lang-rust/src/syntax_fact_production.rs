@@ -36,8 +36,9 @@ use nomos_contracts::{DeterminismStrength, ReproducibilityScope, Strategy, Trace
 ///
 /// What makes that sound rather than convenient is the harness. Each producer has a
 /// production of its own in `tests/integration/tests/determinism.rs` — `syntax-fact-
-/// production` and `module-index-rollup` — so the declaration is discharged twice, once
-/// against each thing it covers. A restatement that added a sentence here and no production
+/// production` and `module-index-rollup`, and since then `controlflow-reachability-production`
+/// and `syntax-sites-production` for the reachability and sites offers — so the declaration is
+/// discharged once against each thing it covers. A restatement that added a sentence here and no production
 /// there would be widening a promise to cover code nothing measures, which is the defect
 /// this crate's guard exists to catch, committed deliberately.
 ///

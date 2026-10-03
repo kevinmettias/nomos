@@ -35,6 +35,7 @@ mod materialization;
 mod overrides;
 mod provider_naming;
 mod reuse;
+mod syntax_sites;
 
 use compiler_databases::Bounded_Providers;
 use nomos_model::Subject_Of_Path;

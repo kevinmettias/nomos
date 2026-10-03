@@ -111,6 +111,11 @@ const CITATIONS: &[(&str, &str, u32)] = &[
         nomos_rules::UNCOMPILED_CONDITIONAL_BRANCH_CONTRACT_RECORD,
         nomos_rules::UNCOMPILED_CONDITIONAL_BRANCH_CONTRACT_RECORD_VERSION,
     ),
+    (
+        "nomos_rules::A_LABELED_JUMP_LEAVES_ONE_LOOP_CONTRACT_RECORD",
+        nomos_rules::A_LABELED_JUMP_LEAVES_ONE_LOOP_CONTRACT_RECORD,
+        nomos_rules::A_LABELED_JUMP_LEAVES_ONE_LOOP_CONTRACT_RECORD_VERSION,
+    ),
 ];
 
 /// Every cited version must match its record's own front matter, or the citation is a claim

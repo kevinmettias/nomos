@@ -32,7 +32,7 @@ pub use lint_materialization::{LintMaterialization, Materialize_Lint};
 pub use policy_materialization::{Materialize_Policy, PolicyMaterialization};
 pub use review_materialization::{Materialize_Review, ReviewMaterialization};
 pub use subprocess::Subprocess;
-pub use syntax::{Materialize_Complexity, Materialize_Reachability, Materialize_Syntax};
+pub use syntax::{Materialize_Complexity, Materialize_Reachability, Materialize_Sites, Materialize_Syntax};
 
 use nomos_analysis::{Context, MemoryFactStore};
 use nomos_contracts::Finding;
@@ -245,6 +245,24 @@ mod tests
         let written = Materialize_Reachability(&sources, &context, &mut store, Fixture_Providers().reachability);
 
         assert_eq!(written, 1, "a single well-formed Rust source must materialize exactly one reachability fact");
+    }
+
+    /// `nomos.cap.syntax.sites`: a Rust source materializes its sites through the composed row
+    /// that recognizes it, and a source no row recognizes materializes none -- the gap the rule
+    /// reading the family reports, rather than a fact some other language's provider was asked for.
+    #[test]
+    fn Test_Materialize_Sites_Should_Write_A_Fact_Only_For_A_Recognized_Source()
+    {
+        let sources = [
+            SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "fn f() { 'l: loop { break 'l; } }\n"),
+            SourceFile::New("notes.txt", nomos_model::Subject_Of_Path("notes.txt"), "'l: loop { break 'l; }\n"),
+        ];
+        let context = Fixture_Context(&sources);
+        let mut store = MemoryFactStore::New();
+
+        let written = Materialize_Sites(&sources, &context, &mut store, &Fixture_Providers().sites);
+
+        assert_eq!(written, 1, "the Rust source has a sites fact and the text file, which no sites row recognizes, has none");
     }
 
     /// A launcher that cannot even be run -- no real `cargo` invocation, so this stays

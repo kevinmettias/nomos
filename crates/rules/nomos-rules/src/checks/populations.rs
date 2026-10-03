@@ -103,3 +103,8 @@ pub(crate) const GO_FILE_SIZE_POPULATION: Population = Population::Language(GO_L
 /// its extension -- the population the three script rules share, recognized by
 /// `script_discipline`'s own predicate.
 pub(crate) const SCRIPT_POPULATION: Population = Population::Kind { name: "shebang scripts", holds: super::script_discipline::Is_Shebang_Script };
+
+/// Every source whose language a syntax provider reads -- the population
+/// `a-labeled-jump-leaves-one-loop` judges, because a loop label is a construct of every such
+/// language and whether one offers the kind is the source's sites' answer, not this filter's.
+pub(crate) const LABELED_JUMP_POPULATION: Population = Population::Kind { name: "sources a syntax provider reads", holds: super::labeled_jump::Is_Read_By_A_Syntax_Provider };

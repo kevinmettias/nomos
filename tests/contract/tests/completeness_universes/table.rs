@@ -103,6 +103,16 @@ pub(crate) const UNIVERSES: &[Universe] = &[
             by: "Test_Every_Layer_Should_Be_Listed",
         },
     },
+    // `OD-CAPABILITY-019`'s declared kinds. The reality it enumerates is every `SiteKind` constant
+    // the crate's source declares, which a test reads off the source rather than off a second list.
+    Universe {
+        path: "crates/capabilities/nomos-cap-syntax/src/sites/site_kind.rs",
+        name: "SITE_KINDS",
+        kind: UniverseKind::Constant,
+        standing: Standing::Mirrored {
+            by: "Test_Every_Declared_Site_Kind_Should_Be_Listed",
+        },
+    },
     // ---- mirrored for other reasons ----
     //
     // `OD-COMPLETENESS-002`: this row named `Test_A_Rule_Nobody_Declared_Should_Fail_The_Run`,

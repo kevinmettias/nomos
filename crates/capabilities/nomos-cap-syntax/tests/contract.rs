@@ -7,7 +7,10 @@
 //! `Payload_Schema`, all `pub` already — the same surface `nomos-rules` or a registry
 //! composition root would use.
 
-use nomos_cap_syntax::{Capability, Capability_Contract, Ceiling, CONTRACT_VERSION, Payload_Schema, SCHEMA};
+use nomos_cap_syntax::{
+    Capability, Capability_Contract, Ceiling, CONTRACT_VERSION, Payload_Schema, SCHEMA, SITES_CONTRACT_VERSION, SITES_SCHEMA, Sites_Capability,
+    Sites_Capability_Contract, Sites_Ceiling, Sites_Payload_Schema,
+};
 use nomos_capability::contract_testing;
 use nomos_contracts::{Assurance, FactVariant, Guarantee, IncrementalGranularity, SchemaId};
 
@@ -106,4 +109,50 @@ fn Test_Capability_Contract_Should_Assemble_Its_Declared_Identity_And_Ceiling()
     assert_eq!(contract.id, Capability());
     assert_eq!(contract.version, CONTRACT_VERSION);
     assert_eq!(contract.ceiling, Ceiling());
+}
+
+/// The sites family's ceiling admits a weaker offer -- the property the first test above holds
+/// for the items contract, held for the family `OD-CAPABILITY-019` placed beside it.
+#[test]
+fn Test_The_Sites_Ceiling_Should_Admit_A_Weaker_Offer()
+{
+    let guarantee = Guarantee::New(FactVariant::Syntactic, Assurance::Sound, Assurance::Unknown, IncrementalGranularity::File);
+
+    contract_testing::Assert_Ceiling_Admits(Sites_Capability_Contract(), Sites_Capability(), SITES_CONTRACT_VERSION, guarantee);
+}
+
+/// And refuses a claim of resolution, because a site is a fact about what a file says on its face.
+#[test]
+fn Test_The_Sites_Ceiling_Should_Refuse_A_Claim_Of_Name_Resolution()
+{
+    let guarantee = Guarantee::New(FactVariant::SemanticallyResolved, Assurance::Sound, Assurance::Sound, IncrementalGranularity::Region);
+
+    contract_testing::Assert_Ceiling_Refuses(
+        Sites_Capability_Contract(),
+        guarantee,
+        "a provider claiming resolution for a family about what a file says on its face would satisfy every rule that needs resolution",
+    );
+}
+
+/// The family stands with no provider, so a registry declaring it and composing nobody resolves to
+/// coverage debt rather than to a missing contract.
+#[test]
+fn Test_The_Sites_Contract_Should_Stand_With_No_Provider_At_All()
+{
+    contract_testing::Assert_Stands_With_No_Provider(Sites_Capability_Contract(), Sites_Capability(), SITES_CONTRACT_VERSION, Sites_Ceiling());
+}
+
+/// Every field of the family's contract lands the value its declaration names, and its schema is
+/// its own rather than the items payload's.
+#[test]
+fn Test_Sites_Capability_Contract_Should_Assemble_Its_Declared_Identity_And_Ceiling()
+{
+    let contract = Sites_Capability_Contract();
+
+    assert_eq!(contract.id, Sites_Capability());
+    assert_eq!(contract.version, SITES_CONTRACT_VERSION);
+    assert_eq!(contract.ceiling, Sites_Ceiling());
+    assert_eq!(Sites_Payload_Schema(), SchemaId::New(SITES_SCHEMA));
+    assert_ne!(Sites_Capability(), Capability());
+    assert_ne!(Sites_Payload_Schema(), Payload_Schema());
 }

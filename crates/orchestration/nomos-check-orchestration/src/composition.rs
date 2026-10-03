@@ -40,6 +40,7 @@ pub fn Registered(offer: RegistryOffers) -> Result<Registry, RegistryError>
     let mut registry = Registry::New();
 
     Declare_Syntax_Capability(&mut registry)?;
+    Declare_Sites_Capability(&mut registry)?;
     Declare_Dependency_Capability(&mut registry)?;
     Declare_Controlflow_Capability(&mut registry)?;
     Declare_Complexity_Capability(&mut registry)?;
@@ -125,6 +126,16 @@ pub fn Registered(offer: RegistryOffers) -> Result<Registry, RegistryError>
 fn Declare_Syntax_Capability(registry: &mut Registry) -> Result<(), RegistryError>
 {
     registry.Declare(nomos_cap_syntax::Capability_Contract())?;
+
+    return Ok(());
+}
+
+/// The syntax sites family -- every projection a rule reads from a syntax tree, as a kind this one
+/// capability carries (`OD-CAPABILITY-019`). Declared once for every kind there will be; a kind
+/// added later declares nothing here.
+fn Declare_Sites_Capability(registry: &mut Registry) -> Result<(), RegistryError>
+{
+    registry.Declare(nomos_cap_syntax::Sites_Capability_Contract())?;
 
     return Ok(());
 }
@@ -499,16 +510,16 @@ mod tests
 {
     use super::*;
 
-    /// How many `Declare` calls [`Registered`]'s own body wires: syntax, dependency,
-    /// controlflow, the metric family's complexity, lint, dependency-policy, all six of
+    /// How many `Declare` calls [`Registered`]'s own body wires: syntax, the syntax sites family,
+    /// dependency, controlflow, the metric family's complexity, lint, dependency-policy, all six of
     /// `OD-RULES-011`'s families -- naming, limits, scripting, goals, words and test-material
     /// -- review, requirement trace, the architecture declaration, the two compiler-backed
     /// families, `nomos.cap.rust.copy_clones` and `nomos.cap.rust.nested_locks`, and the
     /// declared standards corpus, C# conditional compilation, and Go's discarded values.
-    const DECLARED_CAPABILITY_COUNT: usize = 20;
+    const DECLARED_CAPABILITY_COUNT: usize = 21;
 
     /// The composition this crate ships must not be self-contradictory, and it must
-    /// declare exactly the twenty capabilities [`Registered`]'s own body wires: syntax,
+    /// declare exactly the twenty-one capabilities [`Registered`]'s own body wires: syntax, sites,
     /// dependency, controlflow, complexity, lint, dependency-policy, all six of
     /// `OD-RULES-011`'s families -- naming, limits, scripting, goals, words and test-material
     /// -- review, requirement trace, the architecture declaration, the two compiler-backed
