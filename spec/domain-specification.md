@@ -181,7 +181,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md@authored | docs/records/OD-LEDGER-033-whether-docs-records-needs-a-distinct-result-record-type-or-the-doubling-in-od-ledger-017-is-unmeasured-rather-than-costly.md | authored | 17 | 5 | sha256:69ab019a45e8742af61dfa35899a6c68c9d29cc11a8c28c52356296a97a114ea |
 | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md@authored | docs/records/OD-LEDGER-034-whether-work-needs-a-typed-reconciliation-outcome-beside-the-free-text-reason-work-decline-already-carries.md | authored | 14 | 5 | sha256:cb61b6f602f2fc7836f03727ce282c5f46da3e5ef3c6f92108dc77cc862577fc |
 | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md@authored | docs/records/OD-LEDGER-035-whether-actual-impact-should-be-recorded-against-declared-territory-or-territory-being-declared-not-enforced-makes-the-drift-unmeasured-rather-than-owed.md | authored | 17 | 5 | sha256:14c099dabfb145585d43d44c2830b845b1191674c3666e55b1abfc7301b89952 |
-| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md | authored | 22 | 7 | sha256:3595ed422199d4058d69fa987aa9a1b826a27df82f6e0daa776f250e98ff51a0 |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md | authored | 25 | 8 | sha256:80c099a4ed476c9494042db21fd6915e191c6776a65a1e896a9dff08e4cbb547 |
 | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md@authored | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md | authored | 18 | 6 | sha256:ab5cb902ffef3564343e99f10236808102e5e0f1d3c8374831bc8e8ab0d579ad |
 | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md@authored | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md | authored | 38 | 12 | sha256:3f4aaa811751dfe23680bbf1316a4d38df6ed399ce726d73c5c26ce7a7446248 |
 | docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md@authored | docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md | authored | 45 | 14 | sha256:0f04f2115865a82563d10f7a04c93ede3fc867323c9fb699ab5fb621b5e9bbef |
@@ -285,8 +285,8 @@ profile: domain-specification
 | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md@authored | docs/records/OD-TRACE-003-a-requirement-half-satisfied-is-partial-and-its-obligation-is-a-gap-checked-like-a-site-not-a-record.md | authored | 19 | 8 | sha256:09379db6f9c710a7de0de6a1cb9d749fbdcb23ecbd7f6e25323adb946c14d741 |
 | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md@authored | docs/records/OD-TRACE-004-a-user-story-is-narrative-evidence-for-a-requirements-own-assessment-not-a-second-assessable-statement.md | authored | 21 | 8 | sha256:20584da07fdc54fcdca104e7137bc67b265954ba3734fc8b2d17a9036b2806b1 |
 | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md@authored | docs/records/OD-TRACE-005-an-assessment-carries-the-hash-it-was-made-against-the-comparison-runs-in-tests-integration-and-a-drifted-met-is-a-finding-not-a-silent-flip.md | authored | 29 | 11 | sha256:de7e7ec53c19ad7a55b98bcef5dadc7f7b1234b80d6dc2f3ce0098b4a1463685 |
-| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 24 | 8 | sha256:ab1873ac8f1480de653fbc7fcf3802f15420492c1248f657c83c4ab5041b9500 |
-| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md | authored | 27 | 11 | sha256:0ba6a37a2b0d4d1123db906de3b04d4803d391a4cf3009b33c2c20249904e5a2 |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md | authored | 26 | 9 | sha256:9bb7ed13803fe54b5bfeff62f658f5c56c9640e58314353494e1450bfefca7e8 |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md | authored | 29 | 12 | sha256:bfc56548ea46e02b123076c8c0763be25b958a643b1eca56f02f8308b173ccab |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md@authored | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md | authored | 15 | 6 | sha256:e067ed756ffd159cb17a6fdc76092fd0f3ff664bcc77349204ce572497711c6e |
 | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md@authored | docs/records/OD-WORKFLOW-004-the-first-real-agent-executor-is-a-real-instance-of-wf-006s-task-result-protocol-and-it-is-still-the-only-one.md | authored | 30 | 8 | sha256:3b219e4bcbe3b032bc1200918f681c31178c8e314636b4283aceff14c9c0cfac |
 | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md@authored | docs/records/OD-WORKFLOW-005-the-workflow-tiers-first-real-execution-increment-is-built-under-the-users-standing-override-not-a-fired-trigger.md | authored | 49 | 10 | sha256:ffe4fe8d9b042b9f639a19983bddbef6c8c38a7550ffe1c21a49055749669ea1 |
@@ -1867,7 +1867,8 @@ profile: domain-specification
 | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#11 | authored | 2 | Decision |
 | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#14 | authored | 2 | What This Record Does Not Do |
 | docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#18 | authored | 2 | What Would Decide It Otherwise |
-| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20 | authored | 2 | Status |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20 | authored | 2 | Amendment, Version 3 |
+| docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#22 | authored | 2 | Status |
 | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#1 | authored | 1 | Whether nomos-agent-contracts' reuse of nomos-ledger's Territory and VerificationPredicate needs its own product-owned types |
 | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#2 | authored | 2 | Question |
 | docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#5 | authored | 2 | What Was Measured |
@@ -2863,6 +2864,7 @@ profile: domain-specification
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#16 | authored | 2 | Amendment: A Bare Clock Reading Cannot Give RunId Real Per-Execution Uniqueness |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#20 | authored | 2 | Status |
 | docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#22 | authored | 2 | Amendment: The Increment Landed; The Construction Lives In `nomos-gate-orchestration`, Not `nomos-contracts` |
+| docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#25 | authored | 2 | Amendment, Version 5: The Ledger's Runner Is `Run_Gate_Steps` |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#1 | authored | 1 | The workflow tier's second increment has not arrived since RunId's first consumer shipped |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#2 | authored | 2 | Question |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#4 | authored | 2 | What Was Measured |
@@ -2873,7 +2875,8 @@ profile: domain-specification
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#17 | authored | 2 | Amendment (OD-WORKFLOW-004) |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#19 | authored | 2 | Amendment (OD-WORKFLOW-005) |
 | docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#21 | authored | 2 | Amendment (OD-WORKFLOW-004, version 2) |
-| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#26 | authored | 2 | Status |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#26 | authored | 2 | Amendment, Version 6 |
+| docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#28 | authored | 2 | Status |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#1 | authored | 1 | WorkflowStep is admitted to band 0 as WF-008's declared contract, not the engine OD-WORKFLOW-002 declined |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#2 | authored | 2 | Question |
 | docs/records/OD-WORKFLOW-003-workflowstep-is-admitted-to-band-zero-as-wf-008s-declared-contract-not-the-engine.md#6 | authored | 2 | What Was Measured |
@@ -57020,13 +57023,14 @@ exactly the risk the review named.
 
 ### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#8
 
-*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:8f5cc8a97ec68c4ad554e76a4c12c6a6d9a9e2d2b9e2cc95976f71d35fcbd116*
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / What Was Measured · hash: sha256:19b353585d2db3d0c3f809796663c916000b6000a5abf14462a4e4744db57551*
 
 **The two vocabularies have already collided once, by accident, and been explicitly
 un-conflated twice.** `OD-WORKFLOW-001` corrects "a conflation an earlier draft of this
 paragraph made from a substring grep rather than reading the file" — mistaking `nomos-ledger`'s
-own `Run_Gate_Step` (an internal argv runner `nomos work finish` uses to run the gate's lint
-step) for a call into the product's real `nomos_gate_orchestration::Run_Gate`. `OD-WORKFLOW-
+own `Run_Gate_Steps` (an internal argv runner `nomos work finish` uses to run the gate's `Lint`
+step and then its `Rules` step, `OD-LEDGER-003` version 2 saying what a finish runs) for a call
+into the product's real `nomos_gate_orchestration::Run_Gate`. `OD-WORKFLOW-
 002` names the same correction again, citing "its false `nomos-ledger` caller claim." Two
 independent instances of the same name-fragment accident, each caught and reversed rather than
 left standing, is evidence the vocabularies need to stay legibly apart, not evidence they are
@@ -57134,11 +57138,32 @@ public commitment. That is the point to re-examine this record's answer, not bef
 
 ### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20
 
+*revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Amendment, Version 3 · hash: sha256:d981508841c57bc72fea7ccf381379a8527d3cfc9f58f32ff783a90e9a196cde*
+
+## Amendment, Version 3
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#21
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Amendment, Version 3 · hash: sha256:5e51937679e6f0056809b35e8d6e60140c3308f54aaff26672f2f220ed09544f*
+
+`P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP` (`a370a004`) renamed
+`nomos-ledger`'s `Run_Gate_Step` to `Run_Gate_Steps` and made it run the gate's `Rules` step after
+its `Lint` step. The paragraph of "What Was Measured" on the two vocabularies having collided now
+gives the function its current name and says what it runs, routing to `OD-LEDGER-003` version 2
+for what a finish runs rather than restating it.
+`P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS`
+made the change. The paragraph's point stands exactly: the function is an internal runner of
+this repository's own finish, not the product's `Run_Gate`, and the accident of a shared name
+fragment is evidence the two vocabularies stay apart. The decision does not change, and the
+ledger is still not a convergence target for a product `Workflow`.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#22
+
 *revision: authored · kind: heading · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#21
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#23
 
 *revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:011bef343f2ce3d27124575aaa8652c49125f37ec14afb15810b3bf639351cce*
 
@@ -57148,7 +57173,7 @@ subject, and not a Nomos product feature converging toward `Workflow`/`TaskEnvel
 version 2 by `OD-HOST-007-MCP-PROJECTION-REOPENS-REPO-TOOLING-2`, which answers the trigger
 this record named rather than leaving it standing.
 
-### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#22
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#24
 
 *revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:73765014e0db6bff29afde9ff7089e4e4dc7a8c44423587cdbf265e085fbc7b4*
 
@@ -57161,6 +57186,14 @@ found it to be, and the public-commitment question moves one crate up, where `OD
 bounds an MCP surface to the three Gate verbs and excludes all eleven ledger verbs
 structurally. Revisit this record only if a transport increment makes the case that a
 repo-tooling verb belongs in that registry after all.
+
+### docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#25
+
+*revision: authored · kind: prose · heading: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target / Status · hash: sha256:ff06537d3b29b7e01c51b2ada0faed0c66434877fdb5a2bd31c3345cee3a5191*
+
+Amended to version 3 by
+`P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS`,
+which gives `nomos-ledger`'s runner its current name and says what it runs, and decides nothing.
 
 ### docs/records/OD-LEDGER-037-whether-nomos-agent-contracts-reuse-of-nomos-ledgers-types-needs-its-own-product-owned-types.md#1
 
@@ -90951,7 +90984,7 @@ distinction with no key to carry it.
 
 ### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#10
 
-*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / The Decision · hash: sha256:477e34976f4dd7c299187f0389637c9592dfa83035d83f57e602921ff2ed6cd2*
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / The Decision · hash: sha256:3730477590d9dbd4995f47a7e80301223141ca7002b24e016f68967b391dca86*
 
 Concretely, for the follow-up this record unblocks: `nomos_gate_orchestration::Run_Gate` gains a
 `nomos_platform::Clock` parameter alongside its existing `ProcessLauncher` one -- a composition-
@@ -90960,9 +90993,10 @@ root-supplied dependency, the same shape `variant` and `launcher` already are, n
 field, computed once per call from the clock reading (and nothing else content-addressed,
 because content-addressing it would silently re-introduce the collapse this record just ruled
 out). Every existing caller of `Run_Gate` -- `nomos-cli`'s `gate.rs` and `nomos-api`'s
-`Handle_Gate_Run`, the only two; `nomos-ledger`'s own `Run_Gate_Step` is a distinct function
+`Handle_Gate_Run`, the only two; `nomos-ledger`'s own `Run_Gate_Steps` is a distinct function
 (`crates/substrate/nomos-ledger/src/finish/gate_step.rs`) that runs the workflow's own
-lint-step argv through a `ProcessLauncher` and never calls `nomos_gate_orchestration::Run_Gate`
+`Lint`-step argv and then its `Rules`-step argv through a `ProcessLauncher`, `OD-LEDGER-003`
+version 2 saying what a finish runs, and never calls `nomos_gate_orchestration::Run_Gate`
 at all, a conflation an earlier draft of this paragraph made from a substring grep rather than
 reading the file -- supplies a real clock the same way each already supplies a real build
 variant and a real process launcher.
@@ -91108,6 +91142,25 @@ described -- only the crate that hosts it differs, and its own module doc states
 could not: this crate is the lowest band that can reach both a `Timestamp` and
 `Digest_Of_Parts`.
 
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#25
+
+*revision: authored · kind: heading · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Amendment, Version 5: The Ledger's Runner Is `Run_Gate_Steps` · hash: sha256:cecdf176675bd5dda190922f02e5dab22d37c16e584d47fe2b1a3ce71c4e3e45*
+
+## Amendment, Version 5: The Ledger's Runner Is `Run_Gate_Steps`
+
+### docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#26
+
+*revision: authored · kind: prose · heading: The workflow tier's first real increment is RunId's first real consumer, not the engine / Amendment, Version 5: The Ledger's Runner Is `Run_Gate_Steps` · hash: sha256:b7080507838c4a402a443a3836e940830332f9cee3472e00c88f10fa35459540*
+
+`P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP` (`a370a004`) renamed the
+`nomos-ledger` function the "Concretely, for the follow-up" paragraph sets apart from `Run_Gate`,
+from `Run_Gate_Step` to `Run_Gate_Steps`, and made it run the workflow's `Rules` step after its
+`Lint` step. That paragraph now gives the function its current name and says what it runs, and
+routes to `OD-LEDGER-003` version 2 for what a finish runs rather than restating it.
+`P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS`
+made the change. The paragraph's point stands exactly: the function is distinct from
+`nomos_gate_orchestration::Run_Gate` and never calls it. Nothing this record decides changed.
+
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#1
 
 *revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped · hash: sha256:18bde830e47457a54d9ed472b7bf7164b3f784bfd5abb6ac4bfafeeb778b8dd8*
@@ -91150,7 +91203,7 @@ Read directly from the live tree, not from `OD-WORKFLOW-001`'s own description o
 
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#6
 
-*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Was Measured · hash: sha256:400ab38c70714156a349cae695300bcaf1a77aa91b6929968dde201767ba07d1*
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What Was Measured · hash: sha256:95e6c7560cde29161b1faf078076d5453c15c8d285498646b543c0074049bbae*
 
 - `git log` confirms `P13-WORKFLOW-001-RUNID-FRESH-AND-RUN-GATE` (`9358f9b`) is the tip of
   what this tier has built. No `OD-WORKFLOW-002` existed in `docs/records/` or
@@ -91160,10 +91213,11 @@ Read directly from the live tree, not from `OD-WORKFLOW-001`'s own description o
   `Done`). No live session has claimed or proposed a second workflow-tier increment.
 - Grepped directly: `nomos_gate_orchestration::Run_Gate` still has exactly two real callers
   in this workspace -- `nomos-cli`'s `gate.rs` and `nomos-api`'s `Handle_Gate_Run` -- the
-  same two `OD-WORKFLOW-001` named. `nomos-ledger`'s `Run_Gate_Step`
+  same two `OD-WORKFLOW-001` named. `nomos-ledger`'s `Run_Gate_Steps`
   (`crates/substrate/nomos-ledger/src/finish/gate_step.rs`) remains the distinct, unrelated
   function `OD-WORKFLOW-001`'s own amendment already corrected an earlier draft for
-  conflating; read in full, it runs the workflow's own lint-step argv through a bare
+  conflating; read in full, it runs the workflow's own `Lint`-step argv and then its
+  `Rules`-step argv, `OD-LEDGER-003` version 2 saying what a finish runs, through a bare
   `ProcessLauncher` with no persisted or correlated executions anywhere to give an identity
   meaning against. Giving it a `RunId` now would manufacture a second consumer rather than
   find a real one.
@@ -91233,11 +91287,11 @@ recording it as a "decision" would misuse the pattern this tier's own records ex
 
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#10
 
-*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What This Does Not Do · hash: sha256:e52c5cb3c6121cd29ac25a07a0af38080b8a3119153d0947d3e4dc0c8bab97ad*
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / What This Does Not Do · hash: sha256:c14a02b5b6e76dabe69ddcd02bb6fd14de582ba35fa22d2d6293fccaaeda9c7d*
 
 It does not build `WorkflowStep`, any part of the `WF-009`..`012` engine, a phase concept
 for `Gate`, or a `nomos-workflow` crate. It does not give `RunId` a second consumer inside
-`nomos-ledger`'s `Run_Gate_Step`, which has no persisted or correlated executions to make an
+`nomos-ledger`'s `Run_Gate_Steps`, which has no persisted or correlated executions to make an
 identity meaningful against -- manufacturing that consumer now would repeat the "no invented
 shape ahead of a real case" mistake this workspace has already declined to make elsewhere
 (`OD-PACKAGE-006`, `OD-PACKAGE-008`, `OD-CORRECTIONS-001`). It does not schedule the CLI's
@@ -91404,13 +91458,33 @@ onto the workflow tier.
 
 ### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#26
 
+*revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment, Version 6 · hash: sha256:f5acad2734b823cecbea0953211319586f926cdf868e0f2982700d935cbdf8b6*
+
+## Amendment, Version 6
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#27
+
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Amendment, Version 6 · hash: sha256:8635fd0c3122c85dcbf9e31b773d004854a6d4f63d134cbc20bd22326873a492*
+
+`P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP` (`a370a004`) renamed
+`nomos-ledger`'s `Run_Gate_Step` to `Run_Gate_Steps` and made it run the workflow's `Rules` step
+after its `Lint` step. The two places this record names the function, the second bullet of "What
+Was Measured" and "What This Does Not Do", now give its current name, and the bullet says what it
+runs, routing to `OD-LEDGER-003` version 2 for what a finish runs rather than restating it.
+`P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS`
+made the change. Both points stand exactly: the function is distinct from and unrelated to
+`Run_Gate`, and giving it a `RunId` would manufacture a second consumer rather than find a real
+one. Nothing else here is changed.
+
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#28
+
 *revision: authored · kind: heading · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#27
+### docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#29
 
-*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:bf9f974d5d16658ab38508813e7e94dab13e0065cd643c83a959877ab438277b*
+*revision: authored · kind: prose · heading: The workflow tier's second increment has not arrived since RunId's first consumer shipped / Status · hash: sha256:873d0fb024c147c4fff23631c488e79bbc0cedf7f5ce970e0f028259538b4e1e*
 
 Accepted. Re-surveys the workflow tier against the live tree and the v14 corpus a second
 time, after `OD-WORKFLOW-001`'s first increment shipped, and finds no genuine second
@@ -91424,7 +91498,10 @@ under the user's own override before any of the three conditions fired; the rest
 record's survey stands. Amended a fourth time, at version 5, by `OD-WORKFLOW-004`'s own version
 2, which found condition 3 fired at `5775f8f8` under the narrowing that record made to it, and
 withdrew rather than replaced what this record's earlier amendments said about conditions 1 and
-2. This record's title is version 1's question and version 1's answer, and it is left as
+2. Amended a fifth time, at version 6, by
+`P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS`,
+which gives `nomos-ledger`'s runner its current name and says what it runs, and changes no
+finding. This record's title is version 1's question and version 1's answer, and it is left as
 written: what has arrived since is recorded in the amendments, each dated to the record that
 made it.
 

@@ -3,7 +3,7 @@ id: OD-WORKFLOW-001
 type: decision
 title: The workflow tier's first real increment is RunId's first real consumer, not the engine
 status: accepted
-version: 4
+version: 5
 authority: canonical-normative-record
 tags:
   - workflow
@@ -90,9 +90,10 @@ root-supplied dependency, the same shape `variant` and `launcher` already are, n
 field, computed once per call from the clock reading (and nothing else content-addressed,
 because content-addressing it would silently re-introduce the collapse this record just ruled
 out). Every existing caller of `Run_Gate` -- `nomos-cli`'s `gate.rs` and `nomos-api`'s
-`Handle_Gate_Run`, the only two; `nomos-ledger`'s own `Run_Gate_Step` is a distinct function
+`Handle_Gate_Run`, the only two; `nomos-ledger`'s own `Run_Gate_Steps` is a distinct function
 (`crates/substrate/nomos-ledger/src/finish/gate_step.rs`) that runs the workflow's own
-lint-step argv through a `ProcessLauncher` and never calls `nomos_gate_orchestration::Run_Gate`
+`Lint`-step argv and then its `Rules`-step argv through a `ProcessLauncher`, `OD-LEDGER-003`
+version 2 saying what a finish runs, and never calls `nomos_gate_orchestration::Run_Gate`
 at all, a conflation an earlier draft of this paragraph made from a substring grep rather than
 reading the file -- supplies a real clock the same way each already supplies a real build
 variant and a real process launcher.
@@ -181,3 +182,14 @@ function that exists is `nomos_gate_orchestration::Fresh_Run_Id(now: Timestamp) 
 described -- only the crate that hosts it differs, and its own module doc states why band 0
 could not: this crate is the lowest band that can reach both a `Timestamp` and
 `Digest_Of_Parts`.
+
+## Amendment, Version 5: The Ledger's Runner Is `Run_Gate_Steps`
+
+`P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP` (`a370a004`) renamed the
+`nomos-ledger` function the "Concretely, for the follow-up" paragraph sets apart from `Run_Gate`,
+from `Run_Gate_Step` to `Run_Gate_Steps`, and made it run the workflow's `Rules` step after its
+`Lint` step. That paragraph now gives the function its current name and says what it runs, and
+routes to `OD-LEDGER-003` version 2 for what a finish runs rather than restating it.
+`P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS`
+made the change. The paragraph's point stands exactly: the function is distinct from
+`nomos_gate_orchestration::Run_Gate` and never calls it. Nothing this record decides changed.

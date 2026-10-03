@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:8592e4d4bb74e9227fd27b078523b6e4edd8ce09014df0b70c8e5a0e3c381243",
-  "inputs_digest": "sha256:d12ca1c0b97c3c48e3bd09a7f1277e24901c0d14e75aad9309e181000486ae8e",
+  "content_digest": "sha256:e5536f9e998530e6e3de6f317d5471b3aae582602209e54c869fa4e82000a8bf",
+  "inputs_digest": "sha256:343decd034d6ee9c11817a610b4f3540ceb8b6f5e3b95e8e8e3a45486140aa11",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2603
+      2606
     ],
     [
       "Source blocks",
-      9572
+      9579
     ]
   ],
   "inputs": [
@@ -878,7 +878,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md@authored",
-      "hash": "sha256:3595ed422199d4058d69fa987aa9a1b826a27df82f6e0daa776f250e98ff51a0"
+      "hash": "sha256:80c099a4ed476c9494042db21fd6915e191c6776a65a1e896a9dff08e4cbb547"
     },
     {
       "content": "documents",
@@ -1398,12 +1398,12 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md@authored",
-      "hash": "sha256:ab1873ac8f1480de653fbc7fcf3802f15420492c1248f657c83c4ab5041b9500"
+      "hash": "sha256:9bb7ed13803fe54b5bfeff62f658f5c56c9640e58314353494e1450bfefca7e8"
     },
     {
       "content": "documents",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md@authored",
-      "hash": "sha256:0ba6a37a2b0d4d1123db906de3b04d4803d391a4cf3009b33c2c20249904e5a2"
+      "hash": "sha256:bfc56548ea46e02b123076c8c0763be25b958a643b1eca56f02f8308b173ccab"
     },
     {
       "content": "documents",
@@ -9283,7 +9283,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20",
-      "hash": "sha256:a957ffc70d9d12c916455ad1ff93a80bb1e8e373c2f96cba41cd29cb48b3dd1b"
+      "hash": "sha256:7d51a7efe72a9db65d62a5a649e20e2f1b9a375c7d69c6fbebc6eed1122852ff"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#22",
+      "hash": "sha256:eebdbfe43bdb30c82dfbb95e13cc2a684a33b22cf813f0f39a59550a73a39e34"
     },
     {
       "content": "headings",
@@ -14262,6 +14267,11 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#25",
+      "hash": "sha256:5ee57507daeb2a8dc82c4fac9c1430ca3acd695adb01064eccffe4e7881c59bd"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#1",
       "hash": "sha256:a94a015f57343ab0ef4fc2feae5730f8a377439af41f453e81c7f04d5afe6e99"
     },
@@ -14313,7 +14323,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#26",
-      "hash": "sha256:73948630c44dc0afdaf7a42b0cbd68dc0111d498a8a600e6aeaf3c58ae1d9427"
+      "hash": "sha256:90f8c6d609c2b33934bd0d60536b6b635b768ed40ce54ec097b851c3c8847ddc"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#28",
+      "hash": "sha256:84f82c88b69cd7198c81a2102aa99a5f9e607ce0d54f0a70af1ef6d6bb30bc0a"
     },
     {
       "content": "headings",
@@ -43398,7 +43413,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#8",
-      "hash": "sha256:8f5cc8a97ec68c4ad554e76a4c12c6a6d9a9e2d2b9e2cc95976f71d35fcbd116"
+      "hash": "sha256:19b353585d2db3d0c3f809796663c916000b6000a5abf14462a4e4744db57551"
     },
     {
       "content": "blocks",
@@ -43458,17 +43473,32 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#20",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:d981508841c57bc72fea7ccf381379a8527d3cfc9f58f32ff783a90e9a196cde"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#21",
-      "hash": "sha256:011bef343f2ce3d27124575aaa8652c49125f37ec14afb15810b3bf639351cce"
+      "hash": "sha256:5e51937679e6f0056809b35e8d6e60140c3308f54aaff26672f2f220ed09544f"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#22",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#23",
+      "hash": "sha256:011bef343f2ce3d27124575aaa8652c49125f37ec14afb15810b3bf639351cce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#24",
       "hash": "sha256:73765014e0db6bff29afde9ff7089e4e4dc7a8c44423587cdbf265e085fbc7b4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-036-the-work-ledger-is-repository-bootstrap-machinery-not-a-nomos-product-workflow-convergence-target.md#25",
+      "hash": "sha256:ff06537d3b29b7e01c51b2ada0faed0c66434877fdb5a2bd31c3345cee3a5191"
     },
     {
       "content": "blocks",
@@ -61618,7 +61648,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#10",
-      "hash": "sha256:477e34976f4dd7c299187f0389637c9592dfa83035d83f57e602921ff2ed6cd2"
+      "hash": "sha256:3730477590d9dbd4995f47a7e80301223141ca7002b24e016f68967b391dca86"
     },
     {
       "content": "blocks",
@@ -61692,6 +61722,16 @@
     },
     {
       "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#25",
+      "hash": "sha256:cecdf176675bd5dda190922f02e5dab22d37c16e584d47fe2b1a3ce71c4e3e45"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-001-the-workflow-tiers-first-real-increment-is-runids-first-consumer-not-the-engine.md#26",
+      "hash": "sha256:b7080507838c4a402a443a3836e940830332f9cee3472e00c88f10fa35459540"
+    },
+    {
+      "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#1",
       "hash": "sha256:18bde830e47457a54d9ed472b7bf7164b3f784bfd5abb6ac4bfafeeb778b8dd8"
     },
@@ -61718,7 +61758,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#6",
-      "hash": "sha256:400ab38c70714156a349cae695300bcaf1a77aa91b6929968dde201767ba07d1"
+      "hash": "sha256:95e6c7560cde29161b1faf078076d5453c15c8d285498646b543c0074049bbae"
     },
     {
       "content": "blocks",
@@ -61738,7 +61778,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#10",
-      "hash": "sha256:e52c5cb3c6121cd29ac25a07a0af38080b8a3119153d0947d3e4dc0c8bab97ad"
+      "hash": "sha256:c14a02b5b6e76dabe69ddcd02bb6fd14de582ba35fa22d2d6293fccaaeda9c7d"
     },
     {
       "content": "blocks",
@@ -61818,12 +61858,22 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#26",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:f5acad2734b823cecbea0953211319586f926cdf868e0f2982700d935cbdf8b6"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#27",
-      "hash": "sha256:bf9f974d5d16658ab38508813e7e94dab13e0065cd643c83a959877ab438277b"
+      "hash": "sha256:8635fd0c3122c85dcbf9e31b773d004854a6d4f63d134cbc20bd22326873a492"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#28",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-WORKFLOW-002-the-workflow-tiers-second-increment-has-not-arrived-since-runids-first-consumer-shipped.md#29",
+      "hash": "sha256:873d0fb024c147c4fff23631c488e79bbc0cedf7f5ce970e0f028259538b4e1e"
     },
     {
       "content": "blocks",

@@ -3,7 +3,7 @@ id: OD-LEDGER-036
 type: decision
 title: The work ledger is repository bootstrap machinery, not a Nomos product Workflow convergence target
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - work-ledger
@@ -64,8 +64,9 @@ exactly the risk the review named.
 **The two vocabularies have already collided once, by accident, and been explicitly
 un-conflated twice.** `OD-WORKFLOW-001` corrects "a conflation an earlier draft of this
 paragraph made from a substring grep rather than reading the file" — mistaking `nomos-ledger`'s
-own `Run_Gate_Step` (an internal argv runner `nomos work finish` uses to run the gate's lint
-step) for a call into the product's real `nomos_gate_orchestration::Run_Gate`. `OD-WORKFLOW-
+own `Run_Gate_Steps` (an internal argv runner `nomos work finish` uses to run the gate's `Lint`
+step and then its `Rules` step, `OD-LEDGER-003` version 2 saying what a finish runs) for a call
+into the product's real `nomos_gate_orchestration::Run_Gate`. `OD-WORKFLOW-
 002` names the same correction again, citing "its false `nomos-ledger` caller claim." Two
 independent instances of the same name-fragment accident, each caught and reversed rather than
 left standing, is evidence the vocabularies need to stay legibly apart, not evidence they are
@@ -127,6 +128,19 @@ repository's own tooling and this record's own seam-exercise framing — its exp
 full ledger verb set at band 90 stops being an internal coordination detail and starts being a
 public commitment. That is the point to re-examine this record's answer, not before it.
 
+## Amendment, Version 3
+
+`P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP` (`a370a004`) renamed
+`nomos-ledger`'s `Run_Gate_Step` to `Run_Gate_Steps` and made it run the gate's `Rules` step after
+its `Lint` step. The paragraph of "What Was Measured" on the two vocabularies having collided now
+gives the function its current name and says what it runs, routing to `OD-LEDGER-003` version 2
+for what a finish runs rather than restating it.
+`P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS`
+made the change. The paragraph's point stands exactly: the function is an internal runner of
+this repository's own finish, not the product's `Run_Gate`, and the accident of a shared name
+fragment is evidence the two vocabularies stay apart. The decision does not change, and the
+ledger is still not a convergence target for a product `Workflow`.
+
 ## Status
 
 Accepted. Settles `ARC-ECOSYSTEM-001`'s open disjunction for the work ledger specifically —
@@ -144,3 +158,7 @@ found it to be, and the public-commitment question moves one crate up, where `OD
 bounds an MCP surface to the three Gate verbs and excludes all eleven ledger verbs
 structurally. Revisit this record only if a transport increment makes the case that a
 repo-tooling verb belongs in that registry after all.
+
+Amended to version 3 by
+`P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS`,
+which gives `nomos-ledger`'s runner its current name and says what it runs, and decides nothing.

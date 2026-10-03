@@ -5,8 +5,9 @@
 //! point directly: `Run_Gate` is generic over `nomos-platform`'s traits "so a second adapter
 //! can call it without depending on `nomos-cli`." Until this crate, nothing did --
 //! `nomos-cli`'s own `gate.rs` was the only caller outside the orchestration crate itself,
-//! apart from `nomos-ledger`'s own unrelated `Run_Gate_Step` (a lint-argv runner that merely
-//! shares a name fragment, `OD-WORKFLOW-001`'s own correction). `ARC-ROADMAP-001` names
+//! apart from `nomos-ledger`'s own unrelated `Run_Gate_Steps` (which runs the workflow's `Lint`
+//! step and then its `Rules` step, `OD-LEDGER-003` version 2 saying what a finish runs, and
+//! merely shares a name fragment, `OD-WORKFLOW-001`'s own correction). `ARC-ROADMAP-001` names
 //! `CLI / API / MCP projections` as a near-term-tier item next to the Gate object itself;
 //! this crate's first increment was `Handle_Gate_Run`. Its second, [`work::Handle_Work_List`],
 //! proves the same is true of `nomos_work_orchestration::Run`: grepped directly, before that

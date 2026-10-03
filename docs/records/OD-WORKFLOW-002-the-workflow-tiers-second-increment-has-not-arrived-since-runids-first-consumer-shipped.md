@@ -3,7 +3,7 @@ id: OD-WORKFLOW-002
 type: decision
 title: The workflow tier's second increment has not arrived since RunId's first consumer shipped
 status: accepted
-version: 5
+version: 6
 authority: canonical-normative-record
 tags:
   - workflow
@@ -53,10 +53,11 @@ Read directly from the live tree, not from `OD-WORKFLOW-001`'s own description o
   `Done`). No live session has claimed or proposed a second workflow-tier increment.
 - Grepped directly: `nomos_gate_orchestration::Run_Gate` still has exactly two real callers
   in this workspace -- `nomos-cli`'s `gate.rs` and `nomos-api`'s `Handle_Gate_Run` -- the
-  same two `OD-WORKFLOW-001` named. `nomos-ledger`'s `Run_Gate_Step`
+  same two `OD-WORKFLOW-001` named. `nomos-ledger`'s `Run_Gate_Steps`
   (`crates/substrate/nomos-ledger/src/finish/gate_step.rs`) remains the distinct, unrelated
   function `OD-WORKFLOW-001`'s own amendment already corrected an earlier draft for
-  conflating; read in full, it runs the workflow's own lint-step argv through a bare
+  conflating; read in full, it runs the workflow's own `Lint`-step argv and then its
+  `Rules`-step argv, `OD-LEDGER-003` version 2 saying what a finish runs, through a bare
   `ProcessLauncher` with no persisted or correlated executions anywhere to give an identity
   meaning against. Giving it a `RunId` now would manufacture a second consumer rather than
   find a real one.
@@ -114,7 +115,7 @@ recording it as a "decision" would misuse the pattern this tier's own records ex
 
 It does not build `WorkflowStep`, any part of the `WF-009`..`012` engine, a phase concept
 for `Gate`, or a `nomos-workflow` crate. It does not give `RunId` a second consumer inside
-`nomos-ledger`'s `Run_Gate_Step`, which has no persisted or correlated executions to make an
+`nomos-ledger`'s `Run_Gate_Steps`, which has no persisted or correlated executions to make an
 identity meaningful against -- manufacturing that consumer now would repeat the "no invented
 shape ahead of a real case" mistake this workspace has already declined to make elsewhere
 (`OD-PACKAGE-006`, `OD-PACKAGE-008`, `OD-CORRECTIONS-001`). It does not schedule the CLI's
@@ -219,6 +220,18 @@ reserves this record.
 Nothing else here is changed, and `OD-ROADMAP-001`'s override is not reopened, widened, or read
 onto the workflow tier.
 
+## Amendment, Version 6
+
+`P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP` (`a370a004`) renamed
+`nomos-ledger`'s `Run_Gate_Step` to `Run_Gate_Steps` and made it run the workflow's `Rules` step
+after its `Lint` step. The two places this record names the function, the second bullet of "What
+Was Measured" and "What This Does Not Do", now give its current name, and the bullet says what it
+runs, routing to `OD-LEDGER-003` version 2 for what a finish runs rather than restating it.
+`P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS`
+made the change. Both points stand exactly: the function is distinct from and unrelated to
+`Run_Gate`, and giving it a `RunId` would manufacture a second consumer rather than find a real
+one. Nothing else here is changed.
+
 ## Status
 
 Accepted. Re-surveys the workflow tier against the live tree and the v14 corpus a second
@@ -233,6 +246,9 @@ under the user's own override before any of the three conditions fired; the rest
 record's survey stands. Amended a fourth time, at version 5, by `OD-WORKFLOW-004`'s own version
 2, which found condition 3 fired at `5775f8f8` under the narrowing that record made to it, and
 withdrew rather than replaced what this record's earlier amendments said about conditions 1 and
-2. This record's title is version 1's question and version 1's answer, and it is left as
+2. Amended a fifth time, at version 6, by
+`P202-THREE-RECORDS-AND-NOMOS-API-NAME-RUN-GATE-STEP-AS-A-LINT-RUNNER-AND-IT-IS-NOW-RUN-GATE-STEPS`,
+which gives `nomos-ledger`'s runner its current name and says what it runs, and changes no
+finding. This record's title is version 1's question and version 1's answer, and it is left as
 written: what has arrived since is recorded in the amendments, each dated to the record that
 made it.

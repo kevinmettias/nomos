@@ -103313,10 +103313,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p198-keys",
+        "acquired_at": 1791047077,
+        "lease_expires_at": 1791061477
+      },
       "verification": {
         "argv": [
           "cargo",
