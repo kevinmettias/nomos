@@ -61,8 +61,10 @@ pub const STANDARDS_CORPUS_CONTRACT_RECORD: &str = "ARC-CONFORMANCE-003";
 ///
 /// Version 2 re-stated the record's second milestone and corrected two document counts to
 /// the rule counts they were; nothing this rule reports moved with it, so the citation
-/// follows the record rather than the implementation following a change.
-pub const STANDARDS_CORPUS_CONTRACT_RECORD_VERSION: u32 = 2;
+/// follows the record rather than the implementation following a change. Version 3
+/// re-stated the third milestone around `OD-CAPABILITY-019` and withdrew the conclusion that
+/// the corpus's dominant port is a declared text rule, and that moved nothing here either.
+pub const STANDARDS_CORPUS_CONTRACT_RECORD_VERSION: u32 = 3;
 
 /// Reports every document in a repository's declared standards corpus: what each one declares
 /// about itself, and which declarations could not be read — one `Finding` per document, never

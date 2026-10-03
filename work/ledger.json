@@ -99494,16 +99494,12 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P174-A-SYNTACTIC-PROJECTION-IS-A-KIND-ONE-FAMILY-CARRIES-2"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "opus-m3-arc",
-        "acquired_at": 1791014179,
-        "lease_expires_at": 1791024979
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -99528,7 +99524,42 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "governing_records_are_present",
+          "--test",
+          "round_trip_holds",
+          "--test",
+          "store_holds",
+          "--test",
+          "table_rows",
+          "--test",
+          "record_citation",
+          "--test",
+          "rule_contract_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "Compiling nomos-lang-csharp-compiler v0.1.0 (F:\\repos\\nomos-p175\\crates\\languages\\nomos-lang-csharp-compiler)\n   Compiling nomos-lang-rust-deny v0.1.0 (F:\\repos\\nomos-p175\\crates\\languages\\nomos-lang-rust-deny)\n   Compiling nomos-rules v0.1.0 (F:\\repos\\nomos-p175\\crates\\rules\\nomos-rules)\n   Compiling ra_ap_project_model v0.0.293\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling ra_ap_load-cargo v0.0.293\n   Compiling nomos-lang-rust-compiler v0.1.0 (F:\\repos\\nomos-p175\\crates\\languages\\nomos-lang-rust-compiler)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos-p175\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos-p175\\tests\\contract)\n   Compiling nomos-composer-providers v0.1.0 (F:\\repos\\nomos-p175\\crates\\composer\\nomos-composer-providers)\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 38.29s\n     Running tests\\record_citation.rs (F:/repos/nomos-p175-target\\debug\\deps\\record_citation-e59db42c18b3efde.exe)\n     Running tests\\rule_contract_citation.rs (F:/repos/nomos-p175-target\\debug\\deps\\rule_contract_citation-f8d97f579a98aa1a.exe)\n     Running tests\\governing_records_are_present\\main.rs (F:/repos/nomos-p175-target\\debug\\deps\\governing_records_are_present-00262ca1fd3972b5.exe)\n     Running tests\\round_trip_holds\\main.rs (F:/repos/nomos-p175-target\\debug\\deps\\round_trip_holds-186543f7685a6a84.exe)\n     Running tests\\store_holds.rs (F:/repos/nomos-p175-target\\debug\\deps\\store_holds-9ca0a8b8a7346719.exe)\n     Running tests\\table_rows\\main.rs (F:/repos/nomos-p175-target\\debug\\deps\\table_rows-8e18e4b8c31c2df5.exe)\n",
+        "verified_at": 1791014505,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "c51f17ae639d6b6db1e29487ba760deaabd99ff2"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -99865,7 +99896,12 @@
           "crates/host/nomos-cli/src/gate/report/tests.rs",
           "crates/host/nomos-cli/src/gate/report/tests/verdicts.rs",
           "crates/host/nomos-cli/src/gate/report/tests/explain.rs",
-          "tests/integration/tests/calibration.rs"
+          "tests/integration/tests/calibration.rs",
+          "crates/rules/nomos-rules/src/checks/populations.rs",
+          "crates/rules/nomos-rules/src/checks/script_discipline/shebang.rs",
+          "crates/rules/nomos-rules/src/checks/script_discipline/purpose.rs",
+          "crates/rules/nomos-rules/src/checks/script_discipline/nounset.rs",
+          "crates/rules/nomos-rules/src/checks/function_shape/receiver_allowance.rs"
         ],
         "patterns": []
       },
@@ -99905,7 +99941,25 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "opus-p172-population",
+          "added": [
+            "crates/rules/nomos-rules/src/checks/populations.rs",
+            "crates/rules/nomos-rules/src/checks/script_discipline/shebang.rs",
+            "crates/rules/nomos-rules/src/checks/script_discipline/purpose.rs",
+            "crates/rules/nomos-rules/src/checks/script_discipline/nounset.rs"
+          ],
+          "widened_at": 1791014327
+        },
+        {
+          "holder": "opus-p172-population",
+          "added": [
+            "crates/rules/nomos-rules/src/checks/function_shape/receiver_allowance.rs"
+          ],
+          "widened_at": 1791014568
+        }
+      ]
     },
     {
       "id": "P172-OD-RULES-035-SENDS-A-DEFAULTED-VERDICT-TO-A-POPULATION-QUESTION-OD-ANALYSIS-012-NO-LONGER-ANSWERS",
@@ -99923,10 +99977,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p172-rules035",
+        "acquired_at": 1791014409,
+        "lease_expires_at": 1791028809
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -100967,10 +101025,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p187-walk",
+        "acquired_at": 1791014404,
+        "lease_expires_at": 1791025204
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -101004,10 +101066,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p188-dependents",
+        "acquired_at": 1791014408,
+        "lease_expires_at": 1791032408
+      },
       "verification": {
         "argv": [
           "cargo",

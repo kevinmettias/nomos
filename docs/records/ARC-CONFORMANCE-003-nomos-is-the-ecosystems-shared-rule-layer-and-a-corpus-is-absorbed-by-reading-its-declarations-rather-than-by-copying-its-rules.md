@@ -3,7 +3,7 @@ id: ARC-CONFORMANCE-003
 type: decision
 title: Nomos is the ecosystem's shared rule layer, and a corpus is absorbed by reading its declarations rather than by copying its rules
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - conformance
@@ -33,6 +33,8 @@ relations:
   - target: OD-HOST-013
     type: relates-to
   - target: OD-RULES-035
+    type: relates-to
+  - target: OD-CAPABILITY-019
     type: relates-to
 ---
 
@@ -83,7 +85,11 @@ thin `main.go` declarations from 108 shared engines, joined by an `// Enforces: 
 header — the same declaration/engine split `DeclaredTextRule` describes.
 
 **The Go corpus is 88% text, and the 12% that is not already reaches structural facts through a
-language kernel.** Measured across all 320 `main.go` files and the 108 engine directories
+language kernel** — at the layer these counts were taken, which is the shared engines, and the
+engines judge records a language kernel has already extracted; `OD-CAPABILITY-019` read the
+kernels and found the extraction mostly parses a tree, so this paragraph's conclusion, that the
+dominant port outcome is a declared text rule, is withdrawn in the version 3 amendment below
+and its counts are kept as what they measured. Measured across all 320 `main.go` files and the 108 engine directories
 beneath `*/shared/*`: **zero** of the 108 engines import `go/ast`, `go/parser`, `go/token` or
 `go/types` directly. 95 of them use `strings.` and 11 import `regexp`; 13 reach a structural
 fact, and every one of those does it by importing a *language kernel* —
@@ -233,8 +239,9 @@ author's. It is built first.
 is (P1) a tool relay, where a tool already reaches the verdict (`OD-RULES-010`); (P2) a declared
 text rule, where the predicate is lexical (`OD-RULES-034`); (P3) a native function over a fact,
 where structure is genuinely required; or (P4) a declaration that the rule is model-judged
-(`OD-RULES-022`). The measurement above says P2 dominates, and that P3 is a minority case rather
-than the default.
+(`OD-RULES-022`). The measurement above was read as saying P2 dominates and P3 is a minority;
+`OD-CAPABILITY-019` measured the extraction layer and found the reverse — P3, a native function
+over a syntactic projection, is the dominant form, and P2 is the minority.
 
 **Parameterize before porting.** `OD-RULES-011` governs and the order is not negotiable: a check
 ported with a preference welded into its predicate is a check that must be ported again the
@@ -243,8 +250,8 @@ requirement forbids. `OD-RULES-011`'s own text already records two shipped Go ru
 from the vocabulary their own rule id named for exactly this reason.
 
 **The four forms are reached in this order, and the milestones in the ledger carry it.** M1, a
-distributed corpus is readable. M2, a preference axis is one declaration. M3, a lexical rule is a
-declaration. M4, a tool is a declaration. M5, a waiver and a repair are declarations, and a waiver that matches nothing is
+distributed corpus is readable. M2, a preference axis is one declaration. M3, a syntactic projection is
+a declaration. M4, a tool is a declaration. M5, a waiver and a repair are declarations, and a waiver that matches nothing is
 never a silent pass. M6, what cannot be decided is routed rather than faked. M7, breadth. The order is
 coverage per unit of work: M1 first because it is already decided and covers the most, M2 before
 M3 because porting before parameterizing is the defect above, and M6 last because routing an
@@ -317,7 +324,7 @@ rather than silently clean; and a rule nothing enforces is named rather than mer
 |---|---|---|
 | M1 | G1 | A distributed corpus is readable — one reader makes all 1,133 code-standards rule documents and all 261 xvpe rule documents visible. |
 | M2 | G2 | A preference axis is one declaration: a key a repository can write, declared once beside the rules that read it, so that adding one to an existing row-shaped family edits `nomos-rules` and nothing else (`OD-RULES-035`). |
-| M3 | G1, G2 | A lexical rule is a declaration: `DeclaredTextRule` carries the detectors, parameters, citation and text surface the corpus's 95 text engines need. |
+| M3 | G1, G2 | A syntactic projection is a declaration: a projection is a kind one capability carries, so porting a corpus engine costs the projection's declaration, one extractor per language that offers it, and the rule — not a capability family (`OD-CAPABILITY-019`). |
 | M4 | G1, G2 | A tool is a declaration: a new `ToolProvider` costs a declaration rather than a crate. |
 | M5 | G2, G3 | A waiver is a declaration: the 1,075 waivers the ecosystem already wrote reach the `SuppressionPolicy` that already exists, a waiver matching nothing is an error rather than a silent no-op, and a repaired finding is never reported as a pass. |
 | M6 | G3 | What cannot be decided is routed: `Judgment::ModelJudged` is reachable and `Applicability::AgentRequired` is produced rather than assumed. |
@@ -433,13 +440,41 @@ itself. The question section already said *rule documents*; the other two now ag
 statement stand as written. Nothing in M1's delivery changes: the standards-corpus rule's
 contract is the same at version 2, and the version it cites follows the record.
 
+## Amendment, Version 3
+
+M2 closed with the three items `OD-RULES-035` named, and opening M3 meant measuring what the
+corpus's "95 text engines" need from `DeclaredTextRule`. They are not text engines, and this
+amendment corrects the record where it said they were.
+
+**What was wrong.** Version 1 counted, across the 108 shared engine directories, 95 using
+`strings.` and none importing `go/ast`, and concluded that the corpus is 88 per cent text and
+that the dominant port outcome is a declared text rule. Both counts are accurate and neither
+measures extraction. A code-standards engine is the judgment layer: it judges typed records that
+a language kernel's method has already extracted, and it reaches that kernel through an
+interface registered at start-up, which is why no engine imports one. `OD-CAPABILITY-019` read
+every engine and every language-specific check down its judgment's own call path to a parse or
+a line loop: 73 of the 108 engines and 101 of the 135 language-specific checks extract through a
+syntax tree, and 12 checks judge one line at a time.
+
+**What replaces it.** M3 is re-stated as that record's milestone: a syntactic projection is a
+declaration, a kind one capability carries rather than a capability family of its own, so that
+porting a corpus engine costs the projection's declaration, one extractor per language that
+offers it, and the rule. The paragraph measuring the Go corpus keeps its counts and names the
+layer they were taken at; the sentence ranking the four port forms now ranks them the other way,
+with P3 dominant; and the sentence listing the milestones in order names M3's new statement.
+`DeclaredTextRule` is unaffected and stays as `OD-RULES-034` decided it.
+
+**What did not move.** G1, G2 and G3, the version 2 amendment, the order of the milestones, and
+every other milestone's statement stand as written. The standards-corpus rule's contract is the
+same at version 3, and the version it cites follows the record.
+
 ## Status
 
-Accepted, amended at version 2. The campaign's milestones are M1 through M7 as above; the ledger
+Accepted, amended at version 3. The campaign's milestones are M1 through M7 as above; the ledger
 carries their tasks and this record is the authority each of them cites rather than restates.
 `P26-RULES-MORE-CODE-STANDARDS-3`'s completion — the exhaustion of what the current inputs can
 judge — is the event that made this the next question, and it is why M1 rather than a further
 import slice was the first increment. M1 landed at `ed8d92dd`. M2 is re-stated by
-`OD-RULES-035`, which also says what its items are and why their territory waits. M3 through M7
-are dated by nothing here: each opens when the one before it closes, and its territory is
-grepped then.
+`OD-RULES-035`, which also says what its items are and why their territory waits. M3 is
+re-stated by `OD-CAPABILITY-019`, which names its items. M4 through M7 are dated by nothing
+here: each opens when the one before it closes, and its territory is grepped then.
