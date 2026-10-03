@@ -104004,6 +104004,52 @@
           "widened_at": 1791047659
         }
       ]
+    },
+    {
+      "id": "P207-THREE-NAMING-READS-STILL-RESOLVE-ONE-DECLARATION-TO-A-CASE-CODE-STANDARDS-DOES-NOT",
+      "title": "Three naming reads still resolve one declaration, or none, to a case code-standards does not",
+      "why": "P198-NAMING-KEYS-REPOSITORIES-DECLARE-THAT-NO-RULE-READS-FOR-THE-LANGUAGE-THEY-WROTE-THEM-FOR landed at 43e28e15 as OD-RULES-035 version 5 decision 8, and its section What this does not decide names three reads where this workspace and code-standards still resolve one declaration, or its absence, to two different cases, which is what decision 7 exists to prevent. First, with no function case declared, function-naming-convention judges an unexported Go function against upper-snake, a case no unexported Go name can take because Go exports a name by its first letter, while code-standards' Override_Case falls back to the language's own convention for that kind; in a repository that declares nothing, that rule and the unexported Go rule judge one function against two cases. Second, function-naming-convention exempts main in every language but not a Go init, which the Go specification names and no declaration can rename, while the unexported Go rule now exempts both. Third, decision 7 calls a Rust function exported when it is exactly pub, and code-standards' rust_Named_Symbol also requires it to sit at the file's top level, so a pub function in an impl block or a nested module reads the exported key here and the unexported key there. The record measured that no repository in reach is affected today: none that tracks Go source declares nothing, and none declares different Rust cases for the two sides. These are the verdicts this product gives the first repository that is.",
+      "done_when": "OD-RULES-035 decides each of the three reads as a numbered decision or an amendment to decision 7 or 8, measured against code-standards' own resolution (Override_Case and the language conventions it falls back to, rust_Named_Symbol), and states why. Following code-standards is not required: keeping a divergence is a legitimate decision when the record names the reason and the repositories it would affect. Whatever rule a decision changes is proven by a test whose declaration, or absence of one, makes the old and new reads disagree, shown able to fail by a mutation restored byte-identically. If the Rust exported side changes, the record says what the syntax fact must state for it and does not infer nesting from text. This repository's own nomos check findings and the hex calibration are compared before and after, and every change is explained. The record carries a version bump, the citation constant that pins it moves with it, both projections are re-rendered from the tree the commit publishes, and the predicate passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/rules/nomos-rules/src/checks/naming.rs",
+          "crates/rules/nomos-rules/src/checks/naming",
+          "crates/rules/nomos-rules/src/rule_descriptor/policy_axis.rs",
+          "crates/rules/nomos-rules/src/checks/undeclared_policy_key.rs",
+          "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P190-A-RUN-NAMES-EVERY-VALUE-ITS-RULES-READ-THAT-THE-REPOSITORY-NEVER-DECLARED-BESIDE-ITS-CLAIM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
