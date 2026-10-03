@@ -1341,6 +1341,7 @@ dependencies = [
  "nomos-repo-policy",
  "nomos-rules",
  "nomos-workspace",
+ "nomos-workspace-discovery",
  "serde_json",
  "xvpe-primitives",
 ]

@@ -99915,7 +99915,7 @@
       "claim": {
         "holder": "opus-p172-population",
         "acquired_at": 1791013825,
-        "lease_expires_at": 1791035425
+        "lease_expires_at": 1791044925
       },
       "verification": {
         "argv": [
@@ -101074,14 +101074,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "opus-p187-walk",
-        "acquired_at": 1791014404,
-        "lease_expires_at": 1791025204
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -101094,7 +101090,30 @@
         ],
         "timeout_seconds": 1800
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "exit_code": 0,
+        "output_tail": "^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:57:5\n   |\n57 |        return loop\n   |  ______^      -\n   | | ____________|\n58 | ||     {\n59 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n69 | ||         std::thread::sleep(super::POLL_INTERVAL);\n70 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:79:5\n   |\n79 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n80 | ||     {\n81 | ||         Ok(Some(status)) =>\n...  ||\n88 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n89 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: `nomos-platform-std` (lib) generated 2 warnings\n   Compiling nomos-contract-tests v0.1.0 (F:\\repos\\nomos-p187\\tests\\contract)\nwarning: unused import: `Revisions_In`\n  --> tests\\contract\\tests\\boundaries\\lock_pinning.rs:84:65\n   |\n84 | use nomos_contract_tests::{Declared_Revisions, Repository_Root, Revisions_In, XVPE_PREFIX};\n   |                                                                 ^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-contract-tests` (test \"boundaries\") generated 1 warning (run `cargo fix --test \"boundaries\"` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 17.02s\n     Running tests\\boundaries\\main.rs (F:/repos/nomos-p187-target\\debug\\deps\\boundaries-7358f7238bd8e1a8.exe)\n",
+        "verified_at": 1791016166,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "0000e0e3bca0bb3e5c8b62ed9cbd6f9e0a3304f9"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -101166,10 +101185,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p189-defaults",
+        "acquired_at": 1791015955,
+        "lease_expires_at": 1791033955
+      },
       "verification": {
         "argv": [
           "cargo",

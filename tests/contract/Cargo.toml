@@ -59,6 +59,12 @@ nomos-ledger = { workspace = true }
 # dependency, like `nomos-check-orchestration` above: only `tests/requirement_trace` uses
 # it, nothing this crate publishes does.
 nomos-cap-requirement-trace = { workspace = true }
+# The one walk every composition root shares, for `tests/boundaries/walk_coverage.rs` alone:
+# that guard compares what the walk reaches over this repository with what git tracks, so it
+# calls the walk a run calls rather than a second walk written here, which would be a check
+# of the copy. The extensions the walk recognizes are read from the same crate for the same
+# reason. A dev dependency, like the two above: nothing this crate publishes needs it.
+nomos-workspace-discovery = { workspace = true }
 # The FileSystem port nomos_cap_requirement_trace's own reader and predicates now read
 # through, and its std implementation to read the real disk this suite has always run
 # against.
