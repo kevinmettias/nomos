@@ -41,8 +41,9 @@
 //! opposite of `ClaimRequest`'s: `abandon` and `decline` share only their argument shape, not
 //! what they mean. Its eleventh, [`work::Handle_Work_Finish`], does the same for `Finish` --
 //! `nomos_work_orchestration::Run`'s own `Finish` arm always passes `working_directory: None`
-//! to `nomos_ledger::Finish_Item`, so the gate's own lint step resolves relative to the calling
-//! process's own directory, not anything this crate's caller supplies. Its twelfth,
+//! to `nomos_ledger::Finish_Item`, so the gate's own `Lint` step, then its `Rules` step, then
+//! the item's predicate all resolve relative to the calling process's own directory, not
+//! anything this crate's caller supplies (`OD-LEDGER-003` version 2, `OD-GATE-036`). Its twelfth,
 //! [`work::Handle_Work_Add`], does the same for `Add`, closing `WorkCommand` entirely -- the
 //! one verb needing a real, walked `published` `Territory`, computed by a private
 //! `Published_Records` this crate keeps to itself, a deliberate twin of `nomos-cli`'s own

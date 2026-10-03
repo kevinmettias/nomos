@@ -212,8 +212,9 @@ here is that collapsing them into non-zero makes the first indistinguishable fro
 second.
 
 If you must work before a claim frees, do not leave the changes in the tree — a peer's
-`work finish` runs the workspace lint, and your uncommitted change fails their item for
-your reason. Park it as a patch and re-apply after the claim lands.
+`work finish` runs the gate's `Lint` step, then its `Rules` step, then the item's predicate,
+each in the tree it is invoked from (`OD-LEDGER-003` version 2, `OD-GATE-036`), and your
+uncommitted change fails their item for your reason. Park it as a patch and re-apply after the claim lands.
 
 ## 5. Read only what this item needs
 
@@ -231,9 +232,12 @@ its registration file exists.
 
 ## 7. Verify before finishing
 
-Run the workspace lint yourself, then the item's own predicate, then the tests your change
-actually reaches. `work finish` runs the lint too and refuses on a red gate *after* you
-have spent the run, so doing it by hand is purely for speed.
+Run the gate's `Lint` step (the workspace lint) and its `Rules` step (`nomos gate run`)
+yourself, then the item's own predicate, then the tests your change actually reaches.
+`work finish` runs `Lint`, then `Rules`, then the predicate, and refuses on the first that is
+red *after* you have spent the run, so doing them by hand is purely for speed. A workflow that
+declares no `Rules` step does not refuse for it: the finish records the step as not declared.
+`OD-LEDGER-003` version 2 and `OD-GATE-036` say why each step runs.
 
 A green run is weaker than it looks in two places: `cargo test` stops early without
 `--no-fail-fast`, so the failure count you read may be one of several, and a test that
@@ -270,15 +274,15 @@ predicate failing, the predicate not running at all, and there being no predicat
 hand-edit an item to done: the three answers collapse into one and the item claims a check
 that never ran.
 
-**The green describes the tree you invoked it from.** `work finish` runs the lint and the
-predicate in its own working directory, and `NOMOS_WORK_DIR` relocates the board and nothing
-else: `Work_Directory` in `crates/host/nomos-cli/src/main.rs` reads it to find the ledger, and
-the finish path hands `Finish_Item` in `crates/substrate/nomos-ledger/src/finish.rs` no
-directory, so the predicate runs wherever the caller is. The commit in step 9 has to publish
-the bytes that green examined, and no command in either step reports when it does not. Measured
-2026-09-26: a test file sat in the shared index as an older draft while the version to publish
-lived in a private worktree, so a finish from the shared tree would have been a green about the
-draft beside a commit of the other.
+**The green describes the tree you invoked it from.** `work finish` runs the gate's `Lint` and
+`Rules` steps and then the predicate in its own working directory, and `NOMOS_WORK_DIR`
+relocates the board and nothing else: `Work_Directory` in `crates/host/nomos-cli/src/main.rs`
+reads it to find the ledger, and the finish path hands `Finish_Item` in
+`crates/substrate/nomos-ledger/src/finish.rs` no directory, so all three run wherever the
+caller is. The commit in step 9 has to publish the bytes that green examined, and no command in
+either step reports when it does not. Measured 2026-09-26: a test file sat in the shared index
+as an older draft while the version to publish lived in a private worktree, so a finish from the
+shared tree would have been a green about the draft beside a commit of the other.
 
 Two ways meet it, and which fits is a question of cost:
 

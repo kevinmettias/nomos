@@ -102326,12 +102326,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p186-render",
+        "acquired_at": 1791044994,
+        "lease_expires_at": 1791062994
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -103382,7 +103386,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -103398,7 +103402,49 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "agent_harness"
+        ],
+        "exit_code": 0,
+        "output_tail": "ard_Should_Name_An_Item_That_Is_Still_Open ... ok\ntest checks::Test_Every_Deliberately_Absent_Path_Should_Still_Be_Absent_And_Still_Be_Named ... ok\ntest checks::Test_The_Harness_Should_Not_Restate_The_Band_Table ... ok\n\ntest result: ok. 16 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:57:5\n   |\n57 |        return loop\n   |  ______^      -\n   | | ____________|\n58 | ||     {\n59 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n69 | ||         std::thread::sleep(super::POLL_INTERVAL);\n70 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:79:5\n   |\n79 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n80 | ||     {\n81 | ||         Ok(Some(status)) =>\n...  ||\n88 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n89 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.82s\n     Running tests\\agent_harness.rs (F:/repos/nomos-p200-target\\debug\\deps\\agent_harness-689736c830f18ba1.exe)\n",
+        "verified_at": 1791045673,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "1fb18d5bb5e5d137a337cc4e70dfa0665f4934c9"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -103418,10 +103464,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p201-tail",
+        "acquired_at": 1791044993,
+        "lease_expires_at": 1791059393
+      },
       "verification": {
         "argv": [
           "cargo",
