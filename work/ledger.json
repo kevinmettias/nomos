@@ -99494,12 +99494,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P174-A-SYNTACTIC-PROJECTION-IS-A-KIND-ONE-FAMILY-CARRIES-2"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-m3-arc",
+        "acquired_at": 1791014179,
+        "lease_expires_at": 1791024979
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -99865,12 +99869,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P171-THE-CSHARP-CONDITIONAL-COMPILATION-FACT-JOINS-THE-RUN-FOR-THE-BUILDS-A-REPOSITORY-DECLARES"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p172-population",
+        "acquired_at": 1791013825,
+        "lease_expires_at": 1791035425
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -100878,6 +100886,144 @@
         },
         "revision": "f2fe3dd547d222a1ba79f409f0041e30d7ade447"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P186-THE-GATE-REPORT-SARIF-AND-THE-API-DO-NOT-SAY-WHICH-RULES-JUDGED-AN-EMPTY-POPULATION",
+      "title": "The gate report, SARIF and the API do not say which rules judged an empty population, which the owner ruled must be prominent",
+      "why": "The repository owner ruled on 2026-09-27 that a repository holding no file of a rule's own language can reach a Complete claim. OD-ANALYSIS-012 version 2 extended that to every cause of an empty population: none flips Claim, and every empty one is reported beside the claim instead. On 2026-10-03 the owner ratified that extension, with one condition: the empty-population report is prominent in the default output, not behind a flag. Otherwise reported beside the claim degrades into not reported, and 18 rules that judged nothing in this tree (14 Go-only, 3 shebang, and review-finding, whose materialization deliberately produces nothing until a caller supplies a review comment per ARC-CONNECTOR-001) read exactly like 18 clean judgments. P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM builds the population and renders it in nomos check's text report only; its done_when says whether the gate report, the SARIF log or the API response render it is outside that item. Those three are where most readers meet a verdict: a CI log reads the gate report, a code-scanning view reads SARIF, and an editor or agent reads the API. So on every one of them the owner's condition is unmet. The record carries the 2026-09-27 decision but not the 2026-10-03 ratification or its condition.",
+      "done_when": "Every default rendering of a verdict names the rules whose population was empty, beside the claim and not inside it, and says nothing new when none was. That means nomos gate run's text report, the SARIF log nomos gate run and nomos check write, and nomos-api's check and gate responses. It reads the population P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM adds and computes nothing a second time. Claim, Claim_Of and the gate's disposition are unchanged in every case. Where SARIF carries it is the claimant's to decide and state (a run-level property, an invocation notification, or another place the SARIF 2.1.0 schema admits); it must be machine-readable and must not masquerade as a result, since an empty population is not a finding. OD-ANALYSIS-012 records the owner's 2026-10-03 ratification and its condition in its owner's-decision section, with a version bump, and both projections are re-rendered from the tree the commit publishes. Each rendering is proven by a test that drives a run with one empty-population rule and one non-empty one and asserts that only the first is named, with the same claim either way; each test is shown able to fail by a mutation restored byte-identically. Surface snapshots the change moves are re-blessed with the diff read. The predicate passes, and so does the gate's lint step.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/gate/report.rs",
+          "crates/host/nomos-cli/src/gate/report",
+          "crates/host/nomos-cli/src/gate/sarif_output.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/sarif",
+          "crates/orchestration/nomos-gate-orchestration/src/sarif.rs",
+          "crates/host/nomos-api/src/response/check_outcome_response.rs",
+          "crates/host/nomos-api/src/check/claim_response.rs",
+          "crates/host/nomos-api/src/response/gate_run_response.rs",
+          "tests/contract/surface/nomos-api.txt",
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--bins",
+          "--test",
+          "public_surface",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P187-NOTHING-CHECKS-THAT-THE-WALK-REACHES-EVERY-SOURCE-THE-REPOSITORY-TRACKS",
+      "title": "Nothing checks that the walk reaches every source the repository tracks, and an empty population no longer hints that it did not",
+      "why": "OD-ANALYSIS-012 version 2, ratified by the owner on 2026-10-03, decides that an empty population never flips Claim. One of its stated reasons is that no population count can tell a repository with no file of a language from a walker that dropped files which exist; the record names an earlier walker defect that counted zero exactly the way a script-free tree does. The ruling is right, but it removes the one signal that would have hinted at a walker defect, and nothing replaces it. Measured on 2026-10-03: nomos-workspace-discovery's walk tests are fixture-sized (Test_Walked_Sources_Should_Discover_A_Go_File_Alongside_A_Rust_One and its C# twin), and no test anywhere compares the walk over this repository with what git tracks. The only git ls-files readers are the agent harness's path check and nomos-transition-guard's git_reader. A walker that silently dropped a directory or an extension would now read as clean judgments plus a longer empty-population list, with every test green.",
+      "done_when": "A test fails when the walk over this repository's own root misses a source git tracks. It compares the walked sources with git's tracked files filtered to the extensions the walk recognizes, and asserts every tracked one is walked. Each deliberate exclusion is declared beside the test with the reason it is excluded, and the declaration is held both ways: an excluded path that is walked, or that no longer exists, fails. Files on disk that git does not track are not required to be absent from the walk, because this tree is shared with sessions whose in-flight files are untracked, and a test that failed on them would be red for reasons nobody committed; if the claimant judges the reverse direction worth asserting, it is asserted over tracked files only. The test runs in this repository rather than against an outside corpus, so CI checks it. It is shown able to fail twice, each restored byte-identically: once by making the walk skip one recognized extension, and once by making it skip one tracked directory. No walk behaviour changes unless the test finds a real miss, in which case the miss is reported and boarded rather than fixed here. The predicate passes.",
+      "kind": "Validation",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/contract/tests/boundaries/main.rs",
+          "tests/contract/tests/boundaries/walk_coverage.rs",
+          "tests/contract/Cargo.toml"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "boundaries"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P188-A-PREDICATE-COVERS-ITS-OWN-PACKAGES-AND-FIVE-LANDINGS-REDDENED-A-DEPENDENT-NOBODY-RAN",
+      "title": "A predicate covers its own packages, and five landings reddened a dependent or the Rules step that nobody ran",
+      "why": "Five landings between 2026-09-26 and 2026-09-28 passed their own predicate and left something red at HEAD that no predicate ran. Three were dependent test suites: P123-CSHARP-JOINS-THE-RUN-AND-THE-WALK-2 reddened nomos-cli's profile tests by teaching the walk the cs extension; P149-A-DECLARED-STANDARDS-CORPUS-IS-READABLE-WHERE-IT-IS-DECLARED reddened nomos-integration-tests' calibration; and the compiler-contracts composition under P123 reddened nomos-cli's check_command count. Two were the gate's Rules step: P128-A-JUDGMENT-LEAVES-IN-ONE-FORMAT-AND-EVERY-OTHER-CONSUMER-IS-UNSERVED-2 left an abbreviations finding cleared later by P170, and P128-C-SHARP-IS-READ-ON-ITS-FACE-AND-NO-COMPILER-ANSWERS-FOR-IT left two Blocking findings cleared inside P171. Each sat red for hours and was found only because a later, broader run happened to include it. GitHub CI, which would run the whole gate on every push, is dark on a billing failure, so nothing runs the workspace's tests or the Rules step as a whole. work finish runs the gate's Lint step and the item's predicate, and nothing else. The owner was offered four options and asked that the work proceed autonomously, so the decision belongs to the claimant, on measurement, and is recorded. (a) Size each predicate from the reverse-dependency closure of the crates the change touches, computable from cargo metadata. (b) Require any change to a composed set (rules, providers, languages) to include nomos-cli and nomos-integration-tests, where all three dependent reds surfaced. (c) A scheduled whole-workspace run, including the Rules step, whose red becomes an item. (d) Have work finish run the gate's Rules step as well as its Lint step. Since OD-GATE-035 a real gate run takes about 53 seconds, and this alone would have caught two of the five.",
+      "done_when": "A governing record decides what catches a change whose own predicate passes while it reddens a dependent package's tests or the gate's Rules step, and it decides by measurement, not preference. For each option it weighs, it states which of the five measured landings that option would have caught, and what it costs, in seconds per finish or per run and in machinery to build and keep. A combination is a legitimate answer. Raising every predicate to the whole workspace is refused unless its cost is measured and accepted, because predicates already run up to three hours. Any option that changes what work finish runs is decided here and built by an item the record names and boards, with territory grepped from the code, not built under this one. The record says what would reopen it, including CI coming back. The record is registered, both projections are re-rendered from the tree the commit publishes, and the predicate passes.",
+      "kind": "Decision",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-GATE-036",
+          "crates/spec/nomos-spec-store/records/OD-GATE-036.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,
