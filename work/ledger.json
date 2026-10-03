@@ -104215,6 +104215,47 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P209-THE-REST-OF-P114S-PLATFORM-RENAMES-LEFT-LIVE-OLD-NAMES-AND-WAIVERS-THAT-MATCH-NOTHING",
+      "title": "The rest of P114's platform renames left live old names, and waivers that match nothing",
+      "why": "Found by P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER's claimant and measured 2026-10-03 at 146f8882. P114-CLARITY-PLATFORM (7e33c1f6, 2026-09-16, not an ancestor of f2fe3dd5 and kept on the local branch third-party-guard) renamed eight names. P205 corrected only the launcher pair. The other six were ProcessOutput to ProgramOutput, CrossProcessLock to FilesystemLock, Command::New to Command::From_String_Arguments, Awaited to Waited_Until_Settled, and serialize and deserialize to Write_Unix_Seconds and Read_Unix_Seconds. Some still speak in the present tense under the old name: OD-HOST-001 says Run is generic over four traits nomos-platform declares and lists CrossProcessLock, and its version that P205 wrote says it corrected the launch port only. OD-PLATFORM-001 says output is retained on ProcessOutput.stdout and .stderr. nomos-platform-std's std_program_launcher.rs says its modules are kept under launcher/ rather than std_process_launcher/, naming a file that no longer exists. Separately, suppressions.json, code-standards' waiver file (OD-GATE-018), holds entries that can no longer match anything: three whose path 7e33c1f6 deleted (nomos-platform-std/src/std_process_launcher.rs, nomos-platform/src/process_launcher/command.rs and process_launcher/process_output.rs), and two on launcher/drain.rs and launcher/spawn.rs whose reason excuses a function named Awaited that is now Waited_Until_Settled. nomos's own gate reports a declared entry that matches nothing (OD-GATE-032), but this file is not one it reads that way, so nothing reports these.",
+      "done_when": "Every mention of the six names in records, code comments, Cargo.toml comments, API docs and suppressions.json is classified by the test P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER used (OD-SPEC-017's): a present-tense claim that still holds under the new name is corrected, and past-tense history or a quoted shape that has since changed in more than its name stays. The classification is reported in the commit message. A suppression reason that excuses deferring exactly these renames stays as written, as P205 decided. Each corrected record carries a version bump and a short amendment citing P114-CLARITY-PLATFORM and 7e33c1f6, and any code constant pinning its version moves with it. Records outside the two the item amends are widened by file path only after they are classified as needing a change. The comment in std_program_launcher.rs names the file it sits beside. Every suppressions.json entry shown to match nothing is removed, and the commit says how each was shown: its path does not exist, or the symbol its reason excuses no longer exists in that file and its fingerprint matches no finding. An entry that still matches is not touched, whatever its reason says. The suppression and agent-harness contract tests still pass, both projections are re-rendered from the tree the commit publishes, and the predicate passes.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "suppressions.json",
+          "crates/platform/nomos-platform-std/src/std_program_launcher.rs",
+          "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md",
+          "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
