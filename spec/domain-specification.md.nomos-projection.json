@@ -3,20 +3,20 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:e1cbd921d6ffbc16a6e432a7c36f0a64fc3046d338d438c20f2272bf033630b1",
-  "inputs_digest": "sha256:7b24cd86bfd71be463e84effcbad47b473f052f1624c4cd271296cdb2d0223ce",
+  "content_digest": "sha256:9f1dffc7945407d406bbb3601c060dc2672100b1aa21a41005417e38b9736059",
+  "inputs_digest": "sha256:7a982c3d671bc3b8805460f4e1690a852b34260f68c208ff2f6064fbc261f5cd",
   "sections": [
     [
       "Documents",
-      279
+      280
     ],
     [
       "Sections",
-      2579
+      2600
     ],
     [
       "Source blocks",
-      9475
+      9544
     ]
   ],
   "inputs": [
@@ -594,6 +594,11 @@
       "content": "documents",
       "identity": "docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md@authored",
       "hash": "sha256:d5215058d7f65cec946dfe10df3d3ee35775ac02c55a286a39fcbd70754f507a"
+    },
+    {
+      "content": "documents",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md@authored",
+      "hash": "sha256:9512544fdc340597ae13de790c71bf864407d37633b2876b44830c8fab9e17e5"
     },
     {
       "content": "documents",
@@ -6409,6 +6414,111 @@
       "content": "headings",
       "identity": "docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md#52",
       "hash": "sha256:40781160c0bfcbbaaf04f604a88d990b5b2dfb16181ffdb753c0fae20092d4c4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#1",
+      "hash": "sha256:68c0c49fc6b42e0d22bf5f1657932cbf1dba0e3093aba039d76d98c2e483a30c"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#2",
+      "hash": "sha256:57860a710829a77b1d64bba1b214aaef4f1aed150e77bf4a238cea53f3868019"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#6",
+      "hash": "sha256:be2a93883a1f23c59f77ea859ee3a62e9bc4e7b6d24a614c744a2b067ed2bcb7"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#10",
+      "hash": "sha256:d6459532bc9eeafcb05cd927da4bf3dac44c0dafac631447df6dfb6c819f0568"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#12",
+      "hash": "sha256:db33368da2bd78fc517040f750aae29cb800b67000c53a13bfaf367eff4fc2e2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#14",
+      "hash": "sha256:65d7781128fcc8738faa16a15aa515825b477a4b6ac13e60862e0915795ace62"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#20",
+      "hash": "sha256:ee802d001768e475397f82f267892e617d2809c8dc3b67a5209b88f680f2bd66"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#24",
+      "hash": "sha256:825aac544fd06411b8606057ae5f405f9bfc40b22201842a6daa5f578c176ba4"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#30",
+      "hash": "sha256:bd8b48a9180af9907c7a382628811a892cce46a197c4709242799706c8c2d11b"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#34",
+      "hash": "sha256:fc920c7c0758f6396f65dc620adebca2ae3770a831a65c03f8936d44867da3d6"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#35",
+      "hash": "sha256:c62c6d120c54605f32ae7b8c4b92110f090df30a7f2274d52799176dd32063d1"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#39",
+      "hash": "sha256:082bbf1679c907f5ebc74f7ffedd81b3c4a59b01fc9c12b080675285492dbe76"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#43",
+      "hash": "sha256:17995908c33bbcf19f137122af7edb627f3ff3d1d466c73ca38bd5ea28f544ed"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#47",
+      "hash": "sha256:194bdab8353f542a9ed419f1326f5a168a7995c28d48e31a2898d3e70d265270"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#51",
+      "hash": "sha256:3cf2681e66b8cd5e617a015014e10f2ffa69f2ad93cd4d096203fba8f8d20e98"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#53",
+      "hash": "sha256:12b16a2c15b5351c4632b677ec2f257d37720e42763f35e3cc0b564396a76fee"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#58",
+      "hash": "sha256:a73616adb470c146cb5e09d3976a6de96489bf88a2884749c7285ed06d93a401"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#61",
+      "hash": "sha256:24a3c82d60bb217111a15f7dae5f9a20170ea085c920c7c6794076cd1443a5e2"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#64",
+      "hash": "sha256:5f8432eefedac5d2fa09ac40a2bbb9a33ac370abdcbd68bd871a7f89bae38673"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#66",
+      "hash": "sha256:7febd8642348dd41d75f34a30908be7eefb06287e2e077b87544884b8eacd990"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#68",
+      "hash": "sha256:3f344beab3554fcf61419e4ab73945efac76f61116de808fcb5d1aae1820a42c"
     },
     {
       "content": "headings",
@@ -32924,6 +33034,351 @@
       "content": "blocks",
       "identity": "docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md#53",
       "hash": "sha256:f56208f7ec420848a898ea292456fbff071e845c193b4049cc4bb66f855fab23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#1",
+      "hash": "sha256:70051daf65162e401468d0d0e69c521f29dfc83f0754e771ce8c9701213eef02"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#2",
+      "hash": "sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#3",
+      "hash": "sha256:06e9ddc65d4921ec2e392761a3f8a7aee2965294776c767ff902018dc221cde6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#4",
+      "hash": "sha256:c93c378c01d18923c983ee9f598f2fea7ad604121b1bfe6638c424a2ec761de9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#5",
+      "hash": "sha256:7361b9625a9f0391255cc2cf0b52769d4b49964b0baec3c784411a06fe9e523c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#6",
+      "hash": "sha256:54b5d2319a6f59a0fbb9601c971e1e4161082ce0c2247408918a18f38635ba2b"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#7",
+      "hash": "sha256:551468454c70f5baa5577ba9c2f5c14f7d8707679a44e8eda7ecbaad50bd0abb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#8",
+      "hash": "sha256:00d7b9f6c8852f90058bf58d0affb0cda48bf48e33bb9048dc9b60d77b016228"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#9",
+      "hash": "sha256:28e0607cfc0f91882389aef75adb513040d98ac618454465b924553b82728d7c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#10",
+      "hash": "sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#11",
+      "hash": "sha256:0209402f900deeed473ccac555ff06dc7e6e9fd966f61fd88476bc2bb814e27d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#12",
+      "hash": "sha256:07ff50346b0a48c55733ce32d0ec4a8f4e38d456315cd5fc2ca14bf31fc0b68f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#13",
+      "hash": "sha256:cf5b316ead2ba991dbeb691798c1024b2773e153943b49d57af63044ed0b5db3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#14",
+      "hash": "sha256:f1f714f7dd65336497f3fc68246f747b92c055b9bd07b679e62f9b71e0e61528"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#15",
+      "hash": "sha256:b948ef52f92c02beb6e720e83afc75d2bb45315c08693bd376dda3ec60ce2f0d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#16",
+      "hash": "sha256:284ad86278a4678e759b1d3c775c67661006a890a45f828adbd6626d0ae230c5"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#17",
+      "hash": "sha256:5a913f6e80090af98aafbf6bde646fa570dd8a2bfd4c314da5ab914b6d696ca7"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#18",
+      "hash": "sha256:a33f084d57242ab5305d40b472145d95ead5647fbd90cb66e9c15519a25b30e1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#19",
+      "hash": "sha256:0509f972793916fe3498ac5fb044e8f8e702136cddb4649ab1838be9985f5675"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#20",
+      "hash": "sha256:935fdbbb21f012a147bdb6a18daa42da1b05e54853b59b77c04c5a7ee8c012b8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#21",
+      "hash": "sha256:c3d1b595a58b585bbd2c301cf1ede02ae634d50b0f4fe4d17743649012e0c481"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#22",
+      "hash": "sha256:9feecae6377491802b9302cb1ff5dad3eeffb55f4b5843c566a496a8e8255743"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#23",
+      "hash": "sha256:ba7955ae18ad7f8fdbd4188c85c38e9294eb251de8127ad0a4e1002553edaf7f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#24",
+      "hash": "sha256:7fe11f58789ef90d5ebefb1d6d329f7033db252c03b0ba1749ded0e0cb6f6b73"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#25",
+      "hash": "sha256:c4d39f9f64cea89de4b22736dedceeaf633bfe6db065f3240c2fd593943919d1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#26",
+      "hash": "sha256:d9c5dc06148022796546cd192a885fc9e17c6af90aba43feb0f27e6c298a4f34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#27",
+      "hash": "sha256:edbaad67d5eb6bbba5ae013d5a14755f9500184d2fc57c0904b151bc74372abb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#28",
+      "hash": "sha256:1f90bc147868eef2f93559b2dcd64a11f80fb03d33f08dd3ac591ead069ad024"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#29",
+      "hash": "sha256:5970213f4e61bb23f2d383a3876d82837034110c3d122263e423c0cb2b37fb81"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#30",
+      "hash": "sha256:c8afe3718f64662def62b96a6cdd11ceb05fa3e5dcb7790ec12a7d72236ec067"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#31",
+      "hash": "sha256:aa439212e67f7a006ea454b642deab78ceda11fc1209050c6cccad1918af8127"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#32",
+      "hash": "sha256:e1c4bf762ee2b837b80b5670acb88cd34cbc551d02afd13730a9069edbacde60"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#33",
+      "hash": "sha256:e2535d65c423481379b3075a7bdee1c8f5cb857c9c8a2228b643313bfa8abdb1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#34",
+      "hash": "sha256:266808869530e897815998115123b425c46d5537278f1c3a5d14df060dcc3011"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#35",
+      "hash": "sha256:96f59831d1ba52139837cc7917fa285dc679411fb4817968c99920fab52cbf66"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#36",
+      "hash": "sha256:1ea9c94839014e74bd42cf96e35dd8ac209e32815489b3625327b0d8e1c04cce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#37",
+      "hash": "sha256:4a451f10601bbb97a3ba935a7df53a9aa58ec4b6e4ab3aec04d327f9d176ddee"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#38",
+      "hash": "sha256:21ab653ea5330077e3f82942820cdac0773f46a83a37e192f61cdcab6889b289"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#39",
+      "hash": "sha256:ba9a7b81827c295222d4c8152c0ed9b1918c22c6ee50637273acb1bfbfd7b5e8"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#40",
+      "hash": "sha256:28798bfecd21b7af21843b1c51a34f14b781d8545cefbe7a65ab726195a490cb"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#41",
+      "hash": "sha256:fa1a1daecee1f838236e04eed35b29b252719138af34644506b624c25d230369"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#42",
+      "hash": "sha256:9d1a792c58fb8b516348fc481d51b23fa7838e3b0410ddba25d01b6f2c8b2565"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#43",
+      "hash": "sha256:51f0325b012647bcc805548809207aaad5b7d596810dd65f5c7375815055a809"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#44",
+      "hash": "sha256:162581c2201dcca13a5fe0bd8bd3d0351e223820aa5cef6f5a3f0d5249d37458"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#45",
+      "hash": "sha256:eeef2dd2f8bf9e2ca04eaf38e9410b9e60ffbe1bdb1c3a8ee8c959723589d69c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#46",
+      "hash": "sha256:e42c6306cfd321f43583e99218771e7344bac4c70c835507831868f17bc3ceae"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#47",
+      "hash": "sha256:4b1d4c0b009b7657abe325d8a1800e72cbf8714909b92bb0214a332c8fe2bd3c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#48",
+      "hash": "sha256:2ce885e40205e557c740b227d8c6c742879e6ddd429e9fb74c0d35dbec88cd1e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#49",
+      "hash": "sha256:cfe9185b73895990ca30493addb87e2c35a7e30a8aa27969e9668fd4e5900313"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#50",
+      "hash": "sha256:14441b460b170e9d3a42a1818937d823a5fabeedada631d8ef17e55e9857d72f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#51",
+      "hash": "sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#52",
+      "hash": "sha256:66722162b7fe0e74b5a34c5c441c457ae375a90690762eec42f867c5dd4cea34"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#53",
+      "hash": "sha256:d5f36fd2fac0ad64739312e7bb78f27215a84f4bd3479eb0af2e03049dbbdaaa"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#54",
+      "hash": "sha256:f85adaff15c40fbd698f8be9d20357615ce5eb32008bb156526178036be9a470"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#55",
+      "hash": "sha256:cf511765e835aa6cd8293cb3637e8720b1eb5a99331956f517c25f1ebc7764a6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#56",
+      "hash": "sha256:5d04e3d4a02ea2d8fe7525ce56d1f5799d948c5122cd20a7d1632cc29225bdb3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#57",
+      "hash": "sha256:0d043fcad3ababfdd9006381f7eb236eefb36053950771c66973a65997bea757"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#58",
+      "hash": "sha256:718bfa7ee4dc18d3f60920b283a6e7680eaec762403430baa0294dfa79f50017"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#59",
+      "hash": "sha256:20e3f0632cb0f0223ffa860c38ec260904f5aa111b0c0eb53dce1c68229187c0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#60",
+      "hash": "sha256:0b1a72348d3ca50e062f749ffe3168dd79316d71d9c45f70b2d1d1bdf67fb26a"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#61",
+      "hash": "sha256:24bebb7878f74a7a384843bd09ec2240ca559019786e17640baa96e513d1c5dc"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#62",
+      "hash": "sha256:08ddac13743ffbddd417c84d6713b12b1fa90a4f0ea142412244ba46eee684c4"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#63",
+      "hash": "sha256:df2e69ac4fc6f929462566949839d42d5ebf15899b0f9b312ba9607598313f0d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#64",
+      "hash": "sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#65",
+      "hash": "sha256:d6defc7b719550f8f48287bab2512eff6ec1e3418585a62497358afa3221eb7d"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#66",
+      "hash": "sha256:cda85ee5a442044aa77d1dbf1bcb7f554a3bea93d7501b0ccda56b5a1e1b1ac1"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#67",
+      "hash": "sha256:b9d86348fb85fd6485468bfe6953cd7fd38b4bc2683ba9a207dc77da8efef342"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#68",
+      "hash": "sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#69",
+      "hash": "sha256:479bb0c76097df7d416ac64b011082d7334e7e3f39c1c19a1eccb1af5640a343"
     },
     {
       "content": "blocks",

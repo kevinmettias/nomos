@@ -101142,14 +101142,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "opus-p188-dependents",
-        "acquired_at": 1791014408,
-        "lease_expires_at": 1791032408
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -101165,7 +101161,33 @@
         ],
         "timeout_seconds": 2700
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "ok. 136 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.52s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:57:5\n   |\n57 |        return loop\n   |  ______^      -\n   | | ____________|\n58 | ||     {\n59 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n69 | ||         std::thread::sleep(super::POLL_INTERVAL);\n70 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:79:5\n   |\n79 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n80 | ||     {\n81 | ||         Ok(Some(status)) =>\n...  ||\n88 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n89 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.80s\n     Running unittests src\\lib.rs (F:/repos/nomos-p188-target\\debug\\deps\\nomos_contract_tests-209564b0750efb27.exe)\n     Running tests\\record_citation.rs (F:/repos/nomos-p188-target\\debug\\deps\\record_citation-e19eef83b69a6f12.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p188-target\\debug\\deps\\nomos_spec_store-06e6aa6a481bd8b1.exe)\n",
+        "verified_at": 1791025720,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "revision": "612e3660376a2769bd16f54aaef98f607a10225e"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -101527,6 +101549,114 @@
           "nomos-integration-tests",
           "-p",
           "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP",
+      "title": "work finish runs the gate's Rules step after its Lint step, derived from the workflow by name, as OD-GATE-036 decided",
+      "why": "OD-GATE-036 decided, on measurement, that work finish runs the gate's Rules step as well as its Lint step, and named this item to build it. Two of five measured landings, be59c109 and df79bad6, passed their own predicate and left a Blocking finding at HEAD for 4.3 and 5.4 hours, and the dependency graph cannot reach the second: its crate was new and nothing but the two test packages depended on it. Reintroducing be59c109's helper name at 0000e0e3 made nomos gate run --root . exit 1 with exactly that one Blocking finding. A real run took 52.6 s on a quiet machine (OD-GATE-035) and a median of 210.5 s under the load this board runs at, measured three times at 0000e0e3 for OD-GATE-036. Where it lands: OD-LEDGER-003 derives the Lint step by name through Derive_Step and the LINT_STEP constant in crates/substrate/nomos-ledger/src/gate_unknown.rs; finish.rs's Verify_Predicate runs it through finish/gate_step.rs's Run_Gate_Step before the predicate, under the same Runner, and records it in VerificationRecord's gate field (src/verification/verification_record.rs, GateOutcome in src/gate/gate_outcome.rs). VerificationRecord is built literally in crates/host/nomos-cli/src/work/listing.rs, the CLI's report tests, finish/release_outcome.rs and the nomos-ledger test directories exclusion_holds and declining_ends_an_item, so a new field reaches all of them; FinishRefusal is matched in crates/host/nomos-api/src/work/finish_response.rs and nomos-work-orchestration's board_view/work_outcome.rs. The same ledger serves KWB, whose gate declares Lint, Test and Contract and no Rules step, so a missing Rules step must not refuse a finish. The Lint and Rules steps' comments in .github/workflows/gate.yml, and README.md's finish section, say finish derives the Lint step only, and OD-LEDGER-003 says finishing runs the gate's lint step, so all three move with it. A new key on the verification record makes every binary copied before it refuse the ledger once, by OD-LEDGER-008's guard, which OD-GATE-036 accepts.",
+      "done_when": "work finish runs the workflow's step named Rules after its Lint step and before the item's predicate, derived from the workflow by the derivation the Lint step uses and never copied. Any nonzero exit of the Rules step refuses the finish as a failed gate step that carries the step's argv and the tail of its output. A workflow that declares no Rules step finishes, and the verification record says the step was not declared, never that it passed. A Rules step that cannot be derived refuses as an undetermined gate. The Rules step runs under the item's own bound, as the Lint step does. Its outcome is recorded on the verification record and nothing already on the board is backfilled. Tests show each of those against fixture workflows, and show that this repository's own workflow still yields a Rules argv. OD-LEDGER-003 is amended to say that finishing runs the gate's Lint and Rules steps and that the test step stays scoped, and both projections are re-rendered from the tree the commit publishes. The workflow comments and the README passages that say finish derives only the Lint step say what it derives now. The predicate passes.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/host/nomos-cli/src/work",
+          "crates/host/nomos-cli/tests/gate_step",
+          "crates/host/nomos-api/src/work/finish_response.rs",
+          "crates/orchestration/nomos-work-orchestration/src/board_view",
+          "tests/contract/surface/nomos-ledger.txt",
+          "tests/contract/surface/nomos-api.txt",
+          ".github/workflows/gate.yml",
+          "README.md",
+          "docs/records/OD-LEDGER-003-finishing-runs-the-gate-lint-step-and-derives-it.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P188-A-PREDICATE-COVERS-ITS-OWN-PACKAGES-AND-FIVE-LANDINGS-REDDENED-A-DEPENDENT-NOBODY-RAN"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 7200
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P196-A-CHANGE-TO-THE-COMPOSED-SET-NAMES-THE-PACKAGES-THAT-ENUMERATE-IT",
+      "title": "An item whose territory reaches the composed set is refused a predicate that does not name the packages that enumerate it, as OD-GATE-036 decided",
+      "why": "OD-GATE-036 decided, on measurement, that an item whose territory reaches the composed set must carry a predicate naming the packages that enumerate it, checked when the item is added or widened, and named this item to build it. Three of five measured landings, 88306432, fff5408c and 7edd095f, changed rules, providers or the shared walk, passed their own predicate, and reddened tests in nomos-cli or nomos-integration-tests that no predicate ran; HEAD stayed red 5.0, 12.1 and 109.4 hours. Measured at 0000e0e3 under load, those two suites cost 1,021.9 s and 99.5 s; from 2026-09-20 to 0000e0e3, 42 of 172 finishes reached the paths the record names and 3 of them named both packages. The rule is declared by the repository in a root file, nomos-predicate-coverage.json, and never written into the ledger, which also serves KWB and interprets no build tool. Where it lands: work add receives the published-record declaration from crates/orchestration/nomos-work-orchestration/src/run.rs, which calls FileLedger::Add (crates/substrate/nomos-ledger/src/file_ledger.rs); Add_Item in src/store/verbs.rs decides it and refuses through AddRefusal in src/store/add_refusal.rs, beside the published-record check in src/store/reservation.rs. work widen is Widen_Territory in src/store/verbs.rs with its refusal in src/store/refusal.rs, returning the claim refusal defined in src/claim/refusal.rs. AddRefusal and the claim refusal are matched in crates/host/nomos-api/src/work, crates/host/nomos-cli/src/work and nomos-work-orchestration's board_view, and FileLedger::Add and Widen are called from nomos-ledger's tests exclusion_holds, widening_is_recorded and scope_verification_integration.rs. The two items on the board that reach those paths without naming the packages, P192 and P194, predate the rule and are not touched by it.",
+      "done_when": "A file at the repository root, nomos-predicate-coverage.json, declares rules, each naming the territory paths that trigger it, the arguments a predicate must carry, and any argument that satisfies the rule on its own. This repository declares the one rule OD-GATE-036 states: its eight paths, the arguments naming nomos-cli and nomos-integration-tests, and --workspace as satisfying it alone. work add refuses an item whose territory reaches a declared path and whose predicate carries neither every required argument nor a satisfying one, and the refusal names the missing arguments and the record. work widen refuses a widening into a declared path on the same terms. A repository with no such file is unaffected. The ledger compares argument tokens and interprets no build tool. A test holds that every declared path exists and that every declared package is a member of the workspace. The README's work add section states the rule and routes to OD-GATE-036. The predicate passes.",
+      "kind": "Capability",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/substrate/nomos-ledger",
+          "crates/orchestration/nomos-work-orchestration",
+          "crates/host/nomos-api/src/work",
+          "crates/host/nomos-cli/src/work",
+          "tests/contract/surface/nomos-ledger.txt",
+          "tests/contract/surface/nomos-work-orchestration.txt",
+          "tests/contract/surface/nomos-api.txt",
+          "tests/contract/tests/predicate_coverage.rs",
+          "nomos-predicate-coverage.json",
+          "README.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P188-A-PREDICATE-COVERS-ITS-OWN-PACKAGES-AND-FIVE-LANDINGS-REDDENED-A-DEPENDENT-NOBODY-RAN"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
           "-p",
           "nomos-contract-tests"
         ],

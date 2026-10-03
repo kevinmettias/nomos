@@ -125,6 +125,7 @@ profile: domain-specification
 | docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md@authored | docs/records/OD-GATE-033-the-gate-has-one-canonical-model-and-no-local-executor-of-it.md | authored | 48 | 11 | sha256:fbd373403646110ce167420a031964ee26ad49e92f21db8c9141e7a498148b4b |
 | docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md@authored | docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md | authored | 58 | 14 | sha256:528219d58bda1a9efeb7425b58b3b50c2cb4c07248e24ef4831d025437ac5fb0 |
 | docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md@authored | docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md | authored | 53 | 19 | sha256:d5215058d7f65cec946dfe10df3d3ee35775ac02c55a286a39fcbd70754f507a |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md@authored | docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md | authored | 69 | 21 | sha256:9512544fdc340597ae13de790c71bf864407d37633b2876b44830c8fab9e17e5 |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 21 | 6 | sha256:0336dd5172d90b1888f06079931f9a27993ad8b74311d418f72176a48313e4b6 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:094b9b669979aa12c48d67b684633c326aa16c9e9977fc7ad53cef019da16204 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
@@ -1293,6 +1294,27 @@ profile: domain-specification
 | docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md#48 | authored | 2 | Relation to Sharing One Load |
 | docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md#50 | authored | 2 | What Holds It |
 | docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md#52 | authored | 2 | What This Record Does Not Decide |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#1 | authored | 1 | A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#2 | authored | 2 | Question |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#6 | authored | 2 | The five landings |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#10 | authored | 2 | What Was Measured |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#12 | authored | 3 | Conditions |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#14 | authored | 3 | A real gate run, which is what (d) adds to a finish |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#20 | authored | 3 | The whole workspace, which is what (c) runs and what (a) approaches |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#24 | authored | 3 | Who depends on whom, which is what (a) reads |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#30 | authored | 3 | The board, which says how often each option would have paid |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#34 | authored | 2 | The options |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#35 | authored | 3 | (a) Size each predicate from the reverse-dependency closure |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#39 | authored | 3 | (b) A change to the composed set names nomos-cli and nomos-integration-tests |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#43 | authored | 3 | (c) A scheduled whole-workspace run, whose red becomes an item |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#47 | authored | 3 | (d) A finish runs the gate's Rules step as well as its Lint step |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#51 | authored | 2 | Decision |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#53 | authored | 3 | 1. A finish runs the `Rules` step, derived from the gate |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#58 | authored | 3 | 2. A change to the composed set names the packages that enumerate it |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#61 | authored | 3 | Items |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#64 | authored | 2 | What Holds It |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#66 | authored | 2 | What Would Reopen It |
+| docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#68 | authored | 2 | What This Record Does Not Decide |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1 | authored | 1 | Choosing a platform, running a verb and rendering its outcome are three crates, not one |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#8 | authored | 2 | What stayed out, and why |
@@ -38494,6 +38516,634 @@ comparison of a real run's findings for correctness.
   that inherits from it.
 - It does not decide opt-level 1 or 3, which were not measured.
 - It does not decide caching in CI.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#1
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph · hash: sha256:70051daf65162e401468d0d0e69c521f29dfc83f0754e771ce8c9701213eef02*
+
+# A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#2
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Question · hash: sha256:68b4fb6c30734f663071fbcaf8da5c1d5e4422686bff1353d95e9dca1b326e23*
+
+## Question
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#3
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Question · hash: sha256:06e9ddc65d4921ec2e392761a3f8a7aee2965294776c767ff902018dc221cde6*
+
+`work finish` runs two things: the gate's `Lint` step, derived from `.github/workflows/gate.yml`
+as `OD-LEDGER-003` decided, and the item's own predicate. A predicate names the packages its
+author chose, which is usually the packages the change touches. `OD-LEDGER-003` left the rest of
+the workspace to "the gate itself, at push time", and `OD-GATE-027` records that the gate has run
+nowhere since 2026-09-07, because GitHub refuses the workflow on a billing failure. So nothing runs
+a dependent package's tests, or the gate's `Rules` step, unless some session happens to.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#4
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Question · hash: sha256:c93c378c01d18923c983ee9f598f2fea7ad604121b1bfe6638c424a2ec761de9*
+
+Five landings between 2026-09-22 and 2026-09-27 passed their own predicate and left `HEAD` red in
+a place no predicate ran. What should catch a change like that, at what cost, and where should it
+be built?
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#5
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Question · hash: sha256:7361b9625a9f0391255cc2cf0b52769d4b49964b0baec3c784411a06fe9e523c*
+
+The owner was offered four options, (a) to (d) below, and asked that the work proceed
+autonomously. The decision was delegated to the claimant of
+`P188-A-PREDICATE-COVERS-ITS-OWN-PACKAGES-AND-FIVE-LANDINGS-REDDENED-A-DEPENDENT-NOBODY-RAN` and
+is made here, on the measurements below.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#6
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The five landings · hash: sha256:54b5d2319a6f59a0fbb9601c971e1e4161082ce0c2247408918a18f38635ba2b*
+
+## The five landings
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#7
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The five landings · hash: sha256:551468454c70f5baa5577ba9c2f5c14f7d8707679a44e8eda7ecbaad50bd0abb*
+
+Each is the commit that landed the change, the package or step it left red, what repaired it, and
+how long `HEAD` stayed red, from the landing commit's timestamp to the repair's.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#8
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The five landings · hash: sha256:00d7b9f6c8852f90058bf58d0affb0cda48bf48e33bb9048dc9b60d77b016228*
+
+| # | Landing | What it changed | Left red | Repaired at | Red for |
+|---|---|---|---|---|---|
+| 1 | `88306432`, `P123-CSHARP-JOINS-THE-RUN-AND-THE-WALK-2` | the shared walk learns the `cs` extension | nomos-cli's profile tests, `Test_A_Rich_Root_Should_Render_Every_Row_The_Profile_Carries` among them | `5cff7cd9` | 5.0 h |
+| 2 | `fff5408c`, `P149-A-DECLARED-STANDARDS-CORPUS-IS-READABLE-WHERE-IT-IS-DECLARED` | composes `standards-corpus` | nomos-integration-tests' `Test_Table_Names_Exactly_The_Composed_Rule_Set` | `160a3ac5` | 12.1 h |
+| 3 | `7edd095f`, `P123-THE-COMPILER-CONTRACTS-LEAVE-THEIR-PROVIDER-AND-ITS-RULES-JOIN-THE-RUN-2` | composes `copy-clones` and `nested-locks` | nomos-cli's `Test_An_Admitted_Gap_Should_Be_Reported_Without_Failing` | `160a3ac5` | 109.4 h |
+| 4 | `be59c109`, `P128-A-JUDGMENT-LEAVES-IN-ONE-FORMAT-AND-EVERY-OTHER-CONSUMER-IS-UNSERVED-2` | a GraphML export and its test helper | the `Rules` step: one Blocking `abbreviations` finding | `b98e6846` | 4.3 h |
+| 5 | `df79bad6`, `P128-C-SHARP-IS-READ-ON-ITS-FACE-AND-NO-COMPILER-ANSWERS-FOR-IT` | a new C# compiler crate, not yet composed | the `Rules` step: two Blocking findings in that crate | `2a42e117` | 5.4 h |
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#9
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The five landings · hash: sha256:28e0607cfc0f91882389aef75adb513040d98ac618454465b924553b82728d7c*
+
+Three are dependent suites and two are the `Rules` step. Every dependent red was in one of two
+packages, nomos-cli and nomos-integration-tests. Each red was found only because a later, broader
+run happened to include it: a session measuring nomos-cli's suite for 1, which became
+`P159-NOMOS-CLIS-PROFILE-TESTS-LIST-THE-LANGUAGES-BY-HAND-AND-C-SHARP-MADE-THEM-RED-AT-HEAD`;
+the twelve-package predicate of `P127-THE-CHECK-SERVICE-RECEIVES-ITS-PROVIDERS-FROM-A-COMPOSITION-ROOT-3`
+for 2 and 3; a hand-run `Rules` step for 4, which became
+`P170-A-GRAPHML-TEST-HELPER-IS-THE-ONE-BLOCKING-FINDING-THE-GATES-RULES-STEP-REPORTS`; and
+`P171-THE-CSHARP-CONDITIONAL-COMPILATION-FACT-JOINS-THE-RUN-FOR-THE-BUILDS-A-REPOSITORY-DECLARES`,
+whose territory held the crate, for 5.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#10
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured · hash: sha256:f9446790e1838a6c3c2791e519bed44f85e8758d6f5582ef43d4a3ce8b9c5662*
+
+## What Was Measured
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#11
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured · hash: sha256:0209402f900deeed473ccac555ff06dc7e6e9fd966f61fd88476bc2bb814e27d*
+
+Everything below was taken on 2026-10-03 at `0000e0e3`, the `HEAD` this record was written
+against, unless a row says otherwise.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#12
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / Conditions · hash: sha256:07ff50346b0a48c55733ce32d0ec4a8f4e38d456315cd5fc2ca14bf31fc0b68f*
+
+### Conditions
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#13
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / Conditions · hash: sha256:cf5b316ead2ba991dbeb691798c1024b2773e153943b49d57af63044ed0b5db3*
+
+- **Machine.** The i9-13900K `OD-GATE-035` describes, with the toolchain `rust-toolchain.toml`
+  pins.
+- **Tree.** A private detached worktree at `0000e0e3`, with its own target directory on F:. The
+  nomos binary was built fresh there and copied outside the root before it ran. `GOROOT` named the
+  full Go toolchain in `C:\Program Files\Go`, and no corpus variable was set.
+- **Load.** This is not `OD-GATE-035`'s quiet machine, and the difference is the point of one of
+  the figures. Other sessions were working throughout: during the gate runs a peer's
+  `nomos check --root .` held about 2 GB and a rust-analyzer about a core; total CPU stood at 39 to
+  45 percent without this record's runs, available memory at 5.3 to 8.1 GB, and the pager moved 7
+  to 11 thousand pages a second. During the workspace run a peer ran nomos-gate-orchestration's own
+  suite beside it. Finishes on this board happen under exactly this load, so it is measured rather
+  than waited out.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#14
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / A real gate run, which is what (d) adds to a finish · hash: sha256:f1f714f7dd65336497f3fc68246f747b92c055b9bd07b679e62f9b71e0e61528*
+
+### A real gate run, which is what (d) adds to a finish
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#15
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / A real gate run, which is what (d) adds to a finish · hash: sha256:b948ef52f92c02beb6e720e83afc75d2bb45315c08693bd376dda3ec60ce2f0d*
+
+`nomos gate run --root .`, one discarded warm-up and three measured runs:
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#16
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / A real gate run, which is what (d) adds to a finish · hash: sha256:284ad86278a4678e759b1d3c775c67661006a890a45f828adbd6626d0ae230c5*
+
+| Run | Seconds | Exit | Findings |
+|---|---|---|---|
+| warm-up (cold clippy in the new target) | 292.2 | 0 | 475, none can fail a build |
+| 1 | 209.3 | 0 | 475, none can fail a build |
+| 2 | 210.5 | 0 | 475, none can fail a build |
+| 3 | 236.7 | 0 | 475, none can fail a build |
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#17
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / A real gate run, which is what (d) adds to a finish · hash: sha256:5a913f6e80090af98aafbf6bde646fa570dd8a2bfd4c314da5ab914b6d696ca7*
+
+Median **210.5 s**, against the 52.6 s `OD-GATE-035` measured on a quiet machine. The three
+measured runs' outputs are byte-identical apart from the per-run `run:` line, so the difference is
+load and not work. One run of each family under the same load: `copy-clones` alone 81.8 s,
+`nested-locks` alone 41.0 s, the other 75 rules 63.8 s, against 17.2, 18.3 and 18.1 quiet. Every
+family slowed, the compiler-backed two most.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#18
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / A real gate run, which is what (d) adds to a finish · hash: sha256:a33f084d57242ab5305d40b472145d95ead5647fbd90cb66e9c15519a25b30e1*
+
+**`HEAD` carries no Blocking finding**, so the `Rules` step exits 0 there and (d) would refuse no
+finish over the tree as it stands.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#19
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / A real gate run, which is what (d) adds to a finish · hash: sha256:0509f972793916fe3498ac5fb044e8f8e702136cddb4649ab1838be9985f5675*
+
+**The `Rules` step catches landing 4, measured.** In the worktree, the three spellings of
+`Assert_Well_Formed_Graph_Document` were renamed back to `Assert_Well_Formed_GraphML`, which is
+the helper `be59c109` landed and `b98e6846` renamed. `nomos gate run --root .` then exited 1 in
+92.5 s with 476 findings, exactly one of them Blocking: `abbreviations` on that helper. The file
+was restored and its blob compared equal to `HEAD`'s. Landing 5's two Blocking findings are the ones
+`OD-GATE-035` recorded at `d0581b4e`, where every full run "exited 1 because of them", so the
+`Rules` step catches it too, from that record's own measurement.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#20
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / The whole workspace, which is what (c) runs and what (a) approaches · hash: sha256:935fdbbb21f012a147bdb6a18daa42da1b05e54853b59b77c04c5a7ee8c012b8*
+
+### The whole workspace, which is what (c) runs and what (a) approaches
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#21
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / The whole workspace, which is what (c) runs and what (a) approaches · hash: sha256:c3d1b595a58b585bbd2c301cf1ede02ae634d50b0f4fe4d17743649012e0c481*
+
+`cargo test --workspace --no-run` built 239 test executables in 69.4 s with dependencies already
+built. `cargo test --workspace --no-fail-fast` then ran for **7,202.9 s** and exited 0: 5,769 tests
+passed, none failed, 4 ignored. Wall time per package, attributed from each test binary's start to
+the next one's:
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#22
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / The whole workspace, which is what (c) runs and what (a) approaches · hash: sha256:9feecae6377491802b9302cb1ff5dad3eeffb55f4b5843c566a496a8e8255743*
+
+| Package | Seconds |
+|---|---|
+| nomos-gate-orchestration | 3,897.5 |
+| nomos-cli | 1,021.9 |
+| nomos-check-orchestration | 870.9 |
+| nomos-api | 729.9 |
+| nomos-workspace | 367.7 |
+| nomos-integration-tests | 99.5 |
+| the other 81 members together | 201.5 |
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#23
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / The whole workspace, which is what (c) runs and what (a) approaches · hash: sha256:ba7955ae18ad7f8fdbd4188c85c38e9294eb251de8127ad0a4e1002553edaf7f*
+
+Four packages are 90.7 percent of the run, and each of them judges this repository's own tree for
+real, several times. nomos-cli's binary tests alone took 909.4 s.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#24
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / Who depends on whom, which is what (a) reads · hash: sha256:7fe11f58789ef90d5ebefb1d6d329f7033db252c03b0ba1749ded0e0cb6f6b73*
+
+### Who depends on whom, which is what (a) reads
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#25
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / Who depends on whom, which is what (a) reads · hash: sha256:c4d39f9f64cea89de4b22736dedceeaf633bfe6db065f3240c2fd593943919d1*
+
+The reverse-dependency closure of a change is every member that depends on a package it touches,
+transitively through normal and build dependencies, plus every member that names one of those as a
+dev-dependency. It was computed for each landing from that commit's own manifests, read out of git,
+with each changed path assigned to the member that owns it.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#26
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / Who depends on whom, which is what (a) reads · hash: sha256:d9c5dc06148022796546cd192a885fc9e17c6af90aba43feb0f27e6c298a4f34*
+
+| # | Packages touched | Closure | Closure's test time | Own predicate's packages' test time | Red package in the closure? |
+|---|---|---|---|---|---|
+| 1 | 4 | 15 | 6,660.7 s | 890.4 s | yes, nomos-cli |
+| 2 | 5 | 17 | 6,661.5 s | 4,800.6 s | yes, nomos-integration-tests |
+| 3 | 7 | 18 | 6,668.0 s | 996.8 s | yes, nomos-cli |
+| 4 | 2 | 7 | 5,665.1 s | 3,897.5 s | yes, nomos-cli |
+| 5 | 4 | 4 | 120.3 s | 20.8 s | **no** |
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#27
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / Who depends on whom, which is what (a) reads · hash: sha256:edbaad67d5eb6bbba5ae013d5a14755f9500184d2fc57c0904b151bc74372abb*
+
+The times are this record's per-package figures, so they are `HEAD`'s suites standing in for each
+landing's, and a predicate that ran fewer targets than its whole packages cost less than its row.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#28
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / Who depends on whom, which is what (a) reads · hash: sha256:1f90bc147868eef2f93559b2dcd64a11f80fb03d33f08dd3ac591ead069ad024*
+
+Two facts decide most of what follows.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#29
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / Who depends on whom, which is what (a) reads · hash: sha256:5970213f4e61bb23f2d383a3876d82837034110c3d122263e423c0cb2b37fb81*
+
+- **nomos-cli's tests are the `Rules` step and more.** Its binary tests include
+  `Test_Host_Variant_Should_Compose_Into_A_Real_Run_That_Judges_This_Workspaces_Own_Tree`, which
+  runs `gate run` over this repository and requires exit `Ok` with no Blocking finding, and its
+  `check_command` tests include `Test_This_Workspace_Should_Have_Nothing_That_Can_Fail_A_Build`.
+  Both existed in that form, with nothing accepted, at all five landing commits. So any predicate
+  that runs nomos-cli catches a Blocking finding anywhere in the tree, at about five times the
+  `Rules` step's cost under the same load. Measured: with landing 4's helper name reintroduced as
+  above, the first of those tests failed on exactly that Blocking finding. That run took 1,916.6 s
+  and is not a cost figure: from about 03:31 a lock on cargo's shared package cache, held by a
+  process outside this measurement, stalled the run's nested clippy for 1,800 s and then a 600 s
+  idle bound.
+- **The dependency graph cannot see landing 5.** Its crate was new, and nothing but the two test
+  packages depended on it yet. 70 of the 87 members have nomos-cli in their closure at `HEAD`; a
+  crate on its first day is usually one of the other 17. A Blocking finding in it is still a
+  Blocking finding in the tree.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#30
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / The board, which says how often each option would have paid · hash: sha256:c8afe3718f64662def62b96a6cdd11ceb05fa3e5dcb7790ec12a7d72236ec067*
+
+### The board, which says how often each option would have paid
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#31
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / The board, which says how often each option would have paid · hash: sha256:aa439212e67f7a006ea454b642deab78ceda11fc1209050c6cccad1918af8127*
+
+Every item finished from 2026-09-20 to `HEAD` with a `cargo test` predicate: **172 finishes over
+thirteen days**, between 1 and 99 a day. 136 of them reserved territory owned by some member.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#32
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / The board, which says how often each option would have paid · hash: sha256:e1c4bf762ee2b837b80b5670acb88cd34cbc551d02afd13730a9069edbacde60*
+
+- **Against (a).** 27 of the 136 predicates already covered their closure. Closures held a median
+  of 11 packages, predicates a median of 2. 91 predicates omitted nomos-cli while the closure held
+  it, and 72 omitted nomos-integration-tests. Priced with the per-package figures above, the
+  closure would have added a median of **1,887 s** to each of the 136 finishes, 5,770 s at the
+  75th percentile, and **98.8 h** in all, against 36.1 h for the predicates' own packages.
+- **Against (b).** 42 of the 172 reserved a path under `crates/rules`, `crates/capabilities`,
+  `crates/languages`, `crates/packages`, `crates/repository`, `crates/composer`,
+  nomos-check-orchestration or nomos-workspace-discovery. Three of those already named both
+  packages. Adding the missing ones would have cost **11.8 h** in all.
+- **Against (d).** 172 finishes at 52.6 to 210.5 s each is **2.5 to 10.1 h** in all.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#33
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Was Measured / The board, which says how often each option would have paid · hash: sha256:e2535d65c423481379b3075a7bdee1c8f5cb857c9c8a2228b643313bfa8abdb1*
+
+Two items on the board as this was written reach those paths and do not name nomos-cli:
+`P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM` and
+`P194-THE-RUST-FUNCTION-NAMING-RULE-NEVER-READS-THE-KEYS-XVPE-DECLARES-ITS-FUNCTION-CASE-UNDER`.
+They predate this decision and are left as they are.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#34
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options · hash: sha256:266808869530e897815998115123b425c46d5537278f1c3a5d14df060dcc3011*
+
+## The options
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#35
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (a) Size each predicate from the reverse-dependency closure · hash: sha256:96f59831d1ba52139837cc7917fa285dc679411fb4817968c99920fab52cbf66*
+
+### (a) Size each predicate from the reverse-dependency closure
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#36
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (a) Size each predicate from the reverse-dependency closure · hash: sha256:1ea9c94839014e74bd42cf96e35dd8ac209e32815489b3625327b0d8e1c04cce*
+
+**Catches 1, 2, 3 and 4. Misses 5.** It catches 4 only because nomos-cli is in that closure and
+its tests run the gate for real, not because the graph knows anything about findings.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#37
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (a) Size each predicate from the reverse-dependency closure · hash: sha256:4a451f10601bbb97a3ba935a7df53a9aa58ec4b6e4ab3aec04d327f9d176ddee*
+
+**Costs** about the whole workspace for exactly the changes it exists for. The three
+composed-set landings' closures each ran 6,660 to 6,668 s, 92.7 to 92.8 percent of the
+workspace's 7,188.9 attributed seconds, and the board's 136 finishes would have paid 98.8 h more,
+2.7 times what their own predicates cost. It needs a cargo-metadata reader and a
+territory-to-package map in or beside a ledger that KWB also uses and that knows nothing about
+cargo today, and a territory path no member owns, such as `Cargo.lock` or `README.md`,
+contributes nothing to it.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#38
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (a) Size each predicate from the reverse-dependency closure · hash: sha256:21ab653ea5330077e3f82942820cdac0773f46a83a37e192f61cdcab6889b289*
+
+**Refused.** `P188` refused raising predicates to the whole workspace unless its cost was measured
+and accepted. It is measured here and not accepted: a median of 31 minutes on every finish, for a
+catch that one cheap step and one narrow rule below reproduce, and that still misses the class the
+graph cannot see.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#39
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (b) A change to the composed set names nomos-cli and nomos-integration-tests · hash: sha256:ba9a7b81827c295222d4c8152c0ed9b1918c22c6ee50637273acb1bfbfd7b5e8*
+
+### (b) A change to the composed set names nomos-cli and nomos-integration-tests
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#40
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (b) A change to the composed set names nomos-cli and nomos-integration-tests · hash: sha256:28798bfecd21b7af21843b1c51a34f14b781d8545cefbe7a65ab726195a490cb*
+
+**Catches 1, 2, 3 and 5. Misses 4.** Landings 1 to 3 changed composed-set paths, and their reds
+were in exactly these two packages. Landing 5 changed `crates/languages` and `crates/capabilities`,
+so nomos-cli would have run, and its real-tree tests fail on a Blocking finding. Landing 4 changed
+only nomos-gate-orchestration's export, which composes nothing.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#41
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (b) A change to the composed set names nomos-cli and nomos-integration-tests · hash: sha256:fa1a1daecee1f838236e04eed35b29b252719138af34644506b624c25d230369*
+
+**Costs 1,121.4 s** on each finish that triggers it, nomos-cli's 1,021.9 s and
+nomos-integration-tests' 99.5 s, and nothing on any other. That was 42 of 172 finishes and 11.8 h
+over the window. The machinery is a repository declaration, a refusal when an item is added or
+widened, and the declaration's own drift: its paths and packages are a hand-kept list.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#42
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (b) A change to the composed set names nomos-cli and nomos-integration-tests · hash: sha256:9d1a792c58fb8b516348fc481d51b23fa7838e3b0410ddba25d01b6f2c8b2565*
+
+**Adopted**, as an authoring rule and not as a step finish runs. See the decision.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#43
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (c) A scheduled whole-workspace run, whose red becomes an item · hash: sha256:51f0325b012647bcc805548809207aaad5b7d596810dd65f5c7375815055a809*
+
+### (c) A scheduled whole-workspace run, whose red becomes an item
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#44
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (c) A scheduled whole-workspace run, whose red becomes an item · hash: sha256:162581c2201dcca13a5fe0bd8bd3d0351e223820aa5cef6f5a3f0d5249d37458*
+
+**Catches all five, after they land.** It shortens a red to at most its period plus its run, and
+prevents none.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#45
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (c) A scheduled whole-workspace run, whose red becomes an item · hash: sha256:eeef2dd2f8bf9e2ca04eaf38e9410b9e60ffbe1bdb1c3a8ee8c959723589d69c*
+
+**Costs** at least **7,482.8 s per run** under this load: 69.4 s to build, 7,202.9 s to test and
+210.5 s for the `Rules` step, before the steps not timed here. At one run a day that is about 27 h
+over the window and at two about 54 h, more than (b) and (d) together. It also needs things this
+repository cannot hold: a scheduler on the machine, which is the owner's configuration rather than
+a file in the tree, and an author that boards an item for a red, which has to guess a territory for
+a failure nobody has diagnosed.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#46
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (c) A scheduled whole-workspace run, whose red becomes an item · hash: sha256:e42c6306cfd321f43583e99218771e7344bac4c70c835507831868f17bc3ceae*
+
+**Refused for this question.** Against the five landings it costs more than (b) and (d) and
+catches later. What it would buy beyond them is the gate's other steps running at all while CI is
+dark: Boundaries, Supply chain, the floors, the crossing and the projections. That is
+`OD-GATE-027`'s question and this record does not decide it.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#47
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (d) A finish runs the gate's Rules step as well as its Lint step · hash: sha256:4b1d4c0b009b7657abe325d8a1800e72cbf8714909b92bb0214a332c8fe2bd3c*
+
+### (d) A finish runs the gate's Rules step as well as its Lint step
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#48
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (d) A finish runs the gate's Rules step as well as its Lint step · hash: sha256:2ce885e40205e557c740b227d8c6c742879e6ddd429e9fb74c0d35dbec88cd1e*
+
+**Catches 4 and 5. Misses 1, 2 and 3**, which are test failures and not findings. Landing 4 is
+measured above by reintroducing it at `HEAD`; landing 5 by `OD-GATE-035`'s own runs.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#49
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (d) A finish runs the gate's Rules step as well as its Lint step · hash: sha256:cfe9185b73895990ca30493addb87e2c35a7e30a8aa27969e9668fd4e5900313*
+
+**Costs 52.6 s** on a quiet machine and **210.5 s** under the load this board actually runs at,
+on every finish: 2.5 to 10.1 h over the window. To that add whatever `cargo run` builds first,
+nothing when the binary is fresh, about 3 s after an edit to one member, and a cold build of about
+67 s in an empty target, all three from `OD-GATE-035`. The machinery is one more step name beside
+`Lint`, read by the same derivation, and one more recorded outcome.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#50
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / The options / (d) A finish runs the gate's Rules step as well as its Lint step · hash: sha256:14441b460b170e9d3a42a1818937d823a5fabeedada631d8ef17e55e9857d72f*
+
+**Adopted.** It is the only option that sees a Blocking finding in a crate nothing depends on, and
+it sees every one of them for about a fifth of what nomos-cli's tests cost under the same load.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#51
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Decision · hash: sha256:a15c7c13f167e5ac9204c02acb3f22d9fffdadf996618ee0e068a4b27e4c1511*
+
+## Decision
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#52
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Decision · hash: sha256:66722162b7fe0e74b5a34c5c441c457ae375a90690762eec42f867c5dd4cea34*
+
+**(b) and (d) together.** Between them they catch all five landings before they land, at 14.3 to
+21.9 h over the window, against 98.8 h for (a) alone and at least 27 h for (c) alone. Each covers
+what the other misses: (d) takes the `Rules` step everywhere, and (b) takes the two dependent
+suites where a change can reach them.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#53
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Decision / 1. A finish runs the `Rules` step, derived from the gate · hash: sha256:d5f36fd2fac0ad64739312e7bb78f27215a84f4bd3479eb0af2e03049dbbdaaa*
+
+### 1. A finish runs the `Rules` step, derived from the gate
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#54
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Decision / 1. A finish runs the `Rules` step, derived from the gate · hash: sha256:f85adaff15c40fbd698f8be9d20357615ce5eb32008bb156526178036be9a470*
+
+`work finish` runs the workflow's step named `Rules` after its `Lint` step and before the item's
+predicate. It is derived the way `OD-LEDGER-003` derives `Lint`, by name and from the file, never
+copied. Six parts, each one load-bearing.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#55
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Decision / 1. A finish runs the `Rules` step, derived from the gate · hash: sha256:cf511765e835aa6cd8293cb3637e8720b1eb5a99331956f517c25f1ebc7764a6*
+
+- **Zero is the only success.** `OD-GATE-004` decided it for the step and nothing here relaxes
+  it. Exit 1 is a Blocking finding, 6 is a run that judged nothing, and 5 is a run that could not
+  be assembled. Every one of them refuses the finish as a failed gate step, with the step's argv and
+  the tail of its output, which names the finding.
+- **The order is `Lint`, then `Rules`, then the predicate**, and the first failure ends the finish,
+  which is `OD-LEDGER-003`'s third part extended rather than restated.
+- **A workflow that declares no `Rules` step runs none, and the finish says so.** This ledger
+  serves KWB too, whose gate declares `Lint`, `Test` and `Contract` and no `Rules`. A repository
+  that never declared the step has made no claim for a finish to honour, so its absence is not a
+  refusal. It is recorded as absent, never as passed.
+- **A `Rules` step that cannot be derived refuses.** A scripted body is `GateUndetermined`, exactly
+  as it is for `Lint`, because a guessed command looks like a checked one.
+- **It runs under the item's own bound**, the same `Runner` the `Lint` step uses. That means half
+  the item's timeout as an idle bound, and `gate run` prints nothing until it finishes. At the 600 s
+  default the idle bound is 300 s, above every figure measured here. Eight predicates on the board,
+  finished or not, carry 300 s or less, and those would be cut off at 150 s or less under load.
+- **The outcome is recorded on the verification record, never backfilled**, like `gate` beside
+  it. A new field means every copy of the binary taken before it refuses the ledger once, by
+  `OD-LEDGER-008`'s guard, and that is accepted.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#56
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Decision / 1. A finish runs the `Rules` step, derived from the gate · hash: sha256:5d04e3d4a02ea2d8fe7525ce56d1f5799d948c5122cd20a7d1632cc29225bdb3*
+
+**What it costs a session, beyond seconds.** The step judges the tree it runs in. In the shared
+tree that includes every peer's uncommitted file, so a peer's in-flight Blocking finding refuses an
+unrelated finish. The `Lint` step already has the same exposure, since clippy lints the whole
+workspace, and the remedy is the one `.claude/skills/nomos-spec-change` already prescribes:
+finish from a worktree at the commit you will publish. A Blocking finding that reaches `HEAD`
+refuses every finish until it is repaired. That is the intended pressure, and it is the same one
+`Lint` applies.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#57
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Decision / 1. A finish runs the `Rules` step, derived from the gate · hash: sha256:0d043fcad3ababfdd9006381f7eb236eefb36053950771c66973a65997bea757*
+
+`OD-LEDGER-003` says finishing runs the gate's lint step and that the test step stays scoped. The
+second clause stands. The first becomes "the gate's `Lint` and `Rules` steps", by an amendment the
+building item makes.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#58
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Decision / 2. A change to the composed set names the packages that enumerate it · hash: sha256:718bfa7ee4dc18d3f60920b283a6e7680eaec762403430baa0294dfa79f50017*
+
+### 2. A change to the composed set names the packages that enumerate it
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#59
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Decision / 2. A change to the composed set names the packages that enumerate it · hash: sha256:20e3f0632cb0f0223ffa860c38ec260904f5aa111b0c0eb53dce1c68229187c0*
+
+An item whose territory reaches a declared path must carry a predicate that names each declared
+package, or `work add` refuses it. `work widen` into such a path refuses the same way, because a
+predicate cannot be edited after the item exists.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#60
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Decision / 2. A change to the composed set names the packages that enumerate it · hash: sha256:0b1a72348d3ca50e062f749ffe3168dd79316d71d9c45f70b2d1d1bdf67fb26a*
+
+- **The rule is declared by the repository, not written into the ledger.**
+  `nomos-predicate-coverage.json` at the repository root, read where `work add` already learns
+  which records are published, declares each rule: the paths that trigger it, the arguments a
+  predicate must carry, and any argument that satisfies it on its own, such as `--workspace`. The ledger compares argument tokens and does not
+  interpret cargo. A repository with no such file has no such rule, so KWB is untouched.
+- **This repository declares one rule.** Its paths are `crates/rules`, `crates/capabilities`,
+  `crates/languages`, `crates/packages`, `crates/repository`, `crates/composer`,
+  `crates/orchestration/nomos-check-orchestration` and
+  `crates/orchestration/nomos-workspace-discovery`, because those are where the composed rules,
+  providers, policies and walk are defined. Its packages are nomos-cli and nomos-integration-tests,
+  because every measured dependent red was in one of them and both enumerate the composed set.
+- **Authoring time, not finish time.** At authoring, the author sees the 1,121 s and chooses the
+  item's timeout with it in view. A step added to finish would run under a bound chosen without it
+  in view, and a 600 s item would time out on it.
+- **What keeps the list honest is existence, not completeness.** A test can hold that every
+  declared path exists and every declared package is a member, so a rename cannot leave the rule
+  silently matching nothing. Whether the list is complete cannot be tested; a measured red outside
+  it is what amends it.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#61
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Decision / Items · hash: sha256:24bebb7878f74a7a384843bd09ec2240ca559019786e17640baa96e513d1c5dc*
+
+### Items
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#62
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Decision / Items · hash: sha256:08ddac13743ffbddd417c84d6713b12b1fa90a4f0ea142412244ba46eee684c4*
+
+The building is not done under `P188`. Two items carry it, each depending on `P188`:
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#63
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / Decision / Items · hash: sha256:df2e69ac4fc6f929462566949839d42d5ebf15899b0f9b312ba9607598313f0d*
+
+- `P195-WORK-FINISH-RUNS-THE-GATES-RULES-STEP-AFTER-ITS-LINT-STEP` builds part 1 and amends
+  `OD-LEDGER-003`.
+- `P196-A-CHANGE-TO-THE-COMPOSED-SET-NAMES-THE-PACKAGES-THAT-ENUMERATE-IT` builds part 2.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#64
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Holds It · hash: sha256:2d57479d0e31892ffc06d74f76a08ec413915234be5688baf709442eb0124176*
+
+## What Holds It
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#65
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Holds It · hash: sha256:d6defc7b719550f8f48287bab2512eff6ec1e3418585a62497358afa3221eb7d*
+
+This record's own figures are held by the measurements above, not by a test, and the commands are
+named so that anyone can retake them. The two building items each carry tests: one that a workflow
+naming a `Rules` step makes a finish run it, refuse on its exit, and record it, and that a workflow
+without one finishes with the step recorded as absent; one that an add or a widen reaching a
+declared path without a declared package is refused, that a predicate carrying it is accepted, and
+that the declaration's paths and packages exist.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#66
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Would Reopen It · hash: sha256:cda85ee5a442044aa77d1dbf1bcb7f554a3bea93d7501b0ccda56b5a1e1b1ac1*
+
+## What Would Reopen It
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#67
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What Would Reopen It · hash: sha256:b9d86348fb85fd6485468bfe6953cd7fd38b4bc2683ba9a207dc77da8efef342*
+
+- **GitHub CI running the gate again.** Its `Test` step would then catch a dependent red within one
+  push, and (b)'s 1,121 s per triggered finish would be weighed against a catch after landing
+  rather than against none. (d) is not reopened by that alone, because CI also catches only after
+  landing. (c) becomes CI itself.
+- **A dependent red outside (b)'s list**: a package other than the two, or a change from a path
+  the rule does not name, measured red at `HEAD` after a predicate that satisfied the rule. One is
+  an amendment to the declaration. A second of a different shape reopens (a) and (c).
+- **(d) refusing finishes for findings that are not the finisher's**, measured as a share of
+  refusals, once it is built. If the worktree remedy proves not to be enough, the answer is a
+  comparison against `HEAD`'s own run, which `gate compare` already computes, and not dropping the
+  step.
+- **The `Rules` step's cost moving.** A re-measurement whose median under ordinary load passes the
+  default item's 300 s idle bound, or the compiler-backed families leaving the process, which
+  `OD-GATE-035` already names.
+- **The `Rules` step stopping being one bare command.** It would become underivable, and a finish
+  would refuse, which `OD-GATE-004` already forbids.
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#68
+
+*revision: authored · kind: heading · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What This Record Does Not Decide · hash: sha256:69e0bb0235503bf71bc16fd3316977051fdcae58dc2e09d43e9b2c1dc8badf26*
+
+## What This Record Does Not Decide
+
+### docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md#69
+
+*revision: authored · kind: prose · heading: A finish runs the gate's Rules step, a change to the composed set names the packages that enumerate it, and no predicate is sized from the dependency graph / What This Record Does Not Decide · hash: sha256:479bb0c76097df7d416ac64b011082d7334e7e3f39c1c19a1eccb1af5640a343*
+
+- **Whether a scheduled run should stand in for CI's other steps while CI is dark.** That is
+  `OD-GATE-027`'s and `OD-GATE-033`'s question, and nothing in the five landings measured it.
+- **That a finish runs the gate's `Test` step.** It does not, for the reason `OD-LEDGER-003` gave and
+  this record's 7,202.9 s confirms.
+- **Adding nomos-contract-tests to (b)'s packages.** Its suite costs 12.3 s and it has been
+  reddened by a new declared list before, but none of the five was that, so it is an amendment for a
+  measured landing of its own.
+- **The declaration's syntax**, which belongs to
+  `P196-A-CHANGE-TO-THE-COMPOSED-SET-NAMES-THE-PACKAGES-THAT-ENUMERATE-IT`, within the semantics
+  above.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#1
 

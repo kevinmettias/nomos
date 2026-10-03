@@ -801,6 +801,7 @@ graph LR
     od_gate_004 -->|"relates-to"| od_gate_007["OD-GATE-007"]
     od_gate_004 -->|"relates-to"| od_gate_033["OD-GATE-033"]
     od_gate_004 -->|"relates-to"| od_gate_035
+    od_gate_004 -->|"relates-to"| od_gate_036["OD-GATE-036"]
     od_gate_004 -->|"relates-to"| od_ledger_003
     od_gate_004 -->|"relates-to"| od_rules_001
     od_gate_004 -->|"relates-to"| od_rules_002
@@ -950,6 +951,7 @@ graph LR
     od_gate_027 -->|"relates-to"| od_gate_028
     od_gate_027 -->|"relates-to"| od_gate_033
     od_gate_027 -->|"relates-to"| od_gate_035
+    od_gate_027 -->|"relates-to"| od_gate_036
     od_gate_028 -->|"relates-to"| od_gate_001
     od_gate_028 -->|"relates-to"| od_gate_027
     od_gate_028 -->|"relates-to"| od_gate_030
@@ -979,6 +981,7 @@ graph LR
     od_gate_033 -->|"relates-to"| od_gate_005
     od_gate_033 -->|"relates-to"| od_gate_011
     od_gate_033 -->|"relates-to"| od_gate_027
+    od_gate_033 -->|"relates-to"| od_gate_036
     od_gate_033 -->|"relates-to"| od_host_017
     od_gate_034 -->|"relates-to"| arc_roadmap_001
     od_gate_034 -->|"relates-to"| od_analysis_012
@@ -1000,7 +1003,14 @@ graph LR
     od_gate_035 -->|"relates-to"| od_gate_004
     od_gate_035 -->|"relates-to"| od_gate_025
     od_gate_035 -->|"relates-to"| od_gate_027
+    od_gate_035 -->|"relates-to"| od_gate_036
     od_gate_035 -->|"relates-to"| od_rules_010
+    od_gate_036 -->|"affects"| od_ledger_003
+    od_gate_036 -->|"relates-to"| od_gate_004
+    od_gate_036 -->|"relates-to"| od_gate_027
+    od_gate_036 -->|"relates-to"| od_gate_033
+    od_gate_036 -->|"relates-to"| od_gate_035
+    od_gate_036 -->|"relates-to"| od_ledger_008
     od_host_001 -->|"relates-to"| od_agent_004
     od_host_001 -->|"relates-to"| od_host_002
     od_host_001 -->|"relates-to"| od_host_003
@@ -1212,6 +1222,7 @@ graph LR
     od_ledger_002 -->|"relates-to"| od_ledger_001
     od_ledger_002 -->|"relates-to"| od_ledger_004
     od_ledger_002 -->|"relates-to"| od_ledger_024["OD-LEDGER-024"]
+    od_ledger_003 -->|"affected_by"| od_gate_036
     od_ledger_003 -->|"relates-to"| od_gate_001
     od_ledger_003 -->|"relates-to"| od_gate_002
     od_ledger_003 -->|"relates-to"| od_gate_004
@@ -1266,6 +1277,7 @@ graph LR
     od_ledger_007 -->|"relates-to"| od_ledger_041["OD-LEDGER-041"]
     od_ledger_007 -->|"relates-to"| od_spec_007
     od_ledger_008 -->|"relates-to"| od_completeness_001
+    od_ledger_008 -->|"relates-to"| od_gate_036
     od_ledger_008 -->|"relates-to"| od_ledger_006
     od_ledger_008 -->|"relates-to"| od_ledger_009
     od_ledger_008 -->|"relates-to"| od_ledger_012
@@ -2414,6 +2426,7 @@ graph LR
     od_gate_033
     od_gate_034
     od_gate_035
+    od_gate_036
     od_host_001
     od_host_002
     od_host_003
