@@ -10,6 +10,7 @@ mod compare;
 mod explain;
 mod plan;
 mod policy;
+mod populations;
 mod verdicts;
 
 use nomos_check_orchestration::{CheckOutcome, Claim, Examined, SupportingFactTrail};

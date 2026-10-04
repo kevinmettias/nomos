@@ -66,12 +66,12 @@ pub enum variant nomos_api::BlockChangeResponse::Reflowed { ordinal: u32 }
 pub enum variant nomos_api::BlockChangeResponse::Removed { ordinal: u32, kind: String }
 pub enum variant nomos_api::BlockChangeResponse::Reworded { ordinal: u32, before: String, after: String }
 pub enum variant nomos_api::CheckOutcomeResponse::Contradictory { cause: String, }
-pub enum variant nomos_api::CheckOutcomeResponse::Judged { files: usize, facts: usize, complete: bool, }
+pub enum variant nomos_api::CheckOutcomeResponse::Judged { files: usize, facts: usize, complete: bool, #[serde(skip_serializing_if = "Vec::is_empty")] empty_populations: Vec<RuleId>, }
 pub enum variant nomos_api::CheckOutcomeResponse::NoFacts { files: usize, }
 pub enum variant nomos_api::CheckOutcomeResponse::NoSource
 pub enum variant nomos_api::CheckOutcomeResponse::Unreadable
 pub enum variant nomos_api::CheckResponse::Contradictory { cause: String, }
-pub enum variant nomos_api::CheckResponse::Judged { findings: Vec<Finding>, examined: ExaminedResponse, claim: ClaimResponse, }
+pub enum variant nomos_api::CheckResponse::Judged { findings: Vec<Finding>, examined: ExaminedResponse, claim: ClaimResponse, #[serde(skip_serializing_if = "Vec::is_empty")] empty_populations: Vec<RuleId>, }
 pub enum variant nomos_api::CheckResponse::NoFacts { files: usize, }
 pub enum variant nomos_api::CheckResponse::NoSource
 pub enum variant nomos_api::CheckResponse::Unreadable

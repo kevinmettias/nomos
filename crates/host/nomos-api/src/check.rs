@@ -15,7 +15,7 @@
 
 use crate::{composition, sources};
 use nomos_check_orchestration::{CheckCommand, CheckOutcome, Run, RunContext};
-use nomos_contracts::Finding;
+use nomos_contracts::{Finding, RuleId};
 use nomos_composer_std::{ENVIRONMENT, FILE_SYSTEM, LAUNCHER};
 use nomos_rules::SourceFile;
 use serde::Serialize;
@@ -99,6 +99,16 @@ pub enum CheckResponse
         findings: Vec<Finding>,
         examined: ExaminedResponse,
         claim: ClaimResponse,
+        /// Every rule this run selected whose population was empty, in the order it judged
+        /// them -- `nomos_check_orchestration::Populations::Empty`, read and not recounted.
+        ///
+        /// Beside `claim` and never in it, which is `OD-ANALYSIS-012` version 3: such a rule
+        /// judged nothing, its zero findings would otherwise read exactly like a judgment of
+        /// real subjects found clean, and no empty population moves the claim. Absent from the
+        /// serialized response when every selected rule judged something, so a run with
+        /// nothing new to say tells a caller nothing new.
+        #[serde(skip_serializing_if = "Vec::is_empty")]
+        empty_populations: Vec<RuleId>,
     },
 }
 
@@ -112,10 +122,11 @@ impl CheckResponse
             CheckOutcome::Contradictory(cause) => Self::Contradictory { cause: format!("{cause:?}") },
             CheckOutcome::NoSource => Self::NoSource,
             CheckOutcome::NoFacts { files } => Self::NoFacts { files },
-            CheckOutcome::Judged { findings, examined, claim, .. } => Self::Judged {
+            CheckOutcome::Judged { findings, examined, claim, populations, .. } => Self::Judged {
                 findings,
                 examined: ExaminedResponse::From(examined),
                 claim: ClaimResponse::From(claim),
+                empty_populations: populations.Empty().into_iter().cloned().collect(),
             },
         };
     }
@@ -125,6 +136,7 @@ impl CheckResponse
 mod tests
 {
     use super::*;
+    use nomos_check_orchestration::{Claim, Examined, Populations, SupportingFactTrail};
     use std::path::PathBuf;
 
     /// A real run over a fixture tree with a real blocking phantom claim reaches a real
@@ -195,6 +207,71 @@ mod tests
         let parsed: serde_json::Value = serde_json::from_str(&json).expect("what was just written parses back");
 
         assert_eq!(parsed.get("outcome").expect("a serialized CheckResponse always has this field"), "no_source", "{json}");
+    }
+
+    /// A rule the populations below report as having judged nothing.
+    const EMPTY_RULE: &str = "go-only-rule";
+
+    /// A rule the populations below report as having judged [`JUDGED_SOURCES`] sources.
+    const JUDGED_RULE: &str = "rust-only-rule";
+
+    /// How many sources [`JUDGED_RULE`] was judged over.
+    const JUDGED_SOURCES: usize = 3;
+
+    /// `OD-ANALYSIS-012` version 3, over the response a check run answers: of two rules, the
+    /// one whose population was empty is named and the one that judged three sources is not,
+    /// and every other field -- the claim among them -- is what it is with no population
+    /// reported at all.
+    #[test]
+    fn Test_A_Judged_Response_Should_Name_Only_The_Empty_Population_Beside_An_Unchanged_Claim()
+    {
+        let reported = Rendered_Over(Populations_Of(&[(EMPTY_RULE, 0), (JUDGED_RULE, JUDGED_SOURCES)]));
+        let unreported = Rendered_Over(Populations::New());
+
+        assert_eq!(reported.get("empty_populations"), Some(&serde_json::json!([EMPTY_RULE])), "{reported}");
+        assert_eq!(reported.get("claim"), Some(&serde_json::json!("complete")), "{reported}");
+        let mut without_the_list = reported.clone();
+        if let Some(fields) = without_the_list.as_object_mut()
+        {
+            let _removed = fields.remove("empty_populations");
+        }
+        assert_eq!(without_the_list, unreported, "the response apart from the list is the response with no population reported");
+    }
+
+    /// A run in which every selected rule judged something answers what it answered before the
+    /// list existed.
+    #[test]
+    fn Test_A_Judged_Response_With_No_Empty_Population_Should_Say_Nothing_New()
+    {
+        assert_eq!(Rendered_Over(Populations_Of(&[(JUDGED_RULE, JUDGED_SOURCES)])), Rendered_Over(Populations::New()));
+    }
+
+    /// Each `(rule, size)` noted in order.
+    fn Populations_Of(judged: &[(&str, usize)]) -> Populations
+    {
+        let mut populations = Populations::New();
+        for (rule, size) in judged
+        {
+            populations.Note(RuleId::New(*rule), *size);
+        }
+
+        return populations;
+    }
+
+    /// The response to a complete judgment that found nothing, over `populations`, as a caller
+    /// receives it. The claim is fixed here, so two responses built by this differ in their
+    /// populations and in nothing else.
+    fn Rendered_Over(populations: Populations) -> serde_json::Value
+    {
+        let outcome = CheckOutcome::Judged {
+            findings: Vec::new(),
+            examined: Examined { files: JUDGED_SOURCES, facts: JUDGED_SOURCES },
+            claim: Claim::Complete,
+            supporting_facts: SupportingFactTrail::New(),
+            populations,
+        };
+
+        return serde_json::to_value(CheckResponse::From(outcome)).expect("a derived Serialize over owned data has nothing to refuse");
     }
 
     /// A bare `CheckCommand` over `root` -- this verb selects everything by default, so the

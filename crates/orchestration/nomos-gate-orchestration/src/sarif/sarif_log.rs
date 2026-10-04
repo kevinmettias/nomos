@@ -1,5 +1,6 @@
 //! [`SarifLog`], the document a projection produces, with the two functions that produce one.
 
+use super::run_properties::RunProperties;
 use super::sarif_invocation::SarifInvocation;
 use super::sarif_result::SarifResult;
 use super::sarif_run::SarifRun;
@@ -59,12 +60,18 @@ impl SarifLog
     /// or calibrated one carries a `suppressions` entry rather than being dropped. A run that
     /// judged nothing, judged incompletely, or judged and reached no verdict is emitted as a
     /// run whose invocation is unsuccessful and says why, never as an empty clean log.
+    ///
+    /// Every rule whose population was empty is named in the run's own `properties`, under
+    /// `emptyPopulations`, and nowhere that would move the verdict: the crate-private
+    /// `RunProperties` says why that is the place. A run in which every selected rule judged
+    /// something carries no such property, so its log is what it was before there was one.
     #[must_use]
     pub fn Of_Gate_Run(result: &GateRunResult) -> Self
     {
         let results = Gate_Run_Results(&result.root, &result.findings);
+        let properties = RunProperties::Of(&result.check_outcome);
 
-        return Self::Over(SarifRun::Of(results, SarifInvocation::Of_Gate_Run(result)));
+        return Self::Over(SarifRun::Of(results, SarifInvocation::Of_Gate_Run(result), properties));
     }
 
     /// A check run as a SARIF 2.1.0 log.
@@ -77,12 +84,15 @@ impl SarifLog
     /// Every result's `properties` carries no `bucket`, since no policy was applied and there
     /// is no bucket to report; the absence is the answer, and `OD-HOST-002`'s reconstructibility
     /// is why it is absent rather than defaulted to `blocking`.
+    ///
+    /// The rules whose population was empty are named exactly as [`Self::Of_Gate_Run`] names
+    /// them, since both read the one check outcome that carries them.
     #[must_use]
     pub fn Of_Check_Run(root: &Path, outcome: &CheckOutcome) -> Self
     {
         let results = Check_Run_Results(root, outcome);
 
-        return Self::Over(SarifRun::Of(results, SarifInvocation::Of_Check_Run(outcome)));
+        return Self::Over(SarifRun::Of(results, SarifInvocation::Of_Check_Run(outcome), RunProperties::Of(outcome)));
     }
 
     /// This log as the JSON text a consumer ingests, indented for a person who opens the file.

@@ -45,7 +45,7 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md@authored | docs/records/OD-ANALYSIS-009-whether-run-should-read-a-persistent-fact-store-instead-of-constructing-one-fresh-per-invocation.md | authored | 53 | 10 | sha256:404c693e5e6da316536fe1c75919dcdc288517eaf8773f8d369ac270f97b53b6 |
 | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md@authored | docs/records/OD-ANALYSIS-010-the-sound-control-flow-tier-is-a-crate-local-call-resolver-not-a-compiler-or-language-server-integration.md | authored | 16 | 6 | sha256:abebdf2b824324df346b84d0919c8c4d5388d053b4f113e1d93570f0e9e3939a |
 | docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md@authored | docs/records/OD-ANALYSIS-011-a-findings-subject-name-is-not-always-the-preimage-of-its-subject.md | authored | 58 | 15 | sha256:5bda752756ddc987345ee1cc01b6753457308cf0422bdd9c4da4c5dfce86c937 |
-| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md@authored | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md | authored | 55 | 14 | sha256:96289f68c1ed6a86675f8d3fd1eb6453b99f39003a13e656dbebc754eab77a53 |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md@authored | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md | authored | 72 | 19 | sha256:a78dacbf751456af5555f8ebb467d397071a6998eb6ae74e59e7c014ef8162ca |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md@authored | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md | authored | 34 | 10 | sha256:f1e0d83250422ce9a01b49549ecadefeb10363f0ac7ac1e0aad7ef647caa2626 |
 | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md@authored | docs/records/OD-CAPABILITY-002-a-capability-contract-is-not-a-providers-property.md | authored | 30 | 8 | sha256:37a877700da32038de6f0928850c29baadca4cb64984b86bc683e0cff204b669 |
 | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md@authored | docs/records/OD-CAPABILITY-003-per-subject-fallback-is-admitted-because-the-provider-is-part-of-the-address.md | authored | 23 | 7 | sha256:45b5e163405af8ddb16c7acfa3a07390919b0f8605a212a676fa9a0e5a260994 |
@@ -593,12 +593,17 @@ profile: domain-specification
 | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#17 | authored | 2 | Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It |
 | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#19 | authored | 3 | What version 1 got wrong, measured |
 | docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#26 | authored | 3 | The owner's decision |
-| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#28 | authored | 3 | Decision 1: a rule declares its population on its descriptor, as the one statement its body also filters by |
-| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#34 | authored | 3 | Decision 2: no empty population flips `Claim`, and every one is reported beside it |
-| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#41 | authored | 3 | Decision 3: what the four script rules report here |
-| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#46 | authored | 3 | What version 1 still decides |
-| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#49 | authored | 3 | The items this amendment boards |
-| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#52 | authored | 2 | Status |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#29 | authored | 3 | Decision 1: a rule declares its population on its descriptor, as the one statement its body also filters by |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#35 | authored | 3 | Decision 2: no empty population flips `Claim`, and every one is reported beside it |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#42 | authored | 3 | Decision 3: what the four script rules report here |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#47 | authored | 3 | What version 1 still decides |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#50 | authored | 3 | The items this amendment boards |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#53 | authored | 2 | Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#55 | authored | 3 | What the condition found unmet |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#57 | authored | 3 | Decision 4: every default rendering of a verdict names them beside the claim, and says nothing new when none was |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#61 | authored | 3 | Where the SARIF log carries it |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#64 | authored | 3 | What proves it |
+| docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#68 | authored | 2 | Status |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1 | authored | 1 | The guarantee decides which usable offer answers, and the caller decides how far down to spend |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#2 | authored | 2 | Question |
 | docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#4 | authored | 2 | What It Did |
@@ -14380,18 +14385,30 @@ single-language repository can be `Complete`.**
 
 ### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#28
 
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / The owner's decision · hash: sha256:e41e24cf5e0788987e90c6256aa986db986c867fd57612437e60b9e1bd98b614*
+
+On 2026-10-03 the owner ratified decision 2 below, which extends that ruling from the cause the
+repository makes to every cause of an empty population, with one condition: **the rules that
+judged an empty population are named prominently in the default output of every rendering of a
+verdict, and never behind a flag.** Without it, reported beside the claim degrades into not
+reported, because a list a reader has to ask for is one most readers never see, and every rule
+on it goes on reading as a clean judgment. That ratification and its condition bind version 3,
+whose amendment below says what the condition required.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#29
+
 *revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 1: a rule declares its population on its descriptor, as the one statement its body also filters by · hash: sha256:2865856625acd6bdb5ad285b96e06970e0f9735f0d85abf3018b7cdc6e811b59*
 
 ### Decision 1: a rule declares its population on its descriptor, as the one statement its body also filters by
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#29
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#30
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 1: a rule declares its population on its descriptor, as the one statement its body also filters by · hash: sha256:0efc559c87434d5956be1ccada63216a66288ef6efaa8839c785226586d2afb8*
 
 The item named three candidates. A declaration on the descriptor splits in two, by whether the
 root partitions the slice by it or only counts it, so four are costed, each at `0802e5b6`:
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#30
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#31
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 1: a rule declares its population on its descriptor, as the one statement its body also filters by · hash: sha256:8bc7e116ea810ea2f47f86840a6068d6b510a514d739564a676ed84fb85a55e4*
 
@@ -14402,7 +14419,7 @@ root partitions the slice by it or only counts it, so four are costed, each at `
 | declared on the descriptor, the root partitioning the slice by it | one field, one builder, 42 rows | none | the same section of `OD-RULES-014`: it is still a partition at the root, whichever crate holds the column |
 | **declared on the descriptor, the body filtering by the same declaration, the root only counting** | one field, one builder, 42 rows; the 3 declared rows derive theirs | none; 34 filter sites in 25 files read the declaration in place of their own literal | |
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#31
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#32
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 1: a rule declares its population on its descriptor, as the one statement its body also filters by · hash: sha256:ade0854bcdbe1d19b62387cdd2f8cc60d3335865b98d974b3010e59a3037fb6d*
 
@@ -14418,7 +14435,7 @@ interpreter in `checks/rust_text.rs` already filters by it, so those three are o
 today. `FunctionAritySource::Language`, which `go-helpers-package-five-inputs` reaches through
 `For_Language`, is the form this already takes inside one linked rule.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#32
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#33
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 1: a rule declares its population on its descriptor, as the one statement its body also filters by · hash: sha256:5b0e9ec9cc30e767b7d00001bbacaf0d7d70e70f7e4312ecfc25ac8ede968baa*
 
@@ -14431,7 +14448,7 @@ partition. So the declaration is the very value the body's filter reads, and the
 only to count. Every body still receives exactly the sources it receives today, and no rule's
 findings change.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#33
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#34
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 1: a rule declares its population on its descriptor, as the one statement its body also filters by · hash: sha256:7e5eea8e5d824c3afe63b36d0d99933eda8bbb4113a64c53f41a8c2dde0c2026*
 
@@ -14443,20 +14460,20 @@ population either: no naming case, no scripting policy, no standards corpus, no 
 directory. The subjects were there and nothing was declared to hold them to, which is
 `OD-RULES-011`'s optional-read question and not this record's.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#34
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#35
 
 *revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 2: no empty population flips `Claim`, and every one is reported beside it · hash: sha256:62dbdec3238dd8337007ceffe774f69595891671e45ae50117c74af84b6ea5ee*
 
 ### Decision 2: no empty population flips `Claim`, and every one is reported beside it
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#35
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#36
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 2: no empty population flips `Claim`, and every one is reported beside it · hash: sha256:26f46d0c062974c72a4ea8af400365ce451bf8df6e39d6c733d60b72beb51b74*
 
 The owner decided the case the repository causes. **This amendment gives every cause the same
 answer**, on two measurements.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#36
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#37
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 2: no empty population flips `Claim`, and every one is reported beside it · hash: sha256:570c751c264ddce723362a103590848da6ac5e999216a2885be444ec9011c763*
 
@@ -14466,7 +14483,7 @@ not it held scripts. That is the defect `P43-SCRIPT-RULES-CANNOT-FIRE` found by 
 tree holds no shebang file of any extension anywhere the walk reaches, so it counts the same
 zero for the opposite reason. A flip that spared the one would spare the other.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#37
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#38
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 2: no empty population flips `Claim`, and every one is reported beside it · hash: sha256:88d6ea182bf6409e545b91ee46d2b9f05fdeeb2d2ec13bc756149a2df5cfdf38*
 
@@ -14480,13 +14497,13 @@ to fetch, which `ARC-CONNECTOR-001` declines to invent ahead of a caller that ne
 Flipping on it would make every full run of every repository `Incomplete`, which is a stronger
 form of what the owner ruled out.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#38
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#39
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 2: no empty population flips `Claim`, and every one is reported beside it · hash: sha256:803fcb2841b8f18fc3c61fa5f003a8e44f709db7cfa0cbc66d8a6b389d19b2f1*
 
 **It is reported rather than left silent, because of what each choice shows the two readers.**
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#39
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#40
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 2: no empty population flips `Claim`, and every one is reported beside it · hash: sha256:9a90a03d724f080a4d9c9739347a6a4ca866598e2fd454cfd10ca9be90041550*
 
@@ -14503,9 +14520,9 @@ form of what the owner ruled out.
   name the same 18 rules as having had nothing to judge, and the calibration can assert that
   list rather than restate it in prose.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#40
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#41
 
-*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 2: no empty population flips `Claim`, and every one is reported beside it · hash: sha256:301264adb63d8086204401c2d87b4fa67b18b4bc8ef73ba767f0bd5d98587ad2*
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 2: no empty population flips `Claim`, and every one is reported beside it · hash: sha256:50ae80da6f6655eb8f5eb89e5aad131396722e6696c1d49f0563e7da0395661d*
 
 So the population is reported, and it does not enter the claim. Version 1's placement stands:
 `CheckOutcome::Judged` gains a per-rule population beside `findings`, `examined` and `claim`.
@@ -14516,21 +14533,21 @@ is not a finding and carries no `GateCategory`. `nomos check`'s own report names
 rules whose population was empty. Whether the gate report, the SARIF log or the API response
 render it is left open, as
 `P99-A-RULE-THAT-JUDGED-AN-EMPTY-POPULATION-REPORTS-IT-AS-OD-ANALYSIS-012-DECIDED-3` already
-left it.
+left it. Version 3's decision 4 closes that question: each of them does, by default.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#41
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#42
 
 *revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 3: what the four script rules report here · hash: sha256:2213fc84ac676673fdcf40a0d9066b07e8fec146956426ea8e48c753e87c8850*
 
 ### Decision 3: what the four script rules report here
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#42
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#43
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 3: what the four script rules report here · hash: sha256:148f6c3b347141f302755b602d6e7a481fd946645044972c32134e65da6570a6*
 
 Counted at `0802e5b6` over this tree's walk of 2,134 sources, every one of them `.rs`:
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#43
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#44
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 3: what the four script rules report here · hash: sha256:1e835a6a428d0144355c75c189930ddf874e29f1cc2513bf719de3b0dfb0f35d*
 
@@ -14541,7 +14558,7 @@ Counted at `0802e5b6` over this tree's walk of 2,134 sources, every one of them 
 | `executed-scripts-set-nounset` | the same | 0 | empty, and `Claim` is unaffected |
 | `declared-tooling-language-for-scripts` | every walked source, since it judges each path's extension | 2,134 | not empty: this repository declares `scripting.tooling_language` as `rust` with five forbidden extensions, every path was judged against them, and none matched |
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#44
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#45
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 3: what the four script rules report here · hash: sha256:3b56010665d7a3dce02886752c04c76988e92f8722c1da8f827e0fe8ebb150ce*
 
@@ -14550,7 +14567,7 @@ Four walked sources open with `#!`, and all four are Rust inner attributes: thre
 because it requires an absolute path after the two bytes. A search of every file the walk would
 reach, whatever its extension, found no shebang at all.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#45
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#46
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / Decision 3: what the four script rules report here · hash: sha256:0bc9f0b727b0eca0e41e397751b3d92570a1da447da4c299b54b2c4906537583*
 
@@ -14560,13 +14577,13 @@ against, and finding no match is its clean answer. In hex it judges nothing for 
 reason: no `scripting` policy is declared there. That is the undeclared-norm case of decision 1,
 not a population.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#46
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#47
 
 *revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / What version 1 still decides · hash: sha256:56c18f151fa2052d2a170b3fae2ced14f40e62568558868634bb61a21b315fd7*
 
 ### What version 1 still decides
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#47
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#48
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / What version 1 still decides · hash: sha256:ab08edbbc27c426739a21e3ab47fc08b1e5a2ca7dcdf83ab003b2beb9bebf9ff*
 
@@ -14576,20 +14593,20 @@ and is computed where each rule is judged, at no new materialization cost. `P41-
 is not decided here, since a declared population is read when a rule is judged and is not
 resolved in a plan. `P43-SCRIPT-RULES-CANNOT-FIRE`'s walker fix stands.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#48
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#49
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / What version 1 still decides · hash: sha256:a8b01a8e1de2473229d38eda1cd69ebcca90852caa65443406c411420e519bcf*
 
 What version 1 said this mechanism would have done for that fix is now narrower. A script rule
 that judges nothing is visible in every run, and it makes no run `Incomplete`.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#49
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#50
 
 *revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / The items this amendment boards · hash: sha256:fb6bc1298a37aff7c6113f493317ae1ce0e690b89735d3658ddcd70b35c664bc*
 
 ### The items this amendment boards
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#50
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#51
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / The items this amendment boards · hash: sha256:67b5fb27498e5cfe6d2abe281c34bac5895c3d1a6cc1064ba0c0e1bf32d96d09*
 
@@ -14602,7 +14619,7 @@ snapshots. It waits on
 `P171-THE-CSHARP-CONDITIONAL-COMPILATION-FACT-JOINS-THE-RUN-FOR-THE-BUILDS-A-REPOSITORY-DECLARES`,
 which holds the crates it edits and adds a C#-only rule whose population is one more to declare.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#51
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#52
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 2: A Rule Declares The Population It Judges, And An Empty One Is Reported Beside The Claim Rather Than In It / The items this amendment boards · hash: sha256:16ad558849dbda1a9c8bd61652eb44dbb039ba41c65f69375bb7b0ec5db97fff*
 
@@ -14618,24 +14635,159 @@ excludes, and that item is declined. The module docs of
 waits on this record's mechanism, which will not cover it. They are corrected there rather than
 here, because none of the three is this amendment's territory.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#52
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#53
+
+*revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population · hash: sha256:1268204928f1a53622d79fec4c1caf206990351e3d7c9a983a46259ec6c4d573*
+
+## Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#54
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population · hash: sha256:9dfc795ab13aa72e927bce97296d2f3cb6681b4bccfe918bedc042670353daf8*
+
+The owner's ratification of 2026-10-03 and its condition are recorded in version 2's "The owner's
+decision" above, beside the 2026-09-27 ruling they extend. This section says what the condition
+required, and decides the one placement it left to whoever built it.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#55
+
+*revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population / What the condition found unmet · hash: sha256:ca334b0f5710325ce9661099f8fc3e5638fa9a6dc5d424b3f5b71ec1520ddfd9*
+
+### What the condition found unmet
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#56
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population / What the condition found unmet · hash: sha256:ca413ef94d01c4f630a27dc9c19e69ecd5fa8110f0a8baf9a3765f97759d2794*
+
+`P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM`
+built decisions 1 and 2 and rendered the population in one place, `nomos check`'s text report.
+The renderings decision 2 left open are where most readers meet a verdict: a CI log reads
+`nomos gate run`'s report, a code-scanning view reads the SARIF log, and an editor or an agent
+reads `nomos-api`'s responses. None of them carried it. Over this repository's own tree the
+check names 5 rules as having judged nothing -- `review-finding`, the three shebang rules and
+`uncompiled-conditional-branch` -- and over hex's calibration fixture
+`tests/integration/tests/calibration.rs` asserts 19, row by row. In each of those three renderings
+every one of them read as a clean judgment, which is the condition unmet everywhere but one place.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#57
+
+*revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population / Decision 4: every default rendering of a verdict names them beside the claim, and says nothing new when none was · hash: sha256:0213fa28ed6c8a652ea54ca7225ae01bbfe9c04294e3a09c091a4a36552d1c98*
+
+### Decision 4: every default rendering of a verdict names them beside the claim, and says nothing new when none was
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#58
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population / Decision 4: every default rendering of a verdict names them beside the claim, and says nothing new when none was · hash: sha256:df1413703cb349a93f4e57bd77f373ebd88642c735d22ff37521758d4e2fee08*
+
+| Rendering | Where it names them | When none was empty |
+|---|---|---|
+| `nomos check`'s text report | after the claim and its coverage, under `N rule(s) judged nothing, because no source was in their population:`, one rule a line (version 2) | it prints nothing more |
+| `nomos gate run`'s text report | last, after the counts, the exceeded baselines and the unmatched policy, in the same words | it prints nothing more |
+| the SARIF log `nomos gate run --sarif` and `nomos check --sarif` write | `runs[0].properties.emptyPopulations`, an array of rule ids, each resolvable against `runs[0].tool.driver.rules` | the property is absent |
+| `nomos-api`'s check response | `empty_populations`, beside `claim` in the `judged` outcome | the field is absent |
+| `nomos-api`'s gate response | `check_outcome.empty_populations`, beside `complete` | the field is absent |
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#59
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population / Decision 4: every default rendering of a verdict names them beside the claim, and says nothing new when none was · hash: sha256:4b2b457faa9c5193844a84892dfd8227bd7eed4f735bec8707d18555b2b243ea*
+
+None of them is behind a flag, a verbosity level or a verb of its own. Each reads
+`nomos_check_orchestration::Populations::Empty` off the check outcome and counts nothing a second
+time. None of them reaches `Claim`, `Claim_Of`, the gate's disposition, an exit code, or the
+SARIF invocation's `executionSuccessful`, so decision 2's answer holds on every surface: the claim
+is what the findings support, and the empty populations are reported beside it.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#60
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population / Decision 4: every default rendering of a verdict names them beside the claim, and says nothing new when none was · hash: sha256:8e9ba3d03330cdb8b8b84414d4135204d19e07ffe2b8d0fcd5f7c3a26aaed62a*
+
+Absent rather than empty when there is nothing to say, on the two machine surfaces as on the two
+text ones. A run in which every selected rule judged something is rendered byte for byte as it
+was before this amendment, which is the property each rendering's test pins.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#61
+
+*revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population / Where the SARIF log carries it · hash: sha256:bb3ad9c2abd5ef1ad8b958e6ea7daa2be62dd40b26734c5fdcea02130a454b24*
+
+### Where the SARIF log carries it
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#62
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population / Where the SARIF log carries it · hash: sha256:2899492a3f12da59566a0d25bb4abb5ebe7ce52cb76862a45544aa659507b40b*
+
+SARIF 2.1.0 admits three places, and two are refused.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#63
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population / Where the SARIF log carries it · hash: sha256:0d487095654c81591352466ee63e215e99663c1130423f94c9ff8f94d5488a0c*
+
+- **Not a `result`.** An empty population is not a finding, which decision 2 already says when it
+  takes the `GateCategory` away. It has no subject, no location and no level, and a code-scanning
+  view would raise an alert for a rule that looked at nothing.
+- **Not one of the invocation's `toolExecutionNotifications`.** In this projection a notification
+  there is what makes `executionSuccessful` false, and `executionSuccessful` is the log's
+  rendering of the claim. A notification beside a successful execution would break the
+  invocation's own invariant, and one that flipped it would be the flip the owner ruled out.
+  `toolConfigurationNotifications` is no better: it describes the tool's configuration, and this
+  is a fact about the tree.
+- **A property of the run.** §3.8's property bag on §3.14's `run` is neither a result nor part of
+  the invocation. It is read by key, it sits beside `invocations` rather than inside them, and it
+  names rules by the ids the run's own driver lists, so a consumer can follow each to the record
+  that rule cites. This is the placement decided.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#64
+
+*revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population / What proves it · hash: sha256:555bc04b1d89cde872dc75e9f3e97657a31ab7e73ab2e2100dc021b8f1ee2a50*
+
+### What proves it
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#65
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population / What proves it · hash: sha256:14f324d09128f479bd6bef523bfe312ee2b910ede1500c0e6e3092a4ab5d4e47*
+
+Each rendering is proven by a test that renders a run in which one rule judged an empty
+population and another judged real sources, and asserts that only the first is named and that
+everything else the rendering says -- the claim among it -- is what it says with no population
+reported at all:
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#66
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population / What proves it · hash: sha256:a1b5c724987af9680b6c418d0b44325e7785d967f5b4d52b8d50f4e8cb6e10ca*
+
+- `nomos gate run`'s report: `Test_Render_Run_Should_Name_Only_The_Empty_Population_Beside_An_Unchanged_Verdict`.
+- the SARIF log: `Test_A_Gate_Runs_Log_Should_Name_Only_The_Empty_Population_Beside_An_Unchanged_Verdict`
+  and `Test_A_Check_Runs_Log_Should_Name_Only_The_Empty_Population_Beside_An_Unchanged_Claim`.
+- `nomos-api`'s check response: `Test_A_Judged_Response_Should_Name_Only_The_Empty_Population_Beside_An_Unchanged_Claim`.
+- `nomos-api`'s gate response: `Test_A_Judged_Outcome_Should_Name_Only_The_Empty_Population_Beside_An_Unchanged_Claim`,
+  and through `Handle_Gate_Run` over a real tree,
+  `Test_A_Rule_That_Judged_Nothing_Should_Reach_A_Headless_Caller_Beside_An_Unchanged_Verdict`.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#67
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population / What proves it · hash: sha256:58656230ad31863b47b1145d476ffa2abbfcb38863b8f5923522a7b75c8501fe*
+
+Each was shown able to fail by naming every judged rule in place of the empty ones.
+`P186-THE-GATE-REPORT-SARIF-AND-THE-API-DO-NOT-SAY-WHICH-RULES-JUDGED-AN-EMPTY-POPULATION` built
+this amendment.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#68
 
 *revision: authored · kind: heading · heading: A rule that judged an empty population is reported apart from one that judged clean / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#53
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#69
 
-*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Status · hash: sha256:466388930370c51d962684364f9c061953ae9c600713bde121772eeba7544791*
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Status · hash: sha256:582909de73ca20ddb0101bcc6edb507150f5896d362f84372fa308430377b26d*
 
-Accepted, version 2. An empty population is reported apart from a clean judgment, in
+Accepted, version 3. An empty population is reported apart from a clean judgment, in
 `CheckOutcome::Judged` itself, and it never flips `Claim`. The owner decided on 2026-09-27 that
 a repository holding no file of a rule's language or kind can be `Complete`. This amendment
 gives every other cause the same answer, because no count separates the owner's case from a
 walker defect, and every failure a run can detect already flips the claim through a finding
 of its own.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#54
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#70
 
 *revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Status · hash: sha256:9fe820c489870dcc4448dac5c6f7ce11965be1d676db72a004d84b89f4c3072a*
 
@@ -14647,14 +14799,28 @@ calibration fixture alike. Three of the four script rules `P43-SCRIPT-RULES-CANN
 measured are among them; `declared-tooling-language-for-scripts` judged all 2,134 of this
 tree's walked sources and is not.
 
-### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#55
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#71
 
-*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Status · hash: sha256:f7a66781228be6b6658f48590e9e9059d41950226cccc7da11cce912dee105fc*
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Status · hash: sha256:e68498b04f0058d3ace464970f99a95b93c11727ef9dc94392fa2cd4fa3e4a5c*
 
 Version 1's claim that all four script rules report an empty population, its `Claim` flip with
 the Advisory disposition that went with it, and its reading of the slice `run_context` holds are
 superseded. `P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM`
-builds the rest.
+built decisions 1 and 2.
+
+### docs/records/OD-ANALYSIS-012-a-rule-that-judged-an-empty-population-is-reported-apart-from-one-that-judged-clean.md#72
+
+*revision: authored · kind: prose · heading: A rule that judged an empty population is reported apart from one that judged clean / Status · hash: sha256:0cface51180052c400f09a26f7208030ecfa420661b9eae47ef8e84090c0692a*
+
+The owner ratified decision 2 on 2026-10-03, on the condition that the rules that judged an empty
+population are prominent in the default output and never behind a flag. Version 3's decision 4
+meets it: `nomos check`'s and `nomos gate run`'s text reports, the SARIF log both write, and
+`nomos-api`'s check and gate responses each name every such rule beside the claim, and say
+nothing new when there is none. The SARIF log carries them as the run's own
+`properties.emptyPopulations`, never as a result and never as a notification that would move
+`executionSuccessful`.
+`P186-THE-GATE-REPORT-SARIF-AND-THE-API-DO-NOT-SAY-WHICH-RULES-JUDGED-AN-EMPTY-POPULATION` built
+it.
 
 ### docs/records/OD-CAPABILITY-001-which-of-several-usable-offers-wins-is-unspecified.md#1
 

@@ -102679,7 +102679,12 @@
           "crates/host/nomos-cli/src/gate/report/tests/explain.rs",
           "crates/host/nomos-cli/src/check/report.rs",
           "crates/host/nomos-cli/src/check/tests.rs",
-          "tests/integration/tests/calibration.rs"
+          "tests/integration/tests/calibration.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor/undeclared_value.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor/undeclared_outcome.rs",
+          "crates/rules/nomos-rules/src/checks/optional_reads.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor/optional_read",
+          "crates/rules/nomos-rules/src/checks/script_discipline.rs"
         ],
         "patterns": []
       },
@@ -102722,7 +102727,25 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "opus-b7-p190",
+          "added": [
+            "crates/rules/nomos-rules/src/rule_descriptor/undeclared_value.rs",
+            "crates/rules/nomos-rules/src/rule_descriptor/undeclared_outcome.rs",
+            "crates/rules/nomos-rules/src/checks/optional_reads.rs",
+            "crates/rules/nomos-rules/src/rule_descriptor/optional_read"
+          ],
+          "widened_at": 1791079223
+        },
+        {
+          "holder": "opus-b7-p190",
+          "added": [
+            "crates/rules/nomos-rules/src/checks/script_discipline.rs"
+          ],
+          "widened_at": 1791079422
+        }
+      ]
     },
     {
       "id": "P191-THE-GATE-REPORT-SARIF-AND-THE-API-NAME-THE-VALUES-NOBODY-DECLARED-BESIDE-THE-CLAIM",
@@ -104769,6 +104792,77 @@
         },
         "revision": "2b8a1aa2e4ed17fb1e6149a3a995779385957869"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P212-THE-UNCONDITIONAL-LOOP-IS-THE-SECOND-SYNTAX-SITE-AND-ITS-TERRITORY-IS-THE-BOUND",
+      "title": "The unconditional loop is the second syntax site, and its territory is the bound",
+      "why": "OD-CAPABILITY-019's third build step: a second kind whose own territory is the bound its seventh decision states, so that a widening of this item is the evidence the bound is wrong. The kind is the corpus's unboundedloop engine at code-standards f0d820729 -- a loop whose head states no condition, its spelling and the sentence written for it -- judged by document-loop-termination (MUST, gate blocking). The engine is one of the eight the record counts as answered by a tree in one kernel and by lines in another, so it also tests the fifth decision: the corpus's Rust kernel matches `loop {` within one line and so finds none of this workspace's loops, all braced on the next line, while a tree finds every one. Built and measured in a worktree at ac3a1ef3 before this item was authored: the candidate predicate passed whole, no file outside the territory below had to change, the rule's ten findings over this workspace were answered first by P211, and eleven mutations of its guards were each killed by a named test.",
+      "done_when": "nomos-cap-syntax declares the unconditional-loop kind in SITE_KINDS -- spelling and reason, both text -- with its typed view, and Stated_Reason, the definition every provider computes a reason by: the comment on the construct's own line past any opener inside a double-quoted string, else the first line of the comment block touching it from above; every case of the corpus's loopreason reason_test.go is ported. nomos-lang-rust offers the kind for every `loop`, nomos-lang-go for every `for` with no condition and no clause or an empty one, and nomos-lang-csharp for `while (true)`, `for (;;)` and a `do` loop whose condition is `true` -- offered for a C# file that parses and unanswered for one that does not, while every C# file still declines the labeled jump without a parse. Each provider's records reach a rule only through its sites payload, interleaved with the labeled jump's in source order, so no provider's public surface changes; every case of the corpus's rust_, go_ and csharp_unbounded_loop_test.go is ported through that payload. nomos-rules composes document-loop-termination citing OD-CAPABILITY-019 version 1 and judging the population both rules over the family now share: a loop whose reason is shorter than twelve bytes is one Blocking, Supported finding on its line with the corpus message's substance, every case of the engine's analyzer_test.go is ported, and a declined kind is NotApplicable and an unanswered one MissingCapability, through the family reading a-labeled-jump-leaves-one-loop now shares with its findings unchanged. A run over this tree reports no Blocking finding of the rule and reports tests/corpus/analysis/gamma/broken.rs unjudged, and the calibration row says so beside what code-standards' own check reports here. The territory is the bound and nothing else: nomos-cap-syntax and its snapshot, the three providers that offer the kind, the rule's own files and the family reading it shares in nomos-rules, the three registration sites every composed rule has (the nomos-rules snapshot, its contract citation row and its calibration row), and goldens.rs, where all three sites goldens move because each payload states the new kind's stance -- the bound names only a golden whose fixture holds the construct, and the difference changes no file. The predicate names nomos-cli and nomos-integration-tests, which enumerate the composed set.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-syntax",
+          "tests/contract/surface/nomos-cap-syntax.txt",
+          "crates/languages/nomos-lang-rust",
+          "crates/languages/nomos-lang-go",
+          "crates/languages/nomos-lang-csharp",
+          "crates/rules/nomos-rules/src/checks/loop_termination.rs",
+          "crates/rules/nomos-rules/src/checks/loop_termination",
+          "crates/rules/nomos-rules/src/checks/syntax_sites.rs",
+          "crates/rules/nomos-rules/src/checks/labeled_jump.rs",
+          "crates/rules/nomos-rules/src/checks/labeled_jump",
+          "crates/rules/nomos-rules/src/checks/populations.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/tests/rule_contract_citation.rs",
+          "tests/integration/tests/calibration.rs",
+          "tests/integration/tests/determinism/goldens.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P211-TEN-UNCONDITIONAL-LOOPS-IN-THIS-WORKSPACE-DO-NOT-SAY-HOW-THEY-END"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-go",
+          "-p",
+          "nomos-lang-csharp",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-composer-providers",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 10800
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,

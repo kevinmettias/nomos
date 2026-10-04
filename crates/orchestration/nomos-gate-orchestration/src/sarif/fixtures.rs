@@ -7,7 +7,7 @@
 //! takes runs a real gate instead, in `sarif_log`.
 
 use crate::{GateFindings, GateRunOutcome, GateRunResult};
-use nomos_check_orchestration::{CheckOutcome, Claim, Examined, SupportingFactTrail};
+use nomos_check_orchestration::{CheckOutcome, Claim, Examined, Populations, SupportingFactTrail};
 use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, RunId, SubjectId};
 use std::collections::BTreeMap;
 use std::path::PathBuf;
@@ -84,15 +84,26 @@ pub(crate) fn Judged_Outcome(claim: Claim) -> CheckOutcome
     return Judged_Outcome_With(Vec::new(), claim);
 }
 
-/// A check that judged its tree and found `findings`, under `claim`.
+/// A check that judged its tree and found `findings`, under `claim`, and reported no rule's
+/// population at all.
 pub(crate) fn Judged_Outcome_With(findings: Vec<Finding>, claim: Claim) -> CheckOutcome
+{
+    return Judged_Outcome_Of(findings, Populations::New(), claim);
+}
+
+/// A check that judged its tree and found `findings`, under `claim`, over `populations`.
+///
+/// The claim is the caller's and is never derived from `populations`, which is the property the
+/// tests that use this hold the projection to: a population is reported beside the claim, and
+/// no empty one moves it.
+pub(crate) fn Judged_Outcome_Of(findings: Vec<Finding>, populations: Populations, claim: Claim) -> CheckOutcome
 {
     return CheckOutcome::Judged {
         findings,
         examined: Examined { files: FIXTURE_EXAMINED, facts: FIXTURE_EXAMINED },
         claim,
         supporting_facts: SupportingFactTrail::New(),
-        populations: nomos_check_orchestration::Populations::New(),
+        populations,
     };
 }
 

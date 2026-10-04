@@ -47,6 +47,7 @@ pub(crate) mod fixtures;
 mod physical_location;
 mod reporting_descriptor;
 mod result_properties;
+mod run_properties;
 mod sarif_invocation;
 mod sarif_level;
 mod sarif_location;

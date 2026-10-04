@@ -65,6 +65,10 @@ pub struct GateRunResponse
     /// `nomos-cli` has never had that problem, because it matches on the check outcome
     /// rather than on the disposition -- its own `Render_Run` says so in its doc -- and the
     /// wire had no way to.
+    ///
+    /// A judged one also names, beside its claim, every selected rule whose population was
+    /// empty, which no other field here carries and which moves neither the claim nor
+    /// `disposition`.
     pub check_outcome: CheckOutcomeResponse,
     /// Why a run that judged its tree still reached no verdict, when one did.
     ///
@@ -130,7 +134,7 @@ mod tests
     use crate::test_support::{Area, Judged_Run, Probe_Tree, TreeName, Unique_Scratch_Directory};
     use nomos_contracts::{ConfigurationLayer, RuleId};
     use nomos_gate_orchestration::{CoveragePolicy, Effective_Gate_Policy, PolicyContribution, RuleSelector};
-    use nomos_rules::NAMING_CONVENTION;
+    use nomos_rules::{A_SKIPPED_TEST_STATES_WHY, COMPLETENESS_MIRROR, NAMING_CONVENTION};
 
     /// The subsystem this module's own scratch roots are named under.
     ///
@@ -311,6 +315,45 @@ mod tests
             naming_only.findings.blocking_findings.is_empty(),
             "the deselected rule's finding must not exist at all: {naming_only:?}"
         );
+    }
+
+    /// `OD-ANALYSIS-012` version 3, end to end through the handler a transport calls: two rules
+    /// selected over a tree holding one Rust source and no Go source. The Go-only rule judged
+    /// nothing and is named; the completeness mirror judged the source, found its stale mirror,
+    /// and is not. The same tree judged by the mirror alone names nothing and reaches the same
+    /// disposition, the same claim and the same findings.
+    ///
+    /// Driven through `Handle_Gate_Run` for the reason the malformed-policy test above gives:
+    /// the population is counted where each rule is judged, and only a real run carries it here.
+    #[test]
+    fn Test_A_Rule_That_Judged_Nothing_Should_Reach_A_Headless_Caller_Beside_An_Unchanged_Verdict()
+    {
+        let root = Unique_Scratch_Directory(GATE_RUN_AREA, "empty-population")
+            .expect("the temp directory is writable and this call's own name is fresh");
+        std::fs::write(root.join("a.rs"), "/// Mirrored by `Test_Nowhere`.\npub const TABLE: &[&str] = &[];\n")
+            .expect("writes a fixture whose stale mirror is one real blocking finding");
+
+        let both = Judged_Run(&Command_Selecting(&root, &[A_SKIPPED_TEST_STATES_WHY, COMPLETENESS_MIRROR]));
+        let mirror_only = Judged_Run(&Command_Selecting(&root, &[COMPLETENESS_MIRROR]));
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        let reported = serde_json::to_value(&both).expect("a derived Serialize over owned data has nothing to refuse");
+        let unreported = serde_json::to_value(&mirror_only).expect("a derived Serialize over owned data has nothing to refuse");
+        assert_eq!(Field_At(&reported, &["check_outcome", "empty_populations"]), serde_json::json!([A_SKIPPED_TEST_STATES_WHY]), "{reported}");
+        assert_eq!(Field_At(&unreported, &["check_outcome", "empty_populations"]), serde_json::Value::Null, "{unreported}");
+        assert_eq!(both.disposition, Disposition::Failed, "{reported}");
+        assert_eq!(both.disposition, mirror_only.disposition);
+        assert_eq!(Field_At(&reported, &["check_outcome", "complete"]), Field_At(&unreported, &["check_outcome", "complete"]));
+        assert_eq!(Field_At(&reported, &["findings"]), Field_At(&unreported, &["findings"]));
+    }
+
+    /// [`GateCommand`] over `root`, judging only `rules`.
+    fn Command_Selecting(root: &std::path::Path, rules: &[&str]) -> GateCommand
+    {
+        return GateCommand {
+            rules: RuleSelector { include: rules.iter().map(|rule| return RuleId::New(*rule)).collect() },
+            ..Command_At(root.to_path_buf())
+        };
     }
 
     /// The artifact a policy a caller built in code is reported under, as

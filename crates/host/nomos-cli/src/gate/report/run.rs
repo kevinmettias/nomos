@@ -64,6 +64,7 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
     Report_Judged_Findings(findings, result, stdout);
     Report_Exceeded_Baselines(&result.findings.baseline_populations, stdout);
     Report_Unmatched_Policy(result, stdout);
+    Report_Empty_Populations(&result.check_outcome, stdout);
 
     return Exit_Code_For(result, stderr);
 }
@@ -119,6 +120,38 @@ fn Report_Unmatched_Policy(result: &GateRunResult, stdout: &mut impl Write)
     for entry in &result.unmatched_policy
     {
         let _ = writeln!(stdout, "  {entry}");
+    }
+}
+
+/// Every selected rule whose population was empty, last in the report and apart from the
+/// verdict, in the words `nomos check`'s own report gives it.
+///
+/// `OD-ANALYSIS-012` version 3: such a rule judged nothing, because the run handed it no source
+/// of the language or kind its norm is about, and its zero findings read exactly like a judgment
+/// of real subjects found clean. The owner ratified reporting it beside the claim on the
+/// condition that it is in the default output, and this report is what a CI log shows. It reads
+/// the populations the check outcome carries and recounts nothing, and nothing here reaches the
+/// counts above it or the exit code, which are what the findings support.
+///
+/// Silent for a run in which every selected rule judged something.
+fn Report_Empty_Populations(outcome: &CheckOutcome, stdout: &mut impl Write)
+{
+    let CheckOutcome::Judged { populations, .. } = outcome
+    else
+    {
+        return;
+    };
+
+    let empty = populations.Empty();
+    if empty.is_empty()
+    {
+        return;
+    }
+
+    let _ = writeln!(stdout, "\n{} rule(s) judged nothing, because no source was in their population:", empty.len());
+    for rule in empty
+    {
+        let _ = writeln!(stdout, "  {rule}");
     }
 }
 

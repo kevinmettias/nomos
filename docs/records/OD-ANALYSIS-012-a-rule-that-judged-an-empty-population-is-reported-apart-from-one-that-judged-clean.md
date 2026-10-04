@@ -3,7 +3,7 @@ id: OD-ANALYSIS-012
 type: decision
 title: A rule that judged an empty population is reported apart from one that judged clean
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - analysis
@@ -181,6 +181,14 @@ repository that uses only one language can ever get a `Complete` result, the own
 repository holding no file of the rule's own language or kind does not flip `Claim`, and a
 single-language repository can be `Complete`.**
 
+On 2026-10-03 the owner ratified decision 2 below, which extends that ruling from the cause the
+repository makes to every cause of an empty population, with one condition: **the rules that
+judged an empty population are named prominently in the default output of every rendering of a
+verdict, and never behind a flag.** Without it, reported beside the claim degrades into not
+reported, because a list a reader has to ask for is one most readers never see, and every rule
+on it goes on reading as a clean judgment. That ratification and its condition bind version 3,
+whose amendment below says what the condition required.
+
 ### Decision 1: a rule declares its population on its descriptor, as the one statement its body also filters by
 
 The item named three candidates. A declaration on the descriptor splits in two, by whether the
@@ -267,7 +275,7 @@ is not a finding and carries no `GateCategory`. `nomos check`'s own report names
 rules whose population was empty. Whether the gate report, the SARIF log or the API response
 render it is left open, as
 `P99-A-RULE-THAT-JUDGED-AN-EMPTY-POPULATION-REPORTS-IT-AS-OD-ANALYSIS-012-DECIDED-3` already
-left it.
+left it. Version 3's decision 4 closes that question: each of them does, by default.
 
 ### Decision 3: what the four script rules report here
 
@@ -325,9 +333,84 @@ excludes, and that item is declined. The module docs of
 waits on this record's mechanism, which will not cover it. They are corrected there rather than
 here, because none of the three is this amendment's territory.
 
+## Amendment, Version 3: Every Default Rendering Of A Verdict Names The Rules That Judged An Empty Population
+
+The owner's ratification of 2026-10-03 and its condition are recorded in version 2's "The owner's
+decision" above, beside the 2026-09-27 ruling they extend. This section says what the condition
+required, and decides the one placement it left to whoever built it.
+
+### What the condition found unmet
+
+`P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM`
+built decisions 1 and 2 and rendered the population in one place, `nomos check`'s text report.
+The renderings decision 2 left open are where most readers meet a verdict: a CI log reads
+`nomos gate run`'s report, a code-scanning view reads the SARIF log, and an editor or an agent
+reads `nomos-api`'s responses. None of them carried it. Over this repository's own tree the
+check names 5 rules as having judged nothing -- `review-finding`, the three shebang rules and
+`uncompiled-conditional-branch` -- and over hex's calibration fixture
+`tests/integration/tests/calibration.rs` asserts 19, row by row. In each of those three renderings
+every one of them read as a clean judgment, which is the condition unmet everywhere but one place.
+
+### Decision 4: every default rendering of a verdict names them beside the claim, and says nothing new when none was
+
+| Rendering | Where it names them | When none was empty |
+|---|---|---|
+| `nomos check`'s text report | after the claim and its coverage, under `N rule(s) judged nothing, because no source was in their population:`, one rule a line (version 2) | it prints nothing more |
+| `nomos gate run`'s text report | last, after the counts, the exceeded baselines and the unmatched policy, in the same words | it prints nothing more |
+| the SARIF log `nomos gate run --sarif` and `nomos check --sarif` write | `runs[0].properties.emptyPopulations`, an array of rule ids, each resolvable against `runs[0].tool.driver.rules` | the property is absent |
+| `nomos-api`'s check response | `empty_populations`, beside `claim` in the `judged` outcome | the field is absent |
+| `nomos-api`'s gate response | `check_outcome.empty_populations`, beside `complete` | the field is absent |
+
+None of them is behind a flag, a verbosity level or a verb of its own. Each reads
+`nomos_check_orchestration::Populations::Empty` off the check outcome and counts nothing a second
+time. None of them reaches `Claim`, `Claim_Of`, the gate's disposition, an exit code, or the
+SARIF invocation's `executionSuccessful`, so decision 2's answer holds on every surface: the claim
+is what the findings support, and the empty populations are reported beside it.
+
+Absent rather than empty when there is nothing to say, on the two machine surfaces as on the two
+text ones. A run in which every selected rule judged something is rendered byte for byte as it
+was before this amendment, which is the property each rendering's test pins.
+
+### Where the SARIF log carries it
+
+SARIF 2.1.0 admits three places, and two are refused.
+
+- **Not a `result`.** An empty population is not a finding, which decision 2 already says when it
+  takes the `GateCategory` away. It has no subject, no location and no level, and a code-scanning
+  view would raise an alert for a rule that looked at nothing.
+- **Not one of the invocation's `toolExecutionNotifications`.** In this projection a notification
+  there is what makes `executionSuccessful` false, and `executionSuccessful` is the log's
+  rendering of the claim. A notification beside a successful execution would break the
+  invocation's own invariant, and one that flipped it would be the flip the owner ruled out.
+  `toolConfigurationNotifications` is no better: it describes the tool's configuration, and this
+  is a fact about the tree.
+- **A property of the run.** §3.8's property bag on §3.14's `run` is neither a result nor part of
+  the invocation. It is read by key, it sits beside `invocations` rather than inside them, and it
+  names rules by the ids the run's own driver lists, so a consumer can follow each to the record
+  that rule cites. This is the placement decided.
+
+### What proves it
+
+Each rendering is proven by a test that renders a run in which one rule judged an empty
+population and another judged real sources, and asserts that only the first is named and that
+everything else the rendering says -- the claim among it -- is what it says with no population
+reported at all:
+
+- `nomos gate run`'s report: `Test_Render_Run_Should_Name_Only_The_Empty_Population_Beside_An_Unchanged_Verdict`.
+- the SARIF log: `Test_A_Gate_Runs_Log_Should_Name_Only_The_Empty_Population_Beside_An_Unchanged_Verdict`
+  and `Test_A_Check_Runs_Log_Should_Name_Only_The_Empty_Population_Beside_An_Unchanged_Claim`.
+- `nomos-api`'s check response: `Test_A_Judged_Response_Should_Name_Only_The_Empty_Population_Beside_An_Unchanged_Claim`.
+- `nomos-api`'s gate response: `Test_A_Judged_Outcome_Should_Name_Only_The_Empty_Population_Beside_An_Unchanged_Claim`,
+  and through `Handle_Gate_Run` over a real tree,
+  `Test_A_Rule_That_Judged_Nothing_Should_Reach_A_Headless_Caller_Beside_An_Unchanged_Verdict`.
+
+Each was shown able to fail by naming every judged rule in place of the empty ones.
+`P186-THE-GATE-REPORT-SARIF-AND-THE-API-DO-NOT-SAY-WHICH-RULES-JUDGED-AN-EMPTY-POPULATION` built
+this amendment.
+
 ## Status
 
-Accepted, version 2. An empty population is reported apart from a clean judgment, in
+Accepted, version 3. An empty population is reported apart from a clean judgment, in
 `CheckOutcome::Judged` itself, and it never flips `Claim`. The owner decided on 2026-09-27 that
 a repository holding no file of a rule's language or kind can be `Complete`. This amendment
 gives every other cause the same answer, because no count separates the owner's case from a
@@ -345,4 +428,14 @@ tree's walked sources and is not.
 Version 1's claim that all four script rules report an empty population, its `Claim` flip with
 the Advisory disposition that went with it, and its reading of the slice `run_context` holds are
 superseded. `P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM`
-builds the rest.
+built decisions 1 and 2.
+
+The owner ratified decision 2 on 2026-10-03, on the condition that the rules that judged an empty
+population are prominent in the default output and never behind a flag. Version 3's decision 4
+meets it: `nomos check`'s and `nomos gate run`'s text reports, the SARIF log both write, and
+`nomos-api`'s check and gate responses each name every such rule beside the claim, and say
+nothing new when there is none. The SARIF log carries them as the run's own
+`properties.emptyPopulations`, never as a result and never as a notification that would move
+`executionSuccessful`.
+`P186-THE-GATE-REPORT-SARIF-AND-THE-API-DO-NOT-SAY-WHICH-RULES-JUDGED-AN-EMPTY-POPULATION` built
+it.
