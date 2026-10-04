@@ -28,5 +28,7 @@ mod authored;
 mod board;
 #[path = "list_tells_the_truth/dependencies.rs"]
 mod dependencies;
+#[path = "list_tells_the_truth/filters.rs"]
+mod filters;
 #[path = "list_tells_the_truth/territory.rs"]
 mod territory;

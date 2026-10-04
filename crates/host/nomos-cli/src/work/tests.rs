@@ -10,9 +10,11 @@
 use super::*;
 
 mod exit_codes;
+mod filters;
 mod listing;
 mod parsing;
 mod separator;
+mod show_prefix;
 mod vocabulary;
 
 /// Splits a command line into the arguments a caller would hand the parser -- the one

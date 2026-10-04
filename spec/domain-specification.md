@@ -186,7 +186,7 @@ profile: domain-specification
 | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md@authored | docs/records/OD-LEDGER-038-an-item-can-be-ended-honestly-and-leave-other-items-silently-unreachable.md | authored | 38 | 12 | sha256:3f4aaa811751dfe23680bbf1316a4d38df6ed399ce726d73c5c26ce7a7446248 |
 | docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md@authored | docs/records/OD-LEDGER-039-a-territory-is-widened-by-its-live-holder-under-the-same-exclusion-and-the-widening-is-recorded.md | authored | 45 | 14 | sha256:0f04f2115865a82563d10f7a04c93ede3fc867323c9fb699ab5fb621b5e9bbef |
 | docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md@authored | docs/records/OD-LEDGER-040-a-verification-predicate-need-not-reach-the-crates-its-own-territory-names.md | authored | 43 | 9 | sha256:c973fe19d817ea8c123d41d6c65275fd375472faa79ef3bd371bbff8960ea88c |
-| docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md@authored | docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md | authored | 28 | 7 | sha256:51121e911dba742e7aafa19ba0d8fdb22d486b932bbf60a69f0ee59098694ed0 |
+| docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md@authored | docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md | authored | 43 | 11 | sha256:a584e0b378b608c65247327bebe8c0685066bc5ed82f4775fff460d262b24b8d |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md@authored | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md | authored | 29 | 8 | sha256:dea2667f08661d51389468ccb32132d696dd6cb5a0936574b89125c523341962 |
 | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md@authored | docs/records/OD-MODEL-002-an-identifier-is-derived-from-semantic-addressing-wherever-possible-and-minting-one-is-an-exception-with-a-stated-reason.md | authored | 24 | 7 | sha256:aba629fefa9d9503489cfcae8626b61030287a2f29e558cf0b775875eb32c5b7 |
 | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md@authored | docs/records/OD-PACKAGE-001-independently-versioned-is-a-property-of-a-package-and-this-build-has-no-package.md | authored | 54 | 10 | sha256:0a930d2a044d183c00fc821119d1645738cb398a9374b5a6eb3a736cb50764d2 |
@@ -1928,7 +1928,11 @@ profile: domain-specification
 | docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#12 | authored | 2 | Decision |
 | docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#20 | authored | 2 | What Would Decide It Differently |
 | docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#23 | authored | 2 | What This Does Not Decide |
-| docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#27 | authored | 2 | Status |
+| docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#27 | authored | 2 | Amendment, Version 2 |
+| docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#28 | authored | 3 | The fourth trigger arrived, through agents scripting against the file |
+| docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#33 | authored | 3 | Decision |
+| docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#37 | authored | 3 | The other three triggers, re-measured |
+| docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#41 | authored | 2 | Status |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1 | authored | 1 | A claim and a fact address a path by one rule, and the record-identifier fold stays with the ledger |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#2 | authored | 2 | Question |
 | docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#8 | authored | 2 | What Was Actually Wrong |
@@ -58960,23 +58964,167 @@ mean, and nothing in this repository has needed one.
 
 ### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#26
 
-*revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / What This Does Not Decide · hash: sha256:f4a0374beea43f3d2450ba1267f030010e72e88422b759723a60f2a7874cde2b*
+*revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / What This Does Not Decide · hash: sha256:b7f30ab1356cab43c375f37098ab4ee1b88ec130759fc7ed94e52d150a79ed1b*
 
-Whether the board should ever be queryable rather than only loadable. The fourth trigger above
-is where that question would arrive, and it belongs to whichever consumer raises it.
+Whether the board should ever be served to a consumer that is not this binary. The fourth
+trigger above arrived as agents with a shell, and version 2 below answers them with a verb; an
+editor surface or a transport would raise the question again, and it belongs to whichever one
+does.
 
 ### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#27
+
+*revision: authored · kind: heading · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 · hash: sha256:5cb944a4a1301e8ad3517f1765a04a3f16c2d31cb5ec1b14acf903dbfedfe51e*
+
+## Amendment, Version 2
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#28
+
+*revision: authored · kind: heading · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 / The fourth trigger arrived, through agents scripting against the file · hash: sha256:75660a2f791ddcd33ab64a4f2cb6ad499163585513cf52db98e064d305a876ca*
+
+### The fourth trigger arrived, through agents scripting against the file
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#29
+
+*revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 / The fourth trigger arrived, through agents scripting against the file · hash: sha256:464062b2bd8e5c510feaa5a0a5831eb8043486c5b3e06a8d05dad5840645a1e0*
+
+Version 1 named, as the fourth number that would decide this differently, a consumer that must
+read the board without parsing it whole, and expected an editor surface or a transport. It
+arrived as agents.
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#30
+
+*revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 / The fourth trigger arrived, through agents scripting against the file · hash: sha256:a070fb52900fa666c087fdf7674e3f9844f2d889e268ef2cdf1e8d6892484f54*
+
+`P208-NO-VERB-ANSWERS-WHICH-ITEMS-TOUCH-A-PATH-OR-MENTION-A-RECORD-SO-AGENTS-SCRIPT-AGAINST-THE-RAW-LEDGER`
+measured it on 2026-10-03 over the 67 Claude Code session transcripts this project had kept, by
+matching each shell tool call against `work/ledger.json` and summing what its result returned.
+Sessions of other actors on this tree are outside that population. 1,482 shell calls ran a script
+against the file -- Python, `jq` or `ConvertFrom-Json` -- writing 899 KB of script text, and
+scripts returned 2.7 MB of the 3.6 MB that 2,163 raw reads of the file returned. Over the same
+sessions the built binary's `work list` ran 927 times and returned 2 KB on average. So the cost
+was no longer in the listing version 1 bounded. It was in every question the binary could not
+answer.
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#31
+
+*revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 / The fourth trigger arrived, through agents scripting against the file · hash: sha256:a7b8f5fd28437eccfbd745c2b2e26a839e9a366dd5ddad3b3b674146e9346d00*
+
+What the scripts asked, over a sample of 386 of them: which items reserve or overlap a path, 128;
+one item by id, 72; which items cite a record, 55; a state filter, 45; dependencies, 12; other, 74.
+Only the state filter had a verb. `work show` took only the exact id, which runs past a hundred
+characters, and a P-number does not name an item: 96 of the 153 in use were shared on 2026-09-26.
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#32
+
+*revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 / The fourth trigger arrived, through agents scripting against the file · hash: sha256:d6d537eae24c1213157a8468293f53fd39596883927892f458e500ac9923fcad*
+
+A script is also outside `OD-LEDGER-008`. The ledger moved from schema 6 to 7 while this was
+being measured; a stale binary refused it, and a script would have read on.
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#33
+
+*revision: authored · kind: heading · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 / Decision · hash: sha256:0bcc4df0f4d118d8d8e6130e70b50471139dfce65e9097016e75ae968425f370*
+
+### Decision
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#34
+
+*revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 / Decision · hash: sha256:f1b269a99d00d75944b0e23f8c38e2653e168fae1af27d05fe0ef6c7f7d24d10*
+
+**The question is answered by more of the view this record already bounded: two filters on the
+listing, and an id prefix on `show`.** Not by a second file, not by a query language, and not by
+a board served to another process.
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#35
+
+*revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 / Decision · hash: sha256:9bfcc0efcca1b0ff5e18ad128c8b8990aa992b33c7d01ac45348de999a87722e*
+
+- `nomos work list --touching <path>` prints exactly the items whose territory a claim on that
+  one path would overlap. It is decided by the territory intersection a claim's exclusion is
+  decided by, so containment in either direction counts and a record file folds onto its
+  identifier. An item whose overlap cannot be decided is printed and marked, never left out,
+  because the claim check refuses on that answer.
+- `nomos work list --mentions <text>` prints exactly the items whose id, title, `why`,
+  `done_when` or a recorded reason contains the text, literally and case-sensitively.
+- Both narrow what `--state` or `--all` admits and change neither bound. The line counting what
+  the bound withheld counts only the ended items the filters admit, and a listing either one
+  narrowed names no `next:` item. Both are carried in the request `nomos-work-orchestration`
+  takes, and the answer for one item is decided there, so a second adapter cannot answer it
+  differently.
+- `nomos work show --item <text>` also takes the start of exactly one id, up to a hyphen, so
+  `P19` never names `P190-...`. A text several ids begin with names them all and shows none.
+  Every verb that changes the board still takes the whole id, because a verb that acts on a
+  guess acts on the wrong item the day the guess is wrong.
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#36
+
+*revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 / Decision · hash: sha256:2df965e6963de743d774c9366ecb053de8c02cbb2997c5ac5a132d4700273a77*
+
+A second file is the archive version 1 refused, for reasons none of these measurements touch. A
+query language would be a second vocabulary for territory, and the one answer that matters --
+whether two reservations overlap -- has exactly one implementation, which a language would have
+to restate or wrap. A board served to another process is the consumer version 1 expected, and it
+has not arrived; the one that did is a session with a shell, which a verb serves.
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#37
+
+*revision: authored · kind: heading · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 / The other three triggers, re-measured · hash: sha256:33bb779f5e5f8d82667c73e9129b1b14a543478732af0b1be97de7c5a524dc6e*
+
+### The other three triggers, re-measured
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#38
+
+*revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 / The other three triggers, re-measured · hash: sha256:bf781c3fe57a56e7869c7db99cd765fade37025e6cf0eb024d2da6438e8598c3*
+
+At `2b8a1aa2`, 2026-10-03.
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#39
+
+*revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 / The other three triggers, re-measured · hash: sha256:d5e0b5165e9c25ba796c5b1ac0cb90216ed82cf29a969a2a85d703e46b22456c*
+
+- **`nomos work list` latency.** On a debug build with process start included, twelve
+  consecutive runs took 250 to 478 milliseconds while compiler processes from other sessions
+  loaded the machine, and listings narrowed by either filter took 139 to 329. The first run of a
+  freshly copied executable took 3.8 seconds and its second 218 milliseconds, so that cost is
+  the operating system's check of a new binary and not the listing. Below 500. Version 1's 37
+  milliseconds named no build and no method, so the two figures are not a trend.
+- **The ledger's packed history.** The 34 versions of `work/ledger.json` reachable from `dev`
+  pack to 1,724,060 bytes, against 11,397,276 bytes for everything reachable from `dev`: 15.1 per
+  cent, against a third. Both were packed with their deltas recomputed
+  (`git pack-objects --no-reuse-delta`), because the local repository's stored pack, which still
+  holds history from before the rewrite of 2026-10-01 through old refs, put the figure about
+  fourteen times higher the same day.
+- **The live coordination set.** 7 of 1,672 items, against hundreds. The file is 8,880,406
+  bytes.
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#40
+
+*revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Amendment, Version 2 / The other three triggers, re-measured · hash: sha256:efc7d1d63b382e100ea6a3f79569280733f421159252f69c74c5cf3365583290*
+
+None is crossed, so version 1's decision stands unchanged: terminal items stay on the board.
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#41
 
 *revision: authored · kind: heading · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#28
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#42
 
 *revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Status · hash: sha256:cbf4c58797eec8f2a5f5356e40020bb2467a0db21395194dc9d6d7b5bdadfa7f*
 
 Accepted. No item moves, no file is created, no verb changes, and the one increment this record
 names is owed by a separate item.
+
+### docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#43
+
+*revision: authored · kind: prose · heading: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file / Status · hash: sha256:151fc94985ffb8c3e455c124eabff07316a4ec84a0d869a824cc6ab958f8e8eb*
+
+Version 2 was amended by
+`P208-NO-VERB-ANSWERS-WHICH-ITEMS-TOUCH-A-PATH-OR-MENTION-A-RECORD-SO-AGENTS-SCRIPT-AGAINST-THE-RAW-LEDGER`,
+which records the fourth trigger's arrival, answers it with two listing filters and an id prefix
+on `show`, re-measures the other three triggers, and leaves the decision that terminal items stay
+on the board unchanged.
 
 ### docs/records/OD-MODEL-001-a-claim-and-a-fact-address-a-path-by-one-rule-and-the-record-fold-stays-with-the-ledger.md#1
 

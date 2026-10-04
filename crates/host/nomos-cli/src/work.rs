@@ -17,6 +17,7 @@ use nomos_work_orchestration::{BoardView, ShowView, WorkOutcome};
 use std::path::Path;
 
 mod exit_code;
+mod item_named;
 mod listing;
 mod parse;
 mod report;
@@ -26,11 +27,12 @@ mod tests;
 pub use parse::Work_Command_From_String_Arguments;
 
 pub(crate) use exit_code::ExitCode;
-pub(crate) use nomos_work_orchestration::{ClaimRequest, EndingRequest, ListingScope, WorkCommand};
+pub(crate) use nomos_work_orchestration::{ClaimRequest, EndingRequest, ListingFilters, ListingScope, WorkCommand};
 
+use item_named::{Item_Named, Named};
 use listing::{
-    Bounds, Listed_As, Listing_Label, Nothing_Listed, Print_Claim, Print_Contract, Print_History,
-    Print_Listing,
+    Admission_Note, Bounds, Listing_Label, Nothing_Listed, Print_Claim, Print_Contract,
+    Print_History, Print_Listing, Row_Of,
 };
 use report::{
     Amendment_Note, Blocking_Refusal, Code_For_Refusal, Ended, Print_Blocked, Report_Claim,
@@ -193,9 +195,9 @@ fn Render_Outcome(command: &WorkCommand, outcome: WorkOutcome, directory: &Path,
 {
     return match (command, outcome)
     {
-        (WorkCommand::List { state, scope }, WorkOutcome::List(result)) =>
+        (WorkCommand::List { state, scope, filters }, WorkOutcome::List(result)) =>
         {
-            Render_List(Bounds { state: state.as_deref(), scope: *scope }, result, output)
+            Render_List(Bounds { state: state.as_deref(), scope: *scope, filters }, result, output)
         }
         (WorkCommand::Show { item }, WorkOutcome::Show(result)) => Render_Show(item, result, output),
         (WorkCommand::Add { item, amending }, WorkOutcome::Add(result)) =>
@@ -245,9 +247,9 @@ fn Render_List(
     return ExitCode::Ok;
 }
 
-/// Every item `bounds` admits, or the "nothing" line when none was -- and, on the unfiltered
-/// board only, how many rows the bound withheld and the one line naming which item to claim
-/// next.
+/// Every item `bounds` admits, or the "nothing" line when none was -- and, with no state named,
+/// how many ended rows the bound withheld, and on a listing no filter narrowed, the one line
+/// naming which item to claim next.
 ///
 /// `document` is the whole board at every step, and that is a constraint rather than an
 /// incidental argument. [`Listing_Label`] reads a dependency's terminal state to decide
@@ -266,25 +268,31 @@ fn Print_Board(
     let mut shown = 0_u32;
     for item in &document.items
     {
-        let Some(label) = Listed_As(document, item, bounds, now)
+        let Some(row) = Row_Of(document, item, bounds, now)
         else
         {
             continue;
         };
-        Print_Listing(item, label, &Blocked_Note(&Blocking_Claims(document, &item.id, now), now), output);
+        let blocked = Blocked_Note(&Blocking_Claims(document, &item.id, now), now);
+        Print_Listing(item, row.label, &format!("{blocked}{}", Admission_Note(row.admission)), output);
         shown = shown.saturating_add(1);
     }
     if shown == 0
     {
         Nothing_Listed(bounds, output);
     }
-    // Only on the unfiltered board. `--state` asks for one bucket's rows, and a summary
-    // naming an item outside that bucket would contradict the very filter the caller asked
-    // for -- `--state lapsed` is not the place to also learn what is `Ready` elsewhere.
+    // Only with no state named. `--state` asks for one bucket's rows, and a summary naming an
+    // item outside that bucket would contradict the very filter the caller asked for --
+    // `--state lapsed` is not the place to also learn what is `Ready` elsewhere. A filter
+    // narrows the rows for the same reason, so it silences the `next:` line too; the withheld
+    // count stays, counting only what the filters admitted.
     if bounds.state.is_none()
     {
-        Print_Withheld(document, bounds.scope, output);
-        Print_Next(document, now, output);
+        Print_Withheld(document, bounds, output);
+        if bounds.filters.Is_Empty()
+        {
+            Print_Next(document, now, output);
+        }
     }
 }
 
@@ -298,25 +306,37 @@ fn Print_Board(
 /// no `--state` those are the same number, and this one cannot later be made wrong by a
 /// filter's own exclusions being added into it.
 ///
-/// Silent under [`ListingScope::Whole`], and silent on a board with nothing ended: neither
-/// withheld anything, and a line reporting zero is a line every reader has to stop and check.
-fn Print_Withheld(document: &LedgerDocument, scope: ListingScope, output: &mut impl std::io::Write)
+/// Only the ended items the filters admit are counted, because those are the rows `--all` would
+/// add to this listing; an ended item no filter admits is not withheld from it. The flag is then
+/// named as an addition to the same listing, since `--all` alone prints the board unfiltered.
+///
+/// Silent under [`ListingScope::Whole`], and silent when nothing was withheld: a line reporting
+/// zero is a line every reader has to stop and check.
+fn Print_Withheld(document: &LedgerDocument, bounds: Bounds<'_>, output: &mut impl std::io::Write)
 {
-    if scope != ListingScope::Live
+    if bounds.scope != ListingScope::Live
     {
         return;
     }
 
-    let withheld = document.items.iter().filter(|item| return item.state.Is_Finished()).count();
+    let withheld = document
+        .items
+        .iter()
+        .filter(|item| return item.state.Is_Finished() && bounds.filters.Admits(item).is_some())
+        .count();
     if withheld == 0
     {
         return;
     }
 
-    let _ = writeln!(
-        output,
-        "{withheld} ended items not shown; `nomos work list --all` prints the whole board"
-    );
+    let _ = if bounds.filters.Is_Empty()
+    {
+        writeln!(output, "{withheld} ended items not shown; `nomos work list --all` prints the whole board")
+    }
+    else
+    {
+        writeln!(output, "{withheld} ended items match and are not shown; add `--all` to this listing to print them")
+    };
 }
 
 /// The one line that answers "which one": the first item [`nomos_ledger::Eligible_Items`]
@@ -358,11 +378,15 @@ fn Render_Show(
         Err(error) => return Report_Error(&error, output),
     };
 
-    let Some(found) = document.items.iter().find(|candidate| return &candidate.id == item)
-    else
+    let found = match Item_Named(&document, item)
     {
-        let _ = writeln!(output, "no item named {item}");
-        return ExitCode::Conflict;
+        Named::One(found) => found,
+        Named::Several(ids) => return Report_Several(item, &ids, output),
+        Named::Nothing =>
+        {
+            let _ = writeln!(output, "no item named {item}");
+            return ExitCode::Conflict;
+        }
     };
     let label = Listing_Label(&document, found, now);
 
@@ -372,7 +396,7 @@ fn Render_Show(
     // Directly under the state word, because `held` is the word these lines explain and a
     // reader who has to look further down to learn who is holding them has been told the
     // state and not the reason for it.
-    for line in Blocked_Lines(&Blocking_Claims(&document, item, now), now)
+    for line in Blocked_Lines(&Blocking_Claims(&document, &found.id, now), now)
     {
         let _ = writeln!(output, "{line}");
     }
@@ -381,6 +405,22 @@ fn Render_Show(
     Print_Contract(found, output);
 
     return ExitCode::Ok;
+}
+
+/// A text that begins several ids and is none of them: every id it begins, one per line, so the
+/// reader can copy the one they meant.
+///
+/// A usage error, because the command line is what was wrong -- it named no single item -- and
+/// the same command with more of the id answers it.
+fn Report_Several(text: &ItemId, ids: &[&ItemId], output: &mut impl std::io::Write) -> ExitCode
+{
+    let _ = writeln!(output, "{text} begins {} item ids and is none of them; name one:", ids.len());
+    for id in ids
+    {
+        let _ = writeln!(output, "  {id}");
+    }
+
+    return ExitCode::Usage;
 }
 
 fn Render_Add(

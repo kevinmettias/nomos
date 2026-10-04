@@ -7,14 +7,14 @@
 
 use nomos_ledger::{ItemId, LedgerItem, Territory};
 
-use crate::{ClaimRequest, EndingRequest, ListingScope};
+use crate::{ClaimRequest, EndingRequest, ListingFilters, ListingScope};
 
 /// What to do.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum WorkCommand
 {
-    /// Show items, bounded by how much of the board to draw from and optionally filtered
-    /// by state.
+    /// Show items, bounded by how much of the board to draw from or by a state, and
+    /// optionally narrowed by the path they touch and the text they mention.
     List
     {
         /// Only items in this state.
@@ -26,11 +26,16 @@ pub enum WorkCommand
         /// a scope applied on top of it would answer a question with none of the rows it
         /// named. `OD-LEDGER-041`.
         scope: ListingScope,
+        /// Which of the rows that bound admits are listed. Never a bound itself: a filter
+        /// narrows what the state or the scope admits, and changes neither.
+        /// `OD-LEDGER-041` version 2.
+        filters: ListingFilters,
     },
     /// Report one item, including what has happened to it.
     Show
     {
-        /// Which item.
+        /// Which item: its id, or the start of exactly one id up to a hyphen, which a caller
+        /// resolves against the board [`crate::ShowView`] hands back.
         item: ItemId,
     },
     /// Put a new item on the ledger.

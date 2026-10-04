@@ -6,16 +6,27 @@
 
 /// Every verb and what it takes.
 pub(super) const VERBS: &str = "\x20 list     [--state ready|waiting|held|lapsed|snagged|stranded|claimed|blocked|done|declined] [--all]\n\
+     \x20          [--touching <path>] [--mentions <text>]\n\
      \x20          the live board by default: every item that has not ended. `--all` prints \
      the whole board, the finished and the declined with it, and a bounded listing says at \
      its foot how many rows that would add. `--state` names one bucket and answers with it \
      whether or not that bucket has ended. `OD-LEDGER-041`.\n\
+     \x20          `--touching` keeps the items a claim on that one path would overlap -- a \
+     directory reserves every file beneath it, and a record file is its identifier -- and \
+     marks a row whose overlap cannot be decided rather than leaving it out. `--mentions` \
+     keeps the items whose id, title, why, done_when or a recorded reason contains the text, \
+     literally and case-sensitively. Both narrow whatever `--state` or `--all` admits and \
+     change neither, and a listing either one narrowed names no `next:` item.\n\
      \x20          `ready` means claimable now. An item nothing can claim is reported as \
      `waiting` (a dependency is unfinished), `held` (somebody holds overlapping territory), \
      `lapsed` (its holder's lease ran out, so `takeover` applies), `snagged` (independence \
      cannot be established) or `stranded` (a dependency was declined and will never finish), \
      from the same refusal `claim` would give.\n\
-     \x20 show     --item <id>\n\
+     \x20 show     --item <id or the start of one>\n\
+     \x20          `--item` takes an id prefix too: the start of exactly one id, up to a \
+     hyphen, so `P19` names `P19-...` and never `P190-...`, and a prefix several ids begin \
+     with prints them all and shows none. Only `show` takes a prefix; every verb that changes \
+     the board takes the whole id.\n\
      \x20          one item in full: its claim, every claim given up on it with the reason \
      given, its verification, and then its contract — the `why` and the `done_when` whole and \
      unabridged, the paths it reserves, and the predicate declared to judge it. `list` is a \

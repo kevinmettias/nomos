@@ -7,7 +7,7 @@ use super::Added;
 use super::Arguments;
 use super::{Alternatives_After, FlagAlternatives, Sorted_Words};
 use super::super::parse::Usage_Text;
-use super::super::{ListingScope, WorkCommand, Work_Command_From_String_Arguments};
+use super::super::{ListingFilters, ListingScope, WorkCommand, Work_Command_From_String_Arguments};
 use nomos_ledger::{ItemKind, ItemOrigin};
 
 /// Every kind an item can declare.
@@ -197,7 +197,7 @@ fn Test_The_Contracts_Step_Two_Should_Offer_The_Flag_This_Command_Line_Takes()
         assert_eq!(
             Work_Command_From_String_Arguments(&Arguments(&format!("list {flag}")))
                 .expect("`list` takes no argument that can be wrong"),
-            WorkCommand::List { state: None, scope: ListingScope::Whole },
+            WorkCommand::List { state: None, scope: ListingScope::Whole, filters: ListingFilters::default() },
             "AGENTS.md step 2 offers `{flag}`, and `nomos work list {flag}` does not answer \
              with the whole board"
         );

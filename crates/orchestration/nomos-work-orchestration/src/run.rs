@@ -279,7 +279,7 @@ mod tests
 {
     use super::Run;
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
-    use crate::{ListingScope, WorkCommand};
+    use crate::{ListingFilters, ListingScope, WorkCommand};
     use nomos_ledger::{FileLedger, Territory};
     use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
 
@@ -310,7 +310,7 @@ mod tests
     {
         let mut ledger = Scratch_Ledger();
 
-        let outcome = Run(&WorkCommand::List { state: None, scope: ListingScope::Live }, &mut ledger, &Unreached, Territory::Empty);
+        let outcome = Run(&WorkCommand::List { state: None, scope: ListingScope::Live, filters: ListingFilters::default() }, &mut ledger, &Unreached, Territory::Empty);
 
         let super::WorkOutcome::List(Ok(view)) = outcome
         else

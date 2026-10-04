@@ -2,7 +2,7 @@
 //! which take the same words from being one verb.
 
 use super::Added;
-use super::super::{ClaimRequest, EndingRequest, ItemId, LedgerItem, ListingScope, Territory, WorkCommand, Work_Command_From_String_Arguments};
+use super::super::{ClaimRequest, EndingRequest, ItemId, LedgerItem, ListingFilters, ListingScope, Territory, WorkCommand, Work_Command_From_String_Arguments};
 use super::Arguments;
 use super::super::parse::{Parse_Duration, Usage_Text};
 use nomos_ledger::{DEFAULT_LEASE, ItemState};
@@ -386,12 +386,12 @@ fn Test_List_Should_Default_To_The_Live_Board_And_Take_All_For_The_Whole_One()
     assert_eq!(
         Work_Command_From_String_Arguments(&Arguments("list"))
             .expect("`list` takes no argument that can be wrong"),
-        WorkCommand::List { state: None, scope: ListingScope::Live }
+        WorkCommand::List { state: None, scope: ListingScope::Live, filters: ListingFilters::default() }
     );
     assert_eq!(
         Work_Command_From_String_Arguments(&Arguments("list --all"))
             .expect("`list --all` takes no argument that can be wrong"),
-        WorkCommand::List { state: None, scope: ListingScope::Whole }
+        WorkCommand::List { state: None, scope: ListingScope::Whole, filters: ListingFilters::default() }
     );
 }
 
@@ -403,11 +403,36 @@ fn Test_List_Should_Read_The_State_Filter_And_The_Scope_Independently()
     assert_eq!(
         Work_Command_From_String_Arguments(&Arguments("list --state done"))
             .expect("`list --state done` takes no argument that can be wrong"),
-        WorkCommand::List { state: Some("done".to_owned()), scope: ListingScope::Live }
+        WorkCommand::List { state: Some("done".to_owned()), scope: ListingScope::Live, filters: ListingFilters::default() }
     );
     assert_eq!(
         Work_Command_From_String_Arguments(&Arguments("list --state done --all"))
             .expect("`list --state done --all` takes no argument that can be wrong"),
-        WorkCommand::List { state: Some("done".to_owned()), scope: ListingScope::Whole }
+        WorkCommand::List { state: Some("done".to_owned()), scope: ListingScope::Whole, filters: ListingFilters::default() }
+    );
+}
+
+/// The two filters reach the request beside the state and the scope, each read on its own and
+/// neither displacing a bound. `OD-LEDGER-041` version 2.
+#[test]
+fn Test_List_Should_Carry_Both_Filters_In_The_Request_Beside_Its_Bounds()
+{
+    assert_eq!(
+        Work_Command_From_String_Arguments(&Arguments("list --touching crates/a --mentions OD-LEDGER-041 --state done --all"))
+            .expect("`list` takes no argument that can be wrong"),
+        WorkCommand::List {
+            state: Some("done".to_owned()),
+            scope: ListingScope::Whole,
+            filters: ListingFilters { touching: Some("crates/a".to_owned()), mentions: Some("OD-LEDGER-041".to_owned()) },
+        }
+    );
+    assert_eq!(
+        Work_Command_From_String_Arguments(&Arguments("list --mentions OD-LEDGER-041"))
+            .expect("`list` takes no argument that can be wrong"),
+        WorkCommand::List {
+            state: None,
+            scope: ListingScope::Live,
+            filters: ListingFilters { touching: None, mentions: Some("OD-LEDGER-041".to_owned()) },
+        }
     );
 }

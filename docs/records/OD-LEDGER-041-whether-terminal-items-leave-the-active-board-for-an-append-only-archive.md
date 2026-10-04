@@ -3,7 +3,7 @@ id: OD-LEDGER-041
 type: decision
 title: Terminal items stay on the board because the claim check reads them, and the cost that was measured is the listing's unbounded default rather than the file
 status: accepted
-version: 1
+version: 2
 authority: canonical-normative-record
 tags:
   - ledger
@@ -153,10 +153,94 @@ Whether a declined item should be kept forever. This record measures that 348 of
 little and are read by the claim check; it does not decide what a deliberate deletion would
 mean, and nothing in this repository has needed one.
 
-Whether the board should ever be queryable rather than only loadable. The fourth trigger above
-is where that question would arrive, and it belongs to whichever consumer raises it.
+Whether the board should ever be served to a consumer that is not this binary. The fourth
+trigger above arrived as agents with a shell, and version 2 below answers them with a verb; an
+editor surface or a transport would raise the question again, and it belongs to whichever one
+does.
+
+## Amendment, Version 2
+
+### The fourth trigger arrived, through agents scripting against the file
+
+Version 1 named, as the fourth number that would decide this differently, a consumer that must
+read the board without parsing it whole, and expected an editor surface or a transport. It
+arrived as agents.
+
+`P208-NO-VERB-ANSWERS-WHICH-ITEMS-TOUCH-A-PATH-OR-MENTION-A-RECORD-SO-AGENTS-SCRIPT-AGAINST-THE-RAW-LEDGER`
+measured it on 2026-10-03 over the 67 Claude Code session transcripts this project had kept, by
+matching each shell tool call against `work/ledger.json` and summing what its result returned.
+Sessions of other actors on this tree are outside that population. 1,482 shell calls ran a script
+against the file -- Python, `jq` or `ConvertFrom-Json` -- writing 899 KB of script text, and
+scripts returned 2.7 MB of the 3.6 MB that 2,163 raw reads of the file returned. Over the same
+sessions the built binary's `work list` ran 927 times and returned 2 KB on average. So the cost
+was no longer in the listing version 1 bounded. It was in every question the binary could not
+answer.
+
+What the scripts asked, over a sample of 386 of them: which items reserve or overlap a path, 128;
+one item by id, 72; which items cite a record, 55; a state filter, 45; dependencies, 12; other, 74.
+Only the state filter had a verb. `work show` took only the exact id, which runs past a hundred
+characters, and a P-number does not name an item: 96 of the 153 in use were shared on 2026-09-26.
+
+A script is also outside `OD-LEDGER-008`. The ledger moved from schema 6 to 7 while this was
+being measured; a stale binary refused it, and a script would have read on.
+
+### Decision
+
+**The question is answered by more of the view this record already bounded: two filters on the
+listing, and an id prefix on `show`.** Not by a second file, not by a query language, and not by
+a board served to another process.
+
+- `nomos work list --touching <path>` prints exactly the items whose territory a claim on that
+  one path would overlap. It is decided by the territory intersection a claim's exclusion is
+  decided by, so containment in either direction counts and a record file folds onto its
+  identifier. An item whose overlap cannot be decided is printed and marked, never left out,
+  because the claim check refuses on that answer.
+- `nomos work list --mentions <text>` prints exactly the items whose id, title, `why`,
+  `done_when` or a recorded reason contains the text, literally and case-sensitively.
+- Both narrow what `--state` or `--all` admits and change neither bound. The line counting what
+  the bound withheld counts only the ended items the filters admit, and a listing either one
+  narrowed names no `next:` item. Both are carried in the request `nomos-work-orchestration`
+  takes, and the answer for one item is decided there, so a second adapter cannot answer it
+  differently.
+- `nomos work show --item <text>` also takes the start of exactly one id, up to a hyphen, so
+  `P19` never names `P190-...`. A text several ids begin with names them all and shows none.
+  Every verb that changes the board still takes the whole id, because a verb that acts on a
+  guess acts on the wrong item the day the guess is wrong.
+
+A second file is the archive version 1 refused, for reasons none of these measurements touch. A
+query language would be a second vocabulary for territory, and the one answer that matters --
+whether two reservations overlap -- has exactly one implementation, which a language would have
+to restate or wrap. A board served to another process is the consumer version 1 expected, and it
+has not arrived; the one that did is a session with a shell, which a verb serves.
+
+### The other three triggers, re-measured
+
+At `2b8a1aa2`, 2026-10-03.
+
+- **`nomos work list` latency.** On a debug build with process start included, twelve
+  consecutive runs took 250 to 478 milliseconds while compiler processes from other sessions
+  loaded the machine, and listings narrowed by either filter took 139 to 329. The first run of a
+  freshly copied executable took 3.8 seconds and its second 218 milliseconds, so that cost is
+  the operating system's check of a new binary and not the listing. Below 500. Version 1's 37
+  milliseconds named no build and no method, so the two figures are not a trend.
+- **The ledger's packed history.** The 34 versions of `work/ledger.json` reachable from `dev`
+  pack to 1,724,060 bytes, against 11,397,276 bytes for everything reachable from `dev`: 15.1 per
+  cent, against a third. Both were packed with their deltas recomputed
+  (`git pack-objects --no-reuse-delta`), because the local repository's stored pack, which still
+  holds history from before the rewrite of 2026-10-01 through old refs, put the figure about
+  fourteen times higher the same day.
+- **The live coordination set.** 7 of 1,672 items, against hundreds. The file is 8,880,406
+  bytes.
+
+None is crossed, so version 1's decision stands unchanged: terminal items stay on the board.
 
 ## Status
 
 Accepted. No item moves, no file is created, no verb changes, and the one increment this record
 names is owed by a separate item.
+
+Version 2 was amended by
+`P208-NO-VERB-ANSWERS-WHICH-ITEMS-TOUCH-A-PATH-OR-MENTION-A-RECORD-SO-AGENTS-SCRIPT-AGAINST-THE-RAW-LEDGER`,
+which records the fourth trigger's arrival, answers it with two listing filters and an id prefix
+on `show`, re-measures the other three triggers, and leaves the decision that terminal items stay
+on the board unchanged.

@@ -1,8 +1,8 @@
 //! What `nomos work list` and `show` print, held against the board they print it from.
 
 use super::super::{
-    Bounds, ExitCode, ItemId, LedgerDocument, LedgerItem, ListingScope, Listing_Label, Print_Board,
-    Render_Show, ShowView, Territory,
+    Bounds, ExitCode, ItemId, LedgerDocument, LedgerItem, ListingFilters, ListingScope, Listing_Label,
+    Print_Board, Render_Show, ShowView, Territory,
 };
 use super::{Alternatives_After, FlagAlternatives, Sorted_Words};
 use super::super::parse::Usage_Text;
@@ -10,14 +10,17 @@ use nomos_ledger::{ItemKind, ItemOrigin, ItemState};
 use nomos_platform::Timestamp;
 
 /// The instant every state fixture below treats as now.
-const LISTING_NOW: i64 = 2_000;
+pub(super) const LISTING_NOW: i64 = 2_000;
+
+/// No filter: every listing below is about the bound, and the filters are held by their own suite.
+const NO_FILTERS: ListingFilters = ListingFilters { touching: None, mentions: None };
 
 /// A bare `Ready` item reserving one file named after it, and nothing else.
 ///
 /// Every fixture below starts here and changes exactly the one thing whose label it is after,
 /// so a fixture that produces the wrong word is wrong about that one thing rather than about
 /// its whole shape.
-fn Listing_Item(id: &str) -> LedgerItem
+pub(super) fn Listing_Item(id: &str) -> LedgerItem
 {
     return LedgerItem {
         id: ItemId::New(id),
@@ -132,7 +135,7 @@ fn Blocked(id: &str) -> LedgerItem
     return item;
 }
 
-fn Done(id: &str) -> LedgerItem
+pub(super) fn Done(id: &str) -> LedgerItem
 {
     let mut item = Listing_Item(id);
     item.state = ItemState::Done;
@@ -265,7 +268,7 @@ fn Pruned(document: &LedgerDocument) -> LedgerDocument
 }
 
 /// What `nomos work list` prints for `document` under `bounds`.
-fn Printed(document: &LedgerDocument, bounds: Bounds<'_>) -> String
+pub(super) fn Printed(document: &LedgerDocument, bounds: Bounds<'_>) -> String
 {
     let mut output = Vec::new();
 
@@ -278,7 +281,7 @@ fn Printed(document: &LedgerDocument, bounds: Bounds<'_>) -> String
 ///
 /// `None` and a row with no label are different failures and this keeps them apart: the rows
 /// are `<id> <label> ...`, so a row that named the item at all yields its second word.
-fn Label_In<'a>(printed: &'a str, item: &str) -> Option<&'a str>
+pub(super) fn Label_In<'a>(printed: &'a str, item: &str) -> Option<&'a str>
 {
     return printed
         .lines()
@@ -292,7 +295,7 @@ fn Label_In<'a>(printed: &'a str, item: &str) -> Option<&'a str>
 #[test]
 fn Test_The_Default_Listing_Should_Print_Only_The_Items_That_Have_Not_Ended()
 {
-    let printed = Printed(&A_Board_Half_Ended(), Bounds { state: None, scope: ListingScope::Live });
+    let printed = Printed(&A_Board_Half_Ended(), Bounds { state: None, scope: ListingScope::Live, filters: &NO_FILTERS });
 
     assert_eq!(Label_In(&printed, "T-2"), Some("ready"), "{printed}");
     assert_eq!(Label_In(&printed, "T-4"), Some("stranded"), "{printed}");
@@ -310,7 +313,7 @@ fn Test_The_Default_Listing_Should_Print_Only_The_Items_That_Have_Not_Ended()
 #[test]
 fn Test_The_Whole_Board_Should_Stay_Reachable_By_The_Scope_That_Asks_For_It()
 {
-    let printed = Printed(&A_Board_Half_Ended(), Bounds { state: None, scope: ListingScope::Whole });
+    let printed = Printed(&A_Board_Half_Ended(), Bounds { state: None, scope: ListingScope::Whole, filters: &NO_FILTERS });
 
     assert_eq!(Label_In(&printed, "T-1"), Some("done"), "{printed}");
     assert_eq!(Label_In(&printed, "T-3"), Some("declined"), "{printed}");
@@ -331,7 +334,7 @@ fn Test_The_Whole_Board_Should_Stay_Reachable_By_The_Scope_That_Asks_For_It()
 fn Test_The_Default_Listing_Should_Label_And_Choose_Next_Over_The_Whole_Board()
 {
     let whole = A_Board_Half_Ended();
-    let bounds = Bounds { state: None, scope: ListingScope::Live };
+    let bounds = Bounds { state: None, scope: ListingScope::Live, filters: &NO_FILTERS };
 
     let printed = Printed(&whole, bounds);
 
@@ -366,7 +369,7 @@ fn Test_The_Default_Listing_Should_Label_And_Choose_Next_Over_The_Whole_Board()
 #[test]
 fn Test_A_Bounded_Listing_Should_Report_How_Many_Rows_It_Withheld_And_The_Flag_That_Prints_Them()
 {
-    let printed = Printed(&A_Board_Half_Ended(), Bounds { state: None, scope: ListingScope::Live });
+    let printed = Printed(&A_Board_Half_Ended(), Bounds { state: None, scope: ListingScope::Live, filters: &NO_FILTERS });
 
     assert!(printed.contains("2 ended items not shown"), "{printed}");
     assert!(printed.contains("--all"), "{printed}");
@@ -376,7 +379,7 @@ fn Test_A_Bounded_Listing_Should_Report_How_Many_Rows_It_Withheld_And_The_Flag_T
 #[test]
 fn Test_An_Unbounded_Listing_Should_Not_Report_Withholding_Anything()
 {
-    let printed = Printed(&A_Board_Half_Ended(), Bounds { state: None, scope: ListingScope::Whole });
+    let printed = Printed(&A_Board_Half_Ended(), Bounds { state: None, scope: ListingScope::Whole, filters: &NO_FILTERS });
 
     assert!(!printed.contains("not shown"), "{printed}");
 }
@@ -390,7 +393,7 @@ fn Test_A_Terminal_State_Filter_Should_Answer_Without_Asking_For_The_Whole_Board
 {
     let printed = Printed(
         &A_Board_Half_Ended(),
-        Bounds { state: Some("declined"), scope: ListingScope::Live },
+        Bounds { state: Some("declined"), scope: ListingScope::Live, filters: &NO_FILTERS },
     );
 
     assert_eq!(Label_In(&printed, "T-3"), Some("declined"), "{printed}");

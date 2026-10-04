@@ -104311,14 +104311,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "opus-b7-p208",
-        "acquired_at": 1791074219,
-        "lease_expires_at": 1791088619
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -104357,7 +104353,75 @@
         ],
         "timeout_seconds": 5400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--bins",
+          "--test",
+          "list_tells_the_truth",
+          "--test",
+          "work_orchestration_seam",
+          "--test",
+          "integration_seams",
+          "--test",
+          "governing_records_are_present",
+          "--test",
+          "round_trip_holds",
+          "--test",
+          "store_holds",
+          "--test",
+          "table_rows",
+          "--test",
+          "public_surface",
+          "--test",
+          "record_citation"
+        ],
+        "exit_code": 0,
+        "output_tail": "  |\n45 | use nomos_workflow_orchestration::{Body, CheckBody, CommitIntent, CorrectionBody, GateBody, Platform, Run, StepOutcome, WorkflowOutcome, ...\n   |                                                     ^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-api` (lib) generated 1 warning (run `cargo fix --lib -p nomos-api` to apply 1 suggestion)\nwarning: `nomos-cli` (bin \"nomos\" test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 21.34s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_api-cc647bda1c93b94b.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-c288ed34ab46b881.exe)\n     Running unittests src\\main.rs (target\\debug\\deps\\nomos-0aa845c35ad96899.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-bf8cae0c0a9b9efc.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-9eea5f799f97f472.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_contract_tests-33c5f605eaa36ff7.exe)\n     Running tests\\public_surface\\main.rs (target\\debug\\deps\\public_surface-a8798fba7f7c8802.exe)\n     Running tests\\record_citation.rs (target\\debug\\deps\\record_citation-6456a6b2043c71bb.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_spec_store-99b5d083e16a92d6.exe)\n     Running tests\\governing_records_are_present\\main.rs (target\\debug\\deps\\governing_records_are_present-3020e436fb3bc056.exe)\n     Running tests\\round_trip_holds\\main.rs (target\\debug\\deps\\round_trip_holds-778bf79b0084b626.exe)\n     Running tests\\store_holds.rs (target\\debug\\deps\\store_holds-d46f8d0939eabbf3.exe)\n     Running tests\\table_rows\\main.rs (target\\debug\\deps\\table_rows-371c6f729d35afee.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_work_orchestration-3b8048e9088adbe2.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-b9b0d2bdc302baba.exe)\n",
+        "verified_at": 1791078469,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "2b8a1aa2e4ed17fb1e6149a3a995779385957869"
+      },
       "abandoned": [],
       "displaced": [
         {

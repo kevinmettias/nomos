@@ -24,14 +24,13 @@
 //! stays with the composition root too: what this crate needs is a recursive walk, and
 //! [`nomos_platform::FileSystem`]'s `Read_Directory` is one level by `OD-PLATFORM-002`'s own
 //! floor; a general exclusion ledger that learned to walk a source tree would be answering a
-//! question about this
-//! that learned to walk a source tree would be answering a question about this
-//! repository's conventions rather than the platform's. `Run`'s `published` argument is
-//! where that value arrives from outside.
+//! question about this repository's conventions rather than the platform's. `Run`'s
+//! `published` argument is where that value arrives from outside.
 
 #![forbid(unsafe_code)]
 
 mod claim_request;
+mod listing_filters;
 mod listing_scope;
 mod work_command;
 mod ending_request;
@@ -42,6 +41,7 @@ mod run;
 mod tests;
 
 pub use claim_request::ClaimRequest;
+pub use listing_filters::{Admission, ListingFilters};
 pub use listing_scope::ListingScope;
 pub use work_command::WorkCommand;
 pub use ending_request::EndingRequest;

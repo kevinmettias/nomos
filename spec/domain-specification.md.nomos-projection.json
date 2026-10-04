@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:830b02ef2c8bc9ec8372886d11fd0f1e84c30d7994714c0979cc4b095593fc82",
-  "inputs_digest": "sha256:b22963fb3b7c10d70dfc4fba173caeca2b6edabb19bd5c8f3f9ea835f599fff7",
+  "content_digest": "sha256:2f0f13c1c5cbfc203a5ba97249ea72728656c33684e2bf80d236707c7cfc2522",
+  "inputs_digest": "sha256:560c6a811e24381370e23f9ae17cd9fbbc48bde2a48e8c970f1d9afcc96e6010",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2627
+      2631
     ],
     [
       "Source blocks",
-      9640
+      9655
     ]
   ],
   "inputs": [
@@ -903,7 +903,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md@authored",
-      "hash": "sha256:51121e911dba742e7aafa19ba0d8fdb22d486b932bbf60a69f0ee59098694ed0"
+      "hash": "sha256:a584e0b378b608c65247327bebe8c0685066bc5ed82f4775fff460d262b24b8d"
     },
     {
       "content": "documents",
@@ -9588,7 +9588,27 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#27",
-      "hash": "sha256:3d7c3bf1153755d0e4d9dc39529d884387bf6030760028df25bbbd60698d6485"
+      "hash": "sha256:6f420a2f1b6d90187a8cab87dc3abebae38ce9f4f554d0a52a28d80d50b67215"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#28",
+      "hash": "sha256:8745f2af776c1a21835e6b24ab0c2b477c62fee1e3884970a63edaf465340401"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#33",
+      "hash": "sha256:bf856aceab14e39e0d77bde49b05b865ae49f2f46293941407c026c70cc1caaf"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#37",
+      "hash": "sha256:a0cbe091b5f13775c73b8aa463f4d3cdfb9c6c4a1dd4c94a3c06ff7d2a58b534"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#41",
+      "hash": "sha256:3f989cb51b278b1e9dc8b0e96382b9791c281fc0f21b6458f81a7e2e5be394cd"
     },
     {
       "content": "headings",
@@ -44593,17 +44613,92 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#26",
-      "hash": "sha256:f4a0374beea43f3d2450ba1267f030010e72e88422b759723a60f2a7874cde2b"
+      "hash": "sha256:b7f30ab1356cab43c375f37098ab4ee1b88ec130759fc7ed94e52d150a79ed1b"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#27",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:5cb944a4a1301e8ad3517f1765a04a3f16c2d31cb5ec1b14acf903dbfedfe51e"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#28",
+      "hash": "sha256:75660a2f791ddcd33ab64a4f2cb6ad499163585513cf52db98e064d305a876ca"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#29",
+      "hash": "sha256:464062b2bd8e5c510feaa5a0a5831eb8043486c5b3e06a8d05dad5840645a1e0"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#30",
+      "hash": "sha256:a070fb52900fa666c087fdf7674e3f9844f2d889e268ef2cdf1e8d6892484f54"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#31",
+      "hash": "sha256:a7b8f5fd28437eccfbd745c2b2e26a839e9a366dd5ddad3b3b674146e9346d00"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#32",
+      "hash": "sha256:d6d537eae24c1213157a8468293f53fd39596883927892f458e500ac9923fcad"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#33",
+      "hash": "sha256:0bcc4df0f4d118d8d8e6130e70b50471139dfce65e9097016e75ae968425f370"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#34",
+      "hash": "sha256:f1b269a99d00d75944b0e23f8c38e2653e168fae1af27d05fe0ef6c7f7d24d10"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#35",
+      "hash": "sha256:9bfcc0efcca1b0ff5e18ad128c8b8990aa992b33c7d01ac45348de999a87722e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#36",
+      "hash": "sha256:2df965e6963de743d774c9366ecb053de8c02cbb2997c5ac5a132d4700273a77"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#37",
+      "hash": "sha256:33bb779f5e5f8d82667c73e9129b1b14a543478732af0b1be97de7c5a524dc6e"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#38",
+      "hash": "sha256:bf781c3fe57a56e7869c7db99cd765fade37025e6cf0eb024d2da6438e8598c3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#39",
+      "hash": "sha256:d5e0b5165e9c25ba796c5b1ac0cb90216ed82cf29a969a2a85d703e46b22456c"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#40",
+      "hash": "sha256:efc7d1d63b382e100ea6a3f79569280733f421159252f69c74c5cf3365583290"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#41",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#42",
       "hash": "sha256:cbf4c58797eec8f2a5f5356e40020bb2467a0db21395194dc9d6d7b5bdadfa7f"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md#43",
+      "hash": "sha256:151fc94985ffb8c3e455c124eabff07316a4ec84a0d869a824cc6ab958f8e8eb"
     },
     {
       "content": "blocks",

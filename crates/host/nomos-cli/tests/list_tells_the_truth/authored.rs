@@ -63,6 +63,12 @@ impl Board
         return self.scratch.Said(&arguments);
     }
 
+    /// Runs `nomos work …` with these arguments, returning what it said and what it exited with.
+    pub(crate) fn Work(&self, arguments: &[&str]) -> crate::board::Ran
+    {
+        return self.scratch.Work(arguments);
+    }
+
     /// The label `work list` prints for one item.
     pub(crate) fn Label_Of(&self, item: &str) -> String
     {

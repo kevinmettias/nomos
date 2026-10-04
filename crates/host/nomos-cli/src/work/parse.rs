@@ -9,7 +9,7 @@ use nomos_ledger::{
 
 use crate::arguments::{Named_Value_From_String_Arguments, Named_Values_From_String_Arguments};
 
-use super::{ClaimRequest, EndingRequest, ListingScope, WorkCommand};
+use super::{ClaimRequest, EndingRequest, ListingFilters, ListingScope, WorkCommand};
 
 mod usage;
 
@@ -85,6 +85,21 @@ fn Parse_List(named: &[String]) -> WorkCommand
     return WorkCommand::List {
         state: Named_Value_From_String_Arguments(named, "--state"),
         scope: Listing_Scope(named),
+        filters: Listing_Filters(named),
+    };
+}
+
+/// Which rows `list` narrows to: the items touching one path, and the items mentioning one
+/// text. `OD-LEDGER-041` version 2.
+///
+/// Each takes one value. Two paths would ask whether an item touches either or both, and the
+/// listing answers neither question until somebody needs one; until then a second
+/// `--touching` is the first one's caller asking twice, and the first is the one read.
+fn Listing_Filters(named: &[String]) -> ListingFilters
+{
+    return ListingFilters {
+        touching: Named_Value_From_String_Arguments(named, "--touching"),
+        mentions: Named_Value_From_String_Arguments(named, "--mentions"),
     };
 }
 

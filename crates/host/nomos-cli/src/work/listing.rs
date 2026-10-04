@@ -5,8 +5,9 @@ use nomos_ledger::{
     VerificationPredicate, VerificationRecord,
 };
 use nomos_platform::Timestamp;
+use nomos_work_orchestration::Admission;
 
-use super::ListingScope;
+use super::{ListingFilters, ListingScope};
 
 /// What a listing prints of the board it was handed.
 ///
@@ -21,6 +22,9 @@ pub(super) struct Bounds<'a>
     pub state: Option<&'a str>,
     /// How much of the board to draw rows from when no word was named.
     pub scope: ListingScope,
+    /// Which of the rows the state or the scope admits are printed. Never a bound itself: it
+    /// narrows what either admits and changes neither. `OD-LEDGER-041` version 2.
+    pub filters: &'a ListingFilters,
 }
 
 /// The label this item lists under, or nothing when `bounds` leaves it out.
@@ -46,6 +50,41 @@ pub(super) fn Listed_As(
     {
         Some(wanted) => label.eq_ignore_ascii_case(wanted).then_some(label),
         None => Admitted_By(item, bounds.scope).then_some(label),
+    };
+}
+
+/// One row a listing prints: the word it lists under, and how its filters admitted it.
+pub(super) struct Row
+{
+    pub label: &'static str,
+    pub admission: Admission,
+}
+
+/// The row `item` prints as, or nothing when `bounds` leaves it out.
+///
+/// The filters only ever remove a row from what [`Listed_As`] admits. They are asked first
+/// because they are the cheaper question, and the order changes nothing a reader sees: the label
+/// is still computed out of the whole `document`, so no filter can change what a printed row is
+/// called or which rows the bound alone would have printed.
+pub(super) fn Row_Of(document: &LedgerDocument, item: &LedgerItem, bounds: Bounds<'_>, now: Timestamp) -> Option<Row>
+{
+    let admission = bounds.filters.Admits(item)?;
+    let label = Listed_As(document, item, bounds, now)?;
+
+    return Some(Row { label, admission });
+}
+
+/// What a row says beside its label about how `--touching` admitted it: nothing, unless whether
+/// it overlaps the path could not be decided.
+///
+/// Said on the row rather than by leaving the row out. The claim check refuses on an undecided
+/// overlap, so the row is as much in the way of a claim on that path as one that overlaps it.
+pub(super) const fn Admission_Note(admission: Admission) -> &'static str
+{
+    return match admission
+    {
+        Admission::Admitted => "",
+        Admission::Undecided => "  [overlap undecided]",
     };
 }
 
@@ -75,6 +114,13 @@ fn Admitted_By(item: &LedgerItem, scope: ListingScope) -> bool
 /// been shown nothing is exactly the one who cannot tell a bounded answer from an empty one.
 pub(super) fn Nothing_Listed(bounds: Bounds<'_>, output: &mut impl std::io::Write)
 {
+    if !bounds.filters.Is_Empty()
+    {
+        Nothing_Matched(bounds, output);
+
+        return;
+    }
+
     let _ = match (bounds.state, bounds.scope)
     {
         (Some(wanted), _) => writeln!(output, "no items are {wanted}"),
@@ -85,6 +131,31 @@ pub(super) fn Nothing_Listed(bounds: Bounds<'_>, output: &mut impl std::io::Writ
         ),
         (None, ListingScope::Whole) => writeln!(output, "the ledger has no items"),
     };
+}
+
+/// What to say when the filters admitted none of the rows the bound did.
+///
+/// The filters are named back, because the reader's next question is whether they asked the
+/// right one. Under the live board an ended match is not ruled out, and the withheld line that
+/// follows counts any.
+fn Nothing_Matched(bounds: Bounds<'_>, output: &mut impl std::io::Write)
+{
+    let filters = Filter_Words(bounds.filters);
+    let _ = match (bounds.state, bounds.scope)
+    {
+        (Some(wanted), _) => writeln!(output, "no items are {wanted} and match {filters}"),
+        (None, ListingScope::Live) => writeln!(output, "no live item matches {filters}"),
+        (None, ListingScope::Whole) => writeln!(output, "no item matches {filters}"),
+    };
+}
+
+/// The filters given, spelled as the flags that gave them.
+fn Filter_Words(filters: &ListingFilters) -> String
+{
+    let touching = filters.touching.as_ref().map(|path| return format!("--touching {path}"));
+    let mentions = filters.mentions.as_ref().map(|text| return format!("--mentions {text}"));
+
+    return touching.into_iter().chain(mentions).collect::<Vec<_>>().join(" and ");
 }
 
 /// One item's line: its identifier, what it may be called now, its kind and origin, its
@@ -469,10 +540,13 @@ mod tests
         );
     }
 
+    /// No filter, which every bound below carries: the filters are held by their own tests.
+    const NO_FILTERS: ListingFilters = ListingFilters { touching: None, mentions: None };
+
     /// The bounds an unfiltered call carries under each scope, named so a case below reads as
     /// the question it asks rather than as a struct literal.
-    const LIVE: Bounds<'static> = Bounds { state: None, scope: ListingScope::Live };
-    const WHOLE: Bounds<'static> = Bounds { state: None, scope: ListingScope::Whole };
+    const LIVE: Bounds<'static> = Bounds { state: None, scope: ListingScope::Live, filters: &NO_FILTERS };
+    const WHOLE: Bounds<'static> = Bounds { state: None, scope: ListingScope::Whole, filters: &NO_FILTERS };
 
     #[test]
     fn Test_Listed_As_Should_Report_The_Items_Label_When_No_Filter_Is_Given()
@@ -496,7 +570,7 @@ mod tests
             Listed_As(
                 &document,
                 item,
-                Bounds { state: Some("claimed"), scope: ListingScope::Whole },
+                Bounds { state: Some("claimed"), scope: ListingScope::Whole, filters: &NO_FILTERS },
                 Timestamp::From_Unix_Seconds(0)
             ),
             None,
@@ -541,7 +615,7 @@ mod tests
             Listed_As(
                 &document,
                 item,
-                Bounds { state: Some("done"), scope: ListingScope::Live },
+                Bounds { state: Some("done"), scope: ListingScope::Live, filters: &NO_FILTERS },
                 Timestamp::From_Unix_Seconds(0)
             ),
             Some("done"),
@@ -554,7 +628,7 @@ mod tests
     {
         let mut output = Vec::new();
 
-        Nothing_Listed(Bounds { state: Some("blocked"), scope: ListingScope::Live }, &mut output);
+        Nothing_Listed(Bounds { state: Some("blocked"), scope: ListingScope::Live, filters: &NO_FILTERS }, &mut output);
 
         assert_eq!(String::from_utf8(output).unwrap(), "no items are blocked\n");
     }

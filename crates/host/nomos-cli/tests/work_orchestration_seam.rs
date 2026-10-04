@@ -17,7 +17,7 @@
 //! test owns via `NOMOS_WORK_DIR`.
 
 use nomos_ledger::ItemId;
-use nomos_work_orchestration::{ListingScope, WorkCommand};
+use nomos_work_orchestration::{ListingFilters, ListingScope, WorkCommand};
 use std::path::PathBuf;
 use std::process::Command;
 
@@ -111,15 +111,15 @@ fn A_Board(name: &str) -> Board
 #[test]
 fn Test_Work_Command_Should_Carry_The_State_Filter_And_The_Item_A_Real_Invocation_Would()
 {
-    let listing = WorkCommand::List { state: Some("ready".to_owned()), scope: ListingScope::Live };
+    let listing = WorkCommand::List { state: Some("ready".to_owned()), scope: ListingScope::Live, filters: ListingFilters::default() };
     assert_eq!(
         listing,
-        WorkCommand::List { state: Some("ready".to_owned()), scope: ListingScope::Live }
+        WorkCommand::List { state: Some("ready".to_owned()), scope: ListingScope::Live, filters: ListingFilters::default() }
     );
-    assert_ne!(listing, WorkCommand::List { state: None, scope: ListingScope::Live });
+    assert_ne!(listing, WorkCommand::List { state: None, scope: ListingScope::Live, filters: ListingFilters::default() });
     assert_ne!(
         listing,
-        WorkCommand::List { state: Some("ready".to_owned()), scope: ListingScope::Whole },
+        WorkCommand::List { state: Some("ready".to_owned()), scope: ListingScope::Whole, filters: ListingFilters::default() },
         "the scope is part of the request, so two listings asking for different halves of \
          the board are not one command"
     );

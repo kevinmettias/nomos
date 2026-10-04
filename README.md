@@ -171,8 +171,9 @@ territories are provably disjoint, and an unanswerable overlap question refuses 
 claim rather than granting it.
 
 ```
-nomos work list [--state <state>]          # `nomos work` names every state it can print
-nomos work show   --item <id>
+nomos work list [--state <state>] [--all] [--touching <path>] [--mentions <text>]
+                                           # `nomos work` names every state it can print
+nomos work show   --item <id>              # or the start of exactly one id, up to a hyphen
 nomos work add     --item <id> --title <text> --why <text> --done-when <text>
                    --kind capability|decision|validation|correction|cleanup
                    --origin required|proposed
