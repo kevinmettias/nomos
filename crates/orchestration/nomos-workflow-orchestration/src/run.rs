@@ -141,6 +141,8 @@ pub(crate) fn Attempted_Step<Launcher: ProgramLauncher, Fs: FileSystem, Env: Env
     let allowed = Attempts_Allowed(step.declaration.retry);
     let mut attempt = FIRST_ATTEMPT;
 
+    // One dispatch a turn; ends on the first success, or with the last error once the retry policy's attempts
+    // are spent.
     loop
     {
         let (result, timing) = Timed_Dispatch(&step.body, context, step.declaration.timeout);

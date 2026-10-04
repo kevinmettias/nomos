@@ -52,6 +52,7 @@ pub(super) fn Named_Field_Children<'a>(node: Node<'a>, field: &str) -> Vec<Node<
 
     if cursor.goto_first_child()
     {
+        // Visits each sibling once; ends when the cursor has no next sibling.
         loop
         {
             let current = cursor.node();

@@ -184,6 +184,8 @@ fn Named_Outright(functions: &[Function]) -> BTreeMap<String, BTreeSet<String>>
 /// nothing new.
 fn Propagate(functions: &[Function], reach: &mut BTreeMap<String, BTreeSet<String>>)
 {
+    // Runs passes to a fixed point: ends on the first pass that reaches nothing new, which comes because a
+    // pass only adds and the set is finite.
     loop
     {
         let discovered = Newly_Reached(functions, reach);

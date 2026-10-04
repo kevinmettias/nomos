@@ -134,6 +134,8 @@ impl Parser<'_, '_>
     fn Equality(&mut self) -> Option<bool>
     {
         let mut value = self.Unary()?;
+        // Folds `==` and `!=` left to right; ends at the first token that is neither, or when an operand
+        // fails to parse.
         loop
         {
             if self.Take(&Token::Equal)

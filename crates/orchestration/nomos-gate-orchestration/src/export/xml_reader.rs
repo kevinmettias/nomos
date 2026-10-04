@@ -50,6 +50,8 @@ fn Element_At(text: &str) -> (Element, &str)
     }
 
     let closing = format!("</{name}>");
+    // Takes text and child elements in turn; ends at this element's closing tag, which a well-formed export
+    // always writes.
     loop
     {
         let (between, from_tag) = rest.split_at(rest.find('<').expect("an open element is closed"));

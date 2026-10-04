@@ -45,6 +45,8 @@ fn Path_Segments(text: &str) -> Option<(Vec<&str>, &str)>
     let mut path = Vec::new();
     let mut rest = text;
 
+    // Takes one path segment a turn; ends at the first segment no `::` follows, or when no identifier leads
+    // what remains.
     return loop
            {
         let (segment, after_segment) = Leading_Identifier(rest)?;

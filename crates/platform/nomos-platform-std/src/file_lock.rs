@@ -229,6 +229,8 @@ impl FilesystemLock for FileLock
         let started = std::time::Instant::now();
         let mut broke_stale = None;
 
+        // Ends once the lock file is created; a stale lock is broken and tried again, and Wait_Or_Refuse ends
+        // it with an error once wait_limit passes.
         let acquired = loop
         {
             if self.Try_Create(holder)?

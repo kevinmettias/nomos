@@ -104306,7 +104306,8 @@
           "crates/host/nomos-api/src/work/list_response.rs",
           "tests/contract/surface/nomos-work-orchestration.txt",
           "README.md",
-          "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md"
+          "docs/records/OD-LEDGER-041-whether-terminal-items-leave-the-active-board-for-an-append-only-archive.md",
+          "crates/host/nomos-cli/tests/work_orchestration_seam.rs"
         ],
         "patterns": []
       },
@@ -104366,7 +104367,15 @@
         }
       ],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "opus-b7-p208",
+          "added": [
+            "crates/host/nomos-cli/tests/work_orchestration_seam.rs"
+          ],
+          "widened_at": 1791076195
+        }
+      ]
     },
     {
       "id": "P209-THE-REST-OF-P114S-PLATFORM-RENAMES-LEFT-LIVE-OLD-NAMES-AND-WAIVERS-THAT-MATCH-NOTHING",
@@ -104472,10 +104481,14 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p210-counts",
+        "acquired_at": 1791075459,
+        "lease_expires_at": 1791089859
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -104491,6 +104504,121 @@
         "timeout_seconds": 5400
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P211-TEN-UNCONDITIONAL-LOOPS-IN-THIS-WORKSPACE-DO-NOT-SAY-HOW-THEY-END",
+      "title": "Ten unconditional loops in this workspace do not say how they end",
+      "why": "The corpus rule document-loop-termination (code-standards f0d820729, severity MUST, gate blocking) requires every loop whose head states no condition to say how it ends, in a comment at the loop. OD-CAPABILITY-019's third build step ports it as the second kind of nomos.cap.syntax.sites, whose item is P212. Run over this workspace in a worktree at ac3a1ef3, nomos-lang-rust's offer of that kind recorded ten such loops under crates/ and tests/ -- every one a Rust `loop` braced on its own line, none with a sentence -- and document-loop-termination reported each as Blocking. code-standards' own check-unbounded-loop reports none of them, because its Rust kernel matches `loop {` within one line and so never sees a loop braced on the next. The ten findings are the rule's verdict on this workspace, not a cost of the kind, so they are answered here and first: P212's own territory is then exactly the bound OD-CAPABILITY-019's seventh decision states, and a widening of it stays evidence about the bound rather than about this tree.",
+      "done_when": "Each of the ten unconditional loops, at ac3a1ef3 -- preprocessor_expression.rs:137 in nomos-lang-csharp-compiler, syntax/walk/support.rs:55 in nomos-lang-go, modules.rs:43 in nomos-lang-go-lint, modules.rs:44 in nomos-lang-go-types, export/xml_reader.rs:53 in nomos-gate-orchestration, run.rs:144 in nomos-workflow-orchestration, file_lock.rs:232 and launcher/wait.rs:57 in nomos-platform-std, checks/facade/text.rs:48 in nomos-rules, and tests/contract/src/gates.rs:187 -- has, in the comment block touching its line from above, a sentence of at least twelve characters on that block's first line saying what ends it: the condition each exit tests, as the body states it, and never a claim the body does not support. Each is a plain `//` comment, never a doc comment, and no line of code changes. The predicate compiles every package owning one of the ten files, with all targets. It deliberately does not judge the sentences: document-loop-termination does not exist until P212, whose finish runs it over the whole tree in its Rules step, and that is where the claim that no unexplained loop remains is held mechanically.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/languages/nomos-lang-csharp-compiler/src/preprocessor_expression.rs",
+          "crates/languages/nomos-lang-go/src/syntax/walk/support.rs",
+          "crates/languages/nomos-lang-go-lint/src/modules.rs",
+          "crates/languages/nomos-lang-go-types/src/modules.rs",
+          "crates/orchestration/nomos-gate-orchestration/src/export/xml_reader.rs",
+          "crates/orchestration/nomos-workflow-orchestration/src/run.rs",
+          "crates/platform/nomos-platform-std/src/file_lock.rs",
+          "crates/platform/nomos-platform-std/src/launcher/wait.rs",
+          "crates/rules/nomos-rules/src/checks/facade/text.rs",
+          "tests/contract/src/gates.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "check",
+          "--all-targets",
+          "-p",
+          "nomos-lang-csharp-compiler",
+          "-p",
+          "nomos-lang-go",
+          "-p",
+          "nomos-lang-go-lint",
+          "-p",
+          "nomos-lang-go-types",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 2400
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "check",
+          "--all-targets",
+          "-p",
+          "nomos-lang-csharp-compiler",
+          "-p",
+          "nomos-lang-go",
+          "-p",
+          "nomos-lang-go-lint",
+          "-p",
+          "nomos-lang-go-types",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-workflow-orchestration",
+          "-p",
+          "nomos-platform-std",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "stration)\n    Checking nomos-workspace-discovery v0.1.0 (F:\\repos\\nomos-p177c\\crates\\orchestration\\nomos-workspace-discovery)\n    Checking nomos-contract-tests v0.1.0 (F:\\repos\\nomos-p177c\\tests\\contract)\n    Checking nomos-agent-orchestration v0.1.0 (F:\\repos\\nomos-p177c\\crates\\orchestration\\nomos-agent-orchestration)\n    Checking nomos-gate-orchestration v0.1.0 (F:\\repos\\nomos-p177c\\crates\\orchestration\\nomos-gate-orchestration)\n    Checking nomos-correction-orchestration v0.1.0 (F:\\repos\\nomos-p177c\\crates\\orchestration\\nomos-correction-orchestration)\nwarning: `nomos-rules` (lib test) generated 1 warning (1 duplicate)\n    Checking nomos-workflow-orchestration v0.1.0 (F:\\repos\\nomos-p177c\\crates\\orchestration\\nomos-workflow-orchestration)\n    Checking ra_ap_hir_ty v0.0.293\n    Checking ra_ap_hir v0.0.293\n    Checking ra_ap_ide_db v0.0.293\n    Checking ra_ap_load-cargo v0.0.293\n    Checking nomos-lang-rust-compiler v0.1.0 (F:\\repos\\nomos-p177c\\crates\\languages\\nomos-lang-rust-compiler)\n    Checking nomos-composer-providers v0.1.0 (F:\\repos\\nomos-p177c\\crates\\composer\\nomos-composer-providers)\nwarning: unused import: `Path`\n  --> tests\\contract\\tests\\crossing_cold.rs:45:17\n   |\n45 | use std::path::{Path, PathBuf};\n   |                 ^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-contract-tests` (test \"crossing_cold\") generated 1 warning (run `cargo fix --test \"crossing_cold\"` to apply 1 suggestion)\nwarning: unused import: `Revisions_In`\n  --> tests\\contract\\tests\\boundaries\\lock_pinning.rs:84:65\n   |\n84 | use nomos_contract_tests::{Declared_Revisions, Repository_Root, Revisions_In, XVPE_PREFIX};\n   |                                                                 ^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-contract-tests` (test \"boundaries\") generated 1 warning (run `cargo fix --test \"boundaries\"` to apply 1 suggestion)\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 44.85s\n",
+        "verified_at": 1791076988,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "2b8a1aa2e4ed17fb1e6149a3a995779385957869"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,

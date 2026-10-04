@@ -41,6 +41,7 @@ pub(crate) fn Group_By_Module<Fs: FileSystem>(root: &Path, files: &[&str], files
 fn Module_Directory<Fs: FileSystem>(root: &Path, file: &str, filesystem: &Fs) -> Option<String>
 {
     let mut directory = Parent(file);
+    // Climbs one directory a turn; ends at the first one holding a go.mod, or at the root.
     loop
     {
         if filesystem.Exists(&root.join(&directory).join("go.mod"))

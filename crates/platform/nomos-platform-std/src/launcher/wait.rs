@@ -54,6 +54,8 @@ fn Polled_Until_Settled(
         waiting_since: None,
     };
 
+    // Polls until the child exits, or until Bound_Exceeded finds the idle or total timeout spent and ends the
+    // wait with that outcome.
     return loop
     {
         if let Some(outcome) = Already_Exited(child, program)?
