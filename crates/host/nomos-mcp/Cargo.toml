@@ -22,5 +22,9 @@ nomos-api-transport = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 
+[dev-dependencies]
+nomos-platform = { workspace = true }
+nomos-platform-std = { workspace = true }
+
 [lints]
 workspace = true

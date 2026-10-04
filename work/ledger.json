@@ -106136,6 +106136,106 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "REL08-DEMONSTRATE-MCP-CORRECTION-WITH-EXTERNAL-COMPILER-VALIDATION",
+      "title": "Demonstrate a complete external source package correction through MCP with real compiler and test validation",
+      "why": "Existing release MCP tests use a tiny synthetic file, and external calibration trims the third-party source. The 0.1 worked comparison still needs an independent complete source population and relevant validation around the commit decision.",
+      "done_when": "An explicit ignored acceptance test requires NOMOS_RELEASE_EXTERNAL_REPO and copies its complete source tree into unique scratch roots while preserving original files and licenses. Through the built MCP server it first judges the untouched tree, then demonstrates a deliberately injected false enforcement claim in the actual library source: compiler/tests alone pass but the Nomos finding remains. The default correction stages and writes nothing. An independently staged copy with a deliberate syntax failure fails real Cargo validation, and the client declines by withholding commit. A valid staged copy passes real offline Cargo tests; only then does the client explicitly commit through MCP and verify exact expected bytes, a changed snapshot and a cleared finding, followed by another real test run. No original corpus edits, no upstream source fixture vendoring, no live network, no new shipped API or dependency, no claim that Nomos model validation itself runs the compiler or that the complete 0.1 bar is met. Document provenance, commands, measured timing and scope limits. Existing MCP regressions pass as well.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-mcp/tests/release_workflow.rs",
+          "docs/corpus/nomos-external-correction-demo.md",
+          "crates/host/nomos-mcp/Cargo.toml",
+          "Cargo.lock"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "nomos-mcp",
+          "--test",
+          "release_workflow",
+          "--",
+          "--include-ignored",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "timeout_seconds": 1800
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "nomos-mcp",
+          "--test",
+          "release_workflow",
+          "--",
+          "--include-ignored",
+          "--nocapture",
+          "--test-threads=1"
+        ],
+        "exit_code": 0,
+        "output_tail": "   {\n83 | ||         Ok(Some(status)) =>\n...  ||\n90 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n91 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: unused import: `CommitIntent`\n  --> crates\\host\\nomos-api\\src\\workflow.rs:45:53\n   |\n45 | use nomos_workflow_orchestration::{Body, CheckBody, CommitIntent, CorrectionBody, GateBody, Platform, Run, StepOutcome, WorkflowOutcome, ...\n   |                                                     ^^^^^^^^^^^^\n   |\n   = note: `#[warn(unused_imports)]` on by default\n\nwarning: `nomos-api` (lib) generated 1 warning (run `cargo fix --lib -p nomos-api` to apply 1 suggestion)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.63s\n     Running tests\\release_workflow.rs (F:\\repos\\xvpe\\.agent\\task\\release-loop\\targets\\nomos\\debug\\deps\\release_workflow-850e92e4d768b7a7.exe)\n\nthread 'Test_A_Compilable_Package_With_No_Tests_Should_Fail_The_Validation_Acceptance_Check' panicked at crates\\host\\nomos-mcp\\tests\\release_workflow.rs:254:5:\nvalidation must execute nonzero tests, not just launch Cargo: \nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\n\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n",
+        "verified_at": 1791138174,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "0f53cbddfe78cd93624b1f1eb6365f503c46f12e"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": [
+        {
+          "holder": "codex-release-loop",
+          "added": [
+            "crates/host/nomos-mcp/Cargo.toml",
+            "Cargo.lock"
+          ],
+          "widened_at": 1791137677
+        }
+      ]
     }
   ]
 }

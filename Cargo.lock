@@ -1721,6 +1721,8 @@ name = "nomos-mcp"
 version = "0.1.0"
 dependencies = [
  "nomos-api-transport",
+ "nomos-platform",
+ "nomos-platform-std",
  "serde",
  "serde_json",
  "xvpe-primitives",
