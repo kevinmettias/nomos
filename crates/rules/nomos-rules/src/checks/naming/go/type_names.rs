@@ -5,8 +5,8 @@
 //! so this check is exact for source files recognized as Go by path.
 
 use crate::checks::finding_shape::{Finding_Shape, Own_Name_Finding};
-use crate::checks::naming::{Case_Judged_Against, Resolve_Case};
-use crate::rule_descriptor::policy_axis::{EXPORTED_TYPE_CASE, UNEXPORTED_TYPE_CASE};
+use crate::checks::naming::{Case_Judged_Against, Resolve_Read};
+use crate::checks::optional_reads::{GO_EXPORTED_TYPE, GO_UNEXPORTED_TYPE};
 use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_cap_naming_policy::Case;
@@ -31,7 +31,7 @@ pub fn Check_Go_Type_Names_Use_Camel_Case(
 ) -> Vec<Finding>
 {
     let (Some(exported_case), Some(unexported_case)) =
-        (Resolve_Case(facts, Some("go"), &EXPORTED_TYPE_CASE), Resolve_Case(facts, Some("go"), &UNEXPORTED_TYPE_CASE))
+        (Resolve_Read(facts, &GO_EXPORTED_TYPE), Resolve_Read(facts, &GO_UNEXPORTED_TYPE))
     else
     {
         return Vec::new();

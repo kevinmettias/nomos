@@ -115,6 +115,7 @@ fn Incomplete_Judgment() -> CheckOutcome
         claim: Claim::Incomplete,
         supporting_facts: nomos_check_orchestration::SupportingFactTrail::New(),
         populations: nomos_check_orchestration::Populations::New(),
+        undeclared: nomos_check_orchestration::UndeclaredValues::New(),
     };
 }
 

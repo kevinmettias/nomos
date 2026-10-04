@@ -66,6 +66,7 @@ mod guarantee_exerciser;
 mod naming;
 mod nested_locks;
 mod nesting_depth;
+pub(crate) mod optional_reads;
 mod orphan_modules;
 mod placement;
 mod policy;
@@ -84,7 +85,7 @@ mod structure;
 mod uncompiled_conditional_branch;
 mod undeclared_policy_key;
 #[cfg(test)]
-mod test_support;
+pub(crate) mod test_support;
 
 use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest};
@@ -226,6 +227,15 @@ pub(crate) use rust_text::{
 pub(crate) use rust_text::{
     Has_Allow_Attribute, Has_An_Adjacent_Non_Empty_Comment, Has_Bare_Ignore_Attribute, Has_Inline_Always_Attribute,
 };
+/// Each family's own answer to whether a repository declared a value one of its rules read, for
+/// `crate::OptionalRead::Undeclared` -- `OD-RULES-011` version 3 decision 5 has the family that
+/// resolves a value say whether it was declared, so none of them is answered twice.
+pub(crate) use goals::Undeclared_Goals;
+pub(crate) use naming::Undeclared_Cases;
+pub(crate) use requirement_trace::Undeclared_Requirement_Trace;
+pub(crate) use script_discipline::Undeclared_Tooling_Language;
+pub(crate) use standards_corpus::Undeclared_Standards_Corpus;
+pub(crate) use structure::Undeclared_Limit_Value;
 pub use scalar_range::{
     Check_A_Known_Range_Picks_Its_Type, Check_Nonnegative_Storage_Is_Unsigned, A_KNOWN_RANGE_PICKS_ITS_TYPE, NONNEGATIVE_STORAGE_IS_UNSIGNED,
 };

@@ -104,10 +104,10 @@
 //! upper-snake case" and cite no file.
 
 use nomos_analysis::MemoryFactStore;
-use nomos_check_orchestration::{CheckOutcome, Populations, Run, RunContext};
+use nomos_check_orchestration::{CheckOutcome, Populations, Run, RunContext, UndeclaredValues};
 use nomos_contracts::{Finding, RuleId};
 use nomos_platform_std::{StdEnvironment, StdFileSystem, StdProgramLauncher};
-use nomos_rules::SourceFile;
+use nomos_rules::{SourceFile, UndeclaredOutcome, UndeclaredValue};
 use nomos_workspace::BuildVariant;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::PathBuf;
@@ -144,13 +144,22 @@ fn Test_Variant() -> BuildVariant
     return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
 }
 
+/// What one real run over the fixture reported, per rule: its findings, how many sources it was
+/// judged over, and the values it read that the fixture never declared.
+struct FixtureRun
+{
+    by_rule: BTreeMap<String, Vec<Finding>>,
+    populations: Populations,
+    undeclared: UndeclaredValues,
+}
+
 /// Runs the real, composed rule set over the fixture exactly once and files every finding
-/// under the rule id that produced it, beside how many sources each rule was judged over -- one
-/// real `Run`, since three of its own
+/// under the rule id that produced it, beside how many sources each rule was judged over and what
+/// it read undeclared -- one real `Run`, since three of its own
 /// materializations launch a real subprocess (`cargo metadata`/`clippy`/`deny`) and doing
 /// that once per rule assertion, over dozens of rules, would be both slow and a second, differently-
 /// shaped run per rule rather than the one real run a caller like `nomos-cli check` performs.
-fn Findings_By_Rule() -> (BTreeMap<String, Vec<Finding>>, Populations)
+fn Findings_By_Rule() -> FixtureRun
 {
     let sources = Fixture_Sources();
     let root = Fixture_Root();
@@ -171,7 +180,7 @@ fn Findings_By_Rule() -> (BTreeMap<String, Vec<Finding>>, Populations)
         &[],
     );
 
-    let CheckOutcome::Judged { findings, examined, claim, populations, .. } = outcome
+    let CheckOutcome::Judged { findings, examined, claim, populations, undeclared, .. } = outcome
     else
     {
         panic!("the fixture is a real, readable tree the syntax provider recognizes; a refusal here is a test-setup bug, not a caller-facing failure: {outcome:?}");
@@ -188,7 +197,44 @@ fn Findings_By_Rule() -> (BTreeMap<String, Vec<Finding>>, Populations)
     {
         by_rule.entry(finding.rule.As_Str().to_owned()).or_default().push(finding);
     }
-    return (by_rule, populations);
+    return FixtureRun { by_rule, populations, undeclared };
+}
+
+/// Every value the run names as read by a rule and never declared by the fixture, for each rule
+/// that names any, as `OD-RULES-011` version 3 decision 1 has every run name them: the family, the
+/// key, and what the rule did. Every other rule in [`Verdicts`] names nothing, and the assertion
+/// below holds each row to its entry here or to nothing.
+///
+/// Eight, the count version 3 measured for this fixture. Its `standards.json` declares `function`,
+/// `module` and `field`, so no naming rule judged against a substituted case; it writes no limits
+/// file, so three limits rows judged against this workspace's defaults and `cyclomatic-complexity`
+/// reported its limit undeclared; and four rules judged nothing for want of a norm. The Go rows
+/// would name their values too, and are not here because their population is empty, which the
+/// run reports apart and which reaches no verdict for a value to rest under.
+const NAMED_UNDECLARED: &[(&str, &[&str])] = &[
+    ("parameter-count", &["limits parameter-count-max: judged against 4"]),
+    ("declared-tooling-language-for-scripts", &["scripting scripting.tooling_language: judged nothing"]),
+    ("1500-lines", &["limits file-size-hard-lines: judged against 1500"]),
+    ("goals-and-parts-line-up", &["goals goals: judged nothing"]),
+    ("requirement-trace-staleness", &["requirement-trace *.assessment: judged nothing"]),
+    ("nesting-depth", &["limits nesting-depth-max: judged against 3"]),
+    ("cyclomatic-complexity", &["limits cyclomatic-complexity-max: reported undeclared"]),
+    ("standards-corpus", &["standards-corpus roots: judged nothing"]),
+];
+
+/// One undeclared value as [`NAMED_UNDECLARED`] spells it.
+fn Named_As(value: &UndeclaredValue) -> String
+{
+    let language = value.language.as_ref().map_or_else(String::new, |language| return format!(" for {language}"));
+    let outcome = match &value.outcome
+    {
+        UndeclaredOutcome::JudgedAgainst { value } => format!("judged against {value}"),
+        UndeclaredOutcome::JudgedNothing => "judged nothing".to_owned(),
+        UndeclaredOutcome::ReportedUndeclared => "reported undeclared".to_owned(),
+        UndeclaredOutcome::SpreadBoundNotJudged => "spread bound not judged".to_owned(),
+    };
+
+    return format!("{} {}{language}: {outcome}", value.family, value.key);
 }
 
 /// One rule's stated expected outcome against the fixture -- see this file's own module doc
@@ -277,7 +323,7 @@ fn Verdicts() -> Vec<RuleVerdict>
         RuleVerdict { id: "atomic-ordering-choices-are-justified", population: Population::Judged, expected: Expected::Clean, reason: "no atomic type or Ordering:: usage anywhere in the fixture." },
         RuleVerdict { id: "seqcst-justified-explicitly", population: Population::Judged, expected: Expected::Clean, reason: "no Ordering::SeqCst usage in the fixture." },
         RuleVerdict { id: "relaxed-not-used-when-ordering-matters", population: Population::Judged, expected: Expected::Clean, reason: "no Ordering::Relaxed usage in the fixture." },
-        RuleVerdict { id: "data-names-stay-lower-snake", population: Population::Judged, expected: Expected::Clean, reason: "judges module/field names against Case::LowerSnake, which is this rule's own hardcoded default (data_names.rs's Resolve_Case calls already pass Case::LowerSnake, not nomos's own upper-snake) -- already the real, idiomatic Rust convention hex's one real module (error) and its struct fields (inner, table, next) already follow, with no fixture-side override needed." },
+        RuleVerdict { id: "data-names-stay-lower-snake", population: Population::Judged, expected: Expected::Clean, reason: "judges module and field names against the case ../hex-0.4.3/standards.json declares for `module` and `field`, lower-snake, so the run names no value of this rule's as undeclared -- the real, idiomatic Rust convention hex's one real module (error) and its struct fields (inner, table, next) already follow. The rule's own default for both keys is the same lower-snake, so the zero does not depend on the declaration; the undeclared-values list is what says the declaration was read." },
         RuleVerdict { id: "file-name-matches-declared-type", population: Population::Judged, expected: Expected::TruePositive(1), reason: "error.rs declares the public type `FromHexError` but is named for what it holds generically rather than for that type -- file_names.rs's own Comparable_Stem exempts lib/main/mod but not error, and this file exports no free public function alongside the type (Is_Declaring_A_Public_Operation is false), so the Is_Declaring_A_Public_Operation exemption OD-RULES-015 carved out (a module named for what it does) does not apply either. nomos's own tree renames this exact shape to `<type>_error.rs` (clippy_error.rs, metadata_error.rs, deny_error.rs); hex's `error.rs` is a real, ordinary difference in file-naming convention between the two projects, correctly caught." },
         RuleVerdict { id: "constants-split-by-export", population: Population::Empty, expected: Expected::Clean, reason: "Go-only: not applicable to a Rust-only fixture." },
         RuleVerdict { id: "variables-use-lower-snake-case", population: Population::Empty, expected: Expected::Clean, reason: "Go-only: not applicable." },
@@ -297,7 +343,7 @@ fn Verdicts() -> Vec<RuleVerdict>
         RuleVerdict { id: "no-trailing-punctuation", population: Population::Judged, expected: Expected::Clean, reason: "same #[error(\"...\")]-only scope as lowercase-first-letter: nothing in the fixture for it to examine." },
         RuleVerdict { id: "eager-vs-lazy-context", population: Population::Judged, expected: Expected::Clean, reason: "looks for a literal `.With_Context(` call (nomos's own Pascal_Snake-cased helper name, not the real ecosystem's lowercase anyhow/eyre `.with_context(`/`.context(`); the fixture has no error-context-chaining code in any casing, so this is a real zero either way. Worth flagging separately: this hardcoded spelling would also miss the real anti-pattern in ordinary third-party code using the standard lowercase method name, which this fixture happens not to exercise." },
         RuleVerdict { id: "goals-and-parts-line-up", population: Population::Judged, expected: Expected::Clean, reason: "opt-in: judges a repository's own declared nomos.cap.goals.policy (standards.json's \"goals\" block); the fixture declares none, and Check_Goals_And_Parts_Line_Up's own doc states a repository that has not written one down has not opted in -- a generalizable, unused mechanism, not a hardcoded nomos-only table." },
-        RuleVerdict { id: "requirement-trace-staleness", population: Population::Judged, expected: Expected::Clean, reason: "opt-in: judges a repository's own tests/contract/requirements/*.assessment corpus; the fixture has none, which Discover_Workspace's own doc treats identically to \"declares none\" or \"every entry resolves\" -- a generalizable, unused mechanism." },
+        RuleVerdict { id: "requirement-trace-staleness", population: Population::Judged, expected: Expected::Clean, reason: "opt-in: judges a repository's own tests/contract/requirements/*.assessment corpus; the fixture has no such directory, which the provider reports apart from a corpus whose every entry resolves, so the run names this rule as having judged nothing (OD-RULES-011 version 3 decision 6) -- a generalizable, unused mechanism." },
         RuleVerdict { id: "abbreviations", population: Population::Judged, expected: Expected::TruePositive(1), reason: "1 finding, deserved. `val` (the real, private function fn val(c, idx) -> Result<u8, FromHexError>) is a genuine, deserved true positive: DEFAULT_BANNED_WORDS lists \"val\" verbatim (ported from code-standards' own defaults.go) and hex's author really did choose that terse name. `alloc` -- the name of `extern crate alloc;`, fixed by the real crate being linked, not chosen at this site -- was a real false positive when this verdict was first written (`P68-ABBREVIATIONS-DOES-NOT-EXEMPT-EXTERN-CRATE`); Is_Exempt now recognizes ItemKind::ExternCrate the same way it already recognized ItemKind::Use, and this fixture is what proved the fix." },
         RuleVerdict { id: "single-letter-names", population: Population::Judged, expected: Expected::Clean, reason: "a real, checked zero, and it was 1-finding-0-deserved until P96. `T` was never a struct field or an ordinarily-declared item name a human carelessly abbreviated -- it is `impl<T: AsRef<[u8]>> ToHex for T`'s own Self type, and nomos_lang_rust::syntax::walk's visit_item_impl records an Implementation item's `name` as `Type_Head(&node.self_ty)`, which for this common, idiomatic blanket-impl-over-a-generic-parameter shape is literally the generic parameter's own already-declared name. The gap took two increments and not one: P68 was DECLINED because the payload carried no fact that could tell this apart from `impl Trait for X` over a real, single-letter-named struct somebody chose, and a name-only heuristic would have hidden that second, deserved case. OD-CAPABILITY-014 decided the extension, P96-AN-IMPL-BLOCKS-GENERIC-PARAMETERS-REACH-THE-SYNTAX-PAYLOAD built it (Impl_Shape now carries the block's own type parameters, read back by Impl_Generics), and the rule now exempts an Implementation item whose own name is one of them -- still reporting one whose name is not. This fixture is what surfaced the gap, by using an entirely ordinary Rust idiom nomos's own tree does not happen to write, and is what now measures it closed." },
         RuleVerdict { id: "a-disabled-test-states-why", population: Population::Judged, expected: Expected::Clean, reason: "the fixture carries no #[test] functions at all (see zero-flake-policy's identical note), so there is no #[ignore] attribute for this rule to examine either." },
@@ -348,15 +394,23 @@ fn Test_Table_Names_Exactly_The_Composed_Rule_Set()
 #[test]
 fn Test_Composed_Rules_Against_An_Idiomatic_Third_Party_Fixture()
 {
-    let (by_rule, populations) = Findings_By_Rule();
+    let FixtureRun { by_rule, populations, undeclared } = Findings_By_Rule();
     let reported_empty = populations.Empty();
 
+    for (rule, _) in NAMED_UNDECLARED
+    {
+        assert!(Verdicts().iter().any(|verdict| return verdict.id == *rule), "{rule}: NAMED_UNDECLARED names a rule the verdict table does not");
+    }
     for verdict in Verdicts()
     {
         let rule = RuleId::New(verdict.id);
         let reported = if reported_empty.contains(&&rule) { Population::Empty } else { Population::Judged };
         assert_eq!(reported, verdict.population, "{}: the run reports its population {reported:?} ({})", verdict.id, verdict.reason);
         assert!(populations.Of(&rule).is_some(), "{}: the run selected every composed rule, so it reports a population for each", verdict.id);
+
+        let named: Vec<String> = undeclared.Of(&rule).iter().map(Named_As).collect();
+        let expected = NAMED_UNDECLARED.iter().find(|(named_rule, _)| return *named_rule == verdict.id).map_or(&[][..], |(_, values)| return *values);
+        assert_eq!(named, expected, "{}: what the run names undeclared for this rule ({})", verdict.id, verdict.reason);
 
         let empty: Vec<Finding> = Vec::new();
         let findings = by_rule.get(verdict.id).unwrap_or(&empty);

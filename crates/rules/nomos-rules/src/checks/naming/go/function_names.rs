@@ -37,10 +37,9 @@
 
 use crate::checks::naming::function_cases::Is_Go_Method;
 use crate::checks::naming::{Case_Judged_Against, Resolve_Read};
-use crate::rule_descriptor::policy_axis::{
-    CaseRead, GO_EXPORTED_FUNCTION_READ, GO_EXPORTED_METHOD_READ, GO_UNEXPORTED_FUNCTION_READ, GO_UNEXPORTED_METHOD_READ,
-};
-use crate::{SourceFile, GO_LANGUAGE};
+use crate::checks::optional_reads::{GO_EXPORTED_FUNCTION, GO_EXPORTED_METHOD, GO_UNEXPORTED_FUNCTION, GO_UNEXPORTED_METHOD};
+use crate::rule_descriptor::NamingRead;
+use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{FUNCTION, PayloadItem, SyntaxPayload};
@@ -63,7 +62,7 @@ pub fn Check_Exported_Go_Functions_Use_Upper_Snake_Case(
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    let Some(cases) = Go_Cases(facts, &GO_EXPORTED_FUNCTION_READ, &GO_EXPORTED_METHOD_READ)
+    let Some(cases) = Go_Cases(facts, &GO_EXPORTED_FUNCTION, &GO_EXPORTED_METHOD)
     else
     {
         return Vec::new();
@@ -88,7 +87,7 @@ pub fn Check_Unexported_Go_Functions_Lowercase_Only_The_First_Letter(
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    let Some(cases) = Go_Cases(facts, &GO_UNEXPORTED_FUNCTION_READ, &GO_UNEXPORTED_METHOD_READ)
+    let Some(cases) = Go_Cases(facts, &GO_UNEXPORTED_FUNCTION, &GO_UNEXPORTED_METHOD)
     else
     {
         return Vec::new();
@@ -129,11 +128,9 @@ impl GoCases
 
 /// The cases one side of visibility reads for Go, `function` for a function and `method` for a
 /// method.
-fn Go_Cases(facts: &mut dyn FactReader, function: &CaseRead<'_>, method: &CaseRead<'_>) -> Option<GoCases>
+fn Go_Cases(facts: &mut dyn FactReader, function: &NamingRead, method: &NamingRead) -> Option<GoCases>
 {
-    let language = Some(GO_LANGUAGE);
-
-    return Some(GoCases { function: Resolve_Read(facts, language, function)?, method: Resolve_Read(facts, language, method)? });
+    return Some(GoCases { function: Resolve_Read(facts, function)?, method: Resolve_Read(facts, method)? });
 }
 
 fn Violations_In(payload: &SyntaxPayload, path: &str, cases: GoCases) -> Vec<Finding>

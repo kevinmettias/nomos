@@ -401,11 +401,11 @@ fn Outcome_Of(examination: Examination, judgments: judging::Judgments, supportin
 {
     use crate::examined::{Claim_Of, Examined};
 
-    let judging::Judgments { findings, populations } = judgments;
+    let judging::Judgments { findings, populations, undeclared } = judgments;
     let examined = Examined { files: examination.files, facts: examination.facts };
     let claim = Claim_Of(&findings);
 
-    return CheckOutcome::Judged { findings, examined, claim, supporting_facts, populations };
+    return CheckOutcome::Judged { findings, examined, claim, supporting_facts, populations, undeclared };
 }
 
 /// Every rule [`Run`] composes, in the order it runs them.

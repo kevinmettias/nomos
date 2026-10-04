@@ -45,6 +45,8 @@
 //! an empty policy both judge nothing — which is why this rule needs no fallback constant
 //! of its own, unlike naming's and limits' prior hardcoded defaults.
 
+use super::optional_reads;
+use crate::rule_descriptor::{Note_Read, UndeclaredOutcome, UndeclaredValue};
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_goals_policy::{GoalsPolicyPayload, SubsystemDeclaration};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
@@ -64,6 +66,7 @@ const DECLARATION_FILE: &str = "standards.json";
 #[must_use]
 pub fn Check_Goals_And_Parts_Line_Up(facts: &mut dyn FactReader) -> Vec<Finding>
 {
+    Note_Read(optional_reads::GOALS);
     let Some(payload) = Declared_Policy(facts)
     else
     {
@@ -71,6 +74,30 @@ pub fn Check_Goals_And_Parts_Line_Up(facts: &mut dyn FactReader) -> Vec<Finding>
     };
 
     return Findings_For(&payload);
+}
+
+/// What a repository left undeclared of the goals this rule reads, as `OD-RULES-011` version 3
+/// decision 1 names it: no goal, so this rule judged nothing; or goals and no ceiling, or a ceiling
+/// of zero, which code-standards' schema reads alike, so it judged the two-way audit and not the
+/// spread bound. `None` when both are declared, and when the policy could not be read, which is
+/// coverage debt rather than a value nobody declared.
+pub(crate) fn Undeclared_Goals(facts: &mut dyn FactReader) -> Option<UndeclaredValue>
+{
+    let payload = Declared_Policy(facts)?;
+    let (key, outcome) = if payload.goals.is_empty()
+    {
+        ("goals", UndeclaredOutcome::JudgedNothing)
+    }
+    else if payload.max_subsystems_per_goal == 0
+    {
+        ("max_subsystems_per_goal", UndeclaredOutcome::SpreadBoundNotJudged)
+    }
+    else
+    {
+        return None;
+    };
+
+    return Some(UndeclaredValue { family: "goals", declared_in: DECLARATION_FILE, key, language: None, outcome });
 }
 
 fn Declared_Policy(facts: &mut dyn FactReader) -> Option<GoalsPolicyPayload>

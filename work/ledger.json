@@ -102694,17 +102694,13 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P172-A-RULE-DECLARES-THE-POPULATION-IT-JUDGES-AND-A-RUN-REPORTS-EVERY-EMPTY-ONE-BESIDE-ITS-CLAIM",
         "P189-NO-RECORD-DECIDES-WHETHER-A-VERDICT-REACHED-AGAINST-A-VALUE-THE-REPOSITORY-NEVER-DECLARED-SAYS-SO"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "opus-b7-p190",
-        "acquired_at": 1791078697,
-        "lease_expires_at": 1791109400
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -102729,7 +102725,61 @@
         ],
         "timeout_seconds": 14400
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-cap-requirement-trace",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "\n     Running tests\\rule_composition.rs (target\\debug\\deps\\rule_composition-219bb362b43c038c.exe)\n     Running tests\\rule_contract_citation.rs (target\\debug\\deps\\rule_contract_citation-0ac6f384425dd5b3.exe)\n     Running tests\\rule_descriptors.rs (target\\debug\\deps\\rule_descriptors-c5132aba7ca98bfd.exe)\n     Running tests\\suppression_paths.rs (target\\debug\\deps\\suppression_paths-84c97859a2d070de.exe)\n     Running tests\\toolchain_floor.rs (target\\debug\\deps\\toolchain_floor-dfd3a139dad18d9a.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_gate_orchestration-1daf67a7daaf757e.exe)\n     Running tests\\check_orchestration_seam.rs (target\\debug\\deps\\check_orchestration_seam-6143c4cd6f1f64c5.exe)\n     Running tests\\gate_run_outcome.rs (target\\debug\\deps\\gate_run_outcome-ab4833f71005301b.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-9e47c2edb5a57119.exe)\n     Running tests\\analysis_slice\\main.rs (target\\debug\\deps\\analysis_slice-42e7d506921554ad.exe)\n     Running tests\\calibration.rs (target\\debug\\deps\\calibration-f89fef30b26f4171.exe)\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-756a5d8c4e110fc1.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-6ae30c39c8146f09.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-bb7a512fffe35b5f.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_cap_requirement_trace\n   Doc-tests nomos_check_orchestration\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_gate_orchestration\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_rules\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: 1 warning emitted\n\n",
+        "verified_at": 1791093195,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "f79751ef22630646488fdbbc468cb59b7c45e7c3"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -105175,6 +105225,153 @@
       "state": "Ready",
       "depends_on": [
         "P212-THE-UNCONDITIONAL-LOOP-IS-THE-SECOND-SYNTAX-SITE-AND-ITS-TERRITORY-IS-THE-BOUND"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-csharp",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-composer-providers",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 10800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P215-FIVE-CSHARP-ONLY-CORPUS-RULES-JUDGE-FIVE-KINDS-ONLY-CSHARP-WRITES-AND-JUDGE-NO-OTHER-LANGUAGE",
+      "title": "Five C#-only corpus rules judge five kinds only C# writes, and judge no other language",
+      "why": "The C# half of the rule migration's per-language frontier, measured from code-standards' gates/csharp.json at f0d820729: thirty-three of the checks that gate runs are C#'s alone, and none of them can find a site in this workspace, which holds no C# source, so each lands with no precursor. This item is the first five, each a check that walks C#'s tree for one node kind and decides in the same function: check-anonymous-method (a-lambda-not-an-anonymous-method, MUST), check-query-syntax (one-linq-syntax-and-it-is-method-syntax, SHOULD), check-out-parameter (an-out-parameter-is-the-try-pattern-or-a-return-value, SHOULD), check-public-field (encapsulation, MUST NOT) and check-anonymous-type (a-shape-that-crosses-a-boundary-has-a-name, MUST), all gate blocking. Each becomes a kind of nomos.cap.syntax.sites only nomos-lang-csharp offers -- the walk records what the decision reads, the rule decides -- and a rule over a kind only one language writes must judge only that language's sources: judged over the family's whole population, every Rust and Go source would carry one advisory unjudged finding per rule for a construct its language cannot write. So the family's shared reading takes each rule's population from the rule, which is the value its descriptor already declares. Measured before this item was authored, in a worktree at f79751ef carrying P212 and P214: the five rules add no finding over this tree and are reported as judging an empty population; a probe C# file holding every construct drew, line for line, the five findings code-standards' own five checks report, and the exempt shapes -- a private field, a const, a static readonly singleton, a bool TryParse, a LINQ projection, a local -- drew none from either; seventeen mutations of the guards were each killed by a named test and every file restored byte-identically.",
+      "done_when": "nomos-cap-syntax declares five more kinds in SITE_KINDS with their typed views: the anonymous method and the query expression, each a line and nothing else; the out parameter, as written, with the name and return type of the method or local function it belongs to; the declared field, one record per name a field declaration declares, with every modifier the declaration carries in the order written; and the anonymous object, with the nearest enclosing context the walk outward meets -- a local declaration, a lambda, a return or an expression-bodied member's arrow, or none of them -- and, for a lambda, the name the nearest enclosing invocation's callee carries. nomos-lang-csharp offers all five for a file that parses, from the same parse as its other kinds and interleaved with them in source order, and leaves them unanswered for one that does not; an out parameter is one whose modifier reads out, so ref and in are none, and each signature answers for its own parameter list, so a local function's out names the local function. Every case of the five corpus checks' main_test.go is ported, the projection in nomos-lang-csharp's tests/sites_forms.rs and the judgment in nomos-rules, except check-query-syntax's allow marker, which no rule here honours. nomos-rules composes the five rules, each citing OD-CAPABILITY-019 version 1 and judging C# sources only: every anonymous method and every query expression is one Blocking, Supported finding on its line in the corpus message; an out parameter is one unless its signature is named Try and returns bool, both halves required; a field is one when public, internal or protected and neither const nor static readonly; an anonymous object is one when returned, or built in a lambda not handed to one of the corpus's twenty-two consuming LINQ operators. The family's shared reading judges each rule's own population, the four rules over kinds several languages offer keeping the family's, and a Rust source is no finding of any of the five, not even an unjudged one. A run over this tree reports no finding of the five and names each among the rules that judged an empty population, and each calibration row says why. The territory is OD-CAPABILITY-019's bound for five kinds offered by one provider, plus the family reading and the four rules over it whose descriptions name their population: nomos-cap-syntax and its snapshot, nomos-lang-csharp, the five rules' own files, syntax_sites.rs, populations.rs and the four existing rules' modules, the three registration sites every composed rule has, and goldens.rs, where the C# sites golden moves. The predicate names nomos-cli and nomos-integration-tests, which enumerate the composed set.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-syntax",
+          "tests/contract/surface/nomos-cap-syntax.txt",
+          "crates/languages/nomos-lang-csharp",
+          "crates/rules/nomos-rules/src/checks/anonymous_method.rs",
+          "crates/rules/nomos-rules/src/checks/anonymous_method",
+          "crates/rules/nomos-rules/src/checks/anonymous_type.rs",
+          "crates/rules/nomos-rules/src/checks/anonymous_type",
+          "crates/rules/nomos-rules/src/checks/encapsulation.rs",
+          "crates/rules/nomos-rules/src/checks/encapsulation",
+          "crates/rules/nomos-rules/src/checks/out_parameter.rs",
+          "crates/rules/nomos-rules/src/checks/out_parameter",
+          "crates/rules/nomos-rules/src/checks/query_syntax.rs",
+          "crates/rules/nomos-rules/src/checks/query_syntax",
+          "crates/rules/nomos-rules/src/checks/syntax_sites.rs",
+          "crates/rules/nomos-rules/src/checks/populations.rs",
+          "crates/rules/nomos-rules/src/checks/labeled_jump.rs",
+          "crates/rules/nomos-rules/src/checks/loop_termination.rs",
+          "crates/rules/nomos-rules/src/checks/branch_choice.rs",
+          "crates/rules/nomos-rules/src/checks/control_flow_body.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/tests/rule_contract_citation.rs",
+          "tests/integration/tests/calibration.rs",
+          "tests/integration/tests/determinism/goldens.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P214-THE-IF-BRANCH-AND-THE-CONTROL-FLOW-BODY-ARE-TWO-MORE-SYNTAX-SITES-AND-THREE-CORPUS-RULES-JUDGE-THEM"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-csharp",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-composer-providers",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 10800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P216-FOUR-MORE-CSHARP-ONLY-CORPUS-RULES-JUDGE-CLASSES-THREADS-FLOAT-EQUALITY-AND-BLOCK-BODIES",
+      "title": "Four more C#-only corpus rules judge test classes, threading primitives, float equality and block bodies",
+      "why": "The next four of the thirty-three checks code-standards' gates/csharp.json at f0d820729 runs for C# alone, each a walk of one file's tree that decides in the same function and none able to find a site in this workspace, which holds no C# source: check-test-class-partial (partial-test-classes-for-per-method-file-split), check-concurrency-primitives (prefer-high-level-concurrency-primitives, the specific and blocking one of the two ids it names, every finding belonging to both), check-csharp-float-equality (no-direct-float-equality-comparison, whose Rust half is check-float-equality and is not this item's) and check-expression-bodies (expression-style), all MUST and gate blocking. Each becomes kinds of nomos.cap.syntax.sites only nomos-lang-csharp offers, judged over C# sources only, the shape P215 gave the first five. Measured before this item was authored, in a worktree at f79751ef carrying P212, P214 and P215: the candidate predicate passed whole, 78 test binaries; the four rules add no finding over this tree and are named among the rules that judged an empty population; a probe C# file drew seventeen findings, line for line and in order, where code-standards' own four checks report them, and none at the exempt shapes beside them; seventy mutations of the walk, the wiring, the rules and their populations were each killed by a named test and every file restored byte-identically.",
+      "done_when": "nomos-cap-syntax declares five more kinds in SITE_KINDS with their typed views: the declared class (name and modifiers), the object creation (the created type's bare name, reduced as the corpus kernel reduces one), the member call (receiver and member, recorded only when the callee is a member access), the comparison (operator and each side's form -- a real literal, an integer literal, a cast with its type, or other -- read through parentheses, for the six comparison operators) and the block body (its owner -- method, local function, constructor or accessor -- the number of entries and the first entry's form). nomos-lang-csharp offers all five for a file that parses, from the same parse as its other kinds and interleaved with them in source order, and leaves them unanswered for one that does not. Every case of the four corpus checks' tests is ported, the projection in nomos-lang-csharp's tests and the judgment in nomos-rules. nomos-rules composes the four rules, each citing OD-CAPABILITY-019 version 1 and judging C# sources only, with Blocking, Supported findings in the corpus messages' substance: a test class that is not partial; a created Thread or Mutex, a Thread.Sleep, and a Monitor Enter, Exit or TryEnter, interleaved in line order across the two kinds the rule reads; an equality comparison with a float, double or decimal cast on a side and no written number on either; and a member whose block body is one statement an expression body states, as the corpus check counts one. A Rust source is no finding of any of the four. A run over this tree reports no finding of the four and names each among the rules that judged an empty population, and each calibration row says why. No corpus allow marker is honoured and check-expression-bodies' repair is not reproduced. The territory is OD-CAPABILITY-019's bound for five kinds offered by one provider: nomos-cap-syntax and its snapshot, nomos-lang-csharp, the four rules' own files, populations.rs, the three registration sites every composed rule has, and goldens.rs, where the C# sites golden moves. The predicate names nomos-cli and nomos-integration-tests, which enumerate the composed set.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-syntax",
+          "tests/contract/surface/nomos-cap-syntax.txt",
+          "crates/languages/nomos-lang-csharp",
+          "crates/rules/nomos-rules/src/checks/concurrency_primitives.rs",
+          "crates/rules/nomos-rules/src/checks/concurrency_primitives",
+          "crates/rules/nomos-rules/src/checks/expression_bodies.rs",
+          "crates/rules/nomos-rules/src/checks/expression_bodies",
+          "crates/rules/nomos-rules/src/checks/float_equality.rs",
+          "crates/rules/nomos-rules/src/checks/float_equality",
+          "crates/rules/nomos-rules/src/checks/partial_test_class.rs",
+          "crates/rules/nomos-rules/src/checks/partial_test_class",
+          "crates/rules/nomos-rules/src/checks/populations.rs",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/tests/rule_contract_citation.rs",
+          "tests/integration/tests/calibration.rs",
+          "tests/integration/tests/determinism/goldens.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P215-FIVE-CSHARP-ONLY-CORPUS-RULES-JUDGE-FIVE-KINDS-ONLY-CSHARP-WRITES-AND-JUDGE-NO-OTHER-LANGUAGE"
       ],
       "blocked": null,
       "claim": null,

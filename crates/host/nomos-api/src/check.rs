@@ -269,6 +269,7 @@ mod tests
             claim: Claim::Complete,
             supporting_facts: SupportingFactTrail::New(),
             populations,
+            undeclared: nomos_check_orchestration::UndeclaredValues::New(),
         };
 
         return serde_json::to_value(CheckResponse::From(outcome)).expect("a derived Serialize over owned data has nothing to refuse");

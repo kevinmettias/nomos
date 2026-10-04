@@ -39,7 +39,7 @@
 //! # The convention is now a repository's own, resolved rather than compiled in
 //!
 //! `OD-RULES-011` generalizes this rule's `Pascal_Snake_Case` default, and every other
-//! casing rule this crate ships, onto one shared read: [`Resolve_Case`] asks `nomos.cap.
+//! casing rule this crate ships, onto one shared read: [`Resolve_Read`] asks `nomos.cap.
 //! naming.policy` for the case a symbol key must take, falling back to each rule's own
 //! prior hardcoded default when a repository declares none. The convention above is that
 //! default, still real and still what an unconfigured repository gets, not what every
@@ -86,10 +86,9 @@ mod single_letter_names;
 mod test_names;
 mod violations;
 
-use crate::rule_descriptor::policy_axis::{
-    CaseRead, PolicyAxis, EXPORTED_FUNCTION_READ, EXPORTED_METHOD_READ, FUNCTION_CASE, UNEXPORTED_FUNCTION_READ, UNEXPORTED_METHOD_READ,
-};
-use crate::rule_descriptor::RequiredFact;
+use super::optional_reads::{EXPORTED_FUNCTION, EXPORTED_METHOD, UNEXPORTED_FUNCTION, UNEXPORTED_METHOD};
+use crate::rule_descriptor::policy_axis::FUNCTION_CASE;
+use crate::rule_descriptor::{NamingRead, Note_Read, OptionalRead, RequiredFact, UndeclaredOutcome, UndeclaredValue};
 use crate::{SourceFile, GO_LANGUAGE};
 use function_cases::{FunctionCases, SourceCases};
 use nomos_analysis::{FactReader, InputDigest};
@@ -121,10 +120,16 @@ pub const NAMING_CONVENTION: &str = "function-naming-convention";
 /// The code-standards identifier for this workspace's function naming convention.
 pub const PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str = "project-owned-function-names-use-upper-snake-case";
 
-/// Resolves the case `axis` takes: a repository's own declared `nomos.cap.naming.policy`,
-/// most-specific row first (`language`'s own override, then the repository-wide row), falling
-/// back to the axis's declared default for `language` when neither is declared. The naming
-/// family's one resolver; every naming axis is declared in `rule_descriptor::policy_axis`.
+/// Resolves the case `read` takes, for a read made repository-wide or for one language: the first
+/// of its keys the repository declares, each looked up for the read's language before
+/// repository-wide, and its undeclared axis's default for that language when it declares none of
+/// them. The naming family's one resolver; every naming axis is declared in
+/// `rule_descriptor::policy_axis`, and every read a rule makes in `checks::optional_reads`.
+///
+/// `OD-RULES-035` decisions 7 and 8 are this order. It is code-standards' own for the same block
+/// of the same file -- its `Override_Case` takes the refined key before the plain one, over a block
+/// in which a language's key has already replaced the repository's -- so one declaration in
+/// `standards.json` resolves to one case in both tools.
 ///
 /// `None` only for an axis with no value to judge by, which is an axis reported as undeclared,
 /// and `policy_axis`'s tests hold every naming axis to a default because this family has no
@@ -135,34 +140,74 @@ pub const PROJECT_OWNED_FUNCTION_NAMES_USE_UPPER_SNAKE_CASE: &str = "project-own
 /// capability is optional, every caller already has a complete answer without it, so
 /// `facts.Require` failing for any reason is exactly "no override" — never a `Finding`,
 /// never this capability's own `Applicability` surfacing anywhere.
-pub(super) fn Resolve_Case(facts: &mut dyn FactReader, language: Option<&str>, axis: &PolicyAxis<Case>) -> Option<Case>
+pub(super) fn Resolve_Read(facts: &mut dyn FactReader, read: &NamingRead) -> Option<Case>
 {
-    return Resolve_Read(facts, language, &CaseRead { keys: &[axis], undeclared: axis });
-}
+    let payload = Naming_Policy_Payload(facts, read.read.undeclared.family);
 
-/// Resolves the case `read` takes: the first of its keys the repository declares, each looked up
-/// for `language` before repository-wide, and its undeclared axis's default for `language` when it
-/// declares none of them. [`Resolve_Case`] is this over one axis.
-///
-/// `OD-RULES-035` decisions 7 and 8 are this order. It is code-standards' own for the same block
-/// of the same file -- its `Override_Case` takes the refined key before the plain one, over a block
-/// in which a language's key has already replaced the repository's -- so one declaration in
-/// `standards.json` resolves to one case in both tools.
-pub(super) fn Resolve_Read(facts: &mut dyn FactReader, language: Option<&str>, read: &CaseRead<'_>) -> Option<Case>
-{
-    let payload = Naming_Policy_Payload(facts, read.undeclared.family);
-
-    return Read_From(payload.as_ref(), language, read);
+    return Read_From(payload.as_ref(), read, None);
 }
 
 /// [`Resolve_Read`] over a payload already read, or over none when the repository's naming
-/// policy could not be read.
-fn Read_From(payload: Option<&NamingPolicyPayload>, language: Option<&str>, read: &CaseRead<'_>) -> Option<Case>
+/// policy could not be read, for a source written in `source` -- which only a read made in each
+/// source's own language looks at.
+///
+/// `read` is a constant in `checks::optional_reads`, the one the calling rule's descriptor row
+/// declares it reads (`OD-RULES-011` version 3 decision 5), and noting it here is what lets a test
+/// hold every body to its row.
+fn Read_From(payload: Option<&NamingPolicyPayload>, read: &NamingRead, source: Option<&str>) -> Option<Case>
 {
-    let declared = payload.and_then(|payload| return read.keys.iter().find_map(|axis| return Case_For_Symbol(payload, language, axis.key)));
+    Note_Read(OptionalRead::Of_Case(*read));
+    let language = read.Language_For(source);
 
-    return declared.or_else(|| return read.undeclared.Undeclared_Value(language));
+    return Declared_Case(payload, read, language).or_else(|| return read.read.undeclared.Undeclared_Value(language));
 }
+
+/// The case `payload` declares for `read` in `language`: the first of its keys declared, each for
+/// the language before repository-wide, or `None` when it declares none of them.
+fn Declared_Case(payload: Option<&NamingPolicyPayload>, read: &NamingRead, language: Option<&str>) -> Option<Case>
+{
+    return payload.and_then(|payload| return read.read.keys.iter().find_map(|axis| return Case_For_Symbol(payload, language, axis.key)));
+}
+
+/// Every case `read` reads in one of `languages` that the repository declared under none of its
+/// keys, named with the key whose default the rule judged against and that default.
+/// `OD-RULES-011` version 3 decision 1.
+///
+/// Nothing when the repository's naming policy could not be read, which is coverage debt and not
+/// a value nobody declared. An absent `standards.json` is read: its provider answers no rows for
+/// it, so every case it does not declare is named.
+pub(crate) fn Undeclared_Cases(facts: &mut dyn FactReader, read: &NamingRead, languages: &[Option<&str>]) -> Vec<UndeclaredValue>
+{
+    let Some(payload) = Naming_Policy_Payload(facts, read.read.undeclared.family)
+    else
+    {
+        return Vec::new();
+    };
+
+    let mut undeclared = Vec::new();
+    for &language in languages
+    {
+        if Declared_Case(Some(&payload), read, language).is_some()
+        {
+            continue;
+        }
+        let outcome = read.read.undeclared.Undeclared_Value(language).map_or(UndeclaredOutcome::ReportedUndeclared, |case| {
+            return UndeclaredOutcome::JudgedAgainst { value: case.Label().to_owned() };
+        });
+        undeclared.push(UndeclaredValue {
+            family: "naming",
+            declared_in: STANDARDS_JSON,
+            key: read.read.undeclared.key,
+            language: language.map(str::to_owned),
+            outcome,
+        });
+    }
+
+    return undeclared;
+}
+
+/// The file a repository declares its naming cases in.
+const STANDARDS_JSON: &str = "standards.json";
 
 /// How a finding names the case a name was judged against: the spelling a repository writes for
 /// it in `standards.json`, as `upper-snake case`, and nothing about whether a repository wrote it.
@@ -181,12 +226,12 @@ pub(super) fn Case_Judged_Against(case: Case) -> String
 fn Source_Cases(payload: Option<&NamingPolicyPayload>, source: &SourceFile) -> Option<SourceCases>
 {
     let language = source.language.as_ref().map(nomos_cap_syntax::Language::As_Str);
-    let sides = |exported: &CaseRead<'_>, unexported: &CaseRead<'_>| {
-        return Some(FunctionCases { exported: Read_From(payload, language, exported)?, unexported: Read_From(payload, language, unexported)? });
+    let sides = |exported: &NamingRead, unexported: &NamingRead| {
+        return Some(FunctionCases { exported: Read_From(payload, exported, language)?, unexported: Read_From(payload, unexported, language)? });
     };
-    let methods = if source.Is_Written_In(GO_LANGUAGE) { Some(sides(&EXPORTED_METHOD_READ, &UNEXPORTED_METHOD_READ)?) } else { None };
+    let methods = if source.Is_Written_In(GO_LANGUAGE) { Some(sides(&EXPORTED_METHOD, &UNEXPORTED_METHOD)?) } else { None };
 
-    return Some(SourceCases { functions: sides(&EXPORTED_FUNCTION_READ, &UNEXPORTED_FUNCTION_READ)?, methods });
+    return Some(SourceCases { functions: sides(&EXPORTED_FUNCTION, &UNEXPORTED_FUNCTION)?, methods });
 }
 
 /// Reads and decodes this repository's own `nomos.cap.naming.policy` fact, folding every

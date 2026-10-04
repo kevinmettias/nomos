@@ -12,11 +12,16 @@
 //! that judged an empty population, whose zero findings are not a clean judgment.
 //! `OD-ANALYSIS-012` version 2 decided both halves -- the reader is shown them, and the claim
 //! does not move because of them.
+//!
+//! And `UndeclaredValues`, rendered after both: every value a rule read that the repository never
+//! declared, with what the rule did with it. `OD-RULES-011` version 3 decided it the same way --
+//! named in default output, never in a finding, and the claim does not read it.
 
 use super::{ExitCode, Finding, Path, Write};
 use nomos_capability::RegistryError;
-use nomos_check_orchestration::{CheckOutcome, Claim, Examined, Populations};
+use nomos_check_orchestration::{CheckOutcome, Claim, Examined, Populations, UndeclaredValues};
 use nomos_contracts::Applicability;
+use nomos_rules::{UndeclaredOutcome, UndeclaredValue};
 
 /// How many subjects this run placed in each [`Applicability`] state.
 ///
@@ -149,10 +154,11 @@ pub(super) fn Render_Outcome(root: &Path, outcome: &CheckOutcome, stdout: &mut i
         CheckOutcome::Contradictory(error) => Render_Contradictory(error, stderr),
         CheckOutcome::NoSource => Render_No_Source(root, stderr),
         CheckOutcome::NoFacts { files } => Render_No_Facts(root, *files, stderr),
-        CheckOutcome::Judged { findings, examined, claim, populations, .. } =>
+        CheckOutcome::Judged { findings, examined, claim, populations, undeclared, .. } =>
         {
             let code = Report_Findings(findings, *examined, *claim, stdout);
             Print_Empty_Populations(populations, stdout);
+            Print_Undeclared_Values(undeclared, stdout);
             code
         }
     };
@@ -287,6 +293,50 @@ fn Print_Empty_Populations(populations: &Populations, stdout: &mut impl Write)
     {
         let _ignored = writeln!(stdout, "  {rule}");
     }
+}
+
+/// Every value a selected rule read that the repository never declared, after the claim and the
+/// population and apart from both, one line each: the rule, where the value would be declared, and
+/// what the rule did without it.
+///
+/// A rule that judged against a value this workspace substituted reports exactly what it would
+/// report had the repository declared that value, and a rule with no norm to judge by reports
+/// nothing; this is the one place a reader learns which zero is which, and which remedy is theirs:
+/// a change of code, or a declaration. The claim above is what the findings support and is not
+/// changed by it. `OD-RULES-011` version 3 decisions 1 and 3.
+///
+/// Prints nothing for a run in which every value a rule read was declared.
+fn Print_Undeclared_Values(undeclared: &UndeclaredValues, stdout: &mut impl Write)
+{
+    if undeclared.Is_Empty()
+    {
+        return;
+    }
+
+    let count: usize = undeclared.Named().iter().map(|(_, values)| return values.len()).sum();
+    let _ignored = writeln!(stdout, "\n{count} value(s) the rules read were never declared by this repository:");
+    for (rule, values) in undeclared.Named()
+    {
+        for value in values
+        {
+            let _ignored = writeln!(stdout, "  {rule}: {}", Undeclared_Line(value));
+        }
+    }
+}
+
+/// One undeclared value as a reader acts on it: where to declare it, and what the rule did instead.
+fn Undeclared_Line(value: &UndeclaredValue) -> String
+{
+    let language = value.language.as_ref().map_or_else(String::new, |language| return format!(" for {language}"));
+    let outcome = match &value.outcome
+    {
+        UndeclaredOutcome::JudgedAgainst { value } => format!("judged against {value}"),
+        UndeclaredOutcome::JudgedNothing => "judged nothing".to_owned(),
+        UndeclaredOutcome::ReportedUndeclared => "reported undeclared".to_owned(),
+        UndeclaredOutcome::SpreadBoundNotJudged => "judged the audit and not the spread bound".to_owned(),
+    };
+
+    return format!("{} `{}`{language} in {}, {outcome}", value.family, value.key, value.declared_in);
 }
 
 #[cfg(test)]
@@ -475,6 +525,7 @@ mod tests
             claim: Claim_Of(&[]),
             supporting_facts: SupportingFactTrail::New(),
             populations,
+            undeclared: nomos_check_orchestration::UndeclaredValues::New(),
         };
         let mut stdout = Vec::new();
         let mut stderr = Vec::new();
@@ -508,5 +559,74 @@ mod tests
         populations.Note(RuleId::New("rust-only-rule"), 3);
 
         assert_eq!(Judged_Over(populations), Judged_Over(Populations::New()));
+    }
+
+    fn Judged_With(undeclared: UndeclaredValues) -> String
+    {
+        let outcome = CheckOutcome::Judged {
+            findings: Vec::new(),
+            examined: Examined { files: 1, facts: 1 },
+            claim: Claim_Of(&[]),
+            supporting_facts: SupportingFactTrail::New(),
+            populations: Populations::New(),
+            undeclared,
+        };
+        let mut stdout = Vec::new();
+        let mut stderr = Vec::new();
+        let _code = Render_Outcome(Path::new("."), &outcome, &mut stdout, &mut stderr);
+        return String::from_utf8(stdout).expect("Render_Outcome writes only str into the buffer");
+    }
+
+    /// Every value a rule read and nobody declared is named after the claim, with where it would be
+    /// declared and what the rule did instead, and the report up to the claim does not move.
+    #[test]
+    fn Test_An_Undeclared_Value_Should_Be_Named_After_An_Unchanged_Claim()
+    {
+        let mut undeclared = UndeclaredValues::New();
+        undeclared.Note(
+            RuleId::New("1500-lines"),
+            vec![UndeclaredValue {
+                family: "limits",
+                declared_in: "nomos-limits.json",
+                key: "file-size-hard-lines",
+                language: None,
+                outcome: UndeclaredOutcome::JudgedAgainst { value: "1500".to_owned() },
+            }],
+        );
+        undeclared.Note(
+            RuleId::New("go-rule"),
+            vec![UndeclaredValue {
+                family: "naming",
+                declared_in: "standards.json",
+                key: "type.exported",
+                language: Some("go".to_owned()),
+                outcome: UndeclaredOutcome::JudgedAgainst { value: "upper-camel".to_owned() },
+            }],
+        );
+
+        let rendered = Judged_With(undeclared);
+        let without = Judged_With(UndeclaredValues::New());
+
+        assert!(
+            rendered.contains(
+                "2 value(s) the rules read were never declared by this repository:\n  \
+                 1500-lines: limits `file-size-hard-lines` in nomos-limits.json, judged against 1500\n  \
+                 go-rule: naming `type.exported` for go in standards.json, judged against upper-camel\n"
+            ),
+            "{rendered}"
+        );
+        assert!(rendered.contains("claim: complete"), "{rendered}");
+        assert!(rendered.starts_with(&without), "the report up to and including the claim is unchanged:\n{rendered}\n---\n{without}");
+    }
+
+    /// A run in which every value its rules read was declared prints nothing new: a rule that names
+    /// none is not listed.
+    #[test]
+    fn Test_A_Run_With_Nothing_Undeclared_Should_Print_Nothing_New()
+    {
+        let mut undeclared = UndeclaredValues::New();
+        undeclared.Note(RuleId::New("1500-lines"), Vec::new());
+
+        assert_eq!(Judged_With(undeclared), Judged_With(UndeclaredValues::New()));
     }
 }

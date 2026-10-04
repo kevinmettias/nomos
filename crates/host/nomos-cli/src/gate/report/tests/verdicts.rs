@@ -28,6 +28,7 @@ fn Judged_Without_A_Verdict(finding: &Finding, cause: Option<NoVerdict>) -> Gate
             claim: Claim::Incomplete,
             supporting_facts: SupportingFactTrail::New(),
             populations: nomos_check_orchestration::Populations::New(),
+            undeclared: nomos_check_orchestration::UndeclaredValues::New(),
         },
         findings: Empty_Findings(),
         disposition: GateRunOutcome::Indeterminate,
@@ -51,7 +52,7 @@ fn Judged_Run(findings: Vec<Finding>, whole: GateFindings, disposition: GateRunO
         unmatched_policy: Vec::new(),
         run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(0)),
         root: PathBuf::from("."),
-        check_outcome: CheckOutcome::Judged { findings, examined: Examined { files: 1, facts: 1 }, claim: Claim::Complete, supporting_facts: SupportingFactTrail::New(), populations: nomos_check_orchestration::Populations::New() },
+        check_outcome: CheckOutcome::Judged { findings, examined: Examined { files: 1, facts: 1 }, claim: Claim::Complete, supporting_facts: SupportingFactTrail::New(), populations: nomos_check_orchestration::Populations::New(), undeclared: nomos_check_orchestration::UndeclaredValues::New() },
         findings: whole,
         disposition,
     };

@@ -1,5 +1,6 @@
 use super::*;
 use crate::checks::test_support::{self, FactToFile, OfferedProvider};
+use crate::rule_descriptor::policy_axis::NESTING_DEPTH_MAX;
 use nomos_analysis::{MemoryFactStore, Reader};
 use nomos_capability::Registry;
 use nomos_contracts::SubjectId;

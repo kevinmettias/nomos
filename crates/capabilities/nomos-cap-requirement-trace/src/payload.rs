@@ -22,8 +22,12 @@ pub use problem_kind::ProblemKind;
 pub use refusal::Refusal;
 pub use requirement_trace_payload::RequirementTracePayload;
 
-/// The word every line of this encoding opens with.
+/// The word every problem line of this encoding opens with.
 const PROBLEM_TAG: &str = "problem";
+/// The one line a payload carries when the repository has no `tests/contract/requirements/`
+/// directory: [`RequirementTracePayload::directory_absent`]. No line when it has one, so a
+/// payload for a repository with a corpus encodes exactly as it did before the field existed.
+const DIRECTORY_ABSENT_LINE: &str = "corpus\tabsent";
 /// The fields a `problem` line carries: the tag itself, the kind, the requirement and the
 /// message. The message is read whole, so a message that happens to contain a tab is not
 /// truncated at it.
@@ -37,6 +41,11 @@ pub fn Encode_Payload(payload: &RequirementTracePayload) -> Vec<u8>
 {
     let mut encoded = String::new();
 
+    if payload.directory_absent
+    {
+        encoded.push_str(DIRECTORY_ABSENT_LINE);
+        encoded.push('\n');
+    }
     for problem in &payload.problems
     {
         encoded.push_str(PROBLEM_TAG);
@@ -56,9 +65,9 @@ pub fn Encode_Payload(payload: &RequirementTracePayload) -> Vec<u8>
 ///
 /// # Errors
 ///
-/// [`Refusal`] if the bytes are not valid UTF-8, a line does not open with [`PROBLEM_TAG`],
-/// a line's kind field names none of [`ProblemKind`]'s five tags, or a line does not carry
-/// all four fields (tag, kind, requirement, message).
+/// [`Refusal`] if the bytes are not valid UTF-8, a line other than [`DIRECTORY_ABSENT_LINE`]
+/// does not open with [`PROBLEM_TAG`], a line's kind field names none of [`ProblemKind`]'s five
+/// tags, or a line does not carry all four fields (tag, kind, requirement, message).
 pub fn Parse_Payload(bytes: &[u8]) -> Result<RequirementTracePayload, Refusal>
 {
     let text = core::str::from_utf8(bytes).map_err(|error| return Refusal { reason: format!("not UTF-8: {error}") })?;
@@ -66,6 +75,11 @@ pub fn Parse_Payload(bytes: &[u8]) -> Result<RequirementTracePayload, Refusal>
     let mut payload = RequirementTracePayload::default();
     for line in text.lines()
     {
+        if line == DIRECTORY_ABSENT_LINE
+        {
+            payload.directory_absent = true;
+            continue;
+        }
         payload.problems.push(Problem_Of_Line(line)?);
     }
 
@@ -164,6 +178,21 @@ mod tests
         assert_eq!(decoded, RequirementTracePayload::default());
     }
 
+    /// A repository with no corpus is told apart from one whose corpus all resolves, in both
+    /// directions of the encoding, and a payload with a corpus encodes as it did before.
+    #[test]
+    fn Test_A_Missing_Directory_Should_Round_Trip_Apart_From_A_Corpus_With_Nothing_To_Report()
+    {
+        let absent = RequirementTracePayload { problems: Vec::new(), directory_absent: true };
+
+        let encoded = Encode_Payload(&absent);
+
+        assert_eq!(String::from_utf8(encoded.clone()).expect("ASCII and tabs"), "corpus\tabsent\n");
+        assert_eq!(Parse_Payload(&encoded).expect("this crate's own encoding"), absent);
+        assert!(Encode_Payload(&RequirementTracePayload::default()).is_empty());
+        assert!(!Parse_Payload(&[]).expect("an empty payload").directory_absent);
+    }
+
     #[test]
     fn Test_Encode_Payload_Should_Produce_Stable_Diffable_Bytes()
     {
@@ -217,6 +246,7 @@ mod tests
                 requirement: "CAP-002".to_owned(),
                 message: "CAP-002: a message\twith an embedded tab".to_owned(),
             }],
+            directory_absent: false,
         };
 
         let decoded = Parse_Payload(&Encode_Payload(&payload)).expect("a message field captures the rest of the line");
@@ -241,6 +271,7 @@ mod tests
                     requirement: "CHK-003".to_owned(),
                     message: "a message".to_owned(),
                 }],
+                directory_absent: false,
             };
             let decoded = Parse_Payload(&Encode_Payload(&payload)).expect("this crate's own encoding");
 
@@ -257,6 +288,7 @@ mod tests
                 requirement: "CHK-003".to_owned(),
                 message: "CHK-003: site crates/x.rs is not a file in this workspace".to_owned(),
             }],
+            directory_absent: false,
         };
     }
 }

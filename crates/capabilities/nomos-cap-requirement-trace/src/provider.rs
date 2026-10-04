@@ -16,7 +16,7 @@ use crate::predicates::{
 use crate::registry::Assessments_In;
 use nomos_analysis::{FactKey, FactPayload, GuaranteeDigest, InputDigest, MaterializedFact};
 use nomos_contracts::{EvidenceClass, Guarantee, ProviderId, SubjectId};
-use nomos_platform::FileSystem;
+use nomos_platform::{FileSystem, FileSystemError};
 use std::path::Path;
 
 /// Reads `root`'s own `tests/contract/requirements/` and materializes the one fact this
@@ -24,9 +24,10 @@ use std::path::Path;
 ///
 /// Never fails: [`Discover_Workspace`] treats every reason it cannot fully answer — no such
 /// directory, a directory it cannot enumerate, an entry it cannot parse — as "nothing to
-/// report" rather than a materialization failure, per its own module doc. A repository with
-/// no committed requirement corpus at all (every repository this rule judges, except this
-/// one) produces a fact reporting zero problems, not an absent fact and not a spurious one.
+/// report" rather than a materialization failure, per its own doc. A repository with no
+/// committed requirement corpus at all (every repository this rule judges, except this one)
+/// produces a fact reporting zero problems and saying the directory is absent, not an absent
+/// fact and not a spurious one.
 #[must_use]
 pub fn Materialize_Workspace<Fs: FileSystem>(root: &Path, context: FactContext, filesystem: &Fs) -> TraceFact
 {
@@ -73,28 +74,27 @@ fn Compute_Fact_Key(subject: SubjectId, guarantee: Guarantee, context: FactConte
 /// [`RequirementTracePayload`]'s own module doc.
 ///
 /// `root/tests/contract/requirements/` missing entirely, unreadable, or holding an entry
-/// this crate's own [`crate::registry::Parse`] refuses are all the identical answer: a
-/// payload reporting zero problems. None of the three is the empty population
-/// `OD-ANALYSIS-012` reports, and nothing here waits on that record's mechanism. Its
-/// version 2 makes a rule's population the files its norm is about, and the one rule that
-/// reads this payload, `requirement-trace-staleness`, is a Workspace rule: its population is
-/// the one workspace, which is never empty, so the per-rule report that record decides will
-/// never name it. The ordinary case, no directory at all, is a norm the repository did not
-/// declare. Version 2 says that is not a population and leaves it to `OD-RULES-011`'s
-/// optional-read question, whose answer is that an absent optional read applies no override
-/// and raises no finding of its own. This crate follows the same "an absent or unreadable
-/// optional capability answers as if it declared nothing" idiom `nomos-repo-policy`'s own
-/// four `nomos.cap.*.policy` providers already use for a missing `standards.json`, rather
-/// than inventing a sixth reported case this repository's own contract does not name.
-/// Whether a run should say that a verdict was reached with nothing declared is decided by
-/// no record yet, as `OD-RULES-035` version 2 records. What matters for a repository that
-/// is not this one is that the ordinary case — no `tests/contract/requirements/` directory
-/// at all — never raises a finding: this predicate corpus is nomos's own, not a convention
-/// every judged repository is expected to have adopted.
+/// this crate's own [`crate::registry::Parse`] refuses all report zero problems, and the first
+/// also says the directory is absent. None of the three is the empty population
+/// `OD-ANALYSIS-012` reports: the one rule that reads this payload, `requirement-trace-staleness`,
+/// is a Workspace rule, whose population is the one workspace and is never empty. The ordinary
+/// case, no directory at all, is a norm the repository did not declare, and `OD-RULES-011`
+/// version 3 decides what a run says about one: it names the value beside its claim, never in a
+/// finding, and its decision 6 requires this payload to tell that case from a corpus whose every
+/// entry resolves, and both from a provider that did not run, which answers no fact at all. A
+/// missing directory is what the filesystem reports as not found. What an unreadable directory
+/// or a refused entry reads as is left as it was, zero problems with the directory present,
+/// because decision 6 does not decide it. Neither case raises a finding: this predicate corpus is
+/// nomos's own, not a convention every judged repository is expected to have adopted.
 #[must_use]
 pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> RequirementTracePayload
 {
-    let Ok(assessments) = Assessments_In(&root.join(REGISTRY), filesystem)
+    let directory = root.join(REGISTRY);
+    if let Err(FileSystemError::NotFound { .. }) = filesystem.Read_Directory(&directory)
+    {
+        return RequirementTracePayload { problems: Vec::new(), directory_absent: true };
+    }
+    let Ok(assessments) = Assessments_In(&directory, filesystem)
     else
     {
         return RequirementTracePayload::default();
@@ -110,7 +110,7 @@ pub fn Discover_Workspace<Fs: FileSystem>(root: &Path, filesystem: &Fs) -> Requi
     let partials = Partials_With_No_Gap(&assessments);
     problems.extend(partials);
 
-    return RequirementTracePayload { problems };
+    return RequirementTracePayload { problems, directory_absent: false };
 }
 
 #[cfg(test)]
@@ -141,21 +141,23 @@ mod tests
         );
     }
 
+    /// A repository with no corpus reports no problem and says the directory is absent, through
+    /// the real filesystem: `OD-RULES-011` version 3 decision 6.
     #[test]
-    fn Test_Discover_Workspace_Should_Report_Nothing_When_The_Registry_Directory_Is_Absent()
+    fn Test_Discover_Workspace_Should_Say_The_Directory_Is_Absent_When_It_Is()
     {
         let payload = Discover_Workspace(&std::path::PathBuf::from("this/path/does/not/exist"), &StdFileSystem);
 
-        assert_eq!(payload, RequirementTracePayload::default());
+        assert_eq!(payload, RequirementTracePayload { problems: Vec::new(), directory_absent: true });
     }
 
-    /// A [`FileSystem`] whose `Read_Directory` always refuses, distinguishing "the registry
-    /// directory is absent" (this fixture) from "the registry directory exists and is
-    /// merely empty" (`FakeFileSystem` with an empty listing, below) -- both collapse to
-    /// the same reported answer today, per this module's own doc, but the two are reached
-    /// through different fixtures so a future population-count mechanism can tell them
-    /// apart without this test changing.
-    struct NoDirectory;
+    /// A [`FileSystem`] whose `Read_Directory` always refuses: not found, which is
+    /// a missing directory, or denied, which is one that exists and cannot be enumerated.
+    /// Decision 6 tells the first apart and leaves the second reading as it always has.
+    struct NoDirectory
+    {
+        denied: bool,
+    }
 
     /// Answers from fixed data, so its outputs reproduce byte for byte.
     impl Strategy for NoDirectory
@@ -184,16 +186,26 @@ mod tests
 
         fn Read_Directory(&self, path: &Path) -> Result<Vec<std::path::PathBuf>, FileSystemError>
         {
-            return Err(FileSystemError::NotFound { path: path.display().to_string() });
+            let path = path.display().to_string();
+            if self.denied
+            {
+                return Err(FileSystemError::Denied { path, cause: "access is denied".to_owned() });
+            }
+
+            return Err(FileSystemError::NotFound { path });
         }
     }
 
+    /// A directory the filesystem cannot find is absent; one it refuses to enumerate is not, and
+    /// reads as zero problems with the directory present, as it did before decision 6.
     #[test]
-    fn Test_Discover_Workspace_Should_Report_Nothing_When_Read_Directory_Refuses()
+    fn Test_Discover_Workspace_Should_Tell_A_Missing_Directory_From_An_Unreadable_One()
     {
-        let payload = Discover_Workspace(Path::new("anywhere"), &NoDirectory);
+        let missing = Discover_Workspace(Path::new("anywhere"), &NoDirectory { denied: false });
+        let unreadable = Discover_Workspace(Path::new("anywhere"), &NoDirectory { denied: true });
 
-        assert_eq!(payload, RequirementTracePayload::default());
+        assert_eq!(missing, RequirementTracePayload { problems: Vec::new(), directory_absent: true });
+        assert_eq!(unreadable, RequirementTracePayload::default());
     }
 
     /// A [`FileSystem`] backed by an in-memory directory listing and file map, so a
@@ -268,6 +280,7 @@ mod tests
                     requirement: "CHK-003".to_owned(),
                     message: "CHK-003: site no/such/file.rs is not a file in this workspace".to_owned(),
                 }],
+                directory_absent: false,
             }
         );
     }

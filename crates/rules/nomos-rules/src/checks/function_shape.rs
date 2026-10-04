@@ -17,7 +17,7 @@
 //! # The ceiling is now a repository's own, resolved rather than compiled in
 //!
 //! `OD-RULES-011` named this threshold family as its own future instance of the naming
-//! decision `checks::naming::Resolve_Case` already generalizes. The ceiling is the
+//! decision `checks::naming::Resolve_Read` already generalizes. The ceiling is the
 //! `PARAMETER_COUNT_MAX` axis in `rule_descriptor::policy_axis`, read through
 //! `checks::structure::Resolve_Limit`, the limits family's one resolver, which falls back to
 //! the axis's declared default when a repository declares none. This file kept its own copy
@@ -25,7 +25,7 @@
 //! diverged on the integer type they returned.
 
 use super::structure::{Resolve_Limit, Undeclared_Limit};
-use crate::rule_descriptor::policy_axis::PARAMETER_COUNT_MAX;
+use super::optional_reads;
 use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_cap_syntax::{FUNCTION, Function_Arity, PayloadItem, SyntaxPayload};
@@ -44,8 +44,6 @@ pub const PARAMETER_COUNT: &str = "parameter-count";
 /// The Go-specific code-standards parameter-count rule id.
 pub const GO_PARAMETER_COUNT: &str = "go-helpers-package-five-inputs";
 
-const GO: &str = "go";
-
 /// Reports functions that definitely exceed the value-parameter cap — a repository's own
 /// declared `nomos.cap.limits.policy` when it declares `parameter-count-max`, the axis's
 /// declared default otherwise.
@@ -55,10 +53,10 @@ pub fn Check_Parameter_Count(
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    let Some(max) = Resolve_Limit(facts, None, &PARAMETER_COUNT_MAX)
+    let Some(max) = Resolve_Limit(facts, &optional_reads::PARAMETER_COUNT)
     else
     {
-        return vec![Undeclared_Limit(PARAMETER_COUNT, &PARAMETER_COUNT_MAX)];
+        return vec![Undeclared_Limit(PARAMETER_COUNT, optional_reads::PARAMETER_COUNT.axis)];
     };
     return Check_Function_Arity_Policy(
         sources,

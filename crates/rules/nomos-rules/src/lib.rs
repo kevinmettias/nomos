@@ -109,7 +109,7 @@ pub use checks::{
 pub use declared_universe::DeclaredUniverse;
 pub use reading::Reading;
 pub use registry::{RuleOffer, RuleRegistry, RuleRegistryError};
-pub use rule_descriptor::{Population, RequiredFact, RuleDescriptor, SubjectKind, DESCRIPTORS};
+pub use rule_descriptor::{OptionalRead, Population, RequiredFact, RuleDescriptor, SubjectKind, UndeclaredOutcome, UndeclaredValue, DESCRIPTORS};
 pub use universe_kind::{UniverseKind, Universes_In};
 
 /// What this crate needs from a syntax provider before it will believe an answer.

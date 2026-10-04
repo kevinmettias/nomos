@@ -133,7 +133,7 @@ fn Test_Resolve_Limit_Should_Fall_Back_To_The_Default_When_No_Fact_Is_Materializ
     let StoreAndRegistry { store, registry } = Empty_Store_And_Registry();
     let mut facts = Facts_Reader(&store, &registry);
 
-    let resolved = Resolve_Limit(&mut facts, None, &FILE_SIZE_HARD_LINES);
+    let resolved = Resolve_Limit(&mut facts, &crate::checks::optional_reads::FILE_SIZE_HARD);
 
     assert_eq!(resolved.and_then(|lines| return usize::try_from(lines).ok()), Some(JUSTIFICATION_TRIGGER_LINES));
 }
@@ -147,11 +147,11 @@ fn Test_Resolve_Limit_Should_Prefer_The_Repository_Wide_Row_Over_The_Default()
     Materialize_Limits_Fact(
         &mut store,
         &offer,
-        vec![PolicyRow { scope: Scope::Repository, key: FILE_SIZE_HARD_LINES.key.to_owned(), value: REPOSITORY_OVERRIDE_LINES }],
+        vec![PolicyRow { scope: Scope::Repository, key: crate::rule_descriptor::policy_axis::FILE_SIZE_HARD_LINES.key.to_owned(), value: REPOSITORY_OVERRIDE_LINES }],
     );
     let mut facts = Facts_Reader(&store, &registry);
 
-    let resolved = Resolve_Limit(&mut facts, None, &FILE_SIZE_HARD_LINES);
+    let resolved = Resolve_Limit(&mut facts, &crate::checks::optional_reads::FILE_SIZE_HARD);
 
     assert_eq!(resolved, Some(REPOSITORY_OVERRIDE_LINES));
 }
@@ -167,13 +167,13 @@ fn Test_Resolve_Limit_Should_Prefer_The_Language_Row_Over_The_Repository_Wide_Ro
         &mut store,
         &offer,
         vec![
-            PolicyRow { scope: Scope::Repository, key: FILE_SIZE_HARD_LINES.key.to_owned(), value: REPOSITORY_ROW_LINES },
-            PolicyRow { scope: Scope::Language(GO.to_owned()), key: FILE_SIZE_HARD_LINES.key.to_owned(), value: LANGUAGE_ROW_LINES },
+            PolicyRow { scope: Scope::Repository, key: crate::rule_descriptor::policy_axis::FILE_SIZE_HARD_LINES.key.to_owned(), value: REPOSITORY_ROW_LINES },
+            PolicyRow { scope: Scope::Language(crate::GO_LANGUAGE.to_owned()), key: crate::rule_descriptor::policy_axis::FILE_SIZE_HARD_LINES.key.to_owned(), value: LANGUAGE_ROW_LINES },
         ],
     );
     let mut facts = Facts_Reader(&store, &registry);
 
-    let resolved = Resolve_Limit(&mut facts, Some(GO), &FILE_SIZE_HARD_LINES);
+    let resolved = Resolve_Limit(&mut facts, &crate::checks::optional_reads::GO_FILE_SIZE_HARD);
 
     assert_eq!(resolved, Some(LANGUAGE_ROW_LINES));
 }
@@ -190,11 +190,11 @@ fn Test_Resolve_Limit_Should_Prefer_The_Repository_Wide_Row_Over_A_Languages_Own
     Materialize_Limits_Fact(
         &mut store,
         &offer,
-        vec![PolicyRow { scope: Scope::Repository, key: FILE_SIZE_HARD_LINES.key.to_owned(), value: REPOSITORY_ROW_LINES }],
+        vec![PolicyRow { scope: Scope::Repository, key: crate::rule_descriptor::policy_axis::FILE_SIZE_HARD_LINES.key.to_owned(), value: REPOSITORY_ROW_LINES }],
     );
     let mut facts = Facts_Reader(&store, &registry);
 
-    let resolved = Resolve_Limit(&mut facts, Some(GO), &FILE_SIZE_HARD_LINES);
+    let resolved = Resolve_Limit(&mut facts, &crate::checks::optional_reads::GO_FILE_SIZE_HARD);
 
     assert_eq!(resolved, Some(REPOSITORY_ROW_LINES));
 }
@@ -208,7 +208,7 @@ fn Test_Check_File_Size_Review_Trigger_Should_Honor_A_Real_Materialized_Override
     Materialize_Limits_Fact(
         &mut store,
         &offer,
-        vec![PolicyRow { scope: Scope::Repository, key: FILE_SIZE_REVIEW_LINES.key.to_owned(), value: OVERRIDE_CEILING_LINES }],
+        vec![PolicyRow { scope: Scope::Repository, key: crate::rule_descriptor::policy_axis::FILE_SIZE_REVIEW_LINES.key.to_owned(), value: OVERRIDE_CEILING_LINES }],
     );
     let mut facts = Facts_Reader(&store, &registry);
     let source = Source("src/small.rs", Lines(usize::try_from(OVERRIDE_CEILING_LINES).expect("test literal fits in usize") + 1));
@@ -229,7 +229,7 @@ fn Test_Check_File_Size_Review_Trigger_Should_Honor_A_Real_Materialized_Override
 fn Test_Check_Go_File_Size_Review_Trigger_Should_State_The_Threshold_It_Judged_Against_And_Not_Where_It_Came_From()
 {
     const DECLARED_FOR_GO: u32 = 200;
-    let key = FILE_SIZE_REVIEW_LINES.key;
+    let key = crate::rule_descriptor::policy_axis::FILE_SIZE_REVIEW_LINES.key;
     let lines = GO_REVIEW_TRIGGER_LINES.saturating_add(1);
     let restating = vec![Go_Row(key, u32::try_from(GO_REVIEW_TRIGGER_LINES).expect("500 fits in u32"))];
 
@@ -248,7 +248,7 @@ fn Test_Check_Go_File_Size_Review_Trigger_Should_State_The_Threshold_It_Judged_A
 fn Test_Check_Go_File_Size_Hard_Trigger_Should_State_The_Threshold_It_Judged_Against_And_Not_Where_It_Came_From()
 {
     const DECLARED_FOR_EVERY_LANGUAGE: u32 = 800;
-    let key = FILE_SIZE_HARD_LINES.key;
+    let key = crate::rule_descriptor::policy_axis::FILE_SIZE_HARD_LINES.key;
     let lines = GO_HARD_TRIGGER_LINES.saturating_add(1);
     let restating = vec![Go_Row(key, u32::try_from(GO_HARD_TRIGGER_LINES).expect("1000 fits in u32"))];
     let declaring = vec![PolicyRow { scope: Scope::Repository, key: key.to_owned(), value: DECLARED_FOR_EVERY_LANGUAGE }];
@@ -266,7 +266,7 @@ fn Test_Check_Go_File_Size_Hard_Trigger_Should_State_The_Threshold_It_Judged_Aga
 /// One limits row declared for Go alone.
 fn Go_Row(key: &str, value: u32) -> PolicyRow
 {
-    return PolicyRow { scope: Scope::Language(GO.to_owned()), key: key.to_owned(), value };
+    return PolicyRow { scope: Scope::Language(crate::GO_LANGUAGE.to_owned()), key: key.to_owned(), value };
 }
 
 fn Summaries(findings: &[Finding]) -> Vec<String>

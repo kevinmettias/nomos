@@ -13,7 +13,7 @@
 //! The default vocabulary itself is not a repository's to configure — code-standards
 //! ships it, every repository starts from it — but `nomos.cap.words.policy` carries a
 //! repository's own *additions* to the approved half, the same optional-capability shape
-//! [`super::Resolve_Case`] and `checks::structure::Resolve_Limit` already establish:
+//! [`super::Resolve_Read`] and `checks::structure::Resolve_Limit` already establish:
 //! `facts.Require` failing for any reason means no additions, never a `Finding`.
 
 use crate::SourceFile;

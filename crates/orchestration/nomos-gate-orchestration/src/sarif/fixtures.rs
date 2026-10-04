@@ -104,6 +104,7 @@ pub(crate) fn Judged_Outcome_Of(findings: Vec<Finding>, populations: Populations
         claim,
         supporting_facts: SupportingFactTrail::New(),
         populations,
+        undeclared: nomos_check_orchestration::UndeclaredValues::New(),
     };
 }
 

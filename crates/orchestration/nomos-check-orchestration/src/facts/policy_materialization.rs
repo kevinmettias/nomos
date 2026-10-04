@@ -3,7 +3,7 @@
 //!
 //! Unlike [`super::dependency_materialization`]'s subprocess-backed providers, a policy
 //! capability like `nomos.cap.naming.policy` has no subprocess and no per-file source list a
-//! rule needs handed back: `nomos_rules::Resolve_Case` already reads it directly, by its own
+//! rule needs handed back: `nomos-rules`' naming resolver already reads it directly, by its own
 //! fixed empty-path subject, from whichever real sources `Run` already walked. So this
 //! module's own materialization step writes at most one fact into the store and reports how
 //! many the store now holds current -- `1` once it does, whether this call wrote the fact or
@@ -70,7 +70,7 @@ pub struct PolicyReading<'a, Fs: FileSystem>
 /// A missing or unreadable declaration is not reported as a finding, for seven of the eight
 /// families this is called for: `OD-CAPABILITY-004` already decided an absent optional
 /// capability is silently "no override" from whichever caller reads it
-/// (`nomos_rules::Resolve_Case`), so a materialization that cannot produce the fact simply
+/// (`nomos-rules`' own resolvers), so a materialization that cannot produce the fact simply
 /// leaves the store without one, the same way an unmaterialized syntax fact for one file
 /// does not abort judging the rest.
 ///

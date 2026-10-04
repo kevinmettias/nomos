@@ -15,7 +15,7 @@ fn Judged_Explain(findings: Vec<Finding>, explanation: Explanation) -> GateExpla
 {
     return GateExplainResult {
         root: PathBuf::from("."),
-        check_outcome: CheckOutcome::Judged { findings, examined: Examined { files: 1, facts: 1 }, claim: Claim::Complete, supporting_facts: SupportingFactTrail::New(), populations: nomos_check_orchestration::Populations::New() },
+        check_outcome: CheckOutcome::Judged { findings, examined: Examined { files: 1, facts: 1 }, claim: Claim::Complete, supporting_facts: SupportingFactTrail::New(), populations: nomos_check_orchestration::Populations::New(), undeclared: nomos_check_orchestration::UndeclaredValues::New() },
         explanation,
     };
 }

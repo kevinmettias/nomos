@@ -159,7 +159,7 @@ fn Test_Resolve_Limit_Should_Fall_Back_To_The_Default_When_No_Fact_Is_Materializ
     let registry = nomos_capability::Registry::New();
     let mut facts = Reader::On(&store, &registry, Test_Context());
 
-    let resolved = Resolve_Limit(&mut facts, None, &PARAMETER_COUNT_MAX);
+    let resolved = Resolve_Limit(&mut facts, &crate::checks::optional_reads::PARAMETER_COUNT);
 
     assert_eq!(resolved, Some(MAX_VALUE_PARAMETERS));
 }
@@ -174,13 +174,13 @@ fn Test_Resolve_Limit_Should_Prefer_The_Repository_Wide_Row_Over_The_Default()
         &offer,
         vec![nomos_cap_limits_policy::PolicyRow {
             scope: Scope::Repository,
-            key: PARAMETER_COUNT_MAX.key.to_owned(),
+            key: crate::rule_descriptor::policy_axis::PARAMETER_COUNT_MAX.key.to_owned(),
             value: REPOSITORY_MAX,
         }],
     );
     let mut facts = Reader::On(&store, &registry, Test_Context());
 
-    let resolved = Resolve_Limit(&mut facts, None, &PARAMETER_COUNT_MAX);
+    let resolved = Resolve_Limit(&mut facts, &crate::checks::optional_reads::PARAMETER_COUNT);
 
     assert_eq!(resolved, Some(REPOSITORY_MAX));
 }
@@ -195,7 +195,7 @@ fn Test_Resolve_Limit_Should_Prefer_The_Language_Row_Over_The_Repository_Wide_Ro
     Materialize_Limits_Fact(&mut store, &offer, rows);
     let mut facts = Reader::On(&store, &registry, Test_Context());
 
-    let resolved = Resolve_Limit(&mut facts, Some(GO), &PARAMETER_COUNT_MAX);
+    let resolved = Resolve_Limit(&mut facts, &crate::checks::optional_reads::GO_PARAMETER_COUNT);
 
     assert_eq!(resolved, Some(GO_MAX));
 }
@@ -207,12 +207,12 @@ fn Repository_And_Go_Rows(repository_max: u32, go_max: u32) -> Vec<nomos_cap_lim
     return vec![
         nomos_cap_limits_policy::PolicyRow {
             scope: Scope::Repository,
-            key: PARAMETER_COUNT_MAX.key.to_owned(),
+            key: crate::rule_descriptor::policy_axis::PARAMETER_COUNT_MAX.key.to_owned(),
             value: repository_max,
         },
         nomos_cap_limits_policy::PolicyRow {
-            scope: Scope::Language(GO.to_owned()),
-            key: PARAMETER_COUNT_MAX.key.to_owned(),
+            scope: Scope::Language(GO_LANGUAGE.to_owned()),
+            key: crate::rule_descriptor::policy_axis::PARAMETER_COUNT_MAX.key.to_owned(),
             value: go_max,
         },
     ];
@@ -256,7 +256,7 @@ fn Assert_States_The_Cap_It_Judged_Against(check: fn(&[SourceFile], &mut dyn Fac
 /// One repository-wide `parameter-count-max` row.
 fn Parameter_Cap_Row(value: u32) -> nomos_cap_limits_policy::PolicyRow
 {
-    return nomos_cap_limits_policy::PolicyRow { scope: Scope::Repository, key: PARAMETER_COUNT_MAX.key.to_owned(), value };
+    return nomos_cap_limits_policy::PolicyRow { scope: Scope::Repository, key: crate::rule_descriptor::policy_axis::PARAMETER_COUNT_MAX.key.to_owned(), value };
 }
 
 /// What `check` finds in a five-parameter `Build` at `path`, in a repository whose limits file

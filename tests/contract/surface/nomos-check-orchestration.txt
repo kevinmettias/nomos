@@ -4,7 +4,7 @@ pub enum nomos_check_orchestration::Claim
 pub enum nomos_check_orchestration::RuleResolutionError
 pub enum nomos_check_orchestration::SupportingFacts
 pub enum variant nomos_check_orchestration::CheckOutcome::Contradictory(RegistryError)
-pub enum variant nomos_check_orchestration::CheckOutcome::Judged { findings: Vec<Finding>, examined: Examined, claim: Claim, supporting_facts: SupportingFactTrail, populations: Populations, }
+pub enum variant nomos_check_orchestration::CheckOutcome::Judged { findings: Vec<Finding>, examined: Examined, claim: Claim, supporting_facts: SupportingFactTrail, populations: Populations, undeclared: UndeclaredValues, }
 pub enum variant nomos_check_orchestration::CheckOutcome::NoFacts { files: usize, }
 pub enum variant nomos_check_orchestration::CheckOutcome::NoSource
 pub enum variant nomos_check_orchestration::CheckOutcome::Unreadable
@@ -36,6 +36,11 @@ pub fn nomos_check_orchestration::Run<Launcher: ProgramLauncher, Fs: FileSystem,
 pub fn nomos_check_orchestration::Run_Reassessing<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>( sources: &[SourceFile], context: RunContext<'_, Launcher, Fs, Env>, selected: &[RuleId], reassessment: &mut RuleReassessmentCache, ) -> CheckOutcome
 pub fn nomos_check_orchestration::SupportingFactTrail::Facts_For(&self, rule: &str) -> SupportingFacts
 pub fn nomos_check_orchestration::SupportingFactTrail::New() -> Self
+pub fn nomos_check_orchestration::UndeclaredValues::Is_Empty(&self) -> bool
+pub fn nomos_check_orchestration::UndeclaredValues::Named(&self) -> &[(RuleId, Vec<UndeclaredValue>)]
+pub fn nomos_check_orchestration::UndeclaredValues::New() -> Self
+pub fn nomos_check_orchestration::UndeclaredValues::Note(&mut self, rule: RuleId, values: Vec<UndeclaredValue>)
+pub fn nomos_check_orchestration::UndeclaredValues::Of(&self, rule: &RuleId) -> &[UndeclaredValue]
 pub impl nomos_check_orchestration::Claim implements core::fmt::Display
 pub struct field nomos_check_orchestration::CheckCommand::root: PathBuf
 pub struct field nomos_check_orchestration::ComposedProviders::architecture: WorkspacePolicyProvider<Fs>
@@ -119,6 +124,7 @@ pub struct nomos_check_orchestration::SubjectFact
 pub struct nomos_check_orchestration::SupportingFactTrail
 pub struct nomos_check_orchestration::SyntaxProvider
 pub struct nomos_check_orchestration::Unanswered
+pub struct nomos_check_orchestration::UndeclaredValues
 pub struct nomos_check_orchestration::WalkFacts
 pub struct nomos_check_orchestration::WalkReading<'reading, Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>
 pub struct nomos_check_orchestration::WalkedSource<'source>

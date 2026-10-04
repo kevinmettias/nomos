@@ -40,6 +40,8 @@
 //! summary states: a repository that declares no corpus judges exactly as it did before this
 //! rule existed.
 
+use super::optional_reads;
+use crate::rule_descriptor::{Note_Read, UndeclaredOutcome, UndeclaredValue};
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_standards_corpus::{DeclarationIssue, DeclaredRule, StandardsCorpusPayload};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
@@ -76,6 +78,7 @@ pub const STANDARDS_CORPUS_CONTRACT_RECORD_VERSION: u32 = 3;
 #[must_use]
 pub fn Check_Standards_Corpus(facts: &mut dyn FactReader) -> Vec<Finding>
 {
+    Note_Read(optional_reads::STANDARDS_CORPUS);
     let Some(payload) = Declared_Corpus(facts)
     else
     {
@@ -83,6 +86,28 @@ pub fn Check_Standards_Corpus(facts: &mut dyn FactReader) -> Vec<Finding>
     };
 
     return Findings_For(&payload);
+}
+
+/// The corpus roots, named when the repository's declaration was read and declares none, so this
+/// rule judged nothing: `OD-RULES-011` version 3 decision 1. An absent
+/// `nomos-standards-corpus.json` is read as declaring none. `None` when it declares a root, and
+/// when the declaration could not be read, which is coverage debt rather than a value nobody
+/// declared.
+pub(crate) fn Undeclared_Standards_Corpus(facts: &mut dyn FactReader) -> Option<UndeclaredValue>
+{
+    let payload = Declared_Corpus(facts)?;
+    if !payload.roots.is_empty()
+    {
+        return None;
+    }
+
+    return Some(UndeclaredValue {
+        family: "standards-corpus",
+        declared_in: "nomos-standards-corpus.json",
+        key: "roots",
+        language: None,
+        outcome: UndeclaredOutcome::JudgedNothing,
+    });
 }
 
 fn Declared_Corpus(facts: &mut dyn FactReader) -> Option<StandardsCorpusPayload>

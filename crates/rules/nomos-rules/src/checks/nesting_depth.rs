@@ -53,7 +53,7 @@
 
 use super::formatting::{Advance_Literal_State, RustLiteralState};
 use super::structure::{Resolve_Count, Undeclared_Limit};
-use crate::rule_descriptor::policy_axis::NESTING_DEPTH_MAX;
+use super::optional_reads;
 use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
@@ -80,10 +80,10 @@ const FUNCTION_MODIFIERS: [&str; 5] = ["pub", "async", "unsafe", "const", "exter
 #[must_use]
 pub fn Check_Nesting_Depth(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    let Some(limit) = Resolve_Count(facts, None, &NESTING_DEPTH_MAX)
+    let Some(limit) = Resolve_Count(facts, &optional_reads::NESTING_DEPTH)
     else
     {
-        return vec![Undeclared_Limit(NESTING_DEPTH, &NESTING_DEPTH_MAX)];
+        return vec![Undeclared_Limit(NESTING_DEPTH, optional_reads::NESTING_DEPTH.axis)];
     };
     let mut findings = Vec::new();
 

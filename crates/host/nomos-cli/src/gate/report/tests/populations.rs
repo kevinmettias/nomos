@@ -58,6 +58,7 @@ fn Rendered_Over(populations: Populations) -> (String, ExitCode)
             claim: Claim::Complete,
             supporting_facts: SupportingFactTrail::New(),
             populations,
+            undeclared: nomos_check_orchestration::UndeclaredValues::New(),
         },
         findings: whole,
         disposition: GateRunOutcome::Failed,

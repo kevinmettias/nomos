@@ -14,7 +14,7 @@
 //! # The thresholds are now a repository's own, resolved rather than compiled in
 //!
 //! `OD-RULES-011` named this threshold family as its own future instance of the naming
-//! decision `checks::naming::Resolve_Case` already generalizes: [`Resolve_Limit`] asks
+//! decision `checks::naming::Resolve_Read` already generalizes: [`Resolve_Limit`] asks
 //! `nomos.cap.limits.policy` for the line count a repository declares, falling back to the
 //! axis's declared default when a repository declares none — the identical
 //! `Require`-then-fall-back-on-any-`Err` shape, since `OD-CAPABILITY-004`/`OD-RULES-011`
@@ -29,8 +29,9 @@
 mod go_file_size;
 mod mod_rs;
 
-use crate::rule_descriptor::policy_axis::{PolicyAxis, FILE_SIZE_HARD_LINES, FILE_SIZE_REVIEW_LINES};
-use crate::rule_descriptor::RequiredFact;
+use super::optional_reads::{FILE_SIZE_HARD, FILE_SIZE_REVIEW};
+use crate::rule_descriptor::policy_axis::PolicyAxis;
+use crate::rule_descriptor::{LimitRead, Note_Read, OptionalRead, RequiredFact, UndeclaredOutcome, UndeclaredValue};
 use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_limits_policy::{PolicyRow, Scope};
@@ -50,16 +51,14 @@ pub const FIVE_HUNDRED_LINE_REVIEW_TRIGGER: &str = "five-hundred-line-review-tri
 /// The code-standards Go hard-trigger rule id.
 pub const ONE_THOUSAND_LINE_HARD_TRIGGER: &str = "one-thousand-line-hard-trigger";
 
-pub(super) const GO: &str = "go";
-
 /// Reports files whose line count exceeds the review trigger.
 #[must_use]
 pub fn Check_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    let Some(threshold) = Resolve_Count(facts, None, &FILE_SIZE_REVIEW_LINES)
+    let Some(threshold) = Resolve_Count(facts, &FILE_SIZE_REVIEW)
     else
     {
-        return vec![Undeclared_Limit(FILE_SIZE_REVIEW_TRIGGER, &FILE_SIZE_REVIEW_LINES)];
+        return vec![Undeclared_Limit(FILE_SIZE_REVIEW_TRIGGER, FILE_SIZE_REVIEW.axis)];
     };
     let because = format!("exceeds the {threshold}-line review trigger for splitting");
     return Findings_For_Threshold(
@@ -73,10 +72,10 @@ pub fn Check_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn Fa
 #[must_use]
 pub fn Check_File_Size_Justification_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    let Some(threshold) = Resolve_Count(facts, None, &FILE_SIZE_HARD_LINES)
+    let Some(threshold) = Resolve_Count(facts, &FILE_SIZE_HARD)
     else
     {
-        return vec![Undeclared_Limit(FILE_SIZE_JUSTIFICATION_TRIGGER, &FILE_SIZE_HARD_LINES)];
+        return vec![Undeclared_Limit(FILE_SIZE_JUSTIFICATION_TRIGGER, FILE_SIZE_HARD.axis)];
     };
     let because = format!("exceeds the {threshold}-line trigger and needs an explicit splitting justification");
     return Findings_For_Threshold(
@@ -86,37 +85,71 @@ pub fn Check_File_Size_Justification_Trigger(sources: &[SourceFile], facts: &mut
     );
 }
 
-/// Resolves the value `axis` takes: a repository's own declared `nomos.cap.limits.policy`,
-/// most-specific row first (`language`'s own override, then the repository-wide row), falling
-/// back to what the axis says an undeclared value means for `language` when neither is
-/// declared -- its default, or `None` for an axis reported as undeclared.
+/// Resolves the value `read` takes: a repository's own declared `nomos.cap.limits.policy`,
+/// most-specific row first (the read's language's own override, then the repository-wide row),
+/// falling back to what the axis says an undeclared value means for that language when neither
+/// is declared -- its default, or `None` for an axis reported as undeclared.
+///
+/// `read` is a constant in `checks::optional_reads`, the one the calling rule's descriptor row
+/// declares it reads (`OD-RULES-011` version 3 decision 5), and noting it here is what lets a test
+/// hold every body to its row.
 ///
 /// `None` is not a value a caller chooses a meaning for: every caller hands it to
 /// [`Undeclared_Limit`], so what an undeclared axis means stays written on the axis
 /// (`OD-RULES-035` section 3) and no rule decides it again in its own body.
 ///
 /// `OD-CAPABILITY-004` and `OD-RULES-011` settle how an absent read is treated here,
-/// mirroring `checks::naming::Resolve_Case` exactly: this capability is optional, so
+/// mirroring `checks::naming::Resolve_Read` exactly: this capability is optional, so
 /// `facts.Require` failing for any reason is exactly "nothing declared" — never this
 /// capability's own `Applicability` surfacing anywhere.
-pub(super) fn Resolve_Limit(facts: &mut dyn FactReader, language: Option<&str>, axis: &PolicyAxis<u32>) -> Option<u32>
+pub(super) fn Resolve_Limit(facts: &mut dyn FactReader, read: &LimitRead) -> Option<u32>
 {
-    let undeclared = axis.Undeclared_Value(language);
-    let Some(payload) = Materialized_Limits_Payload(facts, axis.family)
+    Note_Read(OptionalRead::Of_Limit(*read));
+    let undeclared = read.axis.Undeclared_Value(read.language);
+    let Some(payload) = Materialized_Limits_Payload(facts, read.axis.family)
     else
     {
         return undeclared;
     };
 
-    if let Some(language) = language
+    return Declared_Limit(&payload, read).or(undeclared);
+}
+
+/// The value `payload` declares for `read`: its language's own row first, then the
+/// repository-wide row, or `None` when it declares neither.
+fn Declared_Limit(payload: &nomos_cap_limits_policy::LimitsPolicyPayload, read: &LimitRead) -> Option<u32>
+{
+    let for_language = read.language.and_then(|language| return Matching_Row(payload, Scope::Language(language.to_owned()), read.axis.key));
+
+    return for_language.or_else(|| return Matching_Row(payload, Scope::Repository, read.axis.key)).map(|row| return row.value);
+}
+
+/// The value `read` reads, named when the repository's limits were read and declare it in
+/// neither scope [`Resolve_Limit`] looks in: judged against the axis's default, or reported
+/// undeclared for an axis with none. `OD-RULES-011` version 3 decision 1.
+///
+/// `None` when the repository declared it, and when its limits could not be read at all, which
+/// is coverage debt and not a value nobody declared. An absent `nomos-limits.json` is read: its
+/// provider answers no rows for it, so every limit it does not declare is named.
+pub(crate) fn Undeclared_Limit_Value(facts: &mut dyn FactReader, read: &LimitRead) -> Option<UndeclaredValue>
+{
+    let payload = Materialized_Limits_Payload(facts, read.axis.family)?;
+    if Declared_Limit(&payload, read).is_some()
     {
-        if let Some(row) = Matching_Row(&payload, Scope::Language(language.to_owned()), axis.key)
-        {
-            return Some(row.value);
-        }
+        return None;
     }
 
-    return Matching_Row(&payload, Scope::Repository, axis.key).map_or(undeclared, |row| return Some(row.value));
+    let outcome = read.axis.Undeclared_Value(read.language).map_or(UndeclaredOutcome::ReportedUndeclared, |value| {
+        return UndeclaredOutcome::JudgedAgainst { value: value.to_string() };
+    });
+
+    return Some(UndeclaredValue {
+        family: "limits",
+        declared_in: LIMITS_JSON,
+        key: read.axis.key,
+        language: read.language.map(str::to_owned),
+        outcome,
+    });
 }
 
 /// [`Resolve_Limit`] as a `usize`, which is how the four file-size triggers compare a line count,
@@ -124,9 +157,9 @@ pub(super) fn Resolve_Limit(facts: &mut dyn FactReader, language: Option<&str>, 
 ///
 /// A declared `u32` always fits a `usize` on every target this workspace builds for; the
 /// saturating fallback exists only so the conversion states an answer rather than a panic.
-pub(super) fn Resolve_Count(facts: &mut dyn FactReader, language: Option<&str>, axis: &PolicyAxis<u32>) -> Option<usize>
+pub(super) fn Resolve_Count(facts: &mut dyn FactReader, read: &LimitRead) -> Option<usize>
 {
-    return Resolve_Limit(facts, language, axis).map(|limit| return usize::try_from(limit).unwrap_or(usize::MAX));
+    return Resolve_Limit(facts, read).map(|limit| return usize::try_from(limit).unwrap_or(usize::MAX));
 }
 
 /// What a rule reports in place of a verdict when `axis` is undeclared and says so: one advisory
@@ -329,7 +362,7 @@ mod self_tests
         let registry = Registry::New();
         let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
 
-        let resolved = Resolve_Limit(&mut facts, None, &FILE_SIZE_HARD_LINES);
+        let resolved = Resolve_Limit(&mut facts, &FILE_SIZE_HARD);
 
         assert_eq!(resolved.and_then(|lines| return usize::try_from(lines).ok()), Some(JUSTIFICATION_TRIGGER_LINES));
     }
@@ -343,7 +376,7 @@ mod self_tests
         let registry = Registry::New();
         let mut facts = Reader::On(&store, &registry, crate::checks::test_support::Test_Context());
 
-        let resolved = Resolve_Count(&mut facts, Some(GO), &FILE_SIZE_HARD_LINES);
+        let resolved = Resolve_Count(&mut facts, &super::super::optional_reads::GO_FILE_SIZE_HARD);
 
         assert_eq!(resolved, Some(super::tests::GO_HARD_TRIGGER_LINES));
     }

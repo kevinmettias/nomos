@@ -2,6 +2,8 @@
 //! language forbids the extensions it named.
 
 use super::{Because, DECLARED_TOOLING_LANGUAGE_FOR_SCRIPTS, Finding_For_Source, Rule};
+use crate::checks::optional_reads::TOOLING_LANGUAGE;
+use crate::rule_descriptor::{Note_Read, UndeclaredOutcome, UndeclaredValue};
 use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_scripting_policy::ScriptingPolicyPayload;
@@ -14,6 +16,7 @@ use nomos_contracts::Finding;
 #[must_use]
 pub fn Check_Declared_Tooling_Language_For_Scripts(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
+    Note_Read(TOOLING_LANGUAGE);
     let Some(policy) = Resolve_Scripting_Policy(facts)
     else
     {
@@ -43,6 +46,27 @@ fn Resolve_Scripting_Policy(facts: &mut dyn FactReader) -> Option<ScriptingPolic
         .ok()?;
 
     return nomos_cap_scripting_policy::Parse_Payload(&fact.payload.bytes).ok();
+}
+
+/// `scripting.tooling_language`, named when the repository's scripting policy was read and
+/// declares none, so this rule judged nothing: `OD-RULES-011` version 3 decision 1. `None` when it
+/// declares one, and when the policy could not be read, which is coverage debt rather than a value
+/// nobody declared.
+pub(crate) fn Undeclared_Tooling_Language(facts: &mut dyn FactReader) -> Option<UndeclaredValue>
+{
+    let policy = Resolve_Scripting_Policy(facts)?;
+    if policy.tooling_language.is_some()
+    {
+        return None;
+    }
+
+    return Some(UndeclaredValue {
+        family: "scripting",
+        declared_in: "standards.json",
+        key: "scripting.tooling_language",
+        language: None,
+        outcome: UndeclaredOutcome::JudgedNothing,
+    });
 }
 
 /// This crate's own floor for `nomos.cap.scripting.policy` — stated at the capability's

@@ -5,6 +5,7 @@ pub const fn nomos_rules::FunctionArityPolicy::With_Gate(mut self, gate: GateCat
 pub const fn nomos_rules::RuleDescriptor::Citing(self, record: &'static str, version: u32) -> Self
 pub const fn nomos_rules::RuleDescriptor::Is_Citing_A_Versioned_Record(&self) -> bool
 pub const fn nomos_rules::RuleDescriptor::Judging(self, population: Population) -> Self
+pub const fn nomos_rules::RuleDescriptor::Reading(self, reads: &'static [OptionalRead]) -> Self
 pub const nomos_rules::ABBREVIATIONS: &str
 pub const nomos_rules::AN_EXCLUDED_FILE_SAYS_WHY: &str
 pub const nomos_rules::ATOMIC_ORDERING_CHOICES_ARE_JUSTIFIED: &str
@@ -142,6 +143,7 @@ pub enum nomos_rules::ReceiverAllowance
 pub enum nomos_rules::RequiredFact
 pub enum nomos_rules::RuleRegistryError
 pub enum nomos_rules::SubjectKind
+pub enum nomos_rules::UndeclaredOutcome
 pub enum nomos_rules::UniverseKind
 pub enum variant nomos_rules::Population::Every
 pub enum variant nomos_rules::Population::Kind { name: &'static str, holds: fn(&SourceFile) -> bool, }
@@ -176,6 +178,10 @@ pub enum variant nomos_rules::RuleRegistryError::AlreadyOffered(RuleId)
 pub enum variant nomos_rules::SubjectKind::SourceFacts
 pub enum variant nomos_rules::SubjectKind::SourceText
 pub enum variant nomos_rules::SubjectKind::Workspace
+pub enum variant nomos_rules::UndeclaredOutcome::JudgedAgainst { value: String, }
+pub enum variant nomos_rules::UndeclaredOutcome::JudgedNothing
+pub enum variant nomos_rules::UndeclaredOutcome::ReportedUndeclared
+pub enum variant nomos_rules::UndeclaredOutcome::SpreadBoundNotJudged
 pub enum variant nomos_rules::UniverseKind::Constant
 pub enum variant nomos_rules::UniverseKind::Enumeration
 pub fn nomos_rules::Check_A_Consumer_Imports_Through_The_Facade(sources: &[SourceFile]) -> Vec<Finding>
@@ -276,6 +282,7 @@ pub fn nomos_rules::Population::Holds(&self, source: &SourceFile) -> bool
 pub fn nomos_rules::Population::Name(&self) -> String
 pub fn nomos_rules::RequiredFact::Capability(self) -> CapabilityId
 pub fn nomos_rules::RuleDescriptor::Rule(&self) -> RuleId
+pub fn nomos_rules::RuleDescriptor::Undeclared_Values(&self, facts: &mut dyn FactReader, judged: &[SourceFile]) -> Vec<UndeclaredValue>
 pub fn nomos_rules::RuleRegistry::New() -> Self
 pub fn nomos_rules::RuleRegistry::Offer(&mut self, offer: RuleOffer) -> Result<(), RuleRegistryError>
 pub fn nomos_rules::RuleRegistry::Offered(&self, rule: &RuleId) -> Option<&RuleOffer>
@@ -300,6 +307,7 @@ pub struct field nomos_rules::RuleDescriptor::check: RuleJudgment
 pub struct field nomos_rules::RuleDescriptor::contract_record: &'static str
 pub struct field nomos_rules::RuleDescriptor::contract_record_version: u32
 pub struct field nomos_rules::RuleDescriptor::id: &'static str
+pub struct field nomos_rules::RuleDescriptor::optional_reads: &'static [OptionalRead]
 pub struct field nomos_rules::RuleDescriptor::population: Population
 pub struct field nomos_rules::RuleDescriptor::requires: &'static [RequiredFact]
 pub struct field nomos_rules::RuleDescriptor::subject: SubjectKind
@@ -312,10 +320,17 @@ pub struct field nomos_rules::SourceFile::path: String
 pub struct field nomos_rules::SourceFile::preferred_syntax_provider: Option<ProviderId>
 pub struct field nomos_rules::SourceFile::subject: SubjectId
 pub struct field nomos_rules::SourceFile::text: String
+pub struct field nomos_rules::UndeclaredValue::declared_in: &'static str
+pub struct field nomos_rules::UndeclaredValue::family: &'static str
+pub struct field nomos_rules::UndeclaredValue::key: &'static str
+pub struct field nomos_rules::UndeclaredValue::language: Option<String>
+pub struct field nomos_rules::UndeclaredValue::outcome: UndeclaredOutcome
 pub struct nomos_rules::DeclaredUniverse
 pub struct nomos_rules::FunctionArityPolicy
+pub struct nomos_rules::OptionalRead(Read)
 pub struct nomos_rules::RoleSurfacePair
 pub struct nomos_rules::RuleDescriptor
 pub struct nomos_rules::RuleOffer
 pub struct nomos_rules::RuleRegistry
 pub struct nomos_rules::SourceFile
+pub struct nomos_rules::UndeclaredValue

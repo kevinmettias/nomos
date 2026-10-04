@@ -19,21 +19,21 @@
 //!
 //! # What "nothing to report" means here
 //!
-//! An empty payload means one of three things this rule cannot and need not distinguish:
-//! this repository has no `tests/contract/requirements/` directory at all (every repository
-//! this rule judges except this one, today), the directory exists and holds no entry, or
-//! every committed entry resolves. `nomos_cap_requirement_trace::Discover_Workspace`'s own
-//! module doc names the same collapse and why. It is not an empty population, and it does
-//! not wait on `OD-ANALYSIS-012`'s mechanism. That record's version 2 gives a Workspace rule
-//! the one workspace as its population, which is never empty, so its per-rule report never
-//! names this rule. A repository with no requirements directory has not declared the norm
-//! this rule holds it to, and version 2 says that is not a population but `OD-RULES-011`'s
-//! optional-read question: an absent optional read applies no override and raises no
-//! finding of its own. So this rule follows the identical "an absent or empty optional
-//! capability judges nothing" idiom [`crate::Check_Goals_And_Parts_Line_Up`] already uses
-//! for a repository that declared no goals. Whether a run should say a verdict was reached
-//! with nothing declared is decided by no record yet, as `OD-RULES-035` version 2 records.
+//! A payload reporting no problem means one of three things: this repository has no
+//! `tests/contract/requirements/` directory at all (every repository this rule judges except
+//! this one, today), the directory exists and holds no entry, or every committed entry resolves.
+//! None is a finding, and none is an empty population: `OD-ANALYSIS-012` version 2 gives a
+//! Workspace rule the one workspace as its population, which is never empty, so its per-rule
+//! report never names this rule. A repository with no requirements directory has not declared
+//! the norm this rule holds it to, which that record sends to `OD-RULES-011`, and version 3 of
+//! that record decides what a run says about it: the value is named beside the claim as one this
+//! rule judged nothing for, never in a finding. Its decision 6 is why the payload carries
+//! `directory_absent`, so that case is told from a corpus whose every entry resolves;
+//! [`Undeclared_Requirement_Trace`] reads it, and a directory that exists and holds no entry is
+//! a corpus the provider read, as before.
 
+use super::optional_reads;
+use crate::rule_descriptor::{Note_Read, UndeclaredOutcome, UndeclaredValue};
 use nomos_analysis::{FactReader, InputDigest};
 use nomos_cap_requirement_trace::{Problem, ProblemKind, RequirementTracePayload, REGISTRY};
 use nomos_contracts::{Applicability, EvidenceClass, Finding, GateCategory, RuleId};
@@ -64,6 +64,7 @@ pub const REQUIREMENT_TRACE_STALENESS_CONTRACT_RECORD_VERSION: u32 = 1;
 #[must_use]
 pub fn Check_Requirement_Trace_Staleness(facts: &mut dyn FactReader) -> Vec<Finding>
 {
+    Note_Read(optional_reads::REQUIREMENT_TRACE);
     let Some(payload) = Materialized_Trace(facts)
     else
     {
@@ -71,6 +72,27 @@ pub fn Check_Requirement_Trace_Staleness(facts: &mut dyn FactReader) -> Vec<Find
     };
 
     return Findings_For(&payload);
+}
+
+/// The requirement corpus, named when the provider answered that the repository has no
+/// `tests/contract/requirements/` directory, so this rule judged nothing: `OD-RULES-011` version 3
+/// decisions 1 and 6. `None` for a corpus the provider read, whatever it found, and when no fact
+/// could be read, which is coverage debt rather than a value nobody declared.
+pub(crate) fn Undeclared_Requirement_Trace(facts: &mut dyn FactReader) -> Option<UndeclaredValue>
+{
+    let payload = Materialized_Trace(facts)?;
+    if !payload.directory_absent
+    {
+        return None;
+    }
+
+    return Some(UndeclaredValue {
+        family: "requirement-trace",
+        declared_in: REGISTRY,
+        key: "*.assessment",
+        language: None,
+        outcome: UndeclaredOutcome::JudgedNothing,
+    });
 }
 
 fn Materialized_Trace(facts: &mut dyn FactReader) -> Option<RequirementTracePayload>
@@ -252,7 +274,7 @@ mod tests
     {
         let TestOffering { mut store, registry, offer } = Offering();
         Materialize_Requirement_Trace_Fact(
-            &mut store, &offer, &RequirementTracePayload { problems: problems.to_vec() });
+            &mut store, &offer, &RequirementTracePayload { problems: problems.to_vec(), directory_absent: false });
 
         let mut reader = Reader::On(&store, &registry, Test_Context());
         return Check_Requirement_Trace_Staleness(&mut reader);

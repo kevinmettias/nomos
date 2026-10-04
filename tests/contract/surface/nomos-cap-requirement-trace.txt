@@ -56,6 +56,7 @@ pub struct field nomos_cap_requirement_trace::Problem::kind: ProblemKind
 pub struct field nomos_cap_requirement_trace::Problem::message: String
 pub struct field nomos_cap_requirement_trace::Problem::requirement: String
 pub struct field nomos_cap_requirement_trace::Refusal::reason: String
+pub struct field nomos_cap_requirement_trace::RequirementTracePayload::directory_absent: bool
 pub struct field nomos_cap_requirement_trace::RequirementTracePayload::problems: Vec<Problem>
 pub struct field nomos_cap_requirement_trace::Site::path: String
 pub struct field nomos_cap_requirement_trace::Site::symbol: String

@@ -254,6 +254,18 @@ pub(crate) const UNEXPORTED_TYPE_CASE: PolicyAxis<Case> = PolicyAxis {
     undeclared: Undeclared::JudgedAgainstDefault { repository: Case::LowerCamel, languages: &[] },
 };
 
+/// How `data-names-stay-lower-snake` reads a module's case: through `module` alone.
+pub(crate) const MODULE_READ: CaseRead<'static> = CaseRead { keys: &[&MODULE_CASE], undeclared: &MODULE_CASE };
+
+/// How `data-names-stay-lower-snake` reads a field's case: through `field` alone.
+pub(crate) const FIELD_READ: CaseRead<'static> = CaseRead { keys: &[&FIELD_CASE], undeclared: &FIELD_CASE };
+
+/// How the Go type rule reads an exported type's case: through `type.exported` alone.
+pub(crate) const EXPORTED_TYPE_READ: CaseRead<'static> = CaseRead { keys: &[&EXPORTED_TYPE_CASE], undeclared: &EXPORTED_TYPE_CASE };
+
+/// How the Go type rule reads an unexported type's case: through `type.unexported` alone.
+pub(crate) const UNEXPORTED_TYPE_READ: CaseRead<'static> = CaseRead { keys: &[&UNEXPORTED_TYPE_CASE], undeclared: &UNEXPORTED_TYPE_CASE };
+
 /// Every limits axis above, which is every key a repository's `nomos-limits.json` may declare
 /// and have a rule read.
 ///

@@ -40,7 +40,7 @@
 //! the function a parse can see.
 
 use super::structure::{Resolve_Count, Undeclared_Limit};
-use crate::rule_descriptor::policy_axis::CYCLOMATIC_COMPLEXITY_MAX;
+use super::optional_reads;
 use crate::SourceFile;
 use nomos_analysis::{FactReader, InputDigest, MaterializedFact};
 use nomos_cap_complexity::{Aggregation, ComplexityPayload, Directionality, FunctionComplexity};
@@ -80,7 +80,7 @@ pub fn Check_Cyclomatic_Complexity(sources: &[SourceFile], facts: &mut dyn FactR
         return Vec::new();
     }
 
-    let Some(limit) = Resolve_Count(facts, None, &CYCLOMATIC_COMPLEXITY_MAX)
+    let Some(limit) = Resolve_Count(facts, &optional_reads::CYCLOMATIC_COMPLEXITY)
     else
     {
         return vec![Undeclared_With_Measurement(&rust, facts)];
@@ -151,7 +151,7 @@ fn Breach_Finding(source: &SourceFile, function: &FunctionComplexity, limit: usi
 /// a limit has the distribution's top in front of them.
 fn Undeclared_With_Measurement(rust: &[&SourceFile], facts: &mut dyn FactReader) -> Finding
 {
-    let mut finding = Undeclared_Limit(CYCLOMATIC_COMPLEXITY, &CYCLOMATIC_COMPLEXITY_MAX);
+    let mut finding = Undeclared_Limit(CYCLOMATIC_COMPLEXITY, optional_reads::CYCLOMATIC_COMPLEXITY.axis);
     let mut measured = 0usize;
     let mut read = 0usize;
     let mut highest: Option<(String, FunctionComplexity)> = None;

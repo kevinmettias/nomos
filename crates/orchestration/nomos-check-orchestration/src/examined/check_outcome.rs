@@ -3,7 +3,7 @@
 use nomos_capability::RegistryError;
 use nomos_contracts::Finding;
 
-use crate::examined::{Claim, Examined, Populations, SupportingFactTrail};
+use crate::examined::{Claim, Examined, Populations, SupportingFactTrail, UndeclaredValues};
 
 /// What a `nomos check` run produced.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -49,5 +49,11 @@ pub enum CheckOutcome
         /// decided: an empty population is reported here, and the claim is what the findings
         /// alone support. [`Populations::Empty`] names the rules that judged nothing.
         populations: Populations,
+        /// Every value a selected rule judged over a nonempty population read that the repository
+        /// did not declare, and what the rule did with it.
+        ///
+        /// Beside [`Self::Judged::claim`] and [`Self::Judged::populations`] and apart from both, as
+        /// `OD-RULES-011` version 3 decided: no finding carries it and the claim does not read it.
+        undeclared: UndeclaredValues,
     },
 }

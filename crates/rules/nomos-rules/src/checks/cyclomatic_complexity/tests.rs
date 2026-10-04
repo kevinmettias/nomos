@@ -3,6 +3,7 @@
 
 use super::*;
 use crate::checks::test_support::{self, FactToFile, OfferedProvider, Test_Context, TestOffering};
+use crate::rule_descriptor::policy_axis::CYCLOMATIC_COMPLEXITY_MAX;
 use nomos_analysis::{MemoryFactStore, Reader};
 use nomos_cap_complexity::{Complexity_Descriptor, Encode_Payload};
 use nomos_cap_limits_policy::{LimitsPolicyPayload, PolicyRow, Scope};

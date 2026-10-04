@@ -154,7 +154,7 @@ mod tests
     #[test]
     fn Test_A_Judged_Outcome_Should_Carry_Its_Counts_And_Its_Claim_And_Not_Its_Findings()
     {
-        let outcome = CheckOutcome::Judged { findings: Vec::new(), examined: Examined { files: JUDGED_FILES, facts: JUDGED_FACTS }, claim: Claim::Incomplete, supporting_facts: SupportingFactTrail::New(), populations: nomos_check_orchestration::Populations::New() };
+        let outcome = CheckOutcome::Judged { findings: Vec::new(), examined: Examined { files: JUDGED_FILES, facts: JUDGED_FACTS }, claim: Claim::Incomplete, supporting_facts: SupportingFactTrail::New(), populations: nomos_check_orchestration::Populations::New(), undeclared: nomos_check_orchestration::UndeclaredValues::New() };
 
         let rendered = Rendered_Outcome(&outcome);
 
@@ -221,6 +221,7 @@ mod tests
             claim: Claim::Complete,
             supporting_facts: SupportingFactTrail::New(),
             populations,
+            undeclared: nomos_check_orchestration::UndeclaredValues::New(),
         };
     }
 

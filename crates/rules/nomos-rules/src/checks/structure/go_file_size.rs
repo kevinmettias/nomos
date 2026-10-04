@@ -5,8 +5,8 @@
 //! `OD-RULES-011` version 3 decision 4 keeps a finding's text, and the two identities hashed from
 //! it, the same whichever source supplied the value it was judged against.
 
-use super::{FIVE_HUNDRED_LINE_REVIEW_TRIGGER, Findings_For_Threshold, GO, LineThreshold, ONE_THOUSAND_LINE_HARD_TRIGGER, Resolve_Count, Undeclared_Limit};
-use crate::rule_descriptor::policy_axis::{FILE_SIZE_HARD_LINES, FILE_SIZE_REVIEW_LINES};
+use super::{FIVE_HUNDRED_LINE_REVIEW_TRIGGER, Findings_For_Threshold, LineThreshold, ONE_THOUSAND_LINE_HARD_TRIGGER, Resolve_Count, Undeclared_Limit};
+use crate::checks::optional_reads::{GO_FILE_SIZE_HARD, GO_FILE_SIZE_REVIEW};
 use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
@@ -15,10 +15,10 @@ use nomos_contracts::Finding;
 #[must_use]
 pub fn Check_Go_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    let Some(threshold) = Resolve_Count(facts, Some(GO), &FILE_SIZE_REVIEW_LINES)
+    let Some(threshold) = Resolve_Count(facts, &GO_FILE_SIZE_REVIEW)
     else
     {
-        return vec![Undeclared_Limit(FIVE_HUNDRED_LINE_REVIEW_TRIGGER, &FILE_SIZE_REVIEW_LINES)];
+        return vec![Undeclared_Limit(FIVE_HUNDRED_LINE_REVIEW_TRIGGER, GO_FILE_SIZE_REVIEW.axis)];
     };
     let because = format!("exceeds the {threshold}-line review trigger for splitting");
     return Findings_For_Threshold(
@@ -32,10 +32,10 @@ pub fn Check_Go_File_Size_Review_Trigger(sources: &[SourceFile], facts: &mut dyn
 #[must_use]
 pub fn Check_Go_File_Size_Hard_Trigger(sources: &[SourceFile], facts: &mut dyn FactReader) -> Vec<Finding>
 {
-    let Some(threshold) = Resolve_Count(facts, Some(GO), &FILE_SIZE_HARD_LINES)
+    let Some(threshold) = Resolve_Count(facts, &GO_FILE_SIZE_HARD)
     else
     {
-        return vec![Undeclared_Limit(ONE_THOUSAND_LINE_HARD_TRIGGER, &FILE_SIZE_HARD_LINES)];
+        return vec![Undeclared_Limit(ONE_THOUSAND_LINE_HARD_TRIGGER, GO_FILE_SIZE_HARD.axis)];
     };
     let because = format!("exceeds the {threshold}-line trigger and needs decomposition or a documented locality justification");
     return Findings_For_Threshold(

@@ -69,6 +69,7 @@ fn Judged(findings: Vec<Finding>) -> CheckOutcome
         claim: Claim::Complete,
         supporting_facts: SupportingFactTrail::New(),
         populations: nomos_check_orchestration::Populations::New(),
+        undeclared: nomos_check_orchestration::UndeclaredValues::New(),
     };
 }
 

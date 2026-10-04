@@ -238,6 +238,102 @@ fn Test_A_Reused_Rule_Should_Still_Report_Its_Population()
     assert_eq!(second, first);
 }
 
+/// A rule whose findings the reassessment cache reuses names what it read undeclared exactly as the
+/// run that judged it did, so a second, unchanged call reads what the first did. The crate's own
+/// directory, which these runs are rooted at, declares no limits file, so `nesting-depth` names one.
+#[test]
+fn Test_A_Reused_Rule_Should_Name_What_It_Read_Undeclared_As_The_First_Run_Did()
+{
+    let selected = [RuleId::New(nomos_rules::NESTING_DEPTH), RuleId::New(COMPLETENESS_MIRROR)];
+    let sources = Reassessed_Sources();
+    let mut fixture = Test_Reassessing_Fixture();
+
+    let first = Reassessing_Outcome(&sources, &selected, &mut fixture);
+    let recorded_after_first = fixture.reassessment.Recorded();
+    let second = Reassessing_Outcome(&sources, &selected, &mut fixture);
+
+    assert_eq!(fixture.reassessment.Recorded(), recorded_after_first, "the second call reuses every rule");
+    let (CheckOutcome::Judged { undeclared: first, .. }, CheckOutcome::Judged { undeclared: second, .. }) = (first, second)
+    else
+    {
+        panic!("a tree the provider can read must be judged");
+    };
+    assert!(!first.Of(&RuleId::New(nomos_rules::NESTING_DEPTH)).is_empty(), "{first:?}");
+    assert_eq!(second, first);
+}
+
+/// `OD-RULES-011` version 3, end to end: one rule judged over the same source in a repository that
+/// declares the value it reads and in one that does not. Only the second names the value, with the
+/// value the rule judged against, and the two reach identical findings and the same claim -- the
+/// declaration here states the default, so nothing but the list may tell the two runs apart.
+#[test]
+fn Test_An_Undeclared_Value_Should_Be_Named_Beside_Identical_Findings_And_An_Unchanged_Claim()
+{
+    use nomos_rules::{UndeclaredOutcome, UndeclaredValue};
+
+    let rule = RuleId::New(nomos_rules::NESTING_DEPTH);
+    let sources = [SourceFile::New("a.rs", nomos_model::Subject_Of_Path("a.rs"), "pub fn Ok() {}\n")];
+    let declaring = Scratch_Root("declaring", Some("{ \"nesting-depth-max\": 3 }"));
+    let silent = Scratch_Root("silent", None);
+
+    let declared = Judged_At(&declaring, &sources, &rule);
+    let undeclared = Judged_At(&silent, &sources, &rule);
+    let _ignored = std::fs::remove_dir_all(&declaring);
+    let _ignored = std::fs::remove_dir_all(&silent);
+
+    assert!(declared.undeclared.Is_Empty(), "{:?}", declared.undeclared);
+    assert_eq!(
+        undeclared.undeclared.Of(&rule),
+        [UndeclaredValue {
+            family: "limits",
+            declared_in: "nomos-limits.json",
+            key: "nesting-depth-max",
+            language: None,
+            outcome: UndeclaredOutcome::JudgedAgainst { value: "3".to_owned() },
+        }]
+    );
+    assert_eq!(undeclared.findings, declared.findings, "a value nobody declared alters no finding");
+    assert_eq!(undeclared.claim, declared.claim, "a value nobody declared changes no claim");
+}
+
+/// What one run selecting only `rule` over `sources`, rooted at `root`, reported.
+struct JudgedRun
+{
+    findings: Vec<nomos_contracts::Finding>,
+    claim: crate::examined::Claim,
+    undeclared: crate::examined::UndeclaredValues,
+}
+
+fn Judged_At(root: &Path, sources: &[SourceFile], rule: &RuleId) -> JudgedRun
+{
+    let mut workspace = None;
+    let mut store = MemoryFactStore::New();
+    let outcome = Run(sources, Test_Context(root, &mut workspace, &mut store), std::slice::from_ref(rule));
+
+    let CheckOutcome::Judged { findings, claim, undeclared, .. } = outcome
+    else
+    {
+        panic!("a tree the provider can read must be judged");
+    };
+
+    return JudgedRun { findings, claim, undeclared };
+}
+
+/// A directory unique to this process and `name`, holding `nomos-limits.json` with `limits` when
+/// there is one, and nothing otherwise.
+fn Scratch_Root(name: &str, limits: Option<&str>) -> std::path::PathBuf
+{
+    let root = std::env::temp_dir().join(format!("nomos-check-undeclared-{name}-{}", std::process::id()));
+    let _ignored = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(&root).expect("a scratch directory");
+    if let Some(limits) = limits
+    {
+        std::fs::write(root.join("nomos-limits.json"), limits).expect("a scratch limits declaration");
+    }
+
+    return root;
+}
+
 /// The claim and the populations of one `Run` selecting only `rule` over `sources`, which must
 /// raise no finding.
 fn Claim_And_Populations(sources: &[SourceFile], rule: &RuleId) -> (crate::examined::Claim, crate::examined::Populations)

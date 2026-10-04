@@ -16,6 +16,7 @@ pub use nounset::Check_Executed_Scripts_Set_Nounset;
 pub use purpose::Check_A_Script_Declares_Its_Purpose;
 pub use shebang::Check_Scripts_Use_A_Portable_Shebang;
 pub use tooling_language::Check_Declared_Tooling_Language_For_Scripts;
+pub(crate) use tooling_language::Undeclared_Tooling_Language;
 
 /// The code-standards portable-shebang rule id.
 pub const SCRIPTS_USE_A_PORTABLE_SHEBANG: &str = "scripts-use-a-portable-shebang";

@@ -15,6 +15,7 @@ mod fact_read;
 mod populations;
 mod supporting_fact_trail;
 mod supporting_facts;
+mod undeclared_values;
 
 pub use check_outcome::CheckOutcome;
 pub use claim::{Claim, Claim_Of};
@@ -23,6 +24,7 @@ pub(crate) use fact_read::Reduced;
 pub use populations::Populations;
 pub use supporting_fact_trail::SupportingFactTrail;
 pub use supporting_facts::SupportingFacts;
+pub use undeclared_values::UndeclaredValues;
 
 /// How much of the world this run actually saw.
 ///

@@ -13,6 +13,11 @@
 //! ([`Population_Size`]): the population the rule's descriptor declares, counted over exactly
 //! the sources the rule is handed. It only counts. Each rule still receives every source
 //! [`Judged_Sources`] gives it, and the count changes no finding and no claim.
+//!
+//! And for every rule whose population was not empty, it asks the rule's descriptor which values
+//! the rule read that the repository did not declare ([`Undeclared_Values`]), and records the
+//! answer. It interprets no key: what a rule read and whether it was declared are the
+//! descriptor's to say, from the run's own facts.
 
 use nomos_analysis::Reader;
 use nomos_contracts::Finding;
@@ -27,7 +32,7 @@ use nomos_rules::{
     NESTED_LOCKS, REVIEW_FINDING, UNCOMPILED_CONDITIONAL_BRANCH, WRITE_AUTHORITY,
 };
 
-use crate::examined::{FactRead, Populations, Reduced};
+use crate::examined::{FactRead, Populations, Reduced, UndeclaredValues};
 
 use super::{CapabilityMaterialization, Is_Rule_Selected, JudgeEnvironment, Reassessment};
 
@@ -50,14 +55,16 @@ pub(super) fn Judged_Findings(sources: &[SourceFile], capabilities: CapabilityMa
     return judgments;
 }
 
-/// What judging the selected rules produced: every finding, and how many sources each rule was
-/// judged over.
+/// What judging the selected rules produced: every finding, how many sources each rule was
+/// judged over, and which values it read that the repository did not declare.
 pub(super) struct Judgments
 {
     /// What the rules found, and what materialization raised on its own.
     pub(super) findings: Vec<Finding>,
     /// Each selected rule's population size, in the order the rules were judged.
     pub(super) populations: Populations,
+    /// Each selected rule's undeclared values, in the order the rules were judged.
+    pub(super) undeclared: UndeclaredValues,
 }
 
 /// Every finding the completeness, naming-convention, dependency-direction,
@@ -111,6 +118,7 @@ fn Findings_For_Selected_Rules(judged: Judged<'_>, env: &JudgeEnvironment<'_>, r
 
     let mut findings = Vec::new();
     let mut populations = Populations::New();
+    let mut undeclared = UndeclaredValues::New();
     for descriptor in DESCRIPTORS
     {
         if !Is_Rule_Selected(selected, descriptor.id)
@@ -118,9 +126,14 @@ fn Findings_For_Selected_Rules(judged: Judged<'_>, env: &JudgeEnvironment<'_>, r
             continue;
         }
 
-        // Counted before the cache is asked, so a rule whose findings are reused still reports
-        // the population of the run that reused them.
-        populations.Note(descriptor.Rule(), Population_Size(descriptor, &judged));
+        // Counted, and asked what it read undeclared, before the cache is asked, so a rule whose
+        // findings are reused still reports what the run that reused them would report.
+        let size = Population_Size(descriptor, &judged);
+        populations.Note(descriptor.Rule(), size);
+        if size > 0
+        {
+            undeclared.Note(descriptor.Rule(), Undeclared_Values(descriptor, &judged, env));
+        }
 
         if let Some(reused) = cache.Reusable(descriptor.id, changed)
         {
@@ -133,7 +146,19 @@ fn Findings_For_Selected_Rules(judged: Judged<'_>, env: &JudgeEnvironment<'_>, r
         findings.extend(rule_findings);
     }
 
-    return Judgments { findings, populations };
+    return Judgments { findings, populations, undeclared };
+}
+
+/// Every value `descriptor`'s rule read that the repository did not declare, answered by the
+/// descriptor from the run's own facts over the sources the rule is handed.
+///
+/// Its own reader, as [`Judged_By`] builds one per rule, so these reads never land on the trail a
+/// rule's findings are attributed to.
+fn Undeclared_Values(descriptor: &RuleDescriptor, judged: &Judged<'_>, env: &JudgeEnvironment<'_>) -> Vec<nomos_rules::UndeclaredValue>
+{
+    let mut reader = Reader::On(env.store, env.registry, env.context.clone());
+
+    return descriptor.Undeclared_Values(&mut reader, Judged_Sources(descriptor.id, judged));
 }
 
 /// How many sources `descriptor`'s rule is judged over: its declared population counted over the

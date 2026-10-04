@@ -38,7 +38,7 @@ fn Judged_With(fill: u8, provenance: Option<GateRunProvenance>) -> GateRunResult
         unmatched_policy: Vec::new(),
         run: Fresh_Run_Id(Timestamp::From_Unix_Seconds(i64::from(fill))),
         root: PathBuf::from("."),
-        check_outcome: CheckOutcome::Judged { findings: Vec::new(), examined: Examined { files: 1, facts: 1 }, claim: Claim::Complete, supporting_facts: SupportingFactTrail::New(), populations: nomos_check_orchestration::Populations::New() },
+        check_outcome: CheckOutcome::Judged { findings: Vec::new(), examined: Examined { files: 1, facts: 1 }, claim: Claim::Complete, supporting_facts: SupportingFactTrail::New(), populations: nomos_check_orchestration::Populations::New(), undeclared: nomos_check_orchestration::UndeclaredValues::New() },
         findings: Empty_Findings(),
         disposition: GateRunOutcome::Passed,
     };

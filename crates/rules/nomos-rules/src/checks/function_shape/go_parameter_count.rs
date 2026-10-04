@@ -1,7 +1,7 @@
 //! `function_shape`'s Go preset: the arity engine narrowed to Go sources.
 
-use super::{Check_Function_Arity_Policy, FunctionArityPolicy, GO, GO_PARAMETER_COUNT, Resolve_Limit, Undeclared_Limit};
-use crate::rule_descriptor::policy_axis::PARAMETER_COUNT_MAX;
+use super::{Check_Function_Arity_Policy, FunctionArityPolicy, GO_PARAMETER_COUNT, Resolve_Limit, Undeclared_Limit};
+use crate::checks::optional_reads;
 use crate::SourceFile;
 use nomos_analysis::FactReader;
 use nomos_contracts::Finding;
@@ -16,10 +16,10 @@ pub fn Check_Go_Parameter_Count(
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    let Some(max) = Resolve_Limit(facts, Some(GO), &PARAMETER_COUNT_MAX)
+    let Some(max) = Resolve_Limit(facts, &optional_reads::GO_PARAMETER_COUNT)
     else
     {
-        return vec![Undeclared_Limit(GO_PARAMETER_COUNT, &PARAMETER_COUNT_MAX)];
+        return vec![Undeclared_Limit(GO_PARAMETER_COUNT, optional_reads::GO_PARAMETER_COUNT.axis)];
     };
     return Check_Function_Arity_Policy(
         sources,

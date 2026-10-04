@@ -7,8 +7,8 @@
 
 use crate::SourceFile;
 use crate::checks::finding_shape::{Finding_Shape, Member_Finding};
-use crate::checks::naming::Resolve_Case;
-use crate::rule_descriptor::policy_axis::{FIELD_CASE, MODULE_CASE};
+use crate::checks::naming::Resolve_Read;
+use crate::checks::optional_reads;
 use nomos_analysis::FactReader;
 use nomos_cap_naming_policy::Case;
 use nomos_cap_syntax::{PayloadItem, Struct_Fields, SyntaxPayload};
@@ -29,7 +29,7 @@ pub fn Check_Module_And_Field_Names_Stay_Lower_Snake(
     facts: &mut dyn FactReader,
 ) -> Vec<Finding>
 {
-    let (Some(module_case), Some(field_case)) = (Resolve_Case(facts, None, &MODULE_CASE), Resolve_Case(facts, None, &FIELD_CASE))
+    let (Some(module_case), Some(field_case)) = (Resolve_Read(facts, &optional_reads::MODULE), Resolve_Read(facts, &optional_reads::FIELD))
     else
     {
         return Vec::new();
