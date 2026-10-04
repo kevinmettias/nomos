@@ -102846,17 +102846,28 @@
           "crates/host/nomos-api/src/check/claim_response.rs",
           "crates/host/nomos-api/src/response/gate_run_response.rs",
           "tests/contract/surface/nomos-api.txt",
-          "tests/contract/surface/nomos-gate-orchestration.txt"
+          "tests/contract/surface/nomos-gate-orchestration.txt",
+          "crates/host/nomos-api/src/check.rs",
+          "crates/host/nomos-api/src/response.rs",
+          "crates/host/nomos-api/src/lib.rs",
+          "crates/host/nomos-api/src/response/undeclared_value_response.rs",
+          "crates/host/nomos-api/src/response/undeclared_outcome_response.rs",
+          "crates/host/nomos-cli/src/check/report.rs",
+          "crates/host/nomos-cli/src/check.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P186-THE-GATE-REPORT-SARIF-AND-THE-API-DO-NOT-SAY-WHICH-RULES-JUDGED-AN-EMPTY-POPULATION",
         "P190-A-RUN-NAMES-EVERY-VALUE-ITS-RULES-READ-THAT-THE-REPOSITORY-NEVER-DECLARED-BESIDE-ITS-CLAIM"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-p191-undeclared",
+        "acquired_at": 1791093381,
+        "lease_expires_at": 1791111381
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -102881,7 +102892,21 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "opus-p191-undeclared",
+          "added": [
+            "crates/host/nomos-api/src/check.rs",
+            "crates/host/nomos-api/src/response.rs",
+            "crates/host/nomos-api/src/lib.rs",
+            "crates/host/nomos-api/src/response/undeclared_value_response.rs",
+            "crates/host/nomos-api/src/response/undeclared_outcome_response.rs",
+            "crates/host/nomos-cli/src/check/report.rs",
+            "crates/host/nomos-cli/src/check.rs"
+          ],
+          "widened_at": 1791093676
+        }
+      ]
     },
     {
       "id": "P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM",
@@ -104974,12 +104999,16 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P211-TEN-UNCONDITIONAL-LOOPS-IN-THIS-WORKSPACE-DO-NOT-SAY-HOW-THEY-END"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-nomos64-p212",
+        "acquired_at": 1791093763,
+        "lease_expires_at": 1791104563
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -105077,16 +105106,22 @@
           "crates/rules/nomos-rules/src/checks/naming",
           "crates/rules/nomos-rules/src/rule_descriptor/policy_axis.rs",
           "crates/rules/nomos-rules/src/checks/undeclared_policy_key.rs",
-          "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md"
+          "docs/records/OD-RULES-035-a-preference-axis-is-a-key-a-repository-can-write-declared-once-beside-the-rules-that-read-it.md",
+          "crates/rules/nomos-rules/src/checks/optional_reads.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor/optional_read"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Claimed",
       "depends_on": [
         "P190-A-RUN-NAMES-EVERY-VALUE-ITS-RULES-READ-THAT-THE-REPOSITORY-NEVER-DECLARED-BESIDE-ITS-CLAIM"
       ],
       "blocked": null,
-      "claim": null,
+      "claim": {
+        "holder": "opus-e7-p207",
+        "acquired_at": 1791093339,
+        "lease_expires_at": 1791107739
+      },
       "verification": {
         "argv": [
           "cargo",
@@ -105109,7 +105144,22 @@
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "opus-e7-p207",
+          "added": [
+            "crates/rules/nomos-rules/src/checks/optional_reads.rs"
+          ],
+          "widened_at": 1791093646
+        },
+        {
+          "holder": "opus-e7-p207",
+          "added": [
+            "crates/rules/nomos-rules/src/rule_descriptor/optional_read"
+          ],
+          "widened_at": 1791093690
+        }
+      ]
     },
     {
       "id": "P214-THE-WORKSPACE-PROFILE-DOES-NOT-NAME-THE-PREDICATE-COVERAGE-FILE-A-READER-NOW-OPENS",
@@ -105402,6 +105452,210 @@
         "timeout_seconds": 10800
       },
       "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P217-C-IS-A-FOURTH-LANGUAGE-AND-ITS-PREPROCESSOR-BOUNDS-WHAT-ITS-ITEMS-READING-MAY-CLAIM",
+      "title": "C is a fourth language, and its preprocessor bounds what its items reading may claim",
+      "why": "code-standards' gates/c.json at f0d820729 runs thirty-nine checks over C, and this workspace reads no C at all: a .c or .h file in a tree is neither walked nor judged, so every one of those checks is unported for want of a front end, which ARC-CONFORMANCE-003's seventh milestone names -- the language front ends multiply beyond the three that exist. This item is the fourth: nomos-lang-c over tree-sitter-c 0.24, the grammar code-standards' own C kernel pins, and nomos-lang-c-package, composed the way P123 composed C#. Its items reading cannot claim what the other three providers claim. Every C header's include guard is a conditional region wrapping the whole file, so a reading that declined conditional regions as nomos-lang-csharp does would report every header as declaring nothing, and a reading that enters them reports rival branches together; and the tree reads the file's tokens, not the preprocessor's output, so a macro can make a declaration of what is not one. So the items guarantee is Unknown on soundness and completeness, weaker than every sibling's and never the strictly stronger offer whose ranking once displaced Rust's facts; a rule whose floor is a sound reading is told no admitted provider answered for a C file, an unread finding, never a clean one. Its sites are a different reading -- a site is spelling the file really holds -- and declare what Rust's declare: it declines the labeled jump with the corpus's reason, offers the if-branch and control-flow-body kinds the three corpus rules P214 composed judge, and leaves the unconditional loop unanswered, as the corpus has no C strategy for it. Measured before this item was authored, in a worktree at f79751ef carrying P212, P214 and P215: the candidate predicate passed whole; the gate over this tree reports nothing that can fail a build; a probe C file drew the three Blocking findings code-standards' check-control-flow-body and check-branch-choice report, line for line; twenty-six mutations of the visibility mapping, the declarator walk, the else-if handling, the arm classification and the parse-gated offer were each killed by a named test and every file restored byte-identically.",
+      "done_when": "nomos-lang-c (a provider beside nomos-lang-csharp) reads a .c or .h file with tree-sitter-c 0.24 and offers nomos.cap.syntax.items -- functions (a prototype only when the same file does not define it), file-scope variables, struct, union and enum definitions with their fields and enumerators, typedef names and macros, from every conditional branch, under labels the other providers already write; a function or variable is private when any file-scope declaration of its name says static and public otherwise, and a type, typedef, enumerator or macro has no linkage to state -- and nomos.cap.syntax.sites, declining the labeled jump for every C file with the corpus's reason, offering the if-branch and control-flow-body kinds for a file that parses with every case of c_branch_choice_test.go and c_control_flow_body_test.go ported, and leaving every other kind unanswered. Its items guarantee is Syntactic, Unknown on soundness and on completeness, File; its sites guarantee is Syntactic, Sound, Unknown, File; each says on every axis why, the include guard, entered conditional branches and macros being the reasons, and a test holds neither stronger than the Rust or C# providers' on any axis. What the items reading leaves out -- includes, bodiless and untagged tags, nested tags, anonymous members, anything inside a function body -- is stated in the crate doc, and the places a macro visibly hides what the tree shows are counted in the payload. nomos-lang-c-package (beside nomos-lang-csharp-package) declares the provider as its one known provider, a closed C-standard domain C89 through C23, and packages/nomos.lang.c.json claims C89 through C17. The composer offers both of the provider's offers and recognizes .c and .h as C; nomos-workspace-discovery walks them; nomos-rules publishes C_LANGUAGE beside the other three; a run judges a C source through the three rules over the sites kinds and reports it unread to every rule whose floor is a sound items reading. The gate over this tree reports nothing that can fail a build. Every registration a provider crate has is made: the workspace manifest and lock, nomos-architecture.json, the README rows, the surface snapshots of both crates and the nomos-rules line, the completeness-universe table, and a C sites determinism production with its golden. The predicate names nomos-cli and nomos-integration-tests, which enumerate the composed set and the composed providers.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "Cargo.lock",
+          "Cargo.toml",
+          "README.md",
+          "crates/composer/nomos-composer-providers/Cargo.toml",
+          "crates/composer/nomos-composer-providers/src/lib.rs",
+          "crates/orchestration/nomos-check-orchestration/Cargo.toml",
+          "crates/orchestration/nomos-check-orchestration/src/composition.rs",
+          "crates/orchestration/nomos-check-orchestration/src/composition/provider_table.rs",
+          "crates/orchestration/nomos-check-orchestration/src/tests/syntax_sites.rs",
+          "crates/orchestration/nomos-check-orchestration/tests/capability_composition.rs",
+          "crates/orchestration/nomos-check-orchestration/tests/run_seam.rs",
+          "crates/orchestration/nomos-workspace-discovery/Cargo.toml",
+          "crates/orchestration/nomos-workspace-discovery/src/lib.rs",
+          "crates/orchestration/nomos-workspace-discovery/src/workspace_profile/tests.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "nomos-architecture.json",
+          "packages/nomos.lang.c.json",
+          "tests/contract/surface/nomos-lang-c-package.txt",
+          "tests/contract/surface/nomos-lang-c.txt",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/tests/completeness_universes/table.rs",
+          "tests/integration/Cargo.toml",
+          "tests/integration/tests/determinism/domains.rs",
+          "tests/integration/tests/determinism/goldens.rs",
+          "tests/integration/tests/determinism/harness.rs",
+          "tests/integration/tests/determinism/sites_productions.rs",
+          "crates/languages/nomos-lang-c",
+          "crates/packages/nomos-lang-c-package"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P216-FOUR-MORE-CSHARP-ONLY-CORPUS-RULES-JUDGE-CLASSES-THREADS-FLOAT-EQUALITY-AND-BLOCK-BODIES"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-c",
+          "-p",
+          "nomos-lang-c-package",
+          "-p",
+          "nomos-lang-csharp",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-workspace-discovery",
+          "-p",
+          "nomos-composer-providers",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 10800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P218-WORK-SHOW-NEVER-NAMES-WHAT-AN-ITEM-DEPENDS-ON-SO-A-WAITING-ITEM-DOES-NOT-SAY-WHAT-IT-WAITS-FOR",
+      "title": "work show never names what an item depends on, so a waiting item does not say what it waits for",
+      "why": "work show prints one item in full -- its claim, its history, its why, done_when, territory and predicate -- and is the verb AGENTS.md's loop sends a session to before it edits anything. It never prints depends_on, the one field work add authors that it omits, so a waiting item prints the word waiting and nothing that says what it waits for. Measured on the board at abf541ea: P213, P214-THE-IF-BRANCH, P215, P216 and P217 all show state: waiting, and none of their show outputs names an item; the chain behind them (P213 and P214 after P212, P215 after P214, P216 after P215, P217 after P216) was learned only by reading work/ledger.json with a script, the cost OD-LEDGER-041 version 2 and P208 exist to remove. P145-THE-ONLY-WAY-TO-LEARN-WHO-IS-BLOCKING-YOU-IS-TO-ATTEMPT-A-CLAIM-YOU-EXPECT-TO-FAIL-3 answered the same question for held, under the state word, from the refusal the claim check already produces, and deliberately left a dependency out of Blocking_Claims because a dependency is not a holder. work audit already prints the dependency refusal's own Describe (\"X depends on Y, which is Claimed\"), so the answer exists and only show lacks it. The API's show response serializes the whole LedgerItem and is not short of the field.",
+      "done_when": "work show, for an item a claim would refuse on any ground other than a claim (waiting, stranded, snagged), prints under its state word the line that refusal's own Describe gives -- the same refusal Claim_Refusal returns and work audit prints, with no second computation of readiness -- and prints nothing new for a ready item, a claimed or ended one, a held one, whose blocker lines P145-3 already print, or a lapsed one, whose claim line already says so. After its predicate, show prints the item's depends_on whole: a label line counting them (or saying there are none), then one line per dependency in authored order with that dependency's board label as list would print it, and a dependency the board does not carry said to be absent rather than skipped. The usage text for show says both. Tests in nomos-cli build boards in memory and prove: a waiting item names its unfinished dependency under the state word; a stranded item names its declined one; an item depending on two names both in its dependency list with each one's label; an item with no dependencies says none; a ready and a done item print no refusal line. Each test is shown able to fail by reverting the code it covers, restored byte-identically. Nothing in nomos-ledger, nomos-work-orchestration or nomos-api changes.",
+      "kind": "Correction",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/src/work/dependencies.rs",
+          "crates/host/nomos-cli/src/work/tests.rs",
+          "crates/host/nomos-cli/src/work/tests/show_dependencies.rs",
+          "crates/host/nomos-cli/src/work/parse/usage.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "opus-e7-p218",
+        "acquired_at": 1791095561,
+        "lease_expires_at": 1791106361
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "timeout_seconds": 3600
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "REL01-REFUSE-A-CORRECTION-WHEN-THE-FILE-CHANGED-AFTER-PLANNING",
+      "title": "Refuse a correction when its file changed after planning",
+      "why": "The owner requested Nomos 0.1 with adversarial stale-workspace evidence. At abf541ea, run.rs seeds a private model from the candidate before text and replaces the real file without another read. A filesystem supplying changed text after candidate creation can therefore lose that edit.",
+      "done_when": "Before committing a correction, the orchestrator re-reads the target file through the supplied filesystem and refuses changed or unreadable content without publishing the plan or calling Replace_Atomically. Regression tests cover an intervening edit, deletion/read failure, and unchanged content. The removed guard fails the intervening-edit test and is restored byte-identically. Existing dry-run and successful-commit cases stay green. No filesystem port, public API, provider composition, or identity scheme changes. This closes observed staleness only; compare-and-replace atomicity and running repository validation remain separate release obligations. The predicate reaches this orchestration crate only; other packages remain their own obligations.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-correction-orchestration/src/run.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/run/tests.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "nomos-correction-orchestration",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 600
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "nomos-correction-orchestration",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "easured; 0 filtered out; finished in 0.03s\n\n\nrunning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:59:5\n   |\n59 |        return loop\n   |  ______^      -\n   | | ____________|\n60 | ||     {\n61 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n71 | ||         std::thread::sleep(super::POLL_INTERVAL);\n72 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:81:5\n   |\n81 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n82 | ||     {\n83 | ||         Ok(Some(status)) =>\n...  ||\n90 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n91 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n   Compiling nomos-correction-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-correction-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.50s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_correction_orchestration-261312ada436dafe.exe)\n   Doc-tests nomos_correction_orchestration\n",
+        "verified_at": 1791096206,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "abf541ea4084eae8a215616cecd0e5e8382b8304"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,

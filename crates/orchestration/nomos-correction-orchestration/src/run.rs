@@ -312,6 +312,7 @@ fn Staged_Fix<Launcher: ProgramLauncher, Fs: FileSystem, Env: Environment>(fix: 
         evidence_reference: fix.evidence_reference,
         validated,
         workspace: &mut workspace,
+        before: &fix.before,
         after: &fix.after,
         preview,
         filesystem: request.filesystem,
@@ -357,6 +358,7 @@ struct Committing<'a, Fs: FileSystem>
     evidence_reference: EvidenceRef,
     validated: ValidatedPlan,
     workspace: &'a mut Workspace,
+    before: &'a str,
     after: &'a str,
     preview: Vec<u8>,
     filesystem: &'a Fs,
@@ -364,9 +366,15 @@ struct Committing<'a, Fs: FileSystem>
 
 /// Commits `committing.validated` through the workspace's one door and writes the
 /// corrected file through `committing.filesystem`, or reports why either step refused.
+/// The live file must still match the planned bytes before either step. This reread
+/// detects observed staleness; it is not an atomic compare-and-replace against writers.
 fn Committed_Change<Fs: FileSystem>(committing: Committing<'_, Fs>) -> CorrectionOutcome
 {
-    let Committing { root, path, summary, evidence_reference, validated, workspace, after, preview, filesystem } = committing;
+    let Committing { root, path, summary, evidence_reference, validated, workspace, before, after, preview, filesystem } = committing;
+    if let Err(outcome) = Unchanged_File(root, &path, before, filesystem)
+    {
+        return outcome;
+    }
     let committed = match Committed_Plan(validated, workspace, evidence_reference)
     {
         Ok(committed) => committed,
@@ -387,6 +395,18 @@ fn Committed_Change<Fs: FileSystem>(committing: Committing<'_, Fs>) -> Correctio
     };
 }
 
+/// Refuses a file whose current bytes cannot be read or differ from the plan's base.
+fn Unchanged_File<Fs: FileSystem>(root: &Path, path: &str, before: &str, filesystem: &Fs) -> Result<(), CorrectionOutcome>
+{
+    let current = filesystem.Read_To_String(&root.join(path))
+        .map_err(|error| return CorrectionOutcome::Refused(format!("could not re-read `{path}` before committing: {error}")))?;
+    if current != before
+    {
+        return Err(CorrectionOutcome::Refused(format!("refusing to overwrite `{path}`: content changed after planning")));
+    }
+
+    return Ok(());
+}
 /// Commits `validated` through the workspace's one door, submitting under the derived
 /// evidence `evidence_reference` supports, or reports the refusal.
 fn Committed_Plan(validated: ValidatedPlan, workspace: &mut Workspace, evidence_reference: EvidenceRef) -> Result<CommittedPlan, CorrectionOutcome>

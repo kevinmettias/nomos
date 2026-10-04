@@ -239,3 +239,111 @@ fn Test_Variant() -> BuildVariant
 {
     return BuildVariant::New("test-target", "test-profile", "test-toolchain", std::iter::empty::<String>());
 }
+
+/// A competing writer's edit, returned by the first read after candidate construction.
+const INTERVENING_EDIT: &str = "pub fn A_Competing_Writers_Change() {}\n";
+
+/// Changes only the correction target after its first read; all other paths use the real
+/// filesystem. The write counter counts only writes requested by the correction, so the
+/// fixture's simulated competing write cannot be mistaken for one.
+struct RecheckingFileSystem
+{
+    moved_to: Option<&'static str>,
+    already_read: std::cell::Cell<bool>,
+    replacements: std::cell::Cell<usize>,
+}
+
+impl nomos_contracts::Strategy for RecheckingFileSystem
+{
+    const STRENGTH: nomos_contracts::DeterminismStrength = <StdFileSystem as nomos_contracts::Strategy>::STRENGTH;
+    const SCOPE: nomos_contracts::ReproducibilityScope = <StdFileSystem as nomos_contracts::Strategy>::SCOPE;
+    const TRACE: nomos_contracts::TraceEquivalence = <StdFileSystem as nomos_contracts::Strategy>::TRACE;
+}
+
+impl FileSystem for RecheckingFileSystem
+{
+    fn Read_To_String(&self, path: &Path) -> Result<String, nomos_platform::FileSystemError>
+    {
+        if path.file_name() == Some(std::ffi::OsStr::new("a.rs")) && self.already_read.replace(true)
+        {
+            match self.moved_to
+            {
+                Some(content) => StdFileSystem.Replace_Atomically(path, content)?,
+                None => StdFileSystem.Remove_File(path)?,
+            }
+        }
+
+        return StdFileSystem.Read_To_String(path);
+    }
+
+    fn Replace_Atomically(&self, path: &Path, content: &str) -> Result<(), nomos_platform::FileSystemError>
+    {
+        self.replacements.set(self.replacements.get().saturating_add(1));
+        return StdFileSystem.Replace_Atomically(path, content);
+    }
+
+    fn Exists(&self, path: &Path) -> bool
+    {
+        return StdFileSystem.Exists(path);
+    }
+}
+
+/// Runs through the public orchestration seam with a filesystem that changes the target
+/// between planning and the commit read, and reports whether the correction wrote anything.
+fn Ran_With_Rechecking(fixture: &Fixture, moved_to: Option<&'static str>) -> (CorrectionOutcome, usize)
+{
+    let filesystem = RecheckingFileSystem {
+        moved_to,
+        already_read: std::cell::Cell::new(false),
+        replacements: std::cell::Cell::new(0),
+    };
+    let providers = nomos_composer_providers::Standard_Providers();
+    let outcome = Run_Correction(fixture.Walk(), CorrectionEnvironment {
+        variant: Test_Variant(),
+        launcher: &StdProgramLauncher,
+        filesystem: &filesystem,
+        environment: &StdEnvironment,
+        providers: &providers,
+    }, &fixture.command);
+
+    return (outcome, filesystem.replacements.get());
+}
+
+#[test]
+fn Test_A_File_Changed_After_Planning_Should_Be_Refused_Without_Overwriting_The_Edit()
+{
+    let fixture = Fixture::Of("nomos-release-stale-file").Holding(PHANTOM_FIXTURE).Committing();
+    let (outcome, replacements) = Ran_With_Rechecking(&fixture, Some(INTERVENING_EDIT));
+    let content = fixture.Read();
+    fixture.Remove();
+
+    assert!(matches!(outcome, CorrectionOutcome::Refused(_)), "{outcome:?}");
+    assert_eq!(replacements, 0, "a stale candidate must never reach replacement");
+    assert_eq!(content, INTERVENING_EDIT, "the competing writer's edit must survive");
+}
+
+#[test]
+fn Test_A_File_Removed_After_Planning_Should_Be_Refused_Without_Recreating_It()
+{
+    let fixture = Fixture::Of("nomos-release-removed-file").Holding(PHANTOM_FIXTURE).Committing();
+    let (outcome, replacements) = Ran_With_Rechecking(&fixture, None);
+    let exists = fixture.path.exists();
+    fixture.Remove();
+
+    assert!(matches!(outcome, CorrectionOutcome::Refused(_)), "{outcome:?}");
+    assert_eq!(replacements, 0, "a failed re-read must never reach replacement");
+    assert!(!exists, "the correction must not recreate a removed target");
+}
+
+#[test]
+fn Test_An_Unchanged_File_Should_Still_Commit_After_Rechecking()
+{
+    let fixture = Fixture::Of("nomos-release-unchanged-file").Holding(PHANTOM_FIXTURE).Committing();
+    let (outcome, replacements) = Ran_With_Rechecking(&fixture, Some(PHANTOM_FIXTURE));
+    let content = fixture.Read();
+    fixture.Remove();
+
+    Assert_Committed(outcome);
+    assert_eq!(replacements, 1);
+    assert_eq!(content, PHANTOM_CORRECTED);
+}
