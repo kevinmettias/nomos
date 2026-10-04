@@ -104452,6 +104452,49 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "P210-THREE-PLATFORM-COUNTS-ARE-STALE-AND-NOTHING-NOTICES-A-WAIVER-WHOSE-PATH-IS-GONE",
+      "title": "Three nomos-platform counts are stale, and nothing notices a waiver whose path is gone",
+      "why": "Found by P209-THE-REST-OF-P114S-PLATFORM-RENAMES-LEFT-LIVE-OLD-NAMES-AND-WAIVERS-THAT-MATCH-NOTHING's claimant and recorded in 61e0ebd6's message as outside that item. Three present-tense counts about nomos-platform may no longer hold. OD-HOST-001 line 41 says Run is generic over \"the four traits nomos-platform declares\", and nomos-platform also declares Environment now. OD-PLATFORM-001 line 143 says \"A command now carries two bounds\", and Command also carries waiting_timeout. nomos-platform's crate doc at src/lib.rs line 29 says \"the nine serde fields that write a timestamp into the work ledger\", and the claimant counted ten fields across nine types, six of them in nomos-ledger. P114-CLARITY-PLATFORM's own message (7e33c1f6) had already corrected the same count to ten fields across nine types. Separately, suppressions.json still holds a check-interfile-duplication waiver on crates/contracts/nomos-contracts/src/authority/class.rs, a path that does not exist. P209 removed eight waivers that matched nothing, three of them because their path had been deleted, and found that nothing in this workspace reads suppressions.json. So a waiver whose file is deleted or renamed stays until someone happens to read it. nomos's own gate reports a declared entry that matches nothing (OD-GATE-032), but this file is code-standards' waiver file (OD-GATE-018) and the gate does not read it that way.",
+      "done_when": "Each of the three counts is classified by OD-SPEC-017's present-tense test, as P205 and P209 did. A live claim is corrected to what the code holds at the claimant's parent, counted, not glanced. A sentence that was true when written and reads as dated history stays, and the claimant says why. A corrected record carries a version bump and a short amendment, any constant pinning its version moves with it, and records outside the two the item amends are widened by file path only if they are found to need it. The authority/class.rs waiver is removed after its path is shown not to exist as a file or directory, leaving every other entry byte-identical and in order. A test in tests/contract fails when any suppressions.json entry names a path that exists neither as a file nor as a directory in the repository. It reads the real file, so it is not a fixture of today's entries, and it is shown able to fail by a mutation restored byte-identically. A waiver whose symbol was renamed inside a surviving file is out of the test's reach, which the test's doc says, naming P209's method for it. Both projections are re-rendered from the tree the commit publishes, and the predicate passes.",
+      "kind": "Cleanup",
+      "origin": "Proposed",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/platform/nomos-platform/src/lib.rs",
+          "suppressions.json",
+          "tests/contract/tests/suppression_paths.rs",
+          "tests/contract/Cargo.toml",
+          "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md",
+          "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-platform",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 5400
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
