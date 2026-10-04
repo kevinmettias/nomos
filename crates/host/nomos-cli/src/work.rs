@@ -19,6 +19,7 @@ use nomos_composer_std::{CLOCK, FILE_SYSTEM, LAUNCHER, Lock_At};
 use nomos_work_orchestration::{BoardView, ShowView, WorkOutcome};
 use std::path::Path;
 
+mod dependencies;
 mod exit_code;
 mod item_named;
 mod listing;
@@ -32,6 +33,7 @@ pub use parse::Work_Command_From_String_Arguments;
 pub(crate) use exit_code::ExitCode;
 pub(crate) use nomos_work_orchestration::{ClaimRequest, EndingRequest, ListingFilters, ListingScope, WorkCommand};
 
+use dependencies::{Print_Dependencies, Refusal_Line};
 use item_named::{Item_Named, Named};
 use listing::{
     Admission_Note, Bounds, Listing_Label, Nothing_Listed, Print_Claim, Print_Contract,
@@ -440,9 +442,16 @@ fn Render_Show(
     {
         let _ = writeln!(output, "{line}");
     }
+    // In the same place and for the same reason: `waiting`, `stranded` and `snagged` are words
+    // these lines explain too, and the reason for each is a refusal rather than a holder.
+    if let Some(line) = Refusal_Line(&document, found, now)
+    {
+        let _ = writeln!(output, "{line}");
+    }
     Print_Claim(found, now, output);
     Print_History(found, current_revision.as_deref(), output);
     Print_Contract(found, output);
+    Print_Dependencies(&document, found, now, output);
 
     return ExitCode::Ok;
 }

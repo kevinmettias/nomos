@@ -105558,14 +105558,10 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
-      "claim": {
-        "holder": "opus-e7-p218",
-        "acquired_at": 1791095561,
-        "lease_expires_at": 1791106361
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -105576,7 +105572,47 @@
         ],
         "timeout_seconds": 3600
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli"
+        ],
+        "exit_code": 0,
+        "output_tail": "arget\\debug\\deps\\composer_std_seam-65baa51d9528c805.exe)\n     Running tests\\contracts_seam.rs (target\\debug\\deps\\contracts_seam-e27375e855d0bd4d.exe)\n     Running tests\\freshness.rs (target\\debug\\deps\\freshness-b65a8fdd48e6b3eb.exe)\n     Running tests\\gate_orchestration_seam.rs (target\\debug\\deps\\gate_orchestration_seam-63040a31b800b3db.exe)\n     Running tests\\gate_step\\main.rs (target\\debug\\deps\\gate_step-504adff6c2db6692.exe)\n     Running tests\\guard_hooks.rs (target\\debug\\deps\\guard_hooks-2324e3ce1ac4f01d.exe)\n     Running tests\\lang_go_seam.rs (target\\debug\\deps\\lang_go_seam-418ceee177e9f1ae.exe)\n     Running tests\\lang_rust_seam.rs (target\\debug\\deps\\lang_rust_seam-ad0cef4a2632b1bf.exe)\n     Running tests\\list_tells_the_truth.rs (target\\debug\\deps\\list_tells_the_truth-bf8cae0c0a9b9efc.exe)\n     Running tests\\model_backend_ollama_seam.rs (target\\debug\\deps\\model_backend_ollama_seam-8bc98f81d0d93bfb.exe)\n     Running tests\\model_seam.rs (target\\debug\\deps\\model_seam-2f5dc3e585ed83b0.exe)\n     Running tests\\platform_seam.rs (target\\debug\\deps\\platform_seam-e07f3d4bc212699d.exe)\n     Running tests\\read_surface.rs (target\\debug\\deps\\read_surface-f5ced94ea2b0aa0e.exe)\n     Running tests\\request_submit.rs (target\\debug\\deps\\request_submit-d9f9fa073068f256.exe)\n     Running tests\\spec_model_seam.rs (target\\debug\\deps\\spec_model_seam-9fa6dc6074f84213.exe)\n     Running tests\\spec_orchestration_seam.rs (target\\debug\\deps\\spec_orchestration_seam-3cd77b22b0d9f220.exe)\n     Running tests\\spec_store_seam.rs (target\\debug\\deps\\spec_store_seam-b22212cacc9205a3.exe)\n     Running tests\\stale_writer_is_refused.rs (target\\debug\\deps\\stale_writer_is_refused-a5c1fa51c44dedcc.exe)\n     Running tests\\takeover_is_recorded.rs (target\\debug\\deps\\takeover_is_recorded-daad4f7e84f0a246.exe)\n     Running tests\\work_orchestration_seam.rs (target\\debug\\deps\\work_orchestration_seam-9eea5f799f97f472.exe)\n     Running tests\\workspace_seam.rs (target\\debug\\deps\\workspace_seam-385327b0ea41f0f6.exe)\n",
+        "verified_at": 1791098723,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "abf541ea4084eae8a215616cecd0e5e8382b8304"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -105737,6 +105773,95 @@
         },
         "revision": "d7588252daeeae6fe8f913747f04d152cd2c30c6"
       },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "REL03-MEASURE-COLD-UNCHANGED-AND-EDITED-ANALYSIS-WORK",
+      "title": "Measure incremental analysis latency and affected work on a real source corpus",
+      "why": "The owner requires Nomos 0.1 to measure cold, unchanged and one-file-change analysis rather than only naming incremental machinery. The scale suite proves unchanged fact reuse, but emits no per-run durations or rule-invocation deltas. The public reassessment seam and its Recorded counter can provide directly comparable evidence over real code without writing the repository under analysis.",
+      "done_when": "A separate integration test over an explicitly configured real source root records source population and separate cold, unchanged and one-file-change elapsed durations, fact materializations and rule invocations. It asserts unchanged materializes and reassesses nothing, changes one selected in-memory source without touching disk, asserts edited materializes less than cold, and compares edited findings with a fresh run on the same edited inputs. The test explains which selected rules and fact families it covers and does not claim subprocess cost is eliminated. Missing or empty explicitly configured input fails rather than passing as no work. A worked small corpus test demonstrates an unrelated rule family is reused when only the edited rule family moves, with exact affected-work counters. A dated evidence note records the measured numbers and commands. Forbidden: production or public API changes, edits to analyzed source trees, timing thresholds, claiming all rule families from a selected-rule run, swallowed corpus absence or a whole-release claim.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration/tests/release_incremental.rs",
+          "docs/corpus/nomos-incremental-measurement.md"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "release_incremental"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
+      "abandoned": [
+        {
+          "holder": "codex-release-loop",
+          "reason": "The intended measurement is valid, but Recorded() is cfg(test) and crate-private, not a public counter as this item incorrectly assumed. A public-seam integration test cannot observe it without an API change, which this item forbids. No source was edited. A corrected validation item will measure the publicly observable fact deltas and per-run latency over real code, and independently run the existing unit tests that directly assert the private rule invocation deltas. These two measurements will be distinguished explicitly.",
+          "abandoned_at": 1791098453
+        }
+      ],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "REL04-MEASURE-INCREMENTAL-LATENCY-AND-VERIFY-AFFECTED-WORK",
+      "title": "Measure incremental latency and verify affected facts and rule invocations",
+      "why": "Nomos 0.1 needs measured cold, unchanged and edited runs. MemoryFactStore materializations are public; rule invocation counters are test-private. Measure the public seam on real code and separately verify the existing private counter tests, so observed counters are not replaced by inferred ones or by a new public API solely for a test.",
+      "done_when": "An explicitly invoked ignored integration test requires a nonempty configured real source corpus, records its size and separate cold, unchanged and one-file-edit durations and materialization deltas, and reports the selected rule scope. It changes only an in-memory source copy, asserts unchanged materializes zero, asserts one-file-edit materializes less than cold, and compares edited findings to a fresh run over the same edited input. No timing thresholds. Independently run the existing Test_Run_Reassessing tests: two real closures run cold, zero run unchanged, and exactly one re-runs when a source changes while the unrelated whole-workspace family does not. Evidence records those directly asserted private counts separately from the real-corpus public fact counts and latency. Corpus absence during explicit invocation fails, never skips. Forbidden: production or public API changes, edits to analyzed trees, claims of observing private counters from the public integration seam, claims that subprocess or filesystem work is eliminated, a whole-release claim.",
+      "kind": "Validation",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "tests/integration/tests/release_incremental.rs",
+          "docs/corpus/nomos-incremental-measurement.md"
+        ],
+        "patterns": []
+      },
+      "state": "Claimed",
+      "depends_on": [],
+      "blocked": null,
+      "claim": {
+        "holder": "codex-release-loop",
+        "acquired_at": 1791098463,
+        "lease_expires_at": 1791112863
+      },
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "nomos-integration-tests",
+          "--test",
+          "release_incremental",
+          "--",
+          "--ignored",
+          "--nocapture"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": null,
       "abandoned": [],
       "displaced": [],
       "declined": null,

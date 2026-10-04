@@ -16,6 +16,7 @@ mod filters;
 mod listing;
 mod parsing;
 mod separator;
+mod show_dependencies;
 mod show_prefix;
 mod vocabulary;
 
