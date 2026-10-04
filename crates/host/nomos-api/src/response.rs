@@ -38,6 +38,8 @@ mod suppressed_because;
 mod suppression_disposition_response;
 mod suppression_response;
 mod suppression_standing;
+mod undeclared_outcome_response;
+mod undeclared_value_response;
 
 pub use baseline_allowance_response::BaselineAllowanceResponse;
 pub use baseline_debt_response::BaselineDebtResponse;
@@ -58,3 +60,5 @@ pub use rule_calibration_response::RuleCalibrationResponse;
 pub use rule_offer_response::RuleOfferResponse;
 pub use suppression_disposition_response::SuppressionDispositionResponse;
 pub use suppression_response::SuppressionResponse;
+pub use undeclared_outcome_response::UndeclaredOutcomeResponse;
+pub use undeclared_value_response::UndeclaredValueResponse;

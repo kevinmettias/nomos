@@ -1,6 +1,7 @@
 //! [`CheckOutcomeResponse`], the check behind a run as
 //! [`super::gate_run_response::GateRunResponse`] carries it.
 
+use super::undeclared_value_response::UndeclaredValueResponse;
 use nomos_check_orchestration::{CheckOutcome, Claim};
 use nomos_contracts::RuleId;
 use serde::Serialize;
@@ -79,6 +80,18 @@ pub enum CheckOutcomeResponse
         /// rule judged something, so a run with nothing new to say tells a caller nothing new.
         #[serde(skip_serializing_if = "Vec::is_empty")]
         empty_populations: Vec<RuleId>,
+        /// Every value a selected rule read that the repository never declared, one entry each,
+        /// with what the rule did with it -- `nomos_check_orchestration::UndeclaredValues`, read
+        /// and not asked again.
+        ///
+        /// Beside `complete` and `empty_populations` and apart from both, which is `OD-RULES-011`
+        /// version 3 decision 3: a rule that judged against a value this workspace substituted
+        /// reaches a caller exactly as one holding the repository to what it declared does, and no
+        /// value nobody declared moves the claim or the disposition. Absent from the serialized
+        /// response when every value a rule read was declared, so a run with nothing new to say
+        /// tells a caller nothing new.
+        #[serde(skip_serializing_if = "Vec::is_empty")]
+        undeclared_values: Vec<UndeclaredValueResponse>,
     },
 }
 
@@ -92,11 +105,12 @@ impl CheckOutcomeResponse
             CheckOutcome::Contradictory(error) => Self::Contradictory { cause: error.to_string() },
             CheckOutcome::NoSource => Self::NoSource,
             CheckOutcome::NoFacts { files } => Self::NoFacts { files: *files },
-            CheckOutcome::Judged { examined, claim, populations, .. } => Self::Judged {
+            CheckOutcome::Judged { examined, claim, populations, undeclared, .. } => Self::Judged {
                 files: examined.files,
                 facts: examined.facts,
                 complete: *claim == Claim::Complete,
                 empty_populations: populations.Empty().into_iter().cloned().collect(),
+                undeclared_values: UndeclaredValueResponse::Every(undeclared),
             },
         };
     }
@@ -106,7 +120,8 @@ impl CheckOutcomeResponse
 mod tests
 {
     use super::*;
-    use nomos_check_orchestration::{Examined, Populations, SupportingFactTrail};
+    use nomos_check_orchestration::{Examined, Populations, SupportingFactTrail, UndeclaredValues};
+    use nomos_rules::{UndeclaredOutcome, UndeclaredValue, NESTING_DEPTH, PARAMETER_COUNT};
 
     /// How many files a `NoFacts` outcome in these tests read before nothing was materialized.
     const READ_FILES: usize = 3;
@@ -211,9 +226,16 @@ mod tests
         return populations;
     }
 
-    /// A complete judgment that found nothing, over `populations`. The claim is fixed here, so
-    /// two outcomes built by this differ in their populations and in nothing else.
+    /// A complete judgment that found nothing, over `populations`, naming no value as undeclared.
     fn Complete_Over(populations: Populations) -> CheckOutcome
+    {
+        return Complete_Beside(populations, UndeclaredValues::New());
+    }
+
+    /// A complete judgment that found nothing, over `populations`, naming `undeclared`. The claim
+    /// is fixed here, so two outcomes built by this differ in what is reported beside the claim
+    /// and in nothing else.
+    fn Complete_Beside(populations: Populations, undeclared: UndeclaredValues) -> CheckOutcome
     {
         return CheckOutcome::Judged {
             findings: Vec::new(),
@@ -221,8 +243,74 @@ mod tests
             claim: Claim::Complete,
             supporting_facts: SupportingFactTrail::New(),
             populations,
-            undeclared: nomos_check_orchestration::UndeclaredValues::New(),
+            undeclared,
         };
+    }
+
+    /// [`NESTING_DEPTH`] read a limit no `nomos-limits.json` declared and was judged against 3, and
+    /// [`PARAMETER_COUNT`] read one the repository declared, which is why it names nothing --
+    /// exactly what a run records for each.
+    fn One_Undeclared_And_One_Declared() -> UndeclaredValues
+    {
+        let mut undeclared = UndeclaredValues::New();
+        undeclared.Note(
+            RuleId::New(NESTING_DEPTH),
+            vec![UndeclaredValue {
+                family: "limits",
+                declared_in: "nomos-limits.json",
+                key: "nesting-depth-max",
+                language: None,
+                outcome: UndeclaredOutcome::JudgedAgainst { value: "3".to_owned() },
+            }],
+        );
+        undeclared.Note(RuleId::New(PARAMETER_COUNT), Vec::new());
+
+        return undeclared;
+    }
+
+    /// `OD-RULES-011` version 3 decision 3, over the check a gate response carries: of two rules,
+    /// the one that read a value nobody declared is named with it and the one that read a declared
+    /// value is not, beside the population and apart from it, and `complete` -- the claim -- with
+    /// everything else beside it is what it is with no value named.
+    #[test]
+    fn Test_A_Judged_Outcome_Should_Name_Only_The_Undeclared_Value_Beside_An_Unchanged_Claim()
+    {
+        let reported = Rendered_Outcome(&Complete_Beside(Populations_Of(&[(EMPTY_RULE, 0)]), One_Undeclared_And_One_Declared()));
+        let unreported = Rendered_Outcome(&Complete_Beside(Populations_Of(&[(EMPTY_RULE, 0)]), UndeclaredValues::New()));
+
+        assert_eq!(
+            Field_At(&reported, &["undeclared_values"]),
+            serde_json::json!([{
+                "rule": NESTING_DEPTH,
+                "family": "limits",
+                "declared_in": "nomos-limits.json",
+                "key": "nesting-depth-max",
+                "language": null,
+                "outcome": "judged_against",
+                "value": "3",
+            }]),
+            "{reported}"
+        );
+        assert!(!reported.to_string().contains(PARAMETER_COUNT), "{reported}");
+        assert_eq!(Field_At(&reported, &["empty_populations"]), serde_json::json!([EMPTY_RULE]), "{reported}");
+        assert_eq!(Field_At(&reported, &["complete"]).as_bool(), Some(true), "{reported}");
+        let mut without_the_list = reported.clone();
+        if let Some(fields) = without_the_list.as_object_mut()
+        {
+            let _removed = fields.remove("undeclared_values");
+        }
+        assert_eq!(without_the_list, unreported, "the outcome apart from the list is the outcome with no value named");
+    }
+
+    /// A run in which every value its rules read was declared answers what it answered before the
+    /// list existed.
+    #[test]
+    fn Test_A_Judged_Outcome_With_Every_Value_Declared_Should_Say_Nothing_New()
+    {
+        let mut declared = UndeclaredValues::New();
+        declared.Note(RuleId::New(PARAMETER_COUNT), Vec::new());
+
+        assert_eq!(Rendered_Outcome(&Complete_Beside(Populations::New(), declared)), Rendered_Outcome(&Complete_Over(Populations::New())));
     }
 
     /// An outcome as a caller receives it.

@@ -2,6 +2,7 @@
 
 use super::super::ExitCode;
 use super::baselines::Report_Exceeded_Baselines;
+use crate::check::Print_Undeclared_Values;
 use nomos_capability::RegistryError;
 use nomos_check_orchestration::CheckOutcome;
 use nomos_contracts::Finding;
@@ -65,6 +66,7 @@ fn Report_Judged(findings: &[Finding], result: &GateRunResult, stdout: &mut impl
     Report_Exceeded_Baselines(&result.findings.baseline_populations, stdout);
     Report_Unmatched_Policy(result, stdout);
     Report_Empty_Populations(&result.check_outcome, stdout);
+    Report_Undeclared_Values(&result.check_outcome, stdout);
 
     return Exit_Code_For(result, stderr);
 }
@@ -152,6 +154,25 @@ fn Report_Empty_Populations(outcome: &CheckOutcome, stdout: &mut impl Write)
     for rule in empty
     {
         let _ = writeln!(stdout, "  {rule}");
+    }
+}
+
+/// Every value a selected rule read that the repository never declared, after the population
+/// block and apart from it and from the verdict, in the lines `nomos check`'s own report prints,
+/// through the one function that prints them there.
+///
+/// `OD-RULES-011` version 3 decision 3: the gate report prints the list wherever and however it
+/// prints the population. A rule that judged against a value this workspace substituted counts
+/// here exactly as it would had the repository declared that value, and this is what a CI log
+/// shows. It reads the list the check outcome carries and asks no rule again, and nothing here
+/// reaches the counts above it or the exit code.
+///
+/// Silent for a run in which every value a rule read was declared.
+fn Report_Undeclared_Values(outcome: &CheckOutcome, stdout: &mut impl Write)
+{
+    if let CheckOutcome::Judged { undeclared, .. } = outcome
+    {
+        Print_Undeclared_Values(undeclared, stdout);
     }
 }
 

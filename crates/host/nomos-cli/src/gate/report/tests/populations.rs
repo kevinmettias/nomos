@@ -3,7 +3,7 @@
 
 use super::super::{ExitCode, Render_Run};
 use super::{Empty_Findings, Example_Finding};
-use nomos_check_orchestration::{CheckOutcome, Claim, Examined, Populations, SupportingFactTrail};
+use nomos_check_orchestration::{CheckOutcome, Claim, Examined, Populations, SupportingFactTrail, UndeclaredValues};
 use nomos_contracts::{Digest128, GateCategory, RuleId, RunId};
 use nomos_gate_orchestration::{GateRunOutcome, GateRunResult};
 use std::path::PathBuf;
@@ -21,7 +21,7 @@ const RUN_FILL: u8 = 4;
 const JUDGED_SOURCES: usize = 3;
 
 /// Each `(rule, size)` noted in order.
-fn Populations_Of(judged: &[(&str, usize)]) -> Populations
+pub(super) fn Populations_Of(judged: &[(&str, usize)]) -> Populations
 {
     let mut populations = Populations::New();
     for (rule, size) in judged
@@ -32,11 +32,19 @@ fn Populations_Of(judged: &[(&str, usize)]) -> Populations
     return populations;
 }
 
-/// What `run` prints and exits with for a run that blocked on one finding, over `populations`.
+/// What `run` prints and exits with for a run that blocked on one finding, over `populations`,
+/// naming no value as undeclared.
+fn Rendered_Over(populations: Populations) -> (String, ExitCode)
+{
+    return Rendered_Beside(populations, UndeclaredValues::New());
+}
+
+/// What `run` prints and exits with for a run that blocked on one finding, over `populations`,
+/// naming `undeclared`.
 ///
 /// The finding, the claim and the disposition are fixed here, so two reports rendered by this
-/// differ in their populations and in nothing else.
-fn Rendered_Over(populations: Populations) -> (String, ExitCode)
+/// differ in what the run reported beside its claim and in nothing else.
+pub(super) fn Rendered_Beside(populations: Populations, undeclared: UndeclaredValues) -> (String, ExitCode)
 {
     let finding = Example_Finding(GateCategory::Blocking);
     let mut whole = Empty_Findings();
@@ -49,7 +57,7 @@ fn Rendered_Over(populations: Populations) -> (String, ExitCode)
         policy: None,
         no_verdict: None,
         unmatched_policy: Vec::new(),
-        // Fixed rather than fresh, so two reports differ in their populations alone.
+        // Fixed rather than fresh, so two reports differ in what is reported beside the claim alone.
         run: RunId::From_Digest(Digest128::From_Bytes([RUN_FILL; Digest128::BYTE_LENGTH])),
         root: PathBuf::from("."),
         check_outcome: CheckOutcome::Judged {
@@ -58,7 +66,7 @@ fn Rendered_Over(populations: Populations) -> (String, ExitCode)
             claim: Claim::Complete,
             supporting_facts: SupportingFactTrail::New(),
             populations,
-            undeclared: nomos_check_orchestration::UndeclaredValues::New(),
+            undeclared,
         },
         findings: whole,
         disposition: GateRunOutcome::Failed,

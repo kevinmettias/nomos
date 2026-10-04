@@ -63,8 +63,11 @@ impl SarifLog
     ///
     /// Every rule whose population was empty is named in the run's own `properties`, under
     /// `emptyPopulations`, and nowhere that would move the verdict: the crate-private
-    /// `RunProperties` says why that is the place. A run in which every selected rule judged
-    /// something carries no such property, so its log is what it was before there was one.
+    /// `RunProperties` says why that is the place. Every value a rule read that the repository
+    /// never declared is named beside them and apart from them, under `undeclaredValues`, one
+    /// object per value carrying its rule's id, family, `declaredIn`, key, language and outcome.
+    /// A run in which every selected rule judged something and every value was declared carries
+    /// neither property, so its log is what it was before there was one.
     #[must_use]
     pub fn Of_Gate_Run(result: &GateRunResult) -> Self
     {
@@ -85,8 +88,9 @@ impl SarifLog
     /// is no bucket to report; the absence is the answer, and `OD-HOST-002`'s reconstructibility
     /// is why it is absent rather than defaulted to `blocking`.
     ///
-    /// The rules whose population was empty are named exactly as [`Self::Of_Gate_Run`] names
-    /// them, since both read the one check outcome that carries them.
+    /// The rules whose population was empty, and the values nobody declared, are named exactly
+    /// as [`Self::Of_Gate_Run`] names them, since both read the one check outcome that carries
+    /// them.
     #[must_use]
     pub fn Of_Check_Run(root: &Path, outcome: &CheckOutcome) -> Self
     {

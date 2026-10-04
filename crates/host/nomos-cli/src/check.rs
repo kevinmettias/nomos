@@ -118,6 +118,8 @@ mod exit_code;
 
 pub(crate) use exit_code::ExitCode;
 pub(crate) use nomos_check_orchestration::CheckCommand;
+// The one wording of a value nobody declared, which `nomos gate run`'s report prints as well.
+pub(crate) use report::Print_Undeclared_Values;
 use crate::gate::{Emit_Log, Rendered_Beside_Log, SarifDestination};
 
 use crate::arguments::Named_Value_From_String_Arguments;

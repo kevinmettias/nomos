@@ -67,7 +67,8 @@ pub struct GateRunResponse
     /// wire had no way to.
     ///
     /// A judged one also names, beside its claim, every selected rule whose population was
-    /// empty, which no other field here carries and which moves neither the claim nor
+    /// empty, and apart from both, every value a selected rule read that the repository never
+    /// declared. No other field here carries either, and neither moves the claim or
     /// `disposition`.
     pub check_outcome: CheckOutcomeResponse,
     /// Why a run that judged its tree still reached no verdict, when one did.
@@ -134,7 +135,7 @@ mod tests
     use crate::test_support::{Area, Judged_Run, Probe_Tree, TreeName, Unique_Scratch_Directory};
     use nomos_contracts::{ConfigurationLayer, RuleId};
     use nomos_gate_orchestration::{CoveragePolicy, Effective_Gate_Policy, PolicyContribution, RuleSelector};
-    use nomos_rules::{A_SKIPPED_TEST_STATES_WHY, COMPLETENESS_MIRROR, NAMING_CONVENTION};
+    use nomos_rules::{A_SKIPPED_TEST_STATES_WHY, COMPLETENESS_MIRROR, NAMING_CONVENTION, NESTING_DEPTH, PARAMETER_COUNT};
 
     /// The subsystem this module's own scratch roots are named under.
     ///
@@ -345,6 +346,60 @@ mod tests
         assert_eq!(both.disposition, mirror_only.disposition);
         assert_eq!(Field_At(&reported, &["check_outcome", "complete"]), Field_At(&unreported, &["check_outcome", "complete"]));
         assert_eq!(Field_At(&reported, &["findings"]), Field_At(&unreported, &["findings"]));
+    }
+
+    /// `OD-RULES-011` version 3 decision 3, end to end through the handler a transport calls: the
+    /// nesting-depth and parameter-count rules over one Rust source holding one function too wide
+    /// for the parameter cap, in a tree whose `nomos-limits.json` declares the parameter cap and
+    /// not the depth limit. The depth rule judged against 3, which nobody declared, and is named
+    /// with it; the parameter rule read a declared value and is not. The same tree declaring both
+    /// limits, at the values the first was judged against, names nothing and reaches the same
+    /// disposition, the same claim and the same findings.
+    ///
+    /// Driven through `Handle_Gate_Run` for the reason the malformed-policy test above gives:
+    /// what a rule read undeclared is answered from the run's own facts, and only a real run
+    /// carries it here.
+    #[test]
+    fn Test_A_Value_Nobody_Declared_Should_Reach_A_Headless_Caller_Beside_An_Unchanged_Verdict()
+    {
+        let one_declared = Limits_Tree("one-limit-declared", r#"{ "parameter-count-max": 4 }"#);
+        let both_declared = Limits_Tree("both-limits-declared", r#"{ "parameter-count-max": 4, "nesting-depth-max": 3 }"#);
+
+        let reported_run = Judged_Run(&Command_Selecting(&one_declared, &[NESTING_DEPTH, PARAMETER_COUNT]));
+        let unreported_run = Judged_Run(&Command_Selecting(&both_declared, &[NESTING_DEPTH, PARAMETER_COUNT]));
+
+        let _ignored = std::fs::remove_dir_all(&one_declared);
+        let _ignored = std::fs::remove_dir_all(&both_declared);
+        let reported = serde_json::to_value(&reported_run).expect("a derived Serialize over owned data has nothing to refuse");
+        let unreported = serde_json::to_value(&unreported_run).expect("a derived Serialize over owned data has nothing to refuse");
+        let named = serde_json::json!([{
+            "rule": NESTING_DEPTH,
+            "family": "limits",
+            "declared_in": "nomos-limits.json",
+            "key": "nesting-depth-max",
+            "language": null,
+            "outcome": "judged_against",
+            "value": "3",
+        }]);
+        assert_eq!(Field_At(&reported, &["check_outcome", "undeclared_values"]), named, "{reported}");
+        assert_eq!(Field_At(&unreported, &["check_outcome", "undeclared_values"]), serde_json::Value::Null, "{unreported}");
+        assert!(Field_At(&reported, &["findings"]).to_string().contains("exceeds the value parameter cap of 4"), "{reported}");
+        assert_eq!(reported_run.disposition, unreported_run.disposition);
+        assert_eq!(Field_At(&reported, &["check_outcome", "complete"]), Field_At(&unreported, &["check_outcome", "complete"]));
+        assert_eq!(Field_At(&reported, &["findings"]), Field_At(&unreported, &["findings"]));
+    }
+
+    /// A tree of this module's own holding one Rust source whose one function takes five values,
+    /// one over the parameter cap, and `limits` as its `nomos-limits.json`.
+    fn Limits_Tree(label: &str, limits: &str) -> PathBuf
+    {
+        let root = Unique_Scratch_Directory(GATE_RUN_AREA, label).expect("the temp directory is writable and this call's own name is fresh");
+        std::fs::write(root.join("a.rs"), "pub fn Wide(a: u8, b: u8, c: u8, d: u8, e: u8) -> u8 { return a + b + c + d + e; }
+")
+            .expect("writes a fixture whose one function is over the parameter cap");
+        std::fs::write(root.join("nomos-limits.json"), limits).expect("writes the fixture's limits declaration");
+
+        return root;
     }
 
     /// [`GateCommand`] over `root`, judging only `rules`.

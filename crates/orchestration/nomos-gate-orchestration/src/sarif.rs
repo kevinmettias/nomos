@@ -60,6 +60,7 @@ mod sarif_run;
 mod sarif_suppression;
 mod sarif_tool;
 mod tool_driver;
+mod undeclared_value_property;
 
 pub use sarif_log::SarifLog;
 

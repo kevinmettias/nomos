@@ -13,6 +13,7 @@
 //! rather than sharing either with `nomos-cli`, since a walk and a build variant are each a
 //! composition-root concern, `OD-HOST-002`'s own division.
 
+use crate::response::UndeclaredValueResponse;
 use crate::{composition, sources};
 use nomos_check_orchestration::{CheckCommand, CheckOutcome, Run, RunContext};
 use nomos_contracts::{Finding, RuleId};
@@ -109,6 +110,17 @@ pub enum CheckResponse
         /// nothing new to say tells a caller nothing new.
         #[serde(skip_serializing_if = "Vec::is_empty")]
         empty_populations: Vec<RuleId>,
+        /// Every value a selected rule read that the repository never declared, one entry each,
+        /// with what the rule did with it -- `nomos_check_orchestration::UndeclaredValues`, read
+        /// and not asked again.
+        ///
+        /// Beside `claim` and `empty_populations` and apart from both, which is `OD-RULES-011`
+        /// version 3 decision 3: a rule that judged against a value this workspace substituted
+        /// reports exactly what it would had the repository declared that value, and no value
+        /// nobody declared moves the claim. Absent from the serialized response when every value
+        /// a rule read was declared, so a run with nothing new to say tells a caller nothing new.
+        #[serde(skip_serializing_if = "Vec::is_empty")]
+        undeclared_values: Vec<UndeclaredValueResponse>,
     },
 }
 
@@ -122,11 +134,12 @@ impl CheckResponse
             CheckOutcome::Contradictory(cause) => Self::Contradictory { cause: format!("{cause:?}") },
             CheckOutcome::NoSource => Self::NoSource,
             CheckOutcome::NoFacts { files } => Self::NoFacts { files },
-            CheckOutcome::Judged { findings, examined, claim, populations, .. } => Self::Judged {
+            CheckOutcome::Judged { findings, examined, claim, populations, undeclared, .. } => Self::Judged {
                 findings,
                 examined: ExaminedResponse::From(examined),
                 claim: ClaimResponse::From(claim),
                 empty_populations: populations.Empty().into_iter().cloned().collect(),
+                undeclared_values: UndeclaredValueResponse::Every(&undeclared),
             },
         };
     }
@@ -136,7 +149,8 @@ impl CheckResponse
 mod tests
 {
     use super::*;
-    use nomos_check_orchestration::{Claim, Examined, Populations, SupportingFactTrail};
+    use nomos_check_orchestration::{Claim, Examined, Populations, SupportingFactTrail, UndeclaredValues};
+    use nomos_rules::{UndeclaredOutcome, UndeclaredValue, NESTING_DEPTH, PARAMETER_COUNT};
     use std::path::PathBuf;
 
     /// A real run over a fixture tree with a real blocking phantom claim reaches a real
@@ -258,10 +272,17 @@ mod tests
         return populations;
     }
 
-    /// The response to a complete judgment that found nothing, over `populations`, as a caller
-    /// receives it. The claim is fixed here, so two responses built by this differ in their
-    /// populations and in nothing else.
+    /// The response to a complete judgment that found nothing, over `populations`, naming no
+    /// value as undeclared, as a caller receives it.
     fn Rendered_Over(populations: Populations) -> serde_json::Value
+    {
+        return Rendered_Beside(populations, UndeclaredValues::New());
+    }
+
+    /// The response to a complete judgment that found nothing, over `populations`, naming
+    /// `undeclared`, as a caller receives it. The claim is fixed here, so two responses built by
+    /// this differ in what is reported beside the claim and in nothing else.
+    fn Rendered_Beside(populations: Populations, undeclared: UndeclaredValues) -> serde_json::Value
     {
         let outcome = CheckOutcome::Judged {
             findings: Vec::new(),
@@ -269,10 +290,73 @@ mod tests
             claim: Claim::Complete,
             supporting_facts: SupportingFactTrail::New(),
             populations,
-            undeclared: nomos_check_orchestration::UndeclaredValues::New(),
+            undeclared,
         };
 
         return serde_json::to_value(CheckResponse::From(outcome)).expect("a derived Serialize over owned data has nothing to refuse");
+    }
+
+    /// [`NESTING_DEPTH`] read a limit no `nomos-limits.json` declared and was judged against 3, and
+    /// [`PARAMETER_COUNT`] read one the repository declared, which is why it names nothing --
+    /// exactly what a run records for each.
+    fn One_Undeclared_And_One_Declared() -> UndeclaredValues
+    {
+        let mut undeclared = UndeclaredValues::New();
+        undeclared.Note(
+            RuleId::New(NESTING_DEPTH),
+            vec![UndeclaredValue {
+                family: "limits",
+                declared_in: "nomos-limits.json",
+                key: "nesting-depth-max",
+                language: None,
+                outcome: UndeclaredOutcome::JudgedAgainst { value: "3".to_owned() },
+            }],
+        );
+        undeclared.Note(RuleId::New(PARAMETER_COUNT), Vec::new());
+
+        return undeclared;
+    }
+
+    /// `OD-RULES-011` version 3 decision 3, over the response a check run answers: of two rules,
+    /// the one that read a value nobody declared is named with it and the one that read a declared
+    /// value is not, beside the population and apart from it, and every other field -- the claim
+    /// among them -- is what it is with no value named.
+    #[test]
+    fn Test_A_Judged_Response_Should_Name_Only_The_Undeclared_Value_Beside_An_Unchanged_Claim()
+    {
+        let reported = Rendered_Beside(Populations_Of(&[(EMPTY_RULE, 0)]), One_Undeclared_And_One_Declared());
+        let unreported = Rendered_Beside(Populations_Of(&[(EMPTY_RULE, 0)]), UndeclaredValues::New());
+
+        let named = serde_json::json!([{
+            "rule": NESTING_DEPTH,
+            "family": "limits",
+            "declared_in": "nomos-limits.json",
+            "key": "nesting-depth-max",
+            "language": null,
+            "outcome": "judged_against",
+            "value": "3",
+        }]);
+        assert_eq!(reported.get("undeclared_values"), Some(&named), "{reported}");
+        assert!(!reported.to_string().contains(PARAMETER_COUNT), "{reported}");
+        assert_eq!(reported.get("empty_populations"), Some(&serde_json::json!([EMPTY_RULE])), "{reported}");
+        assert_eq!(reported.get("claim"), Some(&serde_json::json!("complete")), "{reported}");
+        let mut without_the_list = reported.clone();
+        if let Some(fields) = without_the_list.as_object_mut()
+        {
+            let _removed = fields.remove("undeclared_values");
+        }
+        assert_eq!(without_the_list, unreported, "the response apart from the list is the response with no value named");
+    }
+
+    /// A run in which every value its rules read was declared answers what it answered before the
+    /// list existed.
+    #[test]
+    fn Test_A_Judged_Response_With_Every_Value_Declared_Should_Say_Nothing_New()
+    {
+        let mut declared = UndeclaredValues::New();
+        declared.Note(RuleId::New(PARAMETER_COUNT), Vec::new());
+
+        assert_eq!(Rendered_Beside(Populations::New(), declared), Rendered_Over(Populations::New()));
     }
 
     /// A bare `CheckCommand` over `root` -- this verb selects everything by default, so the

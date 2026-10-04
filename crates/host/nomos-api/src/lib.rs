@@ -196,7 +196,8 @@ pub use response::{
     Disposition, FindingBucket,
     GateCompareResponse, GateExplainResponse, GateFindings, GatePlanResponse, GateRunResponse, Handle_Gate_Compare,
     Handle_Gate_Explain, Handle_Gate_Plan, Handle_Gate_Run, JudgmentDifferenceResponse, NoVerdictResponse,
-    RuleCalibrationResponse, RuleOfferResponse, SuppressionDispositionResponse, SuppressionResponse,
+    RuleCalibrationResponse, RuleOfferResponse, SuppressionDispositionResponse, SuppressionResponse, UndeclaredOutcomeResponse,
+    UndeclaredValueResponse,
 };
 pub use nomos_gate_orchestration::SarifLog;
 pub use spec::{

@@ -1,6 +1,8 @@
-//! [`RunProperties`], the rules a run judged over an empty population, carried beside the run's
-//! invocation and never among its results.
+//! [`RunProperties`], the rules a run judged over an empty population and the values its rules
+//! read that the repository never declared, carried beside the run's invocation and never among its
+//! results.
 
+use super::undeclared_value_property::UndeclaredValueProperty;
 use nomos_check_orchestration::CheckOutcome;
 use serde::Serialize;
 
@@ -12,19 +14,28 @@ use serde::Serialize;
 /// rule that judged real subjects and found them clean does, so a log that does not say which
 /// is which reads every such rule as a clean judgment.
 ///
+/// `OD-RULES-011` version 3 decision 3 puts the values a run's rules read that the repository never
+/// declared wherever and however each rendering puts the population, and in SARIF never as a
+/// result. A rule that judged against a value this workspace substituted produces exactly the
+/// results it would have produced had the repository declared that value, so a log that does not
+/// say which value nobody chose reads every such verdict as one the repository asked for. The two
+/// lists sit side by side in this one bag, each under its own key, and neither is read into the
+/// other.
+///
 /// # Why a run-level property and not the two other places SARIF admits
 ///
 /// - **Not a `result`.** An empty population is not a finding: it has no subject, no location
 ///   and no level, and a consumer that counts or lists results would count and list it as one.
-///   A code-scanning view would raise an alert for a rule that looked at nothing.
+///   A code-scanning view would raise an alert for a rule that looked at nothing. A value nobody
+///   declared is not a finding either: a value is not a subject.
 /// - **Not one of the invocation's `toolExecutionNotifications`.** Those are what make
 ///   [`super::sarif_invocation::SarifInvocation`]'s `executionSuccessful` false, which is this
-///   log's rendering of the claim, and the record decided that no empty population moves the
-///   claim. A notification beside a successful execution would break that invocation's own
-///   invariant, and one that flipped it would be the flip the owner ruled out.
+///   log's rendering of the claim, and both records decided that neither list moves the claim.
+///   A notification beside a successful execution would break that invocation's own invariant,
+///   and one that flipped it would be the flip the owner ruled out.
 ///
 /// A property of the run is neither. It sits beside `invocations`, it is read by key rather
-/// than by scanning prose, and every id in it is a rule id a consumer can resolve against
+/// than by scanning prose, and every rule id in it is one a consumer can resolve against
 /// `tool.driver.rules` to reach the record the rule cites.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -32,31 +43,41 @@ pub(crate) struct RunProperties
 {
     /// Every rule the run selected whose population was empty, by id, in the order the run
     /// judged them -- `nomos_check_orchestration::Populations::Empty`, read and not recounted.
+    /// Absent when there is none.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     pub(crate) empty_populations: Vec<String>,
+    /// Every value a selected rule read that the repository never declared, one object each, in
+    /// the order the run judged the rules and each rule named its values --
+    /// `nomos_check_orchestration::UndeclaredValues::Named`, read and not asked again. Absent when
+    /// there is none.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub(crate) undeclared_values: Vec<UndeclaredValueProperty>,
 }
 
 impl RunProperties
 {
     /// The bag for a run whose check produced `outcome`.
     ///
-    /// `None` when every selected rule judged something, so a log over such a run is the log it
-    /// was before this bag existed and says nothing new. `None` as well for a run that judged
-    /// nothing at all: no rule was handed anything, and the invocation already says why.
+    /// `None` when every selected rule judged something and every value a rule read was
+    /// declared, so a log over such a run is the log it was before this bag existed and says
+    /// nothing new. `None` as well for a run that judged nothing at all: no rule was handed
+    /// anything, and the invocation already says why.
     pub(crate) fn Of(outcome: &CheckOutcome) -> Option<Self>
     {
-        let CheckOutcome::Judged { populations, .. } = outcome
+        let CheckOutcome::Judged { populations, undeclared, .. } = outcome
         else
         {
             return None;
         };
 
         let empty_populations: Vec<String> = populations.Empty().into_iter().map(|rule| return rule.As_Str().to_owned()).collect();
-        if empty_populations.is_empty()
+        let undeclared_values = UndeclaredValueProperty::Every(undeclared);
+        if empty_populations.is_empty() && undeclared_values.is_empty()
         {
             return None;
         }
 
-        return Some(Self { empty_populations });
+        return Some(Self { empty_populations, undeclared_values });
     }
 }
 

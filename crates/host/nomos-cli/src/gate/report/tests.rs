@@ -11,6 +11,7 @@ mod explain;
 mod plan;
 mod policy;
 mod populations;
+mod undeclared;
 mod verdicts;
 
 use nomos_check_orchestration::{CheckOutcome, Claim, Examined, SupportingFactTrail};

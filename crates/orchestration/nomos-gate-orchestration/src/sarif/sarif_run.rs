@@ -22,9 +22,10 @@ pub(crate) struct SarifRun
     pub(crate) results: Vec<SarifResult>,
     /// Exactly one, since a judgment is one execution.
     pub(crate) invocations: Vec<SarifInvocation>,
-    /// The rules that judged an empty population, when any did; [`RunProperties`] says why
-    /// here and nowhere else. Absent rather than empty, so a run in which every selected rule
-    /// judged something serializes exactly as it did before the bag existed.
+    /// The rules that judged an empty population and the values nobody declared, when there
+    /// are any; [`RunProperties`] says why here and nowhere else. Absent rather than empty, so a
+    /// run in which every selected rule judged something and every value was declared serializes
+    /// exactly as it did before the bag existed.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub(crate) properties: Option<RunProperties>,
 }

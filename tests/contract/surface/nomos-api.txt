@@ -41,6 +41,7 @@ pub enum nomos_api::SubmissionStateResponse
 pub enum nomos_api::SubmitResponse
 pub enum nomos_api::SuppressionDispositionResponse
 pub enum nomos_api::TableResponse
+pub enum nomos_api::UndeclaredOutcomeResponse
 pub enum nomos_api::VacateOutcomeResponse
 pub enum nomos_api::ValidateResponse
 pub enum nomos_api::VerdictResponse
@@ -66,12 +67,12 @@ pub enum variant nomos_api::BlockChangeResponse::Reflowed { ordinal: u32 }
 pub enum variant nomos_api::BlockChangeResponse::Removed { ordinal: u32, kind: String }
 pub enum variant nomos_api::BlockChangeResponse::Reworded { ordinal: u32, before: String, after: String }
 pub enum variant nomos_api::CheckOutcomeResponse::Contradictory { cause: String, }
-pub enum variant nomos_api::CheckOutcomeResponse::Judged { files: usize, facts: usize, complete: bool, #[serde(skip_serializing_if = "Vec::is_empty")] empty_populations: Vec<RuleId>, }
+pub enum variant nomos_api::CheckOutcomeResponse::Judged { files: usize, facts: usize, complete: bool, #[serde(skip_serializing_if = "Vec::is_empty")] empty_populations: Vec<RuleId>, #[serde(skip_serializing_if = "Vec::is_empty")] undeclared_values: Vec<UndeclaredValueResponse>, }
 pub enum variant nomos_api::CheckOutcomeResponse::NoFacts { files: usize, }
 pub enum variant nomos_api::CheckOutcomeResponse::NoSource
 pub enum variant nomos_api::CheckOutcomeResponse::Unreadable
 pub enum variant nomos_api::CheckResponse::Contradictory { cause: String, }
-pub enum variant nomos_api::CheckResponse::Judged { findings: Vec<Finding>, examined: ExaminedResponse, claim: ClaimResponse, #[serde(skip_serializing_if = "Vec::is_empty")] empty_populations: Vec<RuleId>, }
+pub enum variant nomos_api::CheckResponse::Judged { findings: Vec<Finding>, examined: ExaminedResponse, claim: ClaimResponse, #[serde(skip_serializing_if = "Vec::is_empty")] empty_populations: Vec<RuleId>, #[serde(skip_serializing_if = "Vec::is_empty")] undeclared_values: Vec<UndeclaredValueResponse>, }
 pub enum variant nomos_api::CheckResponse::NoFacts { files: usize, }
 pub enum variant nomos_api::CheckResponse::NoSource
 pub enum variant nomos_api::CheckResponse::Unreadable
@@ -188,6 +189,10 @@ pub enum variant nomos_api::TableResponse::NoRows { document: DocumentSourceResp
 pub enum variant nomos_api::TableResponse::NoSuchDocument
 pub enum variant nomos_api::TableResponse::Selected { document: DocumentSourceResponse, tier: PathMatchResponse, census: RowCensusResponse, lines: Vec<TableLineResponse>, }
 pub enum variant nomos_api::TableResponse::Unreadable { cause: String, }
+pub enum variant nomos_api::UndeclaredOutcomeResponse::JudgedAgainst { value: String, }
+pub enum variant nomos_api::UndeclaredOutcomeResponse::JudgedNothing
+pub enum variant nomos_api::UndeclaredOutcomeResponse::ReportedUndeclared
+pub enum variant nomos_api::UndeclaredOutcomeResponse::SpreadBoundNotJudged
 pub enum variant nomos_api::VacateOutcomeResponse::AlreadyGone
 pub enum variant nomos_api::VacateOutcomeResponse::Failed { message: String }
 pub enum variant nomos_api::VacateOutcomeResponse::Removed
@@ -370,6 +375,12 @@ pub struct field nomos_api::TableLineResponse::kind: String
 pub struct field nomos_api::TableLineResponse::row_ordinal: u32
 pub struct field nomos_api::TableLineResponse::table_ordinal: u32
 pub struct field nomos_api::TableLineResponse::text: String
+pub struct field nomos_api::UndeclaredValueResponse::declared_in: String
+pub struct field nomos_api::UndeclaredValueResponse::family: String
+pub struct field nomos_api::UndeclaredValueResponse::key: String
+pub struct field nomos_api::UndeclaredValueResponse::language: Option<String>
+pub struct field nomos_api::UndeclaredValueResponse::outcome: UndeclaredOutcomeResponse
+pub struct field nomos_api::UndeclaredValueResponse::rule: RuleId
 pub struct field nomos_api::VacatedResponse::outcome: VacateOutcomeResponse
 pub struct field nomos_api::VacatedResponse::path: PathBuf
 pub struct nomos_api::AbsenceResponse
@@ -402,6 +413,7 @@ pub struct nomos_api::RuleOfferResponse
 pub struct nomos_api::SubmissionResponse
 pub struct nomos_api::SuppressionResponse
 pub struct nomos_api::TableLineResponse
+pub struct nomos_api::UndeclaredValueResponse
 pub struct nomos_api::VacatedResponse
 
 # re-exports of items declared outside this crate

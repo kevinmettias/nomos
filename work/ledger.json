@@ -102857,17 +102857,13 @@
         ],
         "patterns": []
       },
-      "state": "Claimed",
+      "state": "Done",
       "depends_on": [
         "P186-THE-GATE-REPORT-SARIF-AND-THE-API-DO-NOT-SAY-WHICH-RULES-JUDGED-AN-EMPTY-POPULATION",
         "P190-A-RUN-NAMES-EVERY-VALUE-ITS-RULES-READ-THAT-THE-REPOSITORY-NEVER-DECLARED-BESIDE-ITS-CLAIM"
       ],
       "blocked": null,
-      "claim": {
-        "holder": "opus-p191-undeclared",
-        "acquired_at": 1791093381,
-        "lease_expires_at": 1791145577
-      },
+      "claim": null,
       "verification": {
         "argv": [
           "cargo",
@@ -102888,7 +102884,57 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-gate-orchestration",
+          "-p",
+          "nomos-contract-tests",
+          "--lib",
+          "--bins",
+          "--test",
+          "public_surface"
+        ],
+        "exit_code": 0,
+        "output_tail": "    {\n61 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n71 | ||         std::thread::sleep(super::POLL_INTERVAL);\n72 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:81:5\n   |\n81 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n82 | ||     {\n83 | ||         Ok(Some(status)) =>\n...  ||\n90 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n91 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Requested_Dispatch` should have an upper camel case name\n   --> crates\\host\\nomos-cli\\src\\agent.rs:162:19\n    |\n162 | pub(super) struct Requested_Dispatch\n    |                   ^^^^^^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `RequestedDispatch`\n    |\n    = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-cli` (bin \"nomos\" test) generated 1 warning\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 23.68s\n     Running unittests src\\lib.rs (F:/repos/nomos-p191-target\\debug\\deps\\nomos_api-cc647bda1c93b94b.exe)\n     Running unittests src\\main.rs (F:/repos/nomos-p191-target\\debug\\deps\\nomos-0aa845c35ad96899.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p191-target\\debug\\deps\\nomos_contract_tests-33c5f605eaa36ff7.exe)\n     Running tests\\public_surface\\main.rs (F:/repos/nomos-p191-target\\debug\\deps\\public_surface-a8798fba7f7c8802.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p191-target\\debug\\deps\\nomos_gate_orchestration-1daf67a7daaf757e.exe)\n",
+        "verified_at": 1791135987,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "5f06a74cdcf338174f7077c74d097e834b3b0c04"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,

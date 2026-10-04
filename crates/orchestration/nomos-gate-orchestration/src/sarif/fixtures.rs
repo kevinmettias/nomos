@@ -7,7 +7,7 @@
 //! takes runs a real gate instead, in `sarif_log`.
 
 use crate::{GateFindings, GateRunOutcome, GateRunResult};
-use nomos_check_orchestration::{CheckOutcome, Claim, Examined, Populations, SupportingFactTrail};
+use nomos_check_orchestration::{CheckOutcome, Claim, Examined, Populations, SupportingFactTrail, UndeclaredValues};
 use nomos_contracts::{Applicability, Digest128, EvidenceClass, Finding, GateCategory, RuleId, RunId, SubjectId};
 use std::collections::BTreeMap;
 use std::path::PathBuf;
@@ -98,13 +98,23 @@ pub(crate) fn Judged_Outcome_With(findings: Vec<Finding>, claim: Claim) -> Check
 /// no empty one moves it.
 pub(crate) fn Judged_Outcome_Of(findings: Vec<Finding>, populations: Populations, claim: Claim) -> CheckOutcome
 {
+    return Judged_Outcome_Beside(findings, populations, UndeclaredValues::New(), claim);
+}
+
+/// A check that judged its tree and found `findings`, under `claim`, over `populations`, naming
+/// `undeclared` as the values its rules read that the repository never declared.
+///
+/// The claim is the caller's here too and is never derived from `undeclared`: a value nobody
+/// declared is reported beside the claim, and moves nothing in it.
+pub(crate) fn Judged_Outcome_Beside(findings: Vec<Finding>, populations: Populations, undeclared: UndeclaredValues, claim: Claim) -> CheckOutcome
+{
     return CheckOutcome::Judged {
         findings,
         examined: Examined { files: FIXTURE_EXAMINED, facts: FIXTURE_EXAMINED },
         claim,
         supporting_facts: SupportingFactTrail::New(),
         populations,
-        undeclared: nomos_check_orchestration::UndeclaredValues::New(),
+        undeclared,
     };
 }
 

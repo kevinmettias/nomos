@@ -305,8 +305,11 @@ fn Print_Empty_Populations(populations: &Populations, stdout: &mut impl Write)
 /// a change of code, or a declaration. The claim above is what the findings support and is not
 /// changed by it. `OD-RULES-011` version 3 decisions 1 and 3.
 ///
+/// `nomos gate run`'s report prints the list through this function too, after its own population
+/// block, so the two reports a person reads cannot word one value two ways.
+///
 /// Prints nothing for a run in which every value a rule read was declared.
-fn Print_Undeclared_Values(undeclared: &UndeclaredValues, stdout: &mut impl Write)
+pub(crate) fn Print_Undeclared_Values(undeclared: &UndeclaredValues, stdout: &mut impl Write)
 {
     if undeclared.Is_Empty()
     {
