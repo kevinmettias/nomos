@@ -371,9 +371,9 @@ struct Committing<'a, Fs: FileSystem>
 fn Committed_Change<Fs: FileSystem>(committing: Committing<'_, Fs>) -> CorrectionOutcome
 {
     let Committing { root, path, summary, evidence_reference, validated, workspace, before, after, preview, filesystem } = committing;
-    if let Err(outcome) = Unchanged_File(root, &path, before, filesystem)
+    if let Err(reason) = Unchanged_File(root, &path, before, filesystem)
     {
-        return outcome;
+        return CorrectionOutcome::Refused(reason);
     }
     let committed = match Committed_Plan(validated, workspace, evidence_reference)
     {
@@ -396,13 +396,13 @@ fn Committed_Change<Fs: FileSystem>(committing: Committing<'_, Fs>) -> Correctio
 }
 
 /// Refuses a file whose current bytes cannot be read or differ from the plan's base.
-fn Unchanged_File<Fs: FileSystem>(root: &Path, path: &str, before: &str, filesystem: &Fs) -> Result<(), CorrectionOutcome>
+pub(super) fn Unchanged_File<Fs: FileSystem>(root: &Path, path: &str, before: &str, filesystem: &Fs) -> Result<(), String>
 {
     let current = filesystem.Read_To_String(&root.join(path))
-        .map_err(|error| return CorrectionOutcome::Refused(format!("could not re-read `{path}` before committing: {error}")))?;
+        .map_err(|error| return format!("could not re-read `{path}` before committing: {error}"))?;
     if current != before
     {
-        return Err(CorrectionOutcome::Refused(format!("refusing to overwrite `{path}`: content changed after planning")));
+        return Err(format!("refusing to overwrite `{path}`: content changed after planning"));
     }
 
     return Ok(());

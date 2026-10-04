@@ -213,7 +213,7 @@ fn Test_Two_Waves_Should_Both_Commit_When_Neither_Refuses()
     let root = Root("nomos-correction-orchestration-waves-both-commit");
     let fixes = vec![Fix("a.rs", "a-old", "a-new"), Fix("b.rs", "b-old", "b-new"), Reading_Fix("c.rs", "c-old", "a.rs")];
 
-    let schedule = Scheduled_Run(Built_From(fixes), Scheduling_Over(&root, true), Always_A_New_State());
+    let schedule = Committed_Run(&root, fixes, Always_A_New_State());
 
     let corrected = std::fs::read_to_string(root.join("c.rs")).expect("the second wave committed and wrote this file");
     let _ignored = std::fs::remove_dir_all(&root);
@@ -254,7 +254,7 @@ fn Test_A_Refusing_Wave_Should_Not_Stage_The_Waves_After_It()
         Fix("a.rs", "a-old", "a-third"),
     ];
 
-    let schedule = Scheduled_Run(Built_From(fixes), Scheduling_Over(&root, true), Always_A_New_State());
+    let schedule = Committed_Run(&root, fixes, Always_A_New_State());
 
     let _ignored = std::fs::remove_dir_all(&root);
     assert_eq!(schedule.Scheduled(), THREE_WAVES);
@@ -270,7 +270,7 @@ fn Test_A_Refusing_Wave_Should_Report_What_Was_Already_Committed()
     let root = Root("nomos-correction-orchestration-waves-committed-then-refused");
     let fixes = vec![Fix("a.rs", "a-old", "a-new"), Fix("b.rs", "b-old", "b-new"), Fix("a.rs", "a-old", "a-other")];
 
-    let schedule = Scheduled_Run(Built_From(fixes), Scheduling_Over(&root, true), Always_A_New_State());
+    let schedule = Committed_Run(&root, fixes, Always_A_New_State());
 
     let on_disk = std::fs::read_to_string(root.join("a.rs")).expect("the first wave committed and wrote this file");
     let _ignored = std::fs::remove_dir_all(&root);
@@ -285,7 +285,7 @@ fn Test_A_Committed_Plan_Should_Carry_The_Snapshots_A_Rollback_Would_Need()
 {
     let root = Root("nomos-correction-orchestration-waves-snapshots");
 
-    let schedule = Scheduled_Run(Built_From(vec![Fix("a.rs", "a-old", "a-new")]), Scheduling_Over(&root, true), Always_A_New_State());
+    let schedule = Committed_Run(&root, vec![Fix("a.rs", "a-old", "a-new")], Always_A_New_State());
 
     let outcome = Wave_At(&schedule, FIRST).Outcomes().first().cloned().expect("the one plan ran");
     let _ignored = std::fs::remove_dir_all(&root);
@@ -306,7 +306,7 @@ fn Test_An_Oscillating_Pair_Should_Stop_At_The_Repeated_State()
     let fixes = vec![Fix("a.rs", "v0", "v1"), Fix("a.rs", "v1", "v0"), Fix("a.rs", "v0", "v2")];
     let script = vec![Observed(&["a.rs:1"]), Observed(&["a.rs:2"]), Observed(&["a.rs:1"])];
 
-    let schedule = Scheduled_Run(Built_From(fixes), Scheduling_Over(&root, true), Scripted(script));
+    let schedule = Committed_Run(&root, fixes, Scripted(script));
 
     let _ignored = std::fs::remove_dir_all(&root);
     assert_eq!(schedule.Scheduled(), THREE_WAVES);
@@ -324,7 +324,7 @@ fn Test_A_Rerun_Should_Name_What_A_Wave_Cleared_And_What_It_Introduced()
     let fixes = vec![Fix("a.rs", "v0", "v1"), Fix("a.rs", "v1", "v0"), Fix("a.rs", "v0", "v2")];
     let script = vec![Observed(&["a.rs:1"]), Observed(&["a.rs:2"]), Observed(&["a.rs:1"])];
 
-    let schedule = Scheduled_Run(Built_From(fixes), Scheduling_Over(&root, true), Scripted(script));
+    let schedule = Committed_Run(&root, fixes, Scripted(script));
 
     let second = Wave_At(&schedule, SECOND).clone();
     let _ignored = std::fs::remove_dir_all(&root);
@@ -341,7 +341,7 @@ fn Test_A_Run_That_Keeps_Reaching_New_States_Should_Not_Be_Stopped()
     let fixes = vec![Fix("a.rs", "v0", "v1"), Fix("a.rs", "v1", "v2"), Fix("a.rs", "v2", "v3")];
     let script = vec![Observed(&["a:1"]), Observed(&["a:2"]), Observed(&["a:3"]), Observed(&["a:4"])];
 
-    let schedule = Scheduled_Run(Built_From(fixes), Scheduling_Over(&root, true), Scripted(script));
+    let schedule = Committed_Run(&root, fixes, Scripted(script));
 
     let _ignored = std::fs::remove_dir_all(&root);
     assert_eq!(schedule.Scheduled(), THREE_WAVES);
@@ -366,7 +366,7 @@ fn Test_A_Plan_The_Partition_Refuses_Should_Be_Reported_And_Never_Dropped()
     };
     let fixes = vec![Fix("a.rs", "a-old", "a-new"), unresolved];
 
-    let schedule = Scheduled_Run(Built_From(fixes), Scheduling_Over(&root, true), Never_Rerun);
+    let schedule = Committed_Run(&root, fixes, Never_Rerun);
 
     let _ignored = std::fs::remove_dir_all(&root);
     let refusal = schedule.Unschedulable().expect("an incomplete derived set is unresolved");
@@ -479,10 +479,119 @@ fn Test_A_Wave_That_Changes_Nothing_Observable_Should_Stop_The_Run()
     let fixes = vec![Fix("a.rs", "v0", "v1"), Fix("a.rs", "v1", "v2"), Fix("a.rs", "v2", "v3")];
     let script = vec![Observed(&["a.rs:1"]), Observed(&["a.rs:1"])];
 
-    let schedule = Scheduled_Run(Built_From(fixes), Scheduling_Over(&root, true), Scripted(script));
+    let schedule = Committed_Run(&root, fixes, Scripted(script));
 
     let _ignored = std::fs::remove_dir_all(&root);
     assert_eq!(schedule.Scheduled(), THREE_WAVES);
     assert_eq!(schedule.Waves().len(), ONE_WAVE, "a stalled run must not stage the waves after it");
     assert!(matches!(schedule.Halt(), Some(ScheduleHalt::Repeated { wave: FIRST, round: FIRST })), "{:?}", schedule.Halt());
+}
+
+/// A public wave run after a competing writer acts during the baseline rejudgment.
+fn Wave_After(root: &Path, act: impl FnOnce()) -> CorrectionSchedule
+{
+    std::fs::write(root.join("a.rs"), PHANTOM_FIXTURE).expect("seed the actual target");
+    let finding = Phantom_Finding("a.rs", "Test_Nonexistent_Check_That_Does_Not_Exist");
+    let mut action = Some(act);
+    return Run_Correction_Waves(&[finding], Scheduling_Over(root, true), |_scope| {
+        if let Some(action) = action.take()
+        {
+            action();
+        }
+        return Vec::new();
+    });
+}
+
+#[test]
+fn Test_A_Wave_Should_Refuse_An_Edit_Made_After_Candidate_Construction()
+{
+    let root = Root("nomos-release-wave-stale-file");
+    let edit = "pub const COMPETING: u32 = 7;\n";
+    let schedule = Wave_After(&root, || std::fs::write(root.join("a.rs"), edit).expect("competing writer"));
+    let content = std::fs::read_to_string(root.join("a.rs")).expect("the competing file survives");
+    let _ignored = std::fs::remove_dir_all(&root);
+    assert!(matches!(schedule.Halt(), Some(ScheduleHalt::Refused { .. })), "{schedule:?}");
+    assert!(schedule.Committed().is_empty(), "stale content must refuse before committing");
+    assert_eq!(content, edit, "the competing edit must survive");
+}
+
+#[test]
+fn Test_A_Wave_Should_Refuse_A_Target_Removed_After_Candidate_Construction()
+{
+    let root = Root("nomos-release-wave-removed-file");
+    let schedule = Wave_After(&root, || std::fs::remove_file(root.join("a.rs")).expect("competing removal"));
+    let exists = root.join("a.rs").exists();
+    let _ignored = std::fs::remove_dir_all(&root);
+    assert!(matches!(schedule.Halt(), Some(ScheduleHalt::Refused { .. })), "{schedule:?}");
+    assert!(schedule.Committed().is_empty());
+    assert!(!exists, "a correction must never recreate the removed target");
+}
+
+#[test]
+fn Test_A_Wave_Should_Still_Commit_When_The_Live_File_Is_Unchanged()
+{
+    let root = Root("nomos-release-wave-unchanged-file");
+    let schedule = Wave_After(&root, || ());
+    let content = std::fs::read_to_string(root.join("a.rs")).expect("corrected target");
+    let _ignored = std::fs::remove_dir_all(&root);
+    assert_eq!(schedule.Committed(), ["a.rs"]);
+    assert!(!content.contains("Mirrored by"));
+}
+
+#[test]
+fn Test_An_Unreadable_Wave_Target_Should_Refuse_Before_Changing_The_Workspace_Model()
+{
+    let root = Root("nomos-release-wave-unreadable-file");
+    let original = [0xff, 0xfe];
+    std::fs::write(root.join("a.rs"), original).expect("invalid UTF-8 target");
+    let scheduling = Scheduling_Over(&root, true);
+    let fix = Fix("a.rs", "old", "new");
+    let mut workspace = Seeded_Workspace(&scheduling, std::slice::from_ref(&fix));
+    let before = workspace.Id();
+    let outcome = Ran_Plan(&fix, &mut workspace, &scheduling);
+    let after = workspace.Id();
+    let content = std::fs::read(root.join("a.rs")).expect("unreadable bytes are retained");
+    let _ignored = std::fs::remove_dir_all(&root);
+    assert!(matches!(outcome, PlanOutcome::Refused { .. }), "{outcome:?}");
+    assert_eq!(before, after, "a failed live read must not commit the model either");
+    assert_eq!(content, original);
+}
+/// Model fixtures also seed the actual file bytes their commit claims are about.
+fn Seed_Files(root: &Path, fixes: &[ScheduledFix])
+{
+    let mut seeded = BTreeSet::new();
+    for fix in fixes
+    {
+        if seeded.insert(&fix.path)
+        {
+            std::fs::write(root.join(&fix.path), &fix.before).expect("seed the first base for each target");
+        }
+    }
+}
+
+fn Committed_Run(root: &Path, fixes: Vec<ScheduledFix>, rejudge: impl FnMut(&[String]) -> Vec<Finding>) -> CorrectionSchedule
+{
+    Seed_Files(root, &fixes);
+    return Scheduled_Run(Built_From(fixes), Scheduling_Over(root, true), rejudge);
+}
+
+#[test]
+fn Test_A_Stale_Wave_Refusal_Should_Preserve_Earlier_Commits_And_Leave_Later_Waves_Unattempted()
+{
+    let root = Root("nomos-release-wave-partial-commit");
+    let fixes = vec![Fix("a.rs", "a-old", "a-new"), Fix("b.rs", "b-old", "b-new"), Reading_Fix("c.rs", "c-old", "a.rs")];
+    Seed_Files(&root, &fixes);
+    let schedule = Scheduled_Run(Built_From(fixes), Scheduling_Over(&root, true), |_scope| {
+        std::fs::write(root.join("b.rs"), "competing edit").expect("competing writer after planning");
+        return Vec::new();
+    });
+    let a = std::fs::read_to_string(root.join("a.rs")).expect("first target");
+    let b = std::fs::read_to_string(root.join("b.rs")).expect("second target");
+    let c = std::fs::read_to_string(root.join("c.rs")).expect("later-wave target");
+    let _ignored = std::fs::remove_dir_all(&root);
+    assert_eq!(schedule.Scheduled(), TWO_WAVES);
+    assert_eq!(schedule.Waves().len(), ONE_WAVE);
+    assert!(matches!(schedule.Halt(), Some(ScheduleHalt::Refused { wave: FIRST, position: SECOND, .. })), "{schedule:?}");
+    assert_eq!(schedule.Committed(), ["a.rs"]);
+    assert_eq!((a.as_str(), b.as_str(), c.as_str()), ("a-new", "competing edit", "c-old"));
 }

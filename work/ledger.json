@@ -106009,6 +106009,87 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "REL06-RECHECK-LIVE-FILES-BEFORE-WAVE-CORRECTION-COMMITS",
+      "title": "Wave corrections refuse observed stale or unreadable files before committing the model or replacing bytes",
+      "why": "The individual correction path rechecks live bytes, while Committed_Fix in wave scheduling writes a candidate built from old bytes without rereading its target. A competing edit or removal can be silently overwritten.",
+      "done_when": "Both individual and wave commits share the live-byte check. A wave refuses changed, removed or unreadable targets before model commit or filesystem replacement; earlier successful independent commits remain reported and a refusal halts later waves. Tests exercise the real public wave entry point with edits made after candidate construction and unchanged positive controls, as well as a filesystem read failure. Existing model-only commit fixtures seed the real files they claim to modify. Mutation of the wave application must fail a named stale-file discriminator, restored byte-identically. Documentation distinguishes observed staleness refusal from atomic compare-and-replace; no race-free publication claim, new filesystem trait method, dependency change or public API change. Individual correction regressions and the complete correction crate pass.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-correction-orchestration/src/run.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/schedule.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/schedule/tests.rs",
+          "docs/corpus/nomos-wave-correction-safety.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "nomos-correction-orchestration",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "nomos-correction-orchestration",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "nning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:59:5\n   |\n59 |        return loop\n   |  ______^      -\n   | | ____________|\n60 | ||     {\n61 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n71 | ||         std::thread::sleep(super::POLL_INTERVAL);\n72 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:81:5\n   |\n81 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n82 | ||     {\n83 | ||         Ok(Some(status)) =>\n...  ||\n90 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n91 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n   Compiling nomos-correction-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-correction-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 17.23s\n     Running unittests src\\lib.rs (F:\\repos\\xvpe\\.agent\\task\\release-loop\\targets\\nomos\\debug\\deps\\nomos_correction_orchestration-261312ada436dafe.exe)\n   Doc-tests nomos_correction_orchestration\n",
+        "verified_at": 1791135704,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "28327c5f0335c76146b0fd6f64438a25ee320522"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }

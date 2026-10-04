@@ -498,10 +498,15 @@ struct Committing<'a, Fs: FileSystem>
 }
 
 /// Commits one validated plan through the workspace's one door and writes the corrected
-/// file, or reports whichever step refused.
+/// file, or reports whichever step refused. Rereads live bytes before the model commit.
+/// This detects observed staleness; it is not atomic compare-and-replace against writers.
 fn Committed_Fix<Fs: FileSystem>(committing: Committing<'_, Fs>) -> PlanOutcome
 {
     let Committing { fix, workspace, scheduling, validated } = committing;
+    if let Err(reason) = crate::run::Unchanged_File(scheduling.root, &fix.path, &fix.before, scheduling.filesystem)
+    {
+        return fix.Refused(reason);
+    }
     let evidence = Evidence {
         class: EvidenceClass::Derived,
         producer: ProviderId::New(SCHEDULER),
