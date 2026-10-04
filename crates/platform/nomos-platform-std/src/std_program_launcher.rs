@@ -3,7 +3,7 @@
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_platform::{Command, ProgramLauncher, ProgramOutput};
 
-// Kept under `launcher/` rather than `std_process_launcher/`: the directory name is not
+// Kept under `launcher/` rather than `std_program_launcher/`: the directory name is not
 // itself subject to check-file-name (which judges files against the types they declare),
 // and matching the file would needlessly abbreviate the folder as well.
 #[path = "launcher/drain.rs"]

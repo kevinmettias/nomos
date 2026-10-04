@@ -3,7 +3,7 @@ id: OD-PLATFORM-001
 type: decision
 title: A port that names its outcomes says nothing about how they are obtained
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - platform
@@ -143,9 +143,9 @@ classification was not.
 **A command now carries two bounds.** `Command::timeout` is unchanged — the wall bound,
 regardless of whether the process is producing anything. `Command::idle_timeout` is new:
 how long the process may go without producing any new output before it is judged to have
-stalled. `Command::New` starts the two equal, so a caller that never asks for the
-distinction gets exactly the wait it asked for before — the two bounds expire together and
-the process is judged once, at the wall bound, exactly as `TimedOut` always meant.
+stalled. `Command::From_String_Arguments` starts the two equal, so a caller that never asks
+for the distinction gets exactly the wait it asked for before — the two bounds expire together
+and the process is judged once, at the wall bound, exactly as `TimedOut` always meant.
 `Command::With_Idle_Timeout` is what gives a caller a shorter idle bound; without it, the
 idle bound cannot fire ahead of the wall bound, because it cannot be shorter than the wall
 bound. Progress resets it: every poll compares how much has been captured on either stream
@@ -169,7 +169,7 @@ which only compiles because `ExitOutcome` is `Copy`. A variant holding a `String
 `Vec<String>` would end that silently, in a file this item's territory does not include and
 must not widen into. `Stalled` therefore carries only `idle_elapsed: std::time::Duration` —
 itself `Copy` — rather than the output or the argv. That is not evidence discarded: both are
-already retained exactly as they were for every other outcome, on `ProcessOutput.stdout` /
+already retained exactly as they were for every other outcome, on `ProgramOutput.stdout` /
 `.stderr`, captured up to the moment of the kill regardless of how the wait ended, and the
 argv was never the launcher's to lose — it is the caller's own `Command`, held by whoever
 already built it. What `Stalled` needed to add was the one fact that lived only inside the
@@ -222,6 +222,18 @@ still draws the distinction that paragraph quotes. The opening sentence of "What
 keeps the std implementation's old name: it says, in the past tense, what that implementation
 did before this record fixed it, under the name it had then.
 `P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+## Amendment, Version 4: The Output Is `ProgramOutput` And The Constructor Is `From_String_Arguments`
+
+The same commit, `7e33c1f6`, under the same item, `P114-CLARITY-PLATFORM`, also renamed the
+launch port's output type from `ProcessOutput` to `ProgramOutput`, and `Command`'s constructor
+from `Command::New` to `Command::From_String_Arguments`. The amendment on the idle bound names
+both in the present tense, and both of its claims still hold under the new names, so both places
+now give them: `Command::From_String_Arguments` still starts the idle bound equal to the wall
+bound, and `ProgramOutput` still carries the captured `stdout` and `stderr` the launcher returns
+however the wait ended.
+`P209-THE-REST-OF-P114S-PLATFORM-RENAMES-LEFT-LIVE-OLD-NAMES-AND-WAIVERS-THAT-MATCH-NOTHING`
 made the change. Nothing this record decides changed.
 
 ## Status

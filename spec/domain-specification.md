@@ -126,7 +126,7 @@ profile: domain-specification
 | docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md@authored | docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md | authored | 58 | 14 | sha256:528219d58bda1a9efeb7425b58b3b50c2cb4c07248e24ef4831d025437ac5fb0 |
 | docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md@authored | docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md | authored | 53 | 19 | sha256:d5215058d7f65cec946dfe10df3d3ee35775ac02c55a286a39fcbd70754f507a |
 | docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md@authored | docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md | authored | 69 | 21 | sha256:9512544fdc340597ae13de790c71bf864407d37633b2876b44830c8fab9e17e5 |
-| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 24 | 7 | sha256:fe9653cce306810856ebecedc4344abc0c63a756a272dd3a10b2b83a7d7eddad |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 26 | 8 | sha256:ab004f1b53cbdc053ca369de0e3848a6e959ab4bd509c610d51b7f39d5880820 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:094b9b669979aa12c48d67b684633c326aa16c9e9977fc7ad53cef019da16204 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 28 | 7 | sha256:dc4dc8bcc47a33cb7bff0b99a6e4b37ac79e0de64b9d77d8d1f3ec561e0b2b88 |
@@ -207,7 +207,7 @@ profile: domain-specification
 | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md@authored | docs/records/OD-PACKAGE-016-an-execution-profile-resolves-against-the-declared-package-set-into-the-resolved-shape-dispatch-already-takes.md | authored | 82 | 22 | sha256:61ddb46fc6dbd488b1eb221ac07a3dbcfb009b06fedb1b7b4533dbb3c66057d9 |
 | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md@authored | docs/records/OD-PACKAGE-017-an-owned-region-is-one-contiguous-span-holding-no-free-region-so-an-interleaved-region-is-checked-and-never-written.md | authored | 56 | 14 | sha256:0ffc8479136943b0a3335a0042a996e0a028e3811b1ebcdca9228da7bd7e458c |
 | docs/records/OD-PACKAGE-018-a-language-package-declares-its-recognizers-and-a-tool-package-declares-every-other-language-provider.md@authored | docs/records/OD-PACKAGE-018-a-language-package-declares-its-recognizers-and-a-tool-package-declares-every-other-language-provider.md | authored | 33 | 6 | sha256:41f36a3dde922dc64b8660e8431d635c31516742bbbf65aa1deb205bcdf2d34c |
-| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 36 | 10 | sha256:eaba3df0bc0e83a8c0babf7e555ec6179be7d951551d1a58a0072b2c7174fa18 |
+| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md | authored | 38 | 11 | sha256:5aac44dfe2f811cc48c0c7ef5d10e53a04c2d97cc1baf7d144216b2f1108e6fe |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md@authored | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md | authored | 15 | 6 | sha256:4873fa92fabe8c269f254570e48e1cb9f78de2768bc80824f67e361e505a9840 |
 | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md@authored | docs/records/OD-PLATFORM-003-nomos-is-built-on-top-of-xvpe-so-the-no-dependency-clause-of-agt-006-no-longer-binds-this-crossing.md | authored | 35 | 11 | sha256:b3ab7e036dc1ddb881cefaa3f9187a2d3c886e0e0102d94a48b4dba487ae17f7 |
 | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md@authored | docs/records/OD-PLATFORM-004-a-local-patch-override-is-a-development-convenience-and-never-the-governing-form-of-the-xvpe-crossing.md | authored | 40 | 8 | sha256:54dd8e341f63882f74fca31d11cc939e8bfec1033fe8ba3e6fcbf6a156689166 |
@@ -1330,6 +1330,7 @@ profile: domain-specification
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#15 | authored | 2 | What would make this wrong |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#17 | authored | 2 | Amendment: The Port Gained Directory Enumeration, And This Record's Stated Reason Did Not Survive It |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#22 | authored | 2 | Amendment, Version 2: The Launch Port Is `ProgramLauncher` |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#25 | authored | 2 | Amendment, Version 3: The Lock Port Is `FilesystemLock` |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1 | authored | 1 | A surface holds no state its canonical services cannot reconstruct |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#9 | authored | 2 | The state families this applies to |
@@ -2127,7 +2128,8 @@ profile: domain-specification
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#22 | authored | 2 | Consequences |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#26 | authored | 2 | Amendment: One Non-Verdict Was Two Facts Wearing The Same Name |
 | docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#33 | authored | 2 | Amendment, Version 3: The Launch Port Is `ProgramLauncher` |
-| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#35 | authored | 2 | Status |
+| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#35 | authored | 2 | Amendment, Version 4: The Output Is `ProgramOutput` And The Constructor Is `From_String_Arguments` |
+| docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#37 | authored | 2 | Status |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#1 | authored | 1 | A port that cannot enumerate a directory forces every caller past it |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#2 | authored | 2 | Question |
 | docs/records/OD-PLATFORM-002-a-port-that-cannot-enumerate-a-directory-forces-every-caller-past-it.md#4 | authored | 2 | What Was Measured |
@@ -39366,13 +39368,13 @@ to notice.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#5
 
-*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / The decision · hash: sha256:f9fcb51864d7a4bfb8ed8e7b17eefd414daedd8196201d5952fd30865b3abe32*
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / The decision · hash: sha256:0a9d892a6b3b3fe1ad431527952d175b73dadabe6b9e32b6b725fe1ad7e67e36*
 
 A seam exists. `nomos-work-orchestration` (band 40, `crates/orchestration/nomos-work-
 orchestration`) is the middle of the three: it owns the request vocabulary
 (`WorkCommand`, `ClaimRequest`, `EndingRequest` — moved from `nomos-cli::work` verbatim)
 and one function, `Run`, generic over the four traits `nomos-platform` declares
-(`FileSystem`, `Clock`, `CrossProcessLock`, `ProgramLauncher`) rather than over
+(`FileSystem`, `Clock`, `FilesystemLock`, `ProgramLauncher`) rather than over
 `nomos-platform-std`'s implementations of them. `Run` takes a command and an
 already-constructed, caller-owned `FileLedger<F, C, L>` and process launcher, and hands
 back `WorkOutcome` — a typed value carrying exactly what `nomos-ledger`'s own API already
@@ -39580,6 +39582,26 @@ and `OD-RULES-028` records that every host has since reached the platform throug
 `nomos-composer-std` instead, which happened before the rename, so substituting the new name
 would describe a `work.rs` that never existed.
 `P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#25
+
+*revision: authored · kind: heading · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / Amendment, Version 3: The Lock Port Is `FilesystemLock` · hash: sha256:4a2075a7f48c031409bf37a0b1f38fe1e40aa5aee53a619bd594e0748c054ca6*
+
+## Amendment, Version 3: The Lock Port Is `FilesystemLock`
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#26
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / Amendment, Version 3: The Lock Port Is `FilesystemLock` · hash: sha256:3b046b2fb207275d4db6f5cf1af8eed8a1a20a02b5b1c1e92222dcfb3a7295a9*
+
+The version 2 amendment left one name standing beside the one it corrected. `P114-CLARITY-PLATFORM`
+renamed `nomos-platform`'s lock port from `CrossProcessLock` to `FilesystemLock` in the same
+commit, `7e33c1f6`, that renamed the launch port. The list of traits `Run` is generic over, in
+the first paragraph of "The decision", now gives that name too, so it names all four traits by
+the names `nomos-work-orchestration`'s `Run` bounds its parameters with today. The version 2
+amendment's own sentence saying it corrected the launch port's name only stays as written: it is
+true of that amendment.
+`P209-THE-REST-OF-P114S-PLATFORM-RENAMES-LEFT-LIVE-OLD-NAMES-AND-WAIVERS-THAT-MATCH-NOTHING`
 made the change. Nothing this record decides changed.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1
@@ -65963,14 +65985,14 @@ classification was not.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#28
 
-*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Amendment: One Non-Verdict Was Two Facts Wearing The Same Name · hash: sha256:a6799fe67ca3261dc0d097c0522fc2c1a17776bf894a17483c7d3a09f0a9327c*
+*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Amendment: One Non-Verdict Was Two Facts Wearing The Same Name · hash: sha256:5f71e1e739cd24469862782e93fcbd03bdba6ec8cdb32c34bbf4cd0bf78218e9*
 
 **A command now carries two bounds.** `Command::timeout` is unchanged — the wall bound,
 regardless of whether the process is producing anything. `Command::idle_timeout` is new:
 how long the process may go without producing any new output before it is judged to have
-stalled. `Command::New` starts the two equal, so a caller that never asks for the
-distinction gets exactly the wait it asked for before — the two bounds expire together and
-the process is judged once, at the wall bound, exactly as `TimedOut` always meant.
+stalled. `Command::From_String_Arguments` starts the two equal, so a caller that never asks
+for the distinction gets exactly the wait it asked for before — the two bounds expire together
+and the process is judged once, at the wall bound, exactly as `TimedOut` always meant.
 `Command::With_Idle_Timeout` is what gives a caller a shorter idle bound; without it, the
 idle bound cannot fire ahead of the wall bound, because it cannot be shorter than the wall
 bound. Progress resets it: every poll compares how much has been captured on either stream
@@ -65993,7 +66015,7 @@ turn honest, ongoing work into a false stall.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#30
 
-*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Amendment: One Non-Verdict Was Two Facts Wearing The Same Name · hash: sha256:ea4865f91eb6ab88ffa3cc2b29b96a873ee23614bcf4b95d4a4346896a0f3e60*
+*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Amendment: One Non-Verdict Was Two Facts Wearing The Same Name · hash: sha256:5afadda53754295050cdb37590e8d17c1c515456026cbf7aaa295f0485f635a4*
 
 **`ExitOutcome` stays `Copy`, and that bounded what `Stalled` could carry.**
 `nomos-ledger`'s own finishing code destructures `output.outcome` by value and, on the
@@ -66002,7 +66024,7 @@ which only compiles because `ExitOutcome` is `Copy`. A variant holding a `String
 `Vec<String>` would end that silently, in a file this item's territory does not include and
 must not widen into. `Stalled` therefore carries only `idle_elapsed: std::time::Duration` —
 itself `Copy` — rather than the output or the argv. That is not evidence discarded: both are
-already retained exactly as they were for every other outcome, on `ProcessOutput.stdout` /
+already retained exactly as they were for every other outcome, on `ProgramOutput.stdout` /
 `.stderr`, captured up to the moment of the kill regardless of how the wait ended, and the
 argv was never the launcher's to lose — it is the caller's own `Command`, held by whoever
 already built it. What `Stalled` needed to add was the one fact that lived only inside the
@@ -66075,11 +66097,31 @@ made the change. Nothing this record decides changed.
 
 ### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#35
 
+*revision: authored · kind: heading · heading: A port that names its outcomes says nothing about how they are obtained / Amendment, Version 4: The Output Is `ProgramOutput` And The Constructor Is `From_String_Arguments` · hash: sha256:50236800eaed91039fdfff0623af7de46db00f9e116a7bd9882b2d3a68d666d5*
+
+## Amendment, Version 4: The Output Is `ProgramOutput` And The Constructor Is `From_String_Arguments`
+
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#36
+
+*revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Amendment, Version 4: The Output Is `ProgramOutput` And The Constructor Is `From_String_Arguments` · hash: sha256:e5689ca983bf914de5d43c841dd08b8863af1ee1619fc17ad399b70e1ea787e3*
+
+The same commit, `7e33c1f6`, under the same item, `P114-CLARITY-PLATFORM`, also renamed the
+launch port's output type from `ProcessOutput` to `ProgramOutput`, and `Command`'s constructor
+from `Command::New` to `Command::From_String_Arguments`. The amendment on the idle bound names
+both in the present tense, and both of its claims still hold under the new names, so both places
+now give them: `Command::From_String_Arguments` still starts the idle bound equal to the wall
+bound, and `ProgramOutput` still carries the captured `stdout` and `stderr` the launcher returns
+however the wait ended.
+`P209-THE-REST-OF-P114S-PLATFORM-RENAMES-LEFT-LIVE-OLD-NAMES-AND-WAIVERS-THAT-MATCH-NOTHING`
+made the change. Nothing this record decides changed.
+
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#37
+
 *revision: authored · kind: heading · heading: A port that names its outcomes says nothing about how they are obtained / Status · hash: sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236*
 
 ## Status
 
-### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#36
+### docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#38
 
 *revision: authored · kind: prose · heading: A port that names its outcomes says nothing about how they are obtained / Status · hash: sha256:03a85d752702f84e2ce9f7ec78da6eba1bb9baff36382862b6777d6f1565029f*
 

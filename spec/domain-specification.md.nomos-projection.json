@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:5c178394644699996f55ae4d2ca62f582a5bddf2ef0e5e0c76ecf88da982231d",
-  "inputs_digest": "sha256:3098fa0e5574ac69c483e9e2fa16438f43398f636cd548791ab9d7351c4d1697",
+  "content_digest": "sha256:4819e91dc9d0d9cec63941019a2741f7ece004e9da928a6aaf7f0e27187cb0ae",
+  "inputs_digest": "sha256:ed3c89f0c558c77215dee044e02424f9782529299a04b33b2805e8f1dc31f04b",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2624
+      2626
     ],
     [
       "Source blocks",
-      9634
+      9638
     ]
   ],
   "inputs": [
@@ -603,7 +603,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored",
-      "hash": "sha256:fe9653cce306810856ebecedc4344abc0c63a756a272dd3a10b2b83a7d7eddad"
+      "hash": "sha256:ab004f1b53cbdc053ca369de0e3848a6e959ab4bd509c610d51b7f39d5880820"
     },
     {
       "content": "documents",
@@ -1008,7 +1008,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md@authored",
-      "hash": "sha256:eaba3df0bc0e83a8c0babf7e555ec6179be7d951551d1a58a0072b2c7174fa18"
+      "hash": "sha256:5aac44dfe2f811cc48c0c7ef5d10e53a04c2d97cc1baf7d144216b2f1108e6fe"
     },
     {
       "content": "documents",
@@ -6597,6 +6597,11 @@
     },
     {
       "content": "headings",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#25",
+      "hash": "sha256:3643aebb75b5adb27dbfdee222efdffd15098f3308d4b377aced12397a2733cb"
+    },
+    {
+      "content": "headings",
       "identity": "docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1",
       "hash": "sha256:d812f1f24d28e399110f5076c869c99a9f9cce1e2a77fb762c8b1879a023e57b"
     },
@@ -10583,7 +10588,12 @@
     {
       "content": "headings",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#35",
-      "hash": "sha256:8570c17438b9cad49d6b45c627ef0f803e7328f29e7130d42ec5d14a96c7746b"
+      "hash": "sha256:d40f5e95f6f751474604d3003f3ff3ba898a3454b25eab2c34f6ad6b1d59e2eb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#37",
+      "hash": "sha256:d6cebc0dd1a498df49ae14496a96694faaa946f8620e4bed475adb9375b46c03"
     },
     {
       "content": "headings",
@@ -33608,7 +33618,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#5",
-      "hash": "sha256:f9fcb51864d7a4bfb8ed8e7b17eefd414daedd8196201d5952fd30865b3abe32"
+      "hash": "sha256:0a9d892a6b3b3fe1ad431527952d175b73dadabe6b9e32b6b725fe1ad7e67e36"
     },
     {
       "content": "blocks",
@@ -33704,6 +33714,16 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#24",
       "hash": "sha256:e32f60d197f17528e527e8a9d35c8da240b044a9656b1fa79ecd8acde94a4bc3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#25",
+      "hash": "sha256:4a2075a7f48c031409bf37a0b1f38fe1e40aa5aee53a619bd594e0748c054ca6"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#26",
+      "hash": "sha256:3b046b2fb207275d4db6f5cf1af8eed8a1a20a02b5b1c1e92222dcfb3a7295a9"
     },
     {
       "content": "blocks",
@@ -48258,7 +48278,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#28",
-      "hash": "sha256:a6799fe67ca3261dc0d097c0522fc2c1a17776bf894a17483c7d3a09f0a9327c"
+      "hash": "sha256:5f71e1e739cd24469862782e93fcbd03bdba6ec8cdb32c34bbf4cd0bf78218e9"
     },
     {
       "content": "blocks",
@@ -48268,7 +48288,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#30",
-      "hash": "sha256:ea4865f91eb6ab88ffa3cc2b29b96a873ee23614bcf4b95d4a4346896a0f3e60"
+      "hash": "sha256:5afadda53754295050cdb37590e8d17c1c515456026cbf7aaa295f0485f635a4"
     },
     {
       "content": "blocks",
@@ -48293,11 +48313,21 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#35",
-      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+      "hash": "sha256:50236800eaed91039fdfff0623af7de46db00f9e116a7bd9882b2d3a68d666d5"
     },
     {
       "content": "blocks",
       "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#36",
+      "hash": "sha256:e5689ca983bf914de5d43c841dd08b8863af1ee1619fc17ad399b70e1ea787e3"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#37",
+      "hash": "sha256:8b1501efecf5aaab88f0940d5804c94111b5c227a27bc5fd9a3e96cca6744236"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-PLATFORM-001-a-port-says-nothing-about-how-its-outcomes-are-obtained.md#38",
       "hash": "sha256:03a85d752702f84e2ce9f7ec78da6eba1bb9baff36382862b6777d6f1565029f"
     },
     {

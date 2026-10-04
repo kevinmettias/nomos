@@ -162,38 +162,6 @@
       "expires": "2026-11-27"
     },
     {
-      "check": "check-naming-clarity",
-      "path": "crates/capabilities/nomos-cap-syntax/src/payload/render.rs",
-      "fingerprint": "29cdccead203ca09",
-      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
-      "owner": "@claude-p19-campaign",
-      "expires": "2026-11-27"
-    },
-    {
-      "check": "check-naming-clarity",
-      "path": "crates/platform/nomos-platform-std/src/std_process_launcher.rs",
-      "fingerprint": "c3de846cce983bca",
-      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
-      "owner": "@claude-p19-campaign",
-      "expires": "2026-11-27"
-    },
-    {
-      "check": "check-naming-clarity",
-      "path": "crates/platform/nomos-platform/src/process_launcher/command.rs",
-      "fingerprint": "f018bfac7f6373cb",
-      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
-      "owner": "@claude-p19-campaign",
-      "expires": "2026-11-27"
-    },
-    {
-      "check": "check-naming-clarity",
-      "path": "crates/platform/nomos-platform/src/process_launcher/process_output.rs",
-      "fingerprint": "4eadb5f5c7607525",
-      "reason": "ProcessLauncher/ProcessOutput/CrossProcessLock/StdProcessLauncher/Command::New/FileSystem::Exists/Intersection::Permits_Concurrency/Observation::Was_Observed/PayloadItem::Declares_No_Visibility/Escape all have real external callers spread across host/, orchestration/, languages/, nomos-ledger and tests/ (up to ~65 call sites for the largest). A rename here is legitimate but large enough to warrant its own tracked item rather than folding into this mechanical sweep.",
-      "owner": "@claude-p19-campaign",
-      "expires": "2026-11-27"
-    },
-    {
       "check": "check-boolean-predicate",
       "path": "crates/capabilities/nomos-cap-syntax/src/payload/observation.rs",
       "fingerprint": "21b4e5d3772c97df",
@@ -1762,22 +1730,6 @@
     },
     {
       "check": "check-naming-clarity",
-      "path": "crates/platform/nomos-platform-std/src/launcher/drain.rs",
-      "fingerprint": "4f52ff11b64f9b09",
-      "reason": "function Awaited is a private test-only helper inside #[cfg(test)] mod tests (a polling wait for a test fixture, called only by tests in this same module); check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
-      "owner": "@claude-p24-regression",
-      "expires": "2026-11-28"
-    },
-    {
-      "check": "check-naming-clarity",
-      "path": "crates/platform/nomos-platform-std/src/launcher/spawn.rs",
-      "fingerprint": "39c10423afe0f6d8",
-      "reason": "function Awaited is a private test-only helper inside #[cfg(test)] mod tests (a polling wait for a test fixture, called only by tests in this same module); check-naming-clarity is test-code-exempt per OD-GATE-018's category boundaries",
-      "owner": "@claude-p24-regression",
-      "expires": "2026-11-28"
-    },
-    {
-      "check": "check-naming-clarity",
       "path": "crates/orchestration/nomos-gate-orchestration/src/run_id.rs",
       "fingerprint": "18af558324df8edc",
       "reason": "test-code exemption (OD-GATE-018): inside a #[cfg(test)] mod tests block, out of scope for this check per the P24 regression-sweep triage",
@@ -1911,22 +1863,6 @@
       "reason": "checker false positive: nomos_rules is named only in a Cargo.toml comment explaining why nomos-cap-dependency (the actual dependency) is listed instead, and inside a doc comment in provider/package_fact.rs -- confirmed no nomos-rules line in [dependencies] and no use/path reference in src/",
       "owner": "@claude-p25-integration",
       "expires": "2026-11-29"
-    },
-    {
-      "check": "check-naming",
-      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
-      "fingerprint": "43036e9f5dc5b7f3",
-      "reason": "nomos_platform::timestamp_serde is a serde with-module: five sites in nomos-api apply the serde with attribute naming it, and serde resolves that attribute to exactly the module functions serialize and deserialize. Those two names are the foreign contract rather than this repository's choice, and renaming either stops every ledger timestamp field from deserializing. check-naming does exempt a name a foreign trait mandates, but that exemption is scoped to an impl-Trait-for block and so does not reach a free function in a with-module. The only remedy left is a newtype with hand-written Serialize and Deserialize impls, which is architecture invented to satisfy a naming rule.",
-      "owner": "@claude-p114-naming",
-      "expires": "2027-03-15"
-    },
-    {
-      "check": "check-naming",
-      "path": "crates/platform/nomos-platform/src/clock/timestamp.rs",
-      "fingerprint": "cc6699c3dc9c8318",
-      "reason": "nomos_platform::timestamp_serde is a serde with-module: five sites in nomos-api apply the serde with attribute naming it, and serde resolves that attribute to exactly the module functions serialize and deserialize. Those two names are the foreign contract rather than this repository's choice, and renaming either stops every ledger timestamp field from deserializing. check-naming does exempt a name a foreign trait mandates, but that exemption is scoped to an impl-Trait-for block and so does not reach a free function in a with-module. The only remedy left is a newtype with hand-written Serialize and Deserialize impls, which is architecture invented to satisfy a naming rule.",
-      "owner": "@claude-p114-naming",
-      "expires": "2027-03-15"
     },
     {
       "check": "check-reference-parameter",

@@ -3,7 +3,7 @@ id: OD-HOST-001
 type: decision
 title: Choosing a platform, running a verb and rendering its outcome are three crates, not one
 status: accepted
-version: 2
+version: 3
 authority: canonical-normative-record
 tags:
   - host
@@ -38,7 +38,7 @@ A seam exists. `nomos-work-orchestration` (band 40, `crates/orchestration/nomos-
 orchestration`) is the middle of the three: it owns the request vocabulary
 (`WorkCommand`, `ClaimRequest`, `EndingRequest` — moved from `nomos-cli::work` verbatim)
 and one function, `Run`, generic over the four traits `nomos-platform` declares
-(`FileSystem`, `Clock`, `CrossProcessLock`, `ProgramLauncher`) rather than over
+(`FileSystem`, `Clock`, `FilesystemLock`, `ProgramLauncher`) rather than over
 `nomos-platform-std`'s implementations of them. `Run` takes a command and an
 already-constructed, caller-owned `FileLedger<F, C, L>` and process launcher, and hands
 back `WorkOutcome` — a typed value carrying exactly what `nomos-ledger`'s own API already
@@ -170,4 +170,16 @@ and `OD-RULES-028` records that every host has since reached the platform throug
 `nomos-composer-std` instead, which happened before the rename, so substituting the new name
 would describe a `work.rs` that never existed.
 `P205-NOMOS-PLATFORMS-PORT-IS-PROGRAMLAUNCHER-AND-NINETEEN-RECORDS-AND-THREE-FILES-STILL-CALL-IT-PROCESSLAUNCHER`
+made the change. Nothing this record decides changed.
+
+## Amendment, Version 3: The Lock Port Is `FilesystemLock`
+
+The version 2 amendment left one name standing beside the one it corrected. `P114-CLARITY-PLATFORM`
+renamed `nomos-platform`'s lock port from `CrossProcessLock` to `FilesystemLock` in the same
+commit, `7e33c1f6`, that renamed the launch port. The list of traits `Run` is generic over, in
+the first paragraph of "The decision", now gives that name too, so it names all four traits by
+the names `nomos-work-orchestration`'s `Run` bounds its parameters with today. The version 2
+amendment's own sentence saying it corrected the launch port's name only stays as written: it is
+true of that amendment.
+`P209-THE-REST-OF-P114S-PLATFORM-RENAMES-LEFT-LIVE-OLD-NAMES-AND-WAIVERS-THAT-MATCH-NOTHING`
 made the change. Nothing this record decides changed.
