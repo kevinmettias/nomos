@@ -272,7 +272,7 @@ fn Phantom_Mirror_Fix<Fs: FileSystem>(root: &Path, claim: &PhantomClaim<'_>, fil
 fn Trailing_Whitespace_Fix<Fs: FileSystem>(root: &Path, claim: &TrailingWhitespaceClaim<'_>, filesystem: &Fs) -> Result<ClaimedFix, CorrectionOutcome>
 {
     let (candidate, before, after) = trailing_whitespace::Candidate_For(root, claim, filesystem)
-        .map_err(|error| return CorrectionOutcome::Refused(format!("could not read `{}`: {error}", claim.path)))?;
+        .map_err(|error| return CorrectionOutcome::Refused(format!("could not construct a whitespace correction for `{}`: {error}", claim.path)))?;
 
     return Ok(ClaimedFix {
         path: claim.path.to_owned(),

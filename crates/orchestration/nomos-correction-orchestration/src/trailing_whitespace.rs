@@ -4,17 +4,14 @@
 //! have: a file can carry any number of trailing-whitespace findings at once, and the
 //! safe fix for all of them is one edit to the one file, not one candidate per line.
 //!
-//! # Why this fix is judgment-free
+//! # Where this fix can prove its literal safety
 //!
-//! `Check_No_Trailing_Whitespace` (`nomos_rules::checks::formatting`) reports a line
-//! whose content, with its own line ending stripped, ends in a space or a tab. Removing
-//! exactly that trailing space or tab and nothing else cannot change what the line means
-//! in any language this workspace recognizes -- Rust and Go both treat trailing
-//! whitespace as insignificant everywhere outside a string or byte literal, and a
-//! trailing space *inside* one is not what this rule reports, since the rule reads the
-//! line's own raw text rather than a parsed token. The same "provably safe, nothing to
-//! guess" shape `phantom_mirror`'s own module doc claims for striking a false mirror
-//! claim.
+//! The finding reads raw lines, so a multiline string may contain its trailing bytes
+//! as data. Candidate construction currently accepts only a recognized Rust, Go or C-sharp
+//! path whose source contains no quote or backtick delimiter. This is a conservative
+//! refusal, not a lexer: single-line strings, lifetime apostrophes and quoted comments
+//! can also make a file ineligible. Sound provider-owned literal spans are needed to
+//! safely narrow that refusal; syntax-item facts alone do not supply them.
 //!
 //! # Why one candidate covers a whole file rather than one line
 //!
@@ -105,6 +102,33 @@ fn File_Path_Of(finding: &Finding) -> Option<&str>
     return Some(path);
 }
 
+/// Why a whitespace finding cannot become a safe candidate.
+#[derive(Debug)]
+pub(crate) enum CandidateError
+{
+    Unreadable(FileSystemError),
+    UnprovenLiteralSafety,
+}
+
+impl core::fmt::Display for CandidateError
+{
+    fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+    {
+        return match self
+        {
+            Self::Unreadable(error) => write!(formatter, "could not read the source: {error}"),
+            Self::UnprovenLiteralSafety => write!(formatter, "literal safety is unproven; refusing automatic whitespace edits"),
+        };
+    }
+}
+
+/// The supported paths whose literal delimiters this conservative guard knows.
+fn Literal_Safety_Is_Proven(path: &str, text: &str) -> bool
+{
+    let supported = [".rs", ".go", ".cs"].iter().any(|extension| return path.ends_with(extension));
+    return supported && !text.contains(['"', '\'', '`']);
+}
+
 /// Builds the one real [`CorrectionCandidate`] for `claim`: `claim.path`'s own content
 /// with every line's trailing space or tab stripped, nothing else touched. Returns the
 /// candidate alongside the exact `before`/`after` text it read and computed, the same
@@ -114,10 +138,15 @@ fn File_Path_Of(finding: &Finding) -> Option<&str>
 ///
 /// # Errors
 ///
-/// The [`FileSystemError`] `filesystem` reports if `claim.path` cannot be read.
-pub(crate) fn Candidate_For<Fs: FileSystem>(root: &Path, claim: &TrailingWhitespaceClaim<'_>, filesystem: &Fs) -> Result<(CorrectionCandidate, String, String), FileSystemError>
+/// [`CandidateError::Unreadable`] if the source cannot be read, or
+/// [`CandidateError::UnprovenLiteralSafety`] if literal safety cannot be proven.
+pub(crate) fn Candidate_For<Fs: FileSystem>(root: &Path, claim: &TrailingWhitespaceClaim<'_>, filesystem: &Fs) -> Result<(CorrectionCandidate, String, String), CandidateError>
 {
-    let before = filesystem.Read_To_String(&root.join(claim.path))?;
+    let before = filesystem.Read_To_String(&root.join(claim.path)).map_err(CandidateError::Unreadable)?;
+    if !Literal_Safety_Is_Proven(claim.path, &before)
+    {
+        return Err(CandidateError::UnprovenLiteralSafety);
+    }
     let after = Stripped_Of_Trailing_Whitespace(&before);
 
     let edit = Edit::New(claim.path, Some(before.clone()), Some(after.clone()));
@@ -259,5 +288,32 @@ mod tests
             summary: format!("{path} line {line} ends with trailing whitespace"),
             locations: vec![format!("{path}:{line}")],
         };
+    }
+}
+
+#[cfg(test)]
+mod literal_tests
+{
+    use super::*;
+
+    #[test]
+    fn Test_Literal_Safety_Should_Refuse_Delimiters_And_Unsupported_Languages()
+    {
+        let cases = [
+            ("a.rs", "fn A() { let value = r#\"data   \nnext\"#; }"),
+            ("a.rs", "fn A() { let value = \"data   \nnext\"; }"),
+            ("a.rs", "fn A() { let value = b\"data   \nnext\"; }"),
+            ("a.go", "package a\nvar value = `data   \nnext`\n"),
+            ("a.cs", "class A { string value = @\"data   \nnext\"; }"),
+            ("a.c", "#define VALUE x \\\nnext\n"),
+        ];
+        for (path, text) in cases
+        {
+            assert!(!Literal_Safety_Is_Proven(path, text), "unproven {path} text was declared safe");
+        }
+        for path in ["a.rs", "a.go", "a.cs"]
+        {
+            assert!(Literal_Safety_Is_Proven(path, "fn Clean() {}  \r\n"), "literal-free supported source remains eligible");
+        }
     }
 }

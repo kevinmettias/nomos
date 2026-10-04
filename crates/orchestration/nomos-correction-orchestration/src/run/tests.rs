@@ -347,3 +347,20 @@ fn Test_An_Unchanged_File_Should_Still_Commit_After_Rechecking()
     assert_eq!(replacements, 1);
     assert_eq!(content, PHANTOM_CORRECTED);
 }
+
+#[test]
+fn Test_Multiline_Literal_Whitespace_Should_Be_Refused_Without_Changing_The_File()
+{
+    let text = "pub fn Text() -> &'static str\n{\n    return r#\"data   \nnext\"#;\n}\n";
+    for commit in [false, true]
+    {
+        let name = if commit { "nomos-release-literal-commit" } else { "nomos-release-literal-stage" };
+        let fixture = Fixture::Of(name).Holding(text);
+        let fixture = if commit { fixture.Committing() } else { fixture };
+        let outcome = fixture.Ran();
+        assert!(matches!(outcome, CorrectionOutcome::Refused(ref reason) if reason.contains("literal")),
+            "an unproven literal edit must be refused: {outcome:?}");
+        assert_eq!(fixture.Read(), text, "the literal's trailing bytes are data, not a formatting fix");
+        fixture.Remove();
+    }
+}

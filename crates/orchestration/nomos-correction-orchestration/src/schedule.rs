@@ -290,7 +290,7 @@ fn Absorb_Whitespace_Claims<Fs: FileSystem>(built: &mut ScheduledFixes, claiming
                 after,
                 evidence_reference: Whitespace_Reference(claim.path),
             }),
-            Err(error) => built.unbuilt.push(format!("`{}`: could not be read: {error}", claim.path)),
+            Err(error) => built.unbuilt.push(format!("`{}`: could not construct a whitespace correction: {error}", claim.path)),
         }
     }
 }

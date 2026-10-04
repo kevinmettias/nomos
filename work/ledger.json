@@ -105927,6 +105927,88 @@
       "displaced": [],
       "declined": null,
       "widened": []
+    },
+    {
+      "id": "REL05-REFUSE-UNPROVEN-LITERAL-CHANGES-IN-WHITESPACE-CORRECTIONS",
+      "title": "Refuse whitespace corrections when literal safety is unproven",
+      "why": "The no-trailing-whitespace correction trims raw source lines and labels every result MechanicallySafe/BehaviorPreserving. A multiline Rust string or Go raw string can contain those trailing bytes as data; removing them changes behavior. Nomos 0.1 requires unsafe proposals to be refused, not merely survive compilation.",
+      "done_when": "Candidate construction refuses a file containing a quoted or backtick literal delimiter because the current correction seam carries no sound literal-span proof. This is an explicit conservative safety floor, not a lexical classifier: quoted comments or single-line strings can also be refused. Files without such delimiters retain the existing line-ending-preserving batched correction. A real Rust multiline-string regression through Run_Correction with commit false and true must refuse and leave the exact bytes intact; candidate regressions cover Rust raw/ordinary/byte strings, Go backticks and C-sharp quoted text, and a literal-free positive control. Existing corrected-file and scheduling tests continue to pass. Removing the guard fails the named multiline regression, restored byte-identically. Document the literal-span gap and do not claim all whitespace findings are wrong or that compiler validation proves behavior preservation. No new public API, parser, language-provider dependency, strategy removal or all-release claim. Predicate covers the correction orchestration crate only; full release acceptance remains separate.",
+      "kind": "Correction",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/orchestration/nomos-correction-orchestration/src/trailing_whitespace.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/run.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/run/tests.rs",
+          "crates/orchestration/nomos-correction-orchestration/src/schedule.rs",
+          "docs/corpus/nomos-literal-correction-safety.md"
+        ],
+        "patterns": []
+      },
+      "state": "Done",
+      "depends_on": [],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "nomos-correction-orchestration",
+          "--no-fail-fast"
+        ],
+        "timeout_seconds": 2700
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--locked",
+          "--offline",
+          "-p",
+          "nomos-correction-orchestration",
+          "--no-fail-fast"
+        ],
+        "exit_code": 0,
+        "output_tail": "nning 0 tests\n\ntest result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:59:5\n   |\n59 |        return loop\n   |  ______^      -\n   | | ____________|\n60 | ||     {\n61 | ||         if let Some(outcome) = Already_Exited(child, program)?\n...  ||\n71 | ||         std::thread::sleep(super::POLL_INTERVAL);\n72 | ||     };\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this expression is unreachable\n   |\n   = note: `#[warn(unreachable_code)]` on by default\n\nwarning: unreachable expression\n  --> crates\\platform\\nomos-platform-std\\src\\launcher\\wait.rs:81:5\n   |\n81 |        return match child.try_wait()\n   |  ______^      -\n   | | ____________|\n82 | ||     {\n83 | ||         Ok(Some(status)) =>\n...  ||\n90 | ||         Err(error) => return Err(format!(\"could not wait for `{program}`: {error}\")),\n91 | ||     }\n   | ||     ^\n   | ||_____|\n   |  |_____unreachable expression\n   |        any code following this `match` expression is unreachable, as all arms diverge\n\nwarning: `nomos-platform-std` (lib) generated 2 warnings\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: `nomos-rules` (lib) generated 1 warning\n   Compiling nomos-correction-orchestration v0.1.0 (F:\\repos\\nomos\\crates\\orchestration\\nomos-correction-orchestration)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 53.11s\n     Running unittests src\\lib.rs (F:\\repos\\xvpe\\.agent\\task\\release-loop\\targets\\nomos\\debug\\deps\\nomos_correction_orchestration-261312ada436dafe.exe)\n   Doc-tests nomos_correction_orchestration\n",
+        "verified_at": 1791133464,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "9029015e31d714f14e0980f2a338fef174bfd588"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
     }
   ]
 }
