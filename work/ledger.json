@@ -105076,7 +105076,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -105093,6 +105093,116 @@
           "nomos-integration-tests"
         ],
         "timeout_seconds": 7200
+      },
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-workspace-discovery",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "model_backend_ollama_seam-8bc98f81d0d93bfb.exe)\n     Running tests\\model_seam.rs (F:/repos/nomos-p214-target\\debug\\deps\\model_seam-2f5dc3e585ed83b0.exe)\n     Running tests\\platform_seam.rs (F:/repos/nomos-p214-target\\debug\\deps\\platform_seam-e07f3d4bc212699d.exe)\n     Running tests\\read_surface.rs (F:/repos/nomos-p214-target\\debug\\deps\\read_surface-f5ced94ea2b0aa0e.exe)\n     Running tests\\request_submit.rs (F:/repos/nomos-p214-target\\debug\\deps\\request_submit-d9f9fa073068f256.exe)\n     Running tests\\spec_model_seam.rs (F:/repos/nomos-p214-target\\debug\\deps\\spec_model_seam-9fa6dc6074f84213.exe)\n     Running tests\\spec_orchestration_seam.rs (F:/repos/nomos-p214-target\\debug\\deps\\spec_orchestration_seam-3cd77b22b0d9f220.exe)\n     Running tests\\spec_store_seam.rs (F:/repos/nomos-p214-target\\debug\\deps\\spec_store_seam-b22212cacc9205a3.exe)\n     Running tests\\stale_writer_is_refused.rs (F:/repos/nomos-p214-target\\debug\\deps\\stale_writer_is_refused-a5c1fa51c44dedcc.exe)\n     Running tests\\takeover_is_recorded.rs (F:/repos/nomos-p214-target\\debug\\deps\\takeover_is_recorded-daad4f7e84f0a246.exe)\n     Running tests\\work_orchestration_seam.rs (F:/repos/nomos-p214-target\\debug\\deps\\work_orchestration_seam-9eea5f799f97f472.exe)\n     Running tests\\workspace_seam.rs (F:/repos/nomos-p214-target\\debug\\deps\\workspace_seam-385327b0ea41f0f6.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p214-target\\debug\\deps\\nomos_integration_tests-9e47c2edb5a57119.exe)\n     Running tests\\analysis_slice\\main.rs (F:/repos/nomos-p214-target\\debug\\deps\\analysis_slice-42e7d506921554ad.exe)\n     Running tests\\calibration.rs (F:/repos/nomos-p214-target\\debug\\deps\\calibration-f89fef30b26f4171.exe)\n     Running tests\\determinism\\main.rs (F:/repos/nomos-p214-target\\debug\\deps\\determinism-756a5d8c4e110fc1.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p214-target\\debug\\deps\\nomos_workspace_discovery-9e1e374fd39f77c9.exe)\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_workspace_discovery\n",
+        "verified_at": 1791089805,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "0e3a1fd225e70c77b94e32f69af7d66a6ba3742d"
+      },
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P214-THE-IF-BRANCH-AND-THE-CONTROL-FLOW-BODY-ARE-TWO-MORE-SYNTAX-SITES-AND-THREE-CORPUS-RULES-JUDGE-THEM",
+      "title": "The if branch and the control-flow body are two more syntax sites, and three corpus rules judge them",
+      "why": "The rule migration's per-language frontier, measured from code-standards' own gate files at f0d820729 (gates/rust.json, csharp.json and c.json with their phases resolved): 195 distinct checks, of which nomos fully ports 33 and partly 14. Two of the unported checks shared by the Rust, C# and C gates are this item, the first batch after OD-CAPABILITY-019's third step: check-branch-choice (engine branchchoice, rule an-if-that-only-chooses-a-value-is-a-conditional-expression, SHOULD, gate blocking) and check-control-flow-body (engine controlflowbody, rules a-control-flow-body-is-a-block and a-block-is-not-flattened-onto-one-line, both MUST, gate blocking). Each engine becomes a kind of nomos.cap.syntax.sites read by nomos-lang-rust over syn and nomos-lang-csharp over tree-sitter, and the three rules judge the kinds. Go is left out: these gates are Rust's, C#'s and C's, and a kind Go neither offers nor declines is an advisory gap, never a pass. Measured before this item was authored, in a worktree at f79751ef carrying P212: the candidate predicate passed whole; the gate over this tree reports none of the three rules Blocking, as code-standards' own two checks report nothing over a copy of the tree; a probe root holding one flattened two-way Rust return and one braceless C# if drew finding for finding what those checks report; twenty-two mutations of the guards were each killed by a named test and every file restored byte-identically. The Rust extractor needs syn's printing feature for syn::spanned, which changes nomos-lang-rust's manifest and not Cargo.lock, since quote is already a dependency of syn there.",
+      "done_when": "nomos-cap-syntax declares two more kinds in SITE_KINDS with their typed views: the if-branch kind (each arm's action -- return, assign or other -- with its target and value text, whether the if has an else, whether that else is another if, and whether this if is the else of another) and the control-flow-body kind (the keyword, whether the body is braced, its brace lines, the lines its contents start and end on, and an unbraced body's line, zero meaning no such line). nomos-lang-rust offers both: every if, and every body an if, an else or a loop runs except an if whose arms are values, a value block being one that ends in a tail expression not itself ending in a block or in a macro with no semicolon, as tree-sitter draws it; the one stated difference is that syn sees no comment, so a comment sharing a brace's line is not content. nomos-lang-csharp offers both for a file that parses and leaves them unanswered for one that does not, every C# file still declining the labeled jump. Each provider's records reach a rule only through its sites payload, interleaved with the other kinds' in source order, so no provider's public surface changes; every case of the corpus's rust_ and csharp_branch_choice_test.go and rust_ and csharp_control_flow_body_test.go is ported through that payload as the projection each case's judgment reads. nomos-rules composes the three rules, each citing OD-CAPABILITY-019 version 1 and judging the family's population: an if with an else, neither the head nor a link of a chain, whose arms both return or both assign one non-empty target is one Blocking, Supported finding on its line with the corpus message, showing Rust an if expression where C# is shown a ternary; a body with no braces is one under a-control-flow-body-is-a-block and a braced body sharing a line with its braces or its contents one under a-block-is-not-flattened-onto-one-line, neither rule reporting the other's defect; every case of the engines' judgment_test.go, analyzer_test.go and finding_test.go is ported; a declined kind is NotApplicable and an unanswered one MissingCapability. A run over this tree reports no Blocking finding of the three rules, and each calibration row says so beside what code-standards' own check reports here. The territory is OD-CAPABILITY-019's bound for two kinds and nothing else: nomos-cap-syntax and its snapshot, the two providers that offer the kinds, the rules' own files, the three registration sites every composed rule has, and goldens.rs, where the Rust and C# sites goldens move. The predicate names nomos-cli and nomos-integration-tests, which enumerate the composed set, and leaves nomos-lang-go, which this item does not change, to its own items.",
+      "kind": "Capability",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "crates/capabilities/nomos-cap-syntax",
+          "tests/contract/surface/nomos-cap-syntax.txt",
+          "crates/languages/nomos-lang-rust",
+          "crates/languages/nomos-lang-csharp",
+          "crates/rules/nomos-rules/src/checks/branch_choice.rs",
+          "crates/rules/nomos-rules/src/checks/branch_choice",
+          "crates/rules/nomos-rules/src/checks/control_flow_body.rs",
+          "crates/rules/nomos-rules/src/checks/control_flow_body",
+          "crates/rules/nomos-rules/src/checks.rs",
+          "crates/rules/nomos-rules/src/lib.rs",
+          "crates/rules/nomos-rules/src/rule_descriptor.rs",
+          "tests/contract/surface/nomos-rules.txt",
+          "tests/contract/tests/rule_contract_citation.rs",
+          "tests/integration/tests/calibration.rs",
+          "tests/integration/tests/determinism/goldens.rs"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P212-THE-UNCONDITIONAL-LOOP-IS-THE-SECOND-SYNTAX-SITE-AND-ITS-TERRITORY-IS-THE-BOUND"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-cap-syntax",
+          "-p",
+          "nomos-lang-rust",
+          "-p",
+          "nomos-lang-csharp",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-check-orchestration",
+          "-p",
+          "nomos-composer-providers",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-integration-tests",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "timeout_seconds": 10800
       },
       "verified": null,
       "abandoned": [],

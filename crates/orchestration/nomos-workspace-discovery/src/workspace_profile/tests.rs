@@ -126,6 +126,7 @@ fn Test_Of_Root_Should_Report_Each_Policy_File_By_Name_With_What_It_Found()
     Write_Fixture(root.join(ROOT_MARKER), "{}\n");
     Write_Fixture_Bytes(root.join("nomos-gate.json"), NOT_TEXT);
     Write_Fixture(root.join("nomos-test-material.json"), "{}\n");
+    Write_Fixture(root.join("nomos-gate-history.json"), "{\"scopes\": []}\n");
 
     let profile = WorkspaceProfile::Of_Root(&root).expect("a directory profiles");
 
@@ -138,16 +139,39 @@ fn Test_Of_Root_Should_Report_Each_Policy_File_By_Name_With_What_It_Found()
             "nomos-gate.json",
             "nomos-architecture.json",
             "nomos-test-material.json",
+            "nomos-gate-history.json",
             "nomos-standards-corpus.json",
             "nomos-limits.json",
             "nomos-csharp-builds.json",
+            "nomos-predicate-coverage.json",
         ]
     );
     assert_eq!(Presence_Of(&profile, "standards.json"), &PolicyFilePresence::Present);
     assert!(matches!(Presence_Of(&profile, "nomos-gate.json"), PolicyFilePresence::PresentButUnreadable { .. }), "{profile:?}");
     assert_eq!(Presence_Of(&profile, "nomos-architecture.json"), &PolicyFilePresence::Absent);
     assert_eq!(Presence_Of(&profile, "nomos-test-material.json"), &PolicyFilePresence::Present);
+    assert_eq!(Presence_Of(&profile, "nomos-gate-history.json"), &PolicyFilePresence::Present);
     assert!(profile.has_root_marker);
+}
+
+/// The file `work add` and `work widen` judge an item's predicate against: a root holding one
+/// is told it has it, and a root without one is told it is absent -- the two answers every
+/// other entry gives, so a person adopting nomos learns which file decides whether their
+/// predicates are accepted.
+#[test]
+fn Test_Of_Root_Should_Report_The_Predicate_Coverage_File_Present_Only_Where_The_Root_Holds_It()
+{
+    let holding = Fresh_Root("nomos-workspace-discovery-profile-predicate-coverage");
+    Write_Fixture(holding.join("nomos-predicate-coverage.json"), "{ \"rules\": [] }\n");
+    let lacking = Fresh_Root("nomos-workspace-discovery-profile-no-predicate-coverage");
+
+    let held = WorkspaceProfile::Of_Root(&holding).expect("a directory profiles");
+    let lacked = WorkspaceProfile::Of_Root(&lacking).expect("a directory profiles");
+
+    let _ignored = std::fs::remove_dir_all(&holding);
+    let _ignored = std::fs::remove_dir_all(&lacking);
+    assert_eq!(Presence_Of(&held, "nomos-predicate-coverage.json"), &PolicyFilePresence::Present);
+    assert_eq!(Presence_Of(&lacked, "nomos-predicate-coverage.json"), &PolicyFilePresence::Absent);
 }
 
 /// A directory of a policy file's name is the other way a path can be there and not be
@@ -224,9 +248,11 @@ fn Expected_Deterministic_Profile() -> WorkspaceProfile
             PolicyFile { name: "nomos-gate.json", presence: PolicyFilePresence::Absent },
             PolicyFile { name: "nomos-architecture.json", presence: PolicyFilePresence::Absent },
             PolicyFile { name: "nomos-test-material.json", presence: PolicyFilePresence::Present },
+            PolicyFile { name: "nomos-gate-history.json", presence: PolicyFilePresence::Absent },
             PolicyFile { name: "nomos-standards-corpus.json", presence: PolicyFilePresence::Absent },
             PolicyFile { name: "nomos-limits.json", presence: PolicyFilePresence::Absent },
             PolicyFile { name: "nomos-csharp-builds.json", presence: PolicyFilePresence::Absent },
+            PolicyFile { name: "nomos-predicate-coverage.json", presence: PolicyFilePresence::Absent },
         ],
         has_root_marker: true,
     };

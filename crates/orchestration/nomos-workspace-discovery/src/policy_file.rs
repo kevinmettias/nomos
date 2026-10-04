@@ -29,6 +29,19 @@ const ARCHITECTURE_JSON: &str = "nomos-architecture.json";
 /// repeated here for exactly the reason [`ARCHITECTURE_JSON`] gives.
 const TEST_MATERIAL_JSON: &str = "nomos-test-material.json";
 
+/// The file a gate run reads its own occurrence history from, beside [`GATE_POLICY_FILE`].
+///
+/// A literal here rather than `nomos_gate_orchestration`'s own `GATE_HISTORY_FILE`, for the
+/// reason [`GATE_POLICY_FILE`] gives: that constant is `pub(in crate::gate_environment)`, so no
+/// other crate can name it whatever its zone. It is not a policy -- its reader's own doc says
+/// the file is evidence a run collected, which `OD-GATE-030` keeps apart from what a repository
+/// decided -- and it is listed anyway, because its presence is the whole of its configuration:
+/// a run records history only into a file that is already there, so whether one is there is
+/// the decision a person adopting nomos makes, and writing it is the act this entry names.
+/// `P128-A-BASELINED-FINDING-CANNOT-BE-TOLD-FROM-ONE-REINTRODUCED` gave it a reader after this
+/// list existed, without adding it here.
+const GATE_HISTORY_FILE: &str = "nomos-gate-history.json";
+
 /// The file a repository declares the standards corpora it owns in.
 ///
 /// `nomos_repo_policy::standards_corpus::STANDARDS_CORPUS_JSON` owns this literal, and it is
@@ -49,6 +62,19 @@ const LIMITS_JSON: &str = "nomos-limits.json";
 /// here for exactly the reason [`ARCHITECTURE_JSON`] gives. The item that gave it a reader added
 /// it here in the same change, so a profile names every file a reader opens.
 const CSHARP_BUILDS_JSON: &str = "nomos-csharp-builds.json";
+
+/// The file a repository declares what an item's predicate must carry in, judged when `work add`
+/// and `work widen` reserve a path it names (`OD-GATE-036`).
+///
+/// `nomos_ledger::PREDICATE_COVERAGE` owns this literal, and it is public, so neither the reach
+/// [`GATE_POLICY_FILE`] gives nor the lock file [`ARCHITECTURE_JSON`] gives is the reason it is
+/// repeated here. The reason is zone: `nomos-ledger` is Repo Tooling, which
+/// `nomos-architecture.json` does not permit Application Service, this crate's zone, to reach,
+/// and no exception names the edge -- so, unlike the `nomos_repo_policy` constants above, no
+/// manifest edit could let this crate name it. The dependency would be wrong, not merely
+/// unreserved. `P196-A-CHANGE-TO-THE-COMPOSED-SET-NAMES-THE-PACKAGES-THAT-ENUMERATE-IT` gave it
+/// a reader without adding it here, because this crate lay outside that item.
+const PREDICATE_COVERAGE: &str = "nomos-predicate-coverage.json";
 
 /// One policy file a reader in this workspace opens at a root, named, with what a first run
 /// finds of it.
@@ -81,10 +107,20 @@ impl PolicyFile
 
 /// The policy files a profile asks about, in the order a profile reports them: the one this
 /// workspace shares with another tool first, then the ones it owns outright in the order
-/// their readers arrived -- gate policy, architecture, test material, standards corpus,
-/// limits, C# builds. A function returning the list rather than a module-level array, the way
-/// [`crate::Registered_Extensions`] is.
+/// their readers arrived -- gate policy, architecture, test material, gate history, standards
+/// corpus, limits, C# builds, predicate coverage. A function returning the list rather than a
+/// module-level array, the way [`crate::Registered_Extensions`] is.
 fn Opened_Policy_Files() -> Vec<&'static str>
 {
-    return vec![ROOT_MARKER, GATE_POLICY_FILE, ARCHITECTURE_JSON, TEST_MATERIAL_JSON, STANDARDS_CORPUS_JSON, LIMITS_JSON, CSHARP_BUILDS_JSON];
+    return vec![
+        ROOT_MARKER,
+        GATE_POLICY_FILE,
+        ARCHITECTURE_JSON,
+        TEST_MATERIAL_JSON,
+        GATE_HISTORY_FILE,
+        STANDARDS_CORPUS_JSON,
+        LIMITS_JSON,
+        CSHARP_BUILDS_JSON,
+        PREDICATE_COVERAGE,
+    ];
 }
