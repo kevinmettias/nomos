@@ -27,6 +27,7 @@ nomos-composer-providers = { workspace = true }
 # provider crate below is already a dev-dependency of this harness.
 nomos-rules = { workspace = true }
 nomos-lang-go = { workspace = true }
+nomos-lang-csharp = { workspace = true }
 nomos-lang-rust-cargo = { workspace = true }
 nomos-lang-rust-clippy = { workspace = true }
 nomos-lang-rust-deny = { workspace = true }

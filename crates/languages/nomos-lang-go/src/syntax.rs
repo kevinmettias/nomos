@@ -15,5 +15,6 @@ pub use item::Item;
 pub use item_kind::ItemKind;
 pub use visibility::Visibility;
 pub use walk::Read_Source;
+pub(crate) use walk::{Parsed_Tree, Root_Error};
 
 use documentation::Documentation_Of_Declaration;

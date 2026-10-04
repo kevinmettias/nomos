@@ -9,15 +9,16 @@
 use crate::harness::Assert_Meets_Declared_Strategy;
 use crate::goldens::{
     BUNDLE_GOLDEN, COMPLEXITY_GOLDEN, CONDITIONAL_GOLDEN, GO_GOLDEN, PARSED_GOLDEN, PROJECTION_GOLDEN, REACHABILITY_GOLDEN, ROLLED_GOLDEN,
-    SCANNED_GOLDEN, SITES_GOLDEN, SNAPSHOT_GOLDEN,
+    CSHARP_SITES_GOLDEN, GO_SITES_GOLDEN, SCANNED_GOLDEN, SITES_GOLDEN, SNAPSHOT_GOLDEN,
 };
 use crate::productions::{
     Coderabbit_Review_Finding_Production, Complexity_Production, Conditional_Production, Copy_Clones_Production, Correction_Production, Dependency_Policy_Production,
     Dependency_Production, Go_Dependency_Production, Go_Production, Limits_Policy_Production, Lint_Production,
     Naming_Policy_Production, Nested_Locks_Production, Parsed_Production, Reachability_Production,
-    Requirement_Trace_Production, Reuse_Production, Rolled_Production, Scanned_Production, Scripting_Policy_Production, Sites_Production,
+    Requirement_Trace_Production, Reuse_Production, Rolled_Production, Scanned_Production, Scripting_Policy_Production,
     Goals_Policy_Production, Snapshot_Production, Words_Policy_Production,
 };
+use crate::sites_productions::{Csharp_Sites_Production, Go_Sites_Production, Sites_Production};
 use crate::spec_productions::{Alternating, Bundle_Bytes, Projection_Bytes};
 use nomos_lang_rust::SyntaxFactProduction;
 
@@ -98,6 +99,22 @@ fn Test_The_Go_Provider_Should_Meet_Its_Declared_Strategy()
         &Go_Production,
         GO_GOLDEN,
     );
+}
+
+/// `nomos-lang-go`'s second producer, its `nomos.cap.syntax.sites` offer, discharged against the
+/// crate's one declaration over a fixture of its own -- the reason the Rust sites offer's test gives.
+#[test]
+fn Test_The_Go_Sites_Offer_Should_Meet_Its_Declared_Strategy()
+{
+    Assert_Meets_Declared_Strategy::<nomos_lang_go::SyntaxFactProduction>("go-sites-production", &Go_Sites_Production, GO_SITES_GOLDEN);
+}
+
+/// `nomos-lang-csharp`'s sites offer, which declines rather than records, discharged against the
+/// crate's declaration: a decline is a payload, and a payload is a fact whose bytes must repeat.
+#[test]
+fn Test_The_Csharp_Sites_Offer_Should_Meet_Its_Declared_Strategy()
+{
+    Assert_Meets_Declared_Strategy::<nomos_lang_csharp::SyntaxFactProduction>("csharp-sites-production", &Csharp_Sites_Production, CSHARP_SITES_GOLDEN);
 }
 
 #[test]

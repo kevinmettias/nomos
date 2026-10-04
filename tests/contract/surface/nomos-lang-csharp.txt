@@ -1,11 +1,13 @@
 pub const fn nomos_lang_csharp::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_csharp::ItemKind::Label(self) -> &'static str
+pub const fn nomos_lang_csharp::sites::Declared_Guarantee() -> Guarantee
 pub const nomos_lang_csharp::CSHARP_EXTENSION: &str
 pub const nomos_lang_csharp::LANGUAGE: &str
 pub const nomos_lang_csharp::PROVIDER: &str
 pub const nomos_lang_csharp::SyntaxFactProduction::SCOPE: ReproducibilityScope
 pub const nomos_lang_csharp::SyntaxFactProduction::STRENGTH: DeterminismStrength
 pub const nomos_lang_csharp::SyntaxFactProduction::TRACE: TraceEquivalence
+pub const nomos_lang_csharp::sites::LABELED_JUMP_DECLINE: &str
 pub enum nomos_lang_csharp::ItemKind
 pub enum nomos_lang_csharp::Materialization
 pub enum nomos_lang_csharp::Reading
@@ -55,6 +57,8 @@ pub fn nomos_lang_csharp::Recognition::Of_Path(path: &str) -> Self
 pub fn nomos_lang_csharp::Visibility::Label(&self) -> &'static str
 pub fn nomos_lang_csharp::Visibility::Of_Modifiers(modifiers: &[&str]) -> Self
 pub fn nomos_lang_csharp::Visibility::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_csharp::sites::Materialize_Sites_Fact(subject: SubjectId, source: &str, context: FactContext) -> Materialization
+pub fn nomos_lang_csharp::sites::Provider_Offer() -> ProviderOffer
 pub impl nomos_lang_csharp::ItemKind implements core::fmt::Display
 pub impl nomos_lang_csharp::ParseFailure implements core::fmt::Display
 pub impl nomos_lang_csharp::ParseFailure implements std::error::Error

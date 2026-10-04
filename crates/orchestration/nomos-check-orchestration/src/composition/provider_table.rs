@@ -47,7 +47,11 @@ pub(crate) fn Composed_Providers<Launcher: ProgramLauncher, Fs: FileSystem, Env:
 {
     return ComposedProviders {
         syntax: Composed_Syntax_Providers(),
-        sites: vec![SitesProvider { recognizes: Rust_Recognizes, materialize: Rust_Sites_Fact }],
+        sites: vec![
+            SitesProvider { recognizes: Rust_Recognizes, materialize: Rust_Sites_Fact },
+            SitesProvider { recognizes: Go_Recognizes, materialize: Go_Sites_Fact },
+            SitesProvider { recognizes: Csharp_Recognizes, materialize: Csharp_Sites_Fact },
+        ],
         reachability: Rust_Reachability_Fact,
         complexity: Rust_Complexity_Fact,
         dependencies: Cargo_Facts,
@@ -85,6 +89,8 @@ pub(crate) fn Offer_Composed_Providers(registry: &mut Registry) -> Result<(), Re
     registry.Offer(nomos_lang_rust_cargo::Provider_Offer())?;
     registry.Offer(nomos_lang_go_modules::Provider_Offer())?;
     registry.Offer(nomos_lang_rust::sites::Provider_Offer())?;
+    registry.Offer(nomos_lang_go::sites::Provider_Offer())?;
+    registry.Offer(nomos_lang_csharp::sites::Provider_Offer())?;
     registry.Offer(nomos_lang_rust::reachability::Provider_Offer())?;
     registry.Offer(nomos_lang_rust_complexity::Provider_Offer())?;
     registry.Offer(nomos_lang_rust_clippy::Provider_Offer())?;
@@ -220,6 +226,32 @@ fn Go_Syntax_Fact(subject: SubjectId, source: &str, context: &Context) -> Option
 fn Rust_Sites_Fact(subject: SubjectId, source: &str, context: &Context) -> Option<Box<MaterializedFact>>
 {
     let nomos_lang_rust::Materialization::Materialized(fact) = nomos_lang_rust::sites::Materialize_Sites_Fact(subject, source, Rust_Production(context))
+    else
+    {
+        return None;
+    };
+
+    return Some(fact);
+}
+
+/// One Go source's `nomos.cap.syntax.sites` fact from `nomos_lang_go`, or `None` if that provider
+/// refused to parse it.
+fn Go_Sites_Fact(subject: SubjectId, source: &str, context: &Context) -> Option<Box<MaterializedFact>>
+{
+    let nomos_lang_go::Materialization::Materialized(fact) = nomos_lang_go::sites::Materialize_Sites_Fact(subject, source, Go_Production(context))
+    else
+    {
+        return None;
+    };
+
+    return Some(fact);
+}
+
+/// One C# source's `nomos.cap.syntax.sites` fact from `nomos_lang_csharp`: its declines, which do not
+/// wait on a parse.
+fn Csharp_Sites_Fact(subject: SubjectId, source: &str, context: &Context) -> Option<Box<MaterializedFact>>
+{
+    let nomos_lang_csharp::Materialization::Materialized(fact) = nomos_lang_csharp::sites::Materialize_Sites_Fact(subject, source, Csharp_Production(context))
     else
     {
         return None;

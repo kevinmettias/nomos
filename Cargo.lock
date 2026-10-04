@@ -1436,6 +1436,7 @@ dependencies = [
  "nomos-connector-coderabbit",
  "nomos-contracts",
  "nomos-corrections",
+ "nomos-lang-csharp",
  "nomos-lang-csharp-compiler",
  "nomos-lang-go",
  "nomos-lang-go-lint",

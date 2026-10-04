@@ -1,5 +1,6 @@
 pub const fn nomos_lang_go::Declared_Guarantee() -> Guarantee
 pub const fn nomos_lang_go::ItemKind::Label(self) -> &'static str
+pub const fn nomos_lang_go::sites::Declared_Guarantee() -> Guarantee
 pub const nomos_lang_go::GO_EXTENSION: &str
 pub const nomos_lang_go::LANGUAGE: &str
 pub const nomos_lang_go::PROVIDER: &str
@@ -11,6 +12,7 @@ pub enum nomos_lang_go::Materialization
 pub enum nomos_lang_go::Reading
 pub enum nomos_lang_go::Recognition
 pub enum nomos_lang_go::Visibility
+pub enum nomos_lang_go::sites::SitesReading
 pub enum variant nomos_lang_go::ItemKind::Constant
 pub enum variant nomos_lang_go::ItemKind::Function
 pub enum variant nomos_lang_go::ItemKind::Import
@@ -28,6 +30,8 @@ pub enum variant nomos_lang_go::Recognition::Unrecognized { extension: Option<St
 pub enum variant nomos_lang_go::Visibility::NotApplicable
 pub enum variant nomos_lang_go::Visibility::Private
 pub enum variant nomos_lang_go::Visibility::Public
+pub enum variant nomos_lang_go::sites::SitesReading::Parsed(Vec<LabeledJump>)
+pub enum variant nomos_lang_go::sites::SitesReading::Unparseable(ParseFailure)
 pub fn nomos_lang_go::Encode_Payload(facts: &Facts) -> Vec<u8>
 pub fn nomos_lang_go::Facts::Has_No_Declarations(&self) -> bool
 pub fn nomos_lang_go::Item::Qualified_Name(&self) -> String
@@ -40,6 +44,9 @@ pub fn nomos_lang_go::Recognition::Of_Path(path: &str) -> Self
 pub fn nomos_lang_go::Visibility::Label(&self) -> &'static str
 pub fn nomos_lang_go::Visibility::Of_Name(name: &str) -> Self
 pub fn nomos_lang_go::Visibility::fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+pub fn nomos_lang_go::sites::Materialize_Sites_Fact(subject: SubjectId, source: &str, context: FactContext) -> Materialization
+pub fn nomos_lang_go::sites::Provider_Offer() -> ProviderOffer
+pub fn nomos_lang_go::sites::Read_Sites(source: &str) -> SitesReading
 pub impl nomos_lang_go::ItemKind implements core::fmt::Display
 pub impl nomos_lang_go::ParseFailure implements core::fmt::Display
 pub impl nomos_lang_go::ParseFailure implements std::error::Error

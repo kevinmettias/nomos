@@ -110,6 +110,8 @@ pub(crate) fn Test_Name_For(domain: &str) -> &'static str
         "complexity-fact-production" => "domains::Test_The_Complexity_Provider_Should_Meet_Its_Declared_Strategy",
         "conditional-fact-production" => "domains::Test_The_Conditional_Provider_Should_Meet_Its_Declared_Strategy",
         "go-syntax-fact-production" => "domains::Test_The_Go_Provider_Should_Meet_Its_Declared_Strategy",
+        "go-sites-production" => "domains::Test_The_Go_Sites_Offer_Should_Meet_Its_Declared_Strategy",
+        "csharp-sites-production" => "domains::Test_The_Csharp_Sites_Offer_Should_Meet_Its_Declared_Strategy",
         "dependency-fact-production" =>
         {
             "domains::Test_The_Dependency_Provider_Should_Meet_Its_Declared_Strategy"

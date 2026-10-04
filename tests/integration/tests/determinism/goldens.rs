@@ -69,6 +69,14 @@ pub(crate) const SCANNED_GOLDEN: &str = "e692ad97796279579ca5cd77764e08e5";
 /// its `shape` now carries real data instead of always `.`, the same re-addressing
 /// [`PARSED_GOLDEN`] took for the identical reason on the Rust side.
 pub(crate) const GO_GOLDEN: &str = "42a188d75caad7d13be97610fc619bbe";
+
+/// The Go `nomos.cap.syntax.sites` offer's golden, over its own fixture: every site's line, label,
+/// label line and both truth values, which Go computes from where a bare `break` binds.
+pub(crate) const GO_SITES_GOLDEN: &str = "77ea48b8784e82640e6822e4e50878eb";
+
+/// The C# `nomos.cap.syntax.sites` offer's golden: one payload declining the labeled jump with its
+/// reason. It moves if the reason's wording or the grammar changes.
+pub(crate) const CSHARP_SITES_GOLDEN: &str = "d2d956dba65982ff2514609aed4aaf76";
 pub(crate) const SNAPSHOT_GOLDEN: &str = "1fb5fb67d666b0bb983f3b71e7e09f93";
 
 /// The bundle's golden, and the one whose scope claim reaches furthest.

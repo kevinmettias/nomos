@@ -67,3 +67,46 @@ fn Test_Run_Should_Not_Pass_A_Source_No_Sites_Provider_Answers_For()
     assert_ne!(found.applicability, Applicability::Supported, "{found:?}");
     assert!(found.summary.contains("were not judged"), "{}", found.summary);
 }
+
+/// The corpus check's own Go positive, `Test_A_Go_Label_Nothing_Needs_Is_Reported`, through the
+/// composed Go offer: one finding on the label's line, saying to delete it.
+#[test]
+fn Test_Run_Should_Report_A_Go_Label_Nothing_Needs()
+{
+    let first = "package p\n\nfunc first(values []int) int {\nLoop:\n    for _, value := range values {\n        if value > 0 {\n            break Loop\n        }\n    }\n    return 0\n}\n";
+
+    let findings = Labeled_Jump_Findings(&[Source_File("first.go", SourceText(first))], "labeled-jump-go", &Bounded_Providers());
+
+    assert_eq!(findings.len(), 1, "{findings:?}");
+    let found = findings.first().expect("asserted one above");
+    assert_eq!(found.subject_name, "first.go:4", "{found:?}");
+    assert!(found.summary.contains("Delete the label"), "{}", found.summary);
+}
+
+/// The corpus check's `Test_A_Go_Break_Out_Of_A_Switch_Is_Not_Reported`: Go's bare `break` is caught
+/// by the `switch`, so the label naming the innermost loop is the only way out, and nothing is
+/// reported -- the shape a check reasoning from depth alone would wrongly convict.
+#[test]
+fn Test_Run_Should_Not_Report_A_Go_Break_Out_Of_A_Switch()
+{
+    let drain = "package p\n\nfunc drain(kinds []int) {\nLoop:\n    for _, kind := range kinds {\n        switch kind {\n        case 0:\n            break Loop\n        }\n    }\n}\n";
+
+    let findings = Labeled_Jump_Findings(&[Source_File("drain.go", SourceText(drain))], "labeled-jump-go-switch", &Bounded_Providers());
+
+    assert_eq!(findings, Vec::new());
+}
+
+/// A C# file is `NotApplicable`, with C#'s reason, and never a clean pass or a gap: the composed C#
+/// offer declines the kind.
+#[test]
+fn Test_Run_Should_Report_A_Csharp_File_As_Not_Applicable()
+{
+    let csharp = "class C\n{\n    void F(int[] xs)\n    {\n        foreach (var x in xs) { if (x == 0) { break; } }\n    }\n}\n";
+
+    let findings = Labeled_Jump_Findings(&[Source_File("C.cs", SourceText(csharp))], "labeled-jump-csharp", &Bounded_Providers());
+
+    assert_eq!(findings.len(), 1, "{findings:?}");
+    let found = findings.first().expect("asserted one above");
+    assert_eq!(found.applicability, Applicability::NotApplicable, "{found:?}");
+    assert!(found.summary.contains("cannot name a loop"), "{}", found.summary);
+}

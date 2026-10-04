@@ -73,7 +73,7 @@ pub fn Read_Source(source: &str) -> Reading
 /// hands back no tree at all. Neither is a fact about `source`, so neither gets to decide
 /// the process's fate; [`Read_Source`] turns each into [`Reading::Unparseable`] and lets
 /// the caller read the outcome.
-fn Parsed_Tree(source: &str) -> Result<tree_sitter::Tree, ParseFailure>
+pub(crate) fn Parsed_Tree(source: &str) -> Result<tree_sitter::Tree, ParseFailure>
 {
     let mut parser = tree_sitter::Parser::new();
 
@@ -104,7 +104,7 @@ fn No_Tree_Failure() -> ParseFailure
     };
 }
 
-fn Root_Error(root: Node) -> Option<ParseFailure>
+pub(crate) fn Root_Error(root: Node) -> Option<ParseFailure>
 {
     if !root.has_error()
     {
