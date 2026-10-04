@@ -102866,7 +102866,7 @@
       "claim": {
         "holder": "opus-p191-undeclared",
         "acquired_at": 1791093381,
-        "lease_expires_at": 1791111381
+        "lease_expires_at": 1791145577
       },
       "verification": {
         "argv": [
@@ -105006,8 +105006,8 @@
       "blocked": null,
       "claim": {
         "holder": "opus-nomos64-p212",
-        "acquired_at": 1791093763,
-        "lease_expires_at": 1791104563
+        "acquired_at": 1791131261,
+        "lease_expires_at": 1791142061
       },
       "verification": {
         "argv": [
@@ -105039,7 +105039,13 @@
       },
       "verified": null,
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "opus-nomos64-p212",
+          "acquired_at": 1791093763,
+          "lease_expires_at": 1791104563
+        }
+      ],
       "declined": null,
       "widened": []
     },
@@ -105119,8 +105125,8 @@
       "blocked": null,
       "claim": {
         "holder": "opus-e7-p207",
-        "acquired_at": 1791093339,
-        "lease_expires_at": 1791107739
+        "acquired_at": 1791131209,
+        "lease_expires_at": 1791145609
       },
       "verification": {
         "argv": [
@@ -105142,7 +105148,13 @@
       },
       "verified": null,
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "opus-e7-p207",
+          "acquired_at": 1791093339,
+          "lease_expires_at": 1791107739
+        }
+      ],
       "declined": null,
       "widened": [
         {
@@ -105793,7 +105805,11 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": {
+        "Declined": {
+          "reason": "Superseded by verified REL04 and commit 5f06a74c. The original item assumed a publicly observable rule counter that is actually cfg(test) and crate-private. REL04 measured real-corpus public fact deltas and latency, compared fresh edited judgments, and independently ran the existing private-counter tests without expanding the public API."
+        }
+      },
       "depends_on": [],
       "blocked": null,
       "claim": null,
@@ -105819,7 +105835,10 @@
         }
       ],
       "displaced": [],
-      "declined": null,
+      "declined": {
+        "holder": "codex-release-loop",
+        "declined_at": 1791132260
+      },
       "widened": []
     },
     {
