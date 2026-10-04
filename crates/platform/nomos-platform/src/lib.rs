@@ -26,10 +26,11 @@
 //! dependency running the wrong way through the seam, and every band above this one
 //! inherits it. So this crate names no `xvpe-` dependency, and the seam paid for the
 //! return trip exactly as it paid for the outward one — no use-site learned either
-//! time, and the nine serde fields that write a timestamp into the work ledger still
-//! name [`timestamp_serde`], because the wire format never moved. What the crossing
-//! kept is untouched by this: it stays adopted, it stays pinned, and
-//! `nomos-platform-xvpe` is still the adapter.
+//! time, and the ten serde fields across nine types that write a timestamp still name
+//! [`timestamp_serde`], because the wire format never moved. Six of them, in
+//! `nomos-ledger`, write it into the work ledger; the other four write it into
+//! `nomos-api`'s responses. What the crossing kept is untouched by this: it stays
+//! adopted, it stays pinned, and `nomos-platform-xvpe` is still the adapter.
 //!
 //! # Scope
 //!
@@ -81,10 +82,10 @@ mod filesystem_lock;
 mod environment;
 mod environment_error;
 
-// The determinism vocabulary the four ports declare in, re-exported so that an
+// The determinism vocabulary the five ports declare in, re-exported so that an
 // implementor names it through the crate whose trait it is implementing. Every implementor
 // already depends on this crate -- that is what implementing its port means -- so this is
-// the difference between one import and a new dependency edge in each of the eighteen
+// the difference between one import and a new dependency edge in each of the twenty-two
 // crates that stand something up behind a port. The authority is still `nomos-contracts`;
 // this is a re-export, not a second copy.
 pub use nomos_contracts::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};

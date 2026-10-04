@@ -3,8 +3,8 @@
   "profile_digest": "sha256:09999e4bf0163df8dc313398b6753cf79a120e0bdd030ede832a81b7defab83b",
   "format": "markdown",
   "output": "spec/domain-specification.md",
-  "content_digest": "sha256:4819e91dc9d0d9cec63941019a2741f7ece004e9da928a6aaf7f0e27187cb0ae",
-  "inputs_digest": "sha256:ed3c89f0c558c77215dee044e02424f9782529299a04b33b2805e8f1dc31f04b",
+  "content_digest": "sha256:830b02ef2c8bc9ec8372886d11fd0f1e84c30d7994714c0979cc4b095593fc82",
+  "inputs_digest": "sha256:b22963fb3b7c10d70dfc4fba173caeca2b6edabb19bd5c8f3f9ea835f599fff7",
   "sections": [
     [
       "Documents",
@@ -12,11 +12,11 @@
     ],
     [
       "Sections",
-      2626
+      2627
     ],
     [
       "Source blocks",
-      9638
+      9640
     ]
   ],
   "inputs": [
@@ -603,7 +603,7 @@
     {
       "content": "documents",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored",
-      "hash": "sha256:ab004f1b53cbdc053ca369de0e3848a6e959ab4bd509c610d51b7f39d5880820"
+      "hash": "sha256:2b87c518c02e503351640d9278ca9967036640c62d8630c6173755720e594292"
     },
     {
       "content": "documents",
@@ -6599,6 +6599,11 @@
       "content": "headings",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#25",
       "hash": "sha256:3643aebb75b5adb27dbfdee222efdffd15098f3308d4b377aced12397a2733cb"
+    },
+    {
+      "content": "headings",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#27",
+      "hash": "sha256:65efa9d267eea9e916d5c36a851729e069fcb2ca1eca6525d658afc1c3f86c0a"
     },
     {
       "content": "headings",
@@ -33618,7 +33623,7 @@
     {
       "content": "blocks",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#5",
-      "hash": "sha256:0a9d892a6b3b3fe1ad431527952d175b73dadabe6b9e32b6b725fe1ad7e67e36"
+      "hash": "sha256:f9ad3306bbcde446a15fda07037bfab4f35a81ff0ce80c49e12cacb86d0a094f"
     },
     {
       "content": "blocks",
@@ -33724,6 +33729,16 @@
       "content": "blocks",
       "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#26",
       "hash": "sha256:3b046b2fb207275d4db6f5cf1af8eed8a1a20a02b5b1c1e92222dcfb3a7295a9"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#27",
+      "hash": "sha256:e7de7d5f9eb4e22c3819163c0b081f06141720adb0b80ce1b82b6c4b9706edce"
+    },
+    {
+      "content": "blocks",
+      "identity": "docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#28",
+      "hash": "sha256:1ab40afc19bed2077114dbb196d42b582ff10b760ec26ff147cbe37265825a8a"
     },
     {
       "content": "blocks",

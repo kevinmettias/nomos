@@ -1362,14 +1362,6 @@
     },
     {
       "check": "check-interfile-duplication",
-      "path": "crates/contracts/nomos-contracts/src/authority/class.rs",
-      "fingerprint": "668a1523671f39c4",
-      "reason": "deliberately-independent enum Label-uniqueness tests (each enumerates its own variants against its own Label() match arms); a shared generic helper would mask a missed variant in any one of them, per SHARED_GUIDANCE parallel-design exemption",
-      "owner": "@claude-p24-regression",
-      "expires": "2026-11-28"
-    },
-    {
-      "check": "check-interfile-duplication",
       "path": "crates/contracts/nomos-contracts/src/authority/mutation_class.rs",
       "fingerprint": "668a1523671f39c4",
       "reason": "deliberately-independent enum Label-uniqueness tests (each enumerates its own variants against its own Label() match arms); a shared generic helper would mask a missed variant in any one of them, per SHARED_GUIDANCE parallel-design exemption",

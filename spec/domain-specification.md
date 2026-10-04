@@ -126,7 +126,7 @@ profile: domain-specification
 | docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md@authored | docs/records/OD-GATE-034-applicabilitypolicy-is-coveragepolicy-under-another-name-and-an-evidence-requirement-is-a-floor-a-gate-states-over-the-ordering-evidenceclass-already-has.md | authored | 58 | 14 | sha256:528219d58bda1a9efeb7425b58b3b50c2cb4c07248e24ef4831d025437ac5fb0 |
 | docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md@authored | docs/records/OD-GATE-035-every-package-this-workspace-depends-on-is-built-at-opt-level-2-in-the-dev-and-test-profiles-and-none-of-its-own-members-is.md | authored | 53 | 19 | sha256:d5215058d7f65cec946dfe10df3d3ee35775ac02c55a286a39fcbd70754f507a |
 | docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md@authored | docs/records/OD-GATE-036-a-finish-runs-the-gates-rules-step-a-change-to-the-composed-set-names-the-packages-that-enumerate-it-and-no-predicate-is-sized-from-the-dependency-graph.md | authored | 69 | 21 | sha256:9512544fdc340597ae13de790c71bf864407d37633b2876b44830c8fab9e17e5 |
-| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 26 | 8 | sha256:ab004f1b53cbdc053ca369de0e3848a6e959ab4bd509c610d51b7f39d5880820 |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md@authored | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md | authored | 28 | 9 | sha256:2b87c518c02e503351640d9278ca9967036640c62d8630c6173755720e594292 |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md@authored | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md | authored | 40 | 9 | sha256:094b9b669979aa12c48d67b684633c326aa16c9e9977fc7ad53cef019da16204 |
 | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md@authored | docs/records/OD-HOST-003-an-editor-surface-is-a-client-of-the-canonical-services-not-a-parser-of-the-clis-rendered-output.md | authored | 19 | 6 | sha256:9237ea74e89c7f49295d2e4bde41ff135c64838767ba17c27b0aad79037ced10 |
 | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md@authored | docs/records/OD-HOST-004-a-second-rule-or-provider-is-composed-by-hand-until-its-participation-depends-on-the-request.md | authored | 28 | 7 | sha256:dc4dc8bcc47a33cb7bff0b99a6e4b37ac79e0de64b9d77d8d1f3ec561e0b2b88 |
@@ -1331,6 +1331,7 @@ profile: domain-specification
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#17 | authored | 2 | Amendment: The Port Gained Directory Enumeration, And This Record's Stated Reason Did Not Survive It |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#22 | authored | 2 | Amendment, Version 2: The Launch Port Is `ProgramLauncher` |
 | docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#25 | authored | 2 | Amendment, Version 3: The Lock Port Is `FilesystemLock` |
+| docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#27 | authored | 2 | Amendment, Version 4: `Run` Is Generic Over Four Of The Ports, Not All Of Them |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1 | authored | 1 | A surface holds no state its canonical services cannot reconstruct |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#4 | authored | 2 | The decision |
 | docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#9 | authored | 2 | The state families this applies to |
@@ -39368,12 +39369,12 @@ to notice.
 
 ### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#5
 
-*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / The decision · hash: sha256:0a9d892a6b3b3fe1ad431527952d175b73dadabe6b9e32b6b725fe1ad7e67e36*
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / The decision · hash: sha256:f9ad3306bbcde446a15fda07037bfab4f35a81ff0ce80c49e12cacb86d0a094f*
 
 A seam exists. `nomos-work-orchestration` (band 40, `crates/orchestration/nomos-work-
 orchestration`) is the middle of the three: it owns the request vocabulary
 (`WorkCommand`, `ClaimRequest`, `EndingRequest` — moved from `nomos-cli::work` verbatim)
-and one function, `Run`, generic over the four traits `nomos-platform` declares
+and one function, `Run`, generic over four of the traits `nomos-platform` declares
 (`FileSystem`, `Clock`, `FilesystemLock`, `ProgramLauncher`) rather than over
 `nomos-platform-std`'s implementations of them. `Run` takes a command and an
 already-constructed, caller-owned `FileLedger<F, C, L>` and process launcher, and hands
@@ -39603,6 +39604,31 @@ amendment's own sentence saying it corrected the launch port's name only stays a
 true of that amendment.
 `P209-THE-REST-OF-P114S-PLATFORM-RENAMES-LEFT-LIVE-OLD-NAMES-AND-WAIVERS-THAT-MATCH-NOTHING`
 made the change. Nothing this record decides changed.
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#27
+
+*revision: authored · kind: heading · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / Amendment, Version 4: `Run` Is Generic Over Four Of The Ports, Not All Of Them · hash: sha256:e7de7d5f9eb4e22c3819163c0b081f06141720adb0b80ce1b82b6c4b9706edce*
+
+## Amendment, Version 4: `Run` Is Generic Over Four Of The Ports, Not All Of Them
+
+### docs/records/OD-HOST-001-choosing-a-platform-running-a-verb-and-rendering-its-outcome-are-three-crates-not-one.md#28
+
+*revision: authored · kind: prose · heading: Choosing a platform, running a verb and rendering its outcome are three crates, not one / Amendment, Version 4: `Run` Is Generic Over Four Of The Ports, Not All Of Them · hash: sha256:1ab40afc19bed2077114dbb196d42b582ff10b760ec26ff147cbe37265825a8a*
+
+The first paragraph of "The decision" called the traits `Run` is generic over "the four traits
+`nomos-platform` declares", which was true when this record was written: that crate declared
+exactly those four. `nomos-platform` has since gained a fifth port, `Environment`, on
+2026-09-12 under `P86-SURFACE-PROVENANCE-READS-THE-ENVIRONMENT-PAST-A-PORT`, and `Run` did not
+take it: `nomos-work-orchestration`'s `run.rs` still bounds its parameters with `FileSystem`,
+`Clock`, `FilesystemLock` and `ProgramLauncher`, and nothing in that crate names `Environment`.
+The sentence now says `Run` is generic over four of the traits `nomos-platform` declares, and
+names the same four. Counted at `48673594`: five `pub trait` declarations in `nomos-platform`,
+and four bounds on `Run`. The version 3 amendment's "all four traits" stays as written, because
+it counts the traits `Run` is bounded by, and there are still four.
+`P210-THREE-PLATFORM-COUNTS-ARE-STALE-AND-NOTHING-NOTICES-A-WAIVER-WHOSE-PATH-IS-GONE` made the
+change, from a count that
+`P209-THE-REST-OF-P114S-PLATFORM-RENAMES-LEFT-LIVE-OLD-NAMES-AND-WAIVERS-THAT-MATCH-NOTHING`
+recorded in its commit, `61e0ebd6`, as outside its own item. Nothing this record decides changed.
 
 ### docs/records/OD-HOST-002-a-surface-holds-no-state-its-canonical-services-cannot-reconstruct.md#1
 

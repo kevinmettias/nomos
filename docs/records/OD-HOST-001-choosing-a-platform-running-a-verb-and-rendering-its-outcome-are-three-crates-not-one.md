@@ -3,7 +3,7 @@ id: OD-HOST-001
 type: decision
 title: Choosing a platform, running a verb and rendering its outcome are three crates, not one
 status: accepted
-version: 3
+version: 4
 authority: canonical-normative-record
 tags:
   - host
@@ -37,7 +37,7 @@ to notice.
 A seam exists. `nomos-work-orchestration` (band 40, `crates/orchestration/nomos-work-
 orchestration`) is the middle of the three: it owns the request vocabulary
 (`WorkCommand`, `ClaimRequest`, `EndingRequest` — moved from `nomos-cli::work` verbatim)
-and one function, `Run`, generic over the four traits `nomos-platform` declares
+and one function, `Run`, generic over four of the traits `nomos-platform` declares
 (`FileSystem`, `Clock`, `FilesystemLock`, `ProgramLauncher`) rather than over
 `nomos-platform-std`'s implementations of them. `Run` takes a command and an
 already-constructed, caller-owned `FileLedger<F, C, L>` and process launcher, and hands
@@ -183,3 +183,20 @@ amendment's own sentence saying it corrected the launch port's name only stays a
 true of that amendment.
 `P209-THE-REST-OF-P114S-PLATFORM-RENAMES-LEFT-LIVE-OLD-NAMES-AND-WAIVERS-THAT-MATCH-NOTHING`
 made the change. Nothing this record decides changed.
+
+## Amendment, Version 4: `Run` Is Generic Over Four Of The Ports, Not All Of Them
+
+The first paragraph of "The decision" called the traits `Run` is generic over "the four traits
+`nomos-platform` declares", which was true when this record was written: that crate declared
+exactly those four. `nomos-platform` has since gained a fifth port, `Environment`, on
+2026-09-12 under `P86-SURFACE-PROVENANCE-READS-THE-ENVIRONMENT-PAST-A-PORT`, and `Run` did not
+take it: `nomos-work-orchestration`'s `run.rs` still bounds its parameters with `FileSystem`,
+`Clock`, `FilesystemLock` and `ProgramLauncher`, and nothing in that crate names `Environment`.
+The sentence now says `Run` is generic over four of the traits `nomos-platform` declares, and
+names the same four. Counted at `48673594`: five `pub trait` declarations in `nomos-platform`,
+and four bounds on `Run`. The version 3 amendment's "all four traits" stays as written, because
+it counts the traits `Run` is bounded by, and there are still four.
+`P210-THREE-PLATFORM-COUNTS-ARE-STALE-AND-NOTHING-NOTICES-A-WAIVER-WHOSE-PATH-IS-GONE` made the
+change, from a count that
+`P209-THE-REST-OF-P114S-PLATFORM-RENAMES-LEFT-LIVE-OLD-NAMES-AND-WAIVERS-THAT-MATCH-NOTHING`
+recorded in its commit, `61e0ebd6`, as outside its own item. Nothing this record decides changed.
