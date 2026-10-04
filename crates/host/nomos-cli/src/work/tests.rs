@@ -2,13 +2,15 @@
 //!
 //! Split by the group each test drives -- the command line each verb parses, what the `--`
 //! separator carries behind it, the labels `list` and `show` print, the two closed
-//! vocabularies the printed usage text has to agree with, and the exit codes it documents --
+//! vocabularies the printed usage text has to agree with, the exit codes it documents, and
+//! the coverage declaration `add` and `widen` read beside the board --
 //! because what a reader comes here to find is the group rather than the assertion. The two
 //! translations more than one group needs, a command line into arguments and a printed
 //! `a|b|c` run into words, live here beside the `mod` list.
 
 use super::*;
 
+mod coverage;
 mod exit_codes;
 mod filters;
 mod listing;

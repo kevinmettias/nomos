@@ -24,8 +24,10 @@
 //! stays with the composition root too: what this crate needs is a recursive walk, and
 //! [`nomos_platform::FileSystem`]'s `Read_Directory` is one level by `OD-PLATFORM-002`'s own
 //! floor; a general exclusion ledger that learned to walk a source tree would be answering a
-//! question about this repository's conventions rather than the platform's. `Run`'s
-//! `published` argument is where that value arrives from outside.
+//! question about this repository's conventions rather than the platform's. The same is true of
+//! the coverage rules a repository declares in its own root file (`OD-GATE-036`), which `Add`
+//! and `Widen` judge an item against. `Run`'s `declared` argument is where both arrive from
+//! outside, as one `nomos_ledger::RepositoryDeclarations`.
 
 #![forbid(unsafe_code)]
 

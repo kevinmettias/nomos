@@ -12,7 +12,7 @@
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use std::time::Duration;
 
-use nomos_ledger::{ClaimRefusal, FileLedger, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, Territory};
+use nomos_ledger::{ClaimRefusal, FileLedger, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, RepositoryDeclarations, Territory};
 use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
 use nomos_work_orchestration::{ClaimRequest, EndingRequest, Run, WorkCommand, WorkOutcome};
 
@@ -86,7 +86,7 @@ fn Added_To_Ledger(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>
         },
         ledger,
         &Unreached,
-        Territory::Empty,
+        RepositoryDeclarations::Undeclared,
     );
 
     assert!(matches!(added, WorkOutcome::Add(Ok(()))), "a real ledger accepts an add for a fresh item");
@@ -101,7 +101,7 @@ fn Test_Run_Should_Add_Then_Show_An_Item_Through_A_Real_Ledger()
     let item = Unclaimed_Item("SEAM-ONE");
     Added_To_Ledger(&mut ledger, &item);
 
-    let shown = Run(&WorkCommand::Show { item: item.id.clone() }, &mut ledger, &Unreached, Territory::Empty);
+    let shown = Run(&WorkCommand::Show { item: item.id.clone() }, &mut ledger, &Unreached, RepositoryDeclarations::Undeclared);
     let WorkOutcome::Show(Ok(view)) = shown
     else
     {
@@ -120,11 +120,11 @@ fn Test_Run_Should_Surface_A_Real_Ledger_Claim_Refusal()
     Added_To_Ledger(&mut ledger, &item);
 
     let request = ClaimRequest { item: item.id.clone(), holder: "agent-a".to_owned(), lease: Duration::from_secs(LEASE_SECONDS) };
-    let first = Run(&WorkCommand::Claim(request), &mut ledger, &Unreached, Territory::Empty);
+    let first = Run(&WorkCommand::Claim(request), &mut ledger, &Unreached, RepositoryDeclarations::Undeclared);
     assert!(matches!(first, WorkOutcome::Claim(Ok(_))));
 
     let request = ClaimRequest { item: item.id, holder: "agent-b".to_owned(), lease: Duration::from_secs(LEASE_SECONDS) };
-    let second = Run(&WorkCommand::Claim(request), &mut ledger, &Unreached, Territory::Empty);
+    let second = Run(&WorkCommand::Claim(request), &mut ledger, &Unreached, RepositoryDeclarations::Undeclared);
     let WorkOutcome::Claim(Err(refusal)) = second
     else
     {
@@ -147,12 +147,12 @@ fn Test_Run_Should_Make_A_Decline_Visible_To_A_Later_Audit()
         &WorkCommand::Decline(EndingRequest { item: item.id.clone(), holder: "nomos work decline".to_owned(), reason: "not work".to_owned() }),
         &mut ledger,
         &Unreached,
-        Territory::Empty,
+        RepositoryDeclarations::Undeclared,
     );
     assert!(matches!(declined, WorkOutcome::Decline { declined: Ok(()), board: Some(_) }),
         "a decline that ended an item carries the board its fanout is read from");
 
-    let audited = Run(&WorkCommand::Audit, &mut ledger, &Unreached, Territory::Empty);
+    let audited = Run(&WorkCommand::Audit, &mut ledger, &Unreached, RepositoryDeclarations::Undeclared);
     let WorkOutcome::Audit(Ok(view)) = audited
     else
     {

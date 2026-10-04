@@ -24,6 +24,7 @@ use crate::fixtures::{
     Claim_For_Holder, Temporary_Directory, Timestamp, AT_NOW, NOW,
 };
 use crate::watching_lock::{Assert_One_Lock_Acquisition, WatchedBoard, Watched_Board_At};
+use nomos_ledger::PredicateCoverage;
 
 /// The two widenings the multiplicity fixture performs, and so the two rows its board must
 /// carry afterwards.
@@ -51,7 +52,7 @@ fn Test_A_Holder_Should_Widen_Their_Own_Territory_And_The_Widening_Should_Be_Kep
     Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs", "c.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs", "c.rs"]), &PredicateCoverage::Undeclared())
         .expect("the holder may widen their own item");
     assert_eq!(added, Strings_From_Paths(&["b.rs", "c.rs"]), "the verb reports what it added");
     Assert_The_Widening_Was_Kept(&ledger, &["b.rs", "c.rs"]);
@@ -91,10 +92,10 @@ fn Test_Two_Widenings_Should_Be_Two_Rows_Rather_Than_One_Coalesced_One()
     Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]), &PredicateCoverage::Undeclared())
         .expect("the first widening is granted");
     ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["c.rs", "d.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["c.rs", "d.rs"]), &PredicateCoverage::Undeclared())
         .expect("the second widening is granted");
     Assert_The_Widenings_Are_Two_Rows(&ledger);
 }
@@ -132,7 +133,7 @@ fn Test_A_Path_Already_Reserved_Should_Add_Nothing_And_Record_Nothing()
     Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["a.rs", "./dir/b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["a.rs", "./dir/b.rs"]), &PredicateCoverage::Undeclared())
         .expect("asking for what you already hold is not an error");
 
     assert!(added.is_empty(), "nothing was added, so nothing is reported as added: {added:?}");
@@ -155,7 +156,7 @@ fn Test_A_Path_Named_Twice_In_One_Widening_Should_Be_Added_Once()
     Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs", "b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs", "b.rs"]), &PredicateCoverage::Undeclared())
         .expect("the holder may widen their own item");
 
     assert_eq!(added, Strings_From_Paths(&["b.rs"]), "one path was added, however many times it was named");
@@ -177,7 +178,7 @@ fn Test_Widening_Should_Never_Remove_A_Path()
 
     let before = Only_Item(&ledger).territory.paths;
     ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["c.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["c.rs"]), &PredicateCoverage::Undeclared())
         .expect("the holder may widen their own item");
     let after = Only_Item(&ledger).territory.paths;
 
@@ -207,7 +208,7 @@ fn Test_A_Widening_Onto_Ground_A_Peer_Holds_Should_Be_Refused()
     Claim_For_Holder(&mut ledger, "T-2", &Holder::from("agent-b"));
 
     let refusal = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]), &PredicateCoverage::Undeclared())
         .expect_err("b.rs is held by agent-b through T-2");
 
     assert!(
@@ -236,7 +237,7 @@ fn Test_The_Same_Widening_Should_Be_Granted_When_No_Peer_Holds_The_Ground()
     Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]), &PredicateCoverage::Undeclared())
         .expect("T-2 reserves b.rs but nobody is holding T-2");
 
     assert_eq!(added, Strings_From_Paths(&["b.rs"]), "an unclaimed peer's territory excludes nobody");
@@ -251,7 +252,7 @@ fn Test_A_Widening_By_Somebody_Who_Is_Not_The_Holder_Should_Be_Refused()
     Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let refusal = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-b"), &Strings_From_Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-b"), &Strings_From_Paths(&["b.rs"]), &PredicateCoverage::Undeclared())
         .expect_err("agent-b does not hold T-1");
 
     assert!(
@@ -274,7 +275,7 @@ fn Test_A_Widening_Of_An_Item_Nobody_Holds_Should_Be_Refused()
         Board_At("unclaimed", vec![Item_Reserving_Files("T-1", &["a.rs"])]);
 
     let refusal = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]), &PredicateCoverage::Undeclared())
         .expect_err("nobody holds T-1");
 
     assert!(
@@ -298,7 +299,7 @@ fn Test_A_Widening_By_A_Holder_Whose_Lease_Has_Run_Out_Should_Be_Refused()
     let BoardOnDisk { directory: _directory, mut ledger } = Board_After_The_Lease_Lapsed("lapsed");
 
     let refusal = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]), &PredicateCoverage::Undeclared())
         .expect_err("agent-a's lease ran out an hour ago");
     Assert_A_Lapse_Refuses(&refusal);
     Assert_No_Widening_Was_Written(&ledger);
@@ -337,7 +338,7 @@ fn Test_The_Same_Holder_Should_Widen_While_The_Lease_Is_Still_Live()
     Claim_For_Holder(&mut ledger, "T-1", &Holder::from("agent-a"));
 
     let added = ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]), &PredicateCoverage::Undeclared())
         .expect("the lease has not run out");
 
     assert_eq!(added, Strings_From_Paths(&["b.rs"]), "a live lease is what the refusal above turns on");
@@ -356,7 +357,7 @@ fn Test_A_Widening_Should_Decide_And_Write_Inside_One_Lock_Acquisition()
     let taken_before = log.lock().expect("the log is not poisoned").acquisitions;
 
     ledger
-        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]))
+        .Widen(&ItemId::New("T-1"), Holder::from("agent-a"), &Strings_From_Paths(&["b.rs"]), &PredicateCoverage::Undeclared())
         .expect("the holder may widen their own item");
     Assert_One_Lock_Acquisition(&log, taken_before);
 }

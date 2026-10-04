@@ -24,7 +24,8 @@
 //!    `work.rs` already makes for `nomos work`.
 //!
 //! All three are handed to [`nomos_check_orchestration::Run`] as values, the same way
-//! `nomos_work_orchestration::Run` takes `published` as a value rather than deriving it.
+//! `nomos_work_orchestration::Run` takes what the repository declares as a value rather than
+//! deriving it.
 //!
 //! # The vacuity guard lives here, and it now has two shapes
 //!

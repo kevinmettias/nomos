@@ -13,6 +13,12 @@ mod add_refusal;
 
 pub use add_refusal::AddRefusal;
 
+// What the repository a ledger serves declares, beside the verbs in this file that take it.
+#[path = "store/repository_declarations.rs"]
+mod repository_declarations;
+
+pub use repository_declarations::RepositoryDeclarations;
+
 #[path = "store/claiming.rs"]
 mod claiming;
 #[path = "store/document.rs"]
@@ -68,6 +74,7 @@ use crate::exclusion::ExclusionLedger;
 use crate::LedgerItem;
 use crate::ItemId;
 use crate::LedgerError;
+use crate::PredicateCoverage;
 use crate::ReleaseOutcome;
 use crate::Reservation;
 use crate::Territory;
@@ -269,21 +276,35 @@ FileLedger<Files, TimeSource, Lock>
     /// unless the reservations it is measured against were genuine attempts to get the
     /// territory right.
     ///
+    /// # What it judges the enlargement against
+    ///
+    /// `coverage` is what the repository declares a predicate must carry, read by the caller as
+    /// [`Self::Add`]'s is. A widening into a declared path is judged on the terms an add would
+    /// be, and only the paths it actually adds are judged, since the rest were judged when they
+    /// were reserved. It is refused rather than granted because a predicate cannot be edited
+    /// after its item exists, so nothing later could make the enlarged item honest.
+    /// `OD-GATE-036`.
+    ///
     /// # Errors
     ///
     /// [`ClaimRefusal::Lapsed`] if the lease has run out -- a lapsed claim stops excluding, so
     /// enlarging one reaches ground a peer may legitimately hold since, and the remedy named is
     /// `takeover`. [`ClaimRefusal::StillHeld`] if somebody else holds it,
-    /// [`ClaimRefusal::NotClaimable`] if nobody does or the item has ended, and whatever a
-    /// claim over the enlarged territory would be refused with otherwise.
+    /// [`ClaimRefusal::NotClaimable`] if nobody does or the item has ended,
+    /// [`ClaimRefusal::Coverage`] if the paths it adds reach a declared path the item's
+    /// predicate does not cover, and whatever a claim over the enlarged territory would be
+    /// refused with otherwise.
     pub fn Widen(
         &mut self,
         item: &ItemId,
         holder: Holder<'_>,
         adding: &[String],
+        coverage: &PredicateCoverage,
     ) -> Result<Vec<String>, ClaimRefusal>
     {
-        return Widen_Territory(self, item, holder, adding);
+        use refusal::Enlargement;
+
+        return Widen_Territory(self, &Enlargement { item, holder: holder.As_Text(), adding, coverage });
     }
 
     /// Takes a lapsed item over, keeping the claim it displaces.
@@ -389,12 +410,13 @@ FileLedger<Files, TimeSource, Lock>
     /// [`AddRefusal::LedgerUnusable`] if the ledger could not be read or written at all.
     /// Adds an item to the board.
     ///
-    /// `published` is the record files this repository has already published, supplied by the
-    /// caller rather than discovered here. The store owns the *decision* — `OD-LEDGER-021`
-    /// put `add` behind one lock for that reason — and enumerating a repository is not a
-    /// thing a general exclusion ledger should learn to do. A caller with nothing to declare
-    /// passes [`Territory::Empty`], which is honest: it is saying it does not know, and the
-    /// open-item half still holds.
+    /// `declared` is what the repository declares, supplied by the caller rather than
+    /// discovered here: the record files it has already published, and what it requires of a
+    /// predicate whose item reaches certain paths. The store owns the *decision* —
+    /// `OD-LEDGER-021` put `add` behind one lock for that reason — and enumerating a
+    /// repository is not a thing a general exclusion ledger should learn to do. A caller with
+    /// nothing to declare passes [`RepositoryDeclarations::Undeclared`], which is honest: it
+    /// is saying it does not know, and the open-item half still holds.
     ///
     /// `amending` is the subset of that reservation the item declares it is *editing* rather
     /// than allocating. Declared by the author and not inferred: an identifier tells you
@@ -408,28 +430,25 @@ FileLedger<Files, TimeSource, Lock>
     /// identifier that is already spent or already spoken for,
     /// [`AddRefusal::AmendmentNotPublished`] for a declared amendment of a record that does
     /// not exist, [`AddRefusal::AmendmentMisspelled`] for one of a record that does exist
-    /// under a different filename, [`AddRefusal::WouldBeInvalid`] for an item that would break
-    /// the board's invariants, and [`AddRefusal::LedgerUnusable`] when the file itself cannot
-    /// be used.
+    /// under a different filename, [`AddRefusal::Coverage`] for an item whose territory
+    /// reaches a path the repository declares and whose predicate does not carry what that
+    /// declaration requires, [`AddRefusal::WouldBeInvalid`] for an item that would break the
+    /// board's invariants, and [`AddRefusal::LedgerUnusable`] when the file itself cannot be
+    /// used.
     pub fn Add(
         &mut self,
         item: &LedgerItem,
         holder: &str,
-        published: &Territory,
+        declared: &RepositoryDeclarations,
         amending: &Territory,
     ) -> Result<(), AddRefusal>
     {
         use reservation::RecordDeclaration;
+        use verbs::AddDeclarations;
 
-        return Add_Item(
-            self,
-            item,
-            holder,
-            &RecordDeclaration {
-                published,
-                amending,
-            },
-        );
+        let records = RecordDeclaration { published: &declared.published, amending };
+
+        return Add_Item(self, item, holder, &AddDeclarations { records, coverage: &declared.coverage });
     }
 
     /// Whether the ledger currently satisfies its invariants.

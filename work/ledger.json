@@ -102684,7 +102684,13 @@
           "crates/rules/nomos-rules/src/rule_descriptor/undeclared_outcome.rs",
           "crates/rules/nomos-rules/src/checks/optional_reads.rs",
           "crates/rules/nomos-rules/src/rule_descriptor/optional_read",
-          "crates/rules/nomos-rules/src/checks/script_discipline.rs"
+          "crates/rules/nomos-rules/src/checks/script_discipline.rs",
+          "crates/rules/nomos-rules/src/checks/cyclomatic_complexity/tests.rs",
+          "crates/rules/nomos-rules/src/checks/nesting_depth/tests.rs",
+          "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs",
+          "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs",
+          "crates/host/nomos-api/src/check.rs",
+          "crates/host/nomos-cli/src/gate/report/tests/populations.rs"
         ],
         "patterns": []
       },
@@ -102697,7 +102703,7 @@
       "claim": {
         "holder": "opus-b7-p190",
         "acquired_at": 1791078697,
-        "lease_expires_at": 1791093097
+        "lease_expires_at": 1791109400
       },
       "verification": {
         "argv": [
@@ -102744,6 +102750,30 @@
             "crates/rules/nomos-rules/src/checks/script_discipline.rs"
           ],
           "widened_at": 1791079422
+        },
+        {
+          "holder": "opus-b7-p190",
+          "added": [
+            "crates/rules/nomos-rules/src/checks/cyclomatic_complexity/tests.rs",
+            "crates/rules/nomos-rules/src/checks/nesting_depth/tests.rs"
+          ],
+          "widened_at": 1791079790
+        },
+        {
+          "holder": "opus-b7-p190",
+          "added": [
+            "crates/rules/nomos-rules/src/checks/naming/abbreviations.rs",
+            "crates/orchestration/nomos-check-orchestration/src/facts/policy_materialization.rs"
+          ],
+          "widened_at": 1791079935
+        },
+        {
+          "holder": "opus-b7-p190",
+          "added": [
+            "crates/host/nomos-api/src/check.rs",
+            "crates/host/nomos-cli/src/gate/report/tests/populations.rs"
+          ],
+          "widened_at": 1791080021
         }
       ]
     },
@@ -103155,11 +103185,13 @@
           "tests/contract/surface/nomos-api.txt",
           "tests/contract/tests/predicate_coverage.rs",
           "nomos-predicate-coverage.json",
-          "README.md"
+          "README.md",
+          "crates/host/nomos-cli/src/work.rs",
+          "crates/host/nomos-cli/src/check.rs"
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P188-A-PREDICATE-COVERS-ITS-OWN-PACKAGES-AND-FIVE-LANDINGS-REDDENED-A-DEPENDENT-NOBODY-RAN"
       ],
@@ -103183,11 +103215,68 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-ledger",
+          "-p",
+          "nomos-work-orchestration",
+          "-p",
+          "nomos-api",
+          "-p",
+          "nomos-cli",
+          "-p",
+          "nomos-contract-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "43c038c.exe)\n     Running tests\\rule_contract_citation.rs (F:/repos/nomos-p196-target\\debug\\deps\\rule_contract_citation-0ac6f384425dd5b3.exe)\n     Running tests\\rule_descriptors.rs (F:/repos/nomos-p196-target\\debug\\deps\\rule_descriptors-c5132aba7ca98bfd.exe)\n     Running tests\\suppression_paths.rs (F:/repos/nomos-p196-target\\debug\\deps\\suppression_paths-84c97859a2d070de.exe)\n     Running tests\\toolchain_floor.rs (F:/repos/nomos-p196-target\\debug\\deps\\toolchain_floor-dfd3a139dad18d9a.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p196-target\\debug\\deps\\nomos_ledger-3c821144759cbc68.exe)\n     Running tests\\declining_ends_an_item\\main.rs (F:/repos/nomos-p196-target\\debug\\deps\\declining_ends_an_item-6197c13f7d5135c4.exe)\n     Running tests\\exclusion_holds\\main.rs (F:/repos/nomos-p196-target\\debug\\deps\\exclusion_holds-9ba180c518e489d0.exe)\n     Running tests\\gate_covers_finish\\main.rs (F:/repos/nomos-p196-target\\debug\\deps\\gate_covers_finish-5847af9ef1cba00b.exe)\n     Running tests\\local_gate_execution.rs (F:/repos/nomos-p196-target\\debug\\deps\\local_gate_execution-30f375275a9966a7.exe)\n     Running tests\\predicate_coverage.rs (F:/repos/nomos-p196-target\\debug\\deps\\predicate_coverage-739cc6ff72fec614.exe)\n     Running tests\\records_do_not_serialize\\main.rs (F:/repos/nomos-p196-target\\debug\\deps\\records_do_not_serialize-e11c06cef3e50113.exe)\n     Running tests\\scope_verification_integration.rs (F:/repos/nomos-p196-target\\debug\\deps\\scope_verification_integration-d93034b5e8af4973.exe)\n     Running tests\\widening_is_recorded\\main.rs (F:/repos/nomos-p196-target\\debug\\deps\\widening_is_recorded-6eaf3aba9225609f.exe)\n     Running unittests src\\lib.rs (F:/repos/nomos-p196-target\\debug\\deps\\nomos_work_orchestration-3b8048e9088adbe2.exe)\n     Running tests\\integration_seams.rs (F:/repos/nomos-p196-target\\debug\\deps\\integration_seams-b9b0d2bdc302baba.exe)\n   Doc-tests nomos_api\n   Doc-tests nomos_contract_tests\n   Doc-tests nomos_ledger\n   Doc-tests nomos_work_orchestration\n",
+        "verified_at": 1791087977,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "f79751ef22630646488fdbbc468cb59b7c45e7c3"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
-      "widened": []
+      "widened": [
+        {
+          "holder": "opus-p196-coverage",
+          "added": [
+            "crates/host/nomos-cli/src/work.rs",
+            "crates/host/nomos-cli/src/check.rs"
+          ],
+          "widened_at": 1791080197
+        }
+      ]
     },
     {
       "id": "P176-A-LABELED-JUMP-IS-THE-FIRST-SYNTAX-SITE-AND-THE-FAMILY-THAT-CARRIES-IT-2",
@@ -104861,6 +104950,55 @@
           "nomos-contract-tests"
         ],
         "timeout_seconds": 10800
+      },
+      "verified": null,
+      "abandoned": [],
+      "displaced": [],
+      "declined": null,
+      "widened": []
+    },
+    {
+      "id": "P213-A-TOOL-IS-A-DECLARATION-ONCE-THE-FOURTH-MILESTONE-IS-MEASURED",
+      "title": "A tool is a declaration, once the fourth milestone is measured",
+      "why": "ARC-CONFORMANCE-003's fourth milestone, a tool is a declaration, opens when the third closes, and its tasks are authored then from a measurement. Measured at code-standards f0d820729: the corpus's eleven tool-backed checks are seven relays of a diagnostic the tool already reports (go vet's lostcancel and unreachable, rustc's unused_must_use, unreachable_patterns and unconditional_recursion, Roslyn's CS0162 and CS0472) and four walks a type checker merely hosts. Measured here: a tool provider cost 28 to 64 files, and a second provider of an existing family 39; five of the seven relayed codes already arrive in nomos.cap.lint facts and reach the gate as lint-diagnostics at the tool's level, not as the corpus rule at the gate it declares; and which subjects a rule reads is a match on its identifier in check orchestration, so a new relay rule would cost a line there too. This item lands the record that decides what a tool and a relay cost from now on.",
+      "done_when": "docs/records/OD-CAPABILITY-020-a-relayed-diagnostic-is-a-declared-row-and-a-diagnostic-tool-is-a-declaration-one-provider-runs-not-a-crate.md is registered by crates/spec/nomos-spec-store/records/OD-CAPABILITY-020.record and decides, from the measurement it records: a relayed diagnostic is a declared row in nomos-rules under the corpus rule's identifier and gate, judged by one rule body over nomos.cap.lint; a claimed code is reported once, by its row and not also by lint-diagnostics; a diagnostic tool is a declaration one provider crate runs through ProgramLauncher, with a closed set of output formats that crate owns, SARIF first; a declaration is this workspace's and never the judged repository's, which only selects or declines as OD-HOST-009 decided; a tool that does not answer is ProviderUnavailable for its family and never a clean subject; a walk a type checker hosts is a semantic kind, not a relay; and the bound -- what the relay table, its route in check orchestration and the declared-tool provider cost once, and the nothing-else a later relay row or declared tool costs. It names the three build steps and builds nothing. Both committed projections are rendered from the record set the commit publishes. The predicate is the spec store's own tests and the contract tests that hold a governing record present, round-tripped and cited.",
+      "kind": "Decision",
+      "origin": "Required",
+      "territory": {
+        "resolution": "File",
+        "paths": [
+          "docs/records/OD-CAPABILITY-020-a-relayed-diagnostic-is-a-declared-row-and-a-diagnostic-tool-is-a-declaration-one-provider-runs-not-a-crate.md",
+          "crates/spec/nomos-spec-store/records/OD-CAPABILITY-020.record"
+        ],
+        "patterns": []
+      },
+      "state": "Ready",
+      "depends_on": [
+        "P212-THE-UNCONDITIONAL-LOOP-IS-THE-SECOND-SYNTAX-SITE-AND-ITS-TERRITORY-IS-THE-BOUND"
+      ],
+      "blocked": null,
+      "claim": null,
+      "verification": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-spec-store",
+          "-p",
+          "nomos-contract-tests",
+          "--test",
+          "governing_records_are_present",
+          "--test",
+          "round_trip_holds",
+          "--test",
+          "store_holds",
+          "--test",
+          "table_rows",
+          "--test",
+          "record_citation"
+        ],
+        "timeout_seconds": 3600
       },
       "verified": null,
       "abandoned": [],

@@ -3,7 +3,7 @@
 //! `nomos_work_orchestration::WorkCommand` except `Add` shares -- the one part of a handler
 //! that is neither the `WorkCommand` it names nor the `WorkOutcome` variant it destructures.
 
-use nomos_ledger::{Board_In, FileLedger, Territory};
+use nomos_ledger::{Board_In, FileLedger, RepositoryDeclarations};
 use nomos_composer_std::{CLOCK, FILE_SYSTEM, LAUNCHER, Lock_At};
 use nomos_composer_std::{ClockType, FileSystemType, LockType};
 use nomos_work_orchestration::{WorkCommand, WorkOutcome};
@@ -17,26 +17,24 @@ pub(crate) fn Ledger_At(directory: &Path) -> FileLedger<FileSystemType, ClockTyp
     return FileLedger::At(board.document, FILE_SYSTEM, CLOCK, Lock_At(board.lock));
 }
 
-/// Runs `command` against the board at `directory` with an empty, real `Territory`.
+/// Runs `command` against the board at `directory` with an undeclared repository: no
+/// published record and no coverage rule.
 ///
-/// Every `WorkCommand` variant but `Add` carries no territory of its own: `ClaimRequest`
-/// names only the item and holder it already names, `Finish` an item and a holder, `Validate`
-/// nothing at all. `nomos_work_orchestration::Run`'s own `published` closure exists so each
-/// composition root can answer "which records has this repository already published" its own
-/// way, and that crate's own doc says the closure is asked for lazily and reached only by
-/// `Add` -- so every other verb hands this empty, real `Territory` instead of a closure over a
-/// directory it will never look at. `add_response::Handle_Work_Add` is the one handler in this
-/// crate that passes a populated one.
+/// Every `WorkCommand` variant this crate handles but `Add` carries no territory of its own:
+/// `ClaimRequest` names only the item and holder it already names, `Finish` an item and a
+/// holder, `Validate` nothing at all. `nomos_work_orchestration::Run`'s own `declared` closure
+/// exists so each composition root can answer "what has this repository published, and what
+/// does it require of a predicate" its own way, and that crate's own doc says the closure is
+/// asked for lazily and reached only by `Add` and `Widen` -- and this crate has no `Widen`
+/// handler -- so every other verb hands [`RepositoryDeclarations::Undeclared`] instead of a
+/// closure over a directory it will never look at. `add_response::Handle_Work_Add` is the one
+/// handler in this crate that passes a populated one. A `Widen` handler added here would have
+/// to pass one too, or it would widen without the repository's coverage rules.
 pub(crate) fn Run_Empty_Territory_Command(directory: &Path, command: WorkCommand) -> WorkOutcome
 {
     let mut ledger = Ledger_At(directory);
 
-    return nomos_work_orchestration::Run(
-        &command,
-        &mut ledger,
-        &LAUNCHER,
-        || Territory::Of_Files(std::iter::empty::<String>()),
-    );
+    return nomos_work_orchestration::Run(&command, &mut ledger, &LAUNCHER, RepositoryDeclarations::Undeclared);
 }
 
 #[cfg(test)]

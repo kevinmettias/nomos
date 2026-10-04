@@ -9,6 +9,7 @@ use crate::board::{
     Validate_Document,
 };
 use crate::interleaving::{Holder_Of, InterleavedLedger, Two_Writers};
+use nomos_ledger::RepositoryDeclarations;
 
 /// A lease with seconds left on it, so the renewal below is visibly the thing that moved the
 /// expiry rather than a value the fixture already carried.
@@ -157,7 +158,7 @@ fn Test_An_Add_Should_Not_Erase_A_Claim_Taken_While_It_Ran()
         |ledger| {
             let item = Item_Reserving_Files("T-1", &["src/a.rs"]);
             ledger
-                .Add(&item, "agent-a", &ItemTerritory::Empty(), &ItemTerritory::Empty())
+                .Add(&item, "agent-a", &RepositoryDeclarations::Undeclared(), &ItemTerritory::Empty())
                 .expect("T-1 is not on the board yet");
         },
         |ledger| {
@@ -243,5 +244,5 @@ fn Adds_T_1(
 {
     let item = Item_Reserving_Files("T-1", &[file]);
 
-    return ledger.Add(&item, holder.0, &ItemTerritory::Empty(), &ItemTerritory::Empty());
+    return ledger.Add(&item, holder.0, &RepositoryDeclarations::Undeclared(), &ItemTerritory::Empty());
 }

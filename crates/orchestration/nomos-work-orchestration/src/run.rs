@@ -3,7 +3,7 @@
 
 use nomos_ledger::{
     ExclusionLedger, FileLedger, Finish_Item, Finishing, ItemId, LedgerDocument, LedgerError,
-    LedgerItem, ReleaseOutcome, Territory, Validate_Document,
+    LedgerItem, ReleaseOutcome, RepositoryDeclarations, Territory, Validate_Document,
 };
 use nomos_platform::{Clock, FilesystemLock, FileSystem, ProgramLauncher};
 
@@ -21,16 +21,19 @@ use crate::{ClaimRequest, EndingRequest, WorkCommand};
 /// and call [`Run`] without also taking on how `nomos-cli` chooses those four or how it
 /// prints an answer.
 ///
-/// `published` is asked for lazily and only reached by [`WorkCommand::Add`]. The territory
-/// this repository's own records already occupy is not answerable through [`FileSystem`] —
-/// that port is read, atomically-replace and exists, not a directory walk — so a
-/// composition root computes it however its own tree is reached and handed over as a
-/// value, the same division `nomos-ledger::FileLedger::Add`'s own documentation already
-/// draws around this exact question.
+/// `declared` is asked for lazily and reached only by [`WorkCommand::Add`] and
+/// [`WorkCommand::Widen`]. What it answers is what the repository declares: the territory its
+/// own records already occupy, and what it requires of a predicate whose item reaches certain
+/// paths (`OD-GATE-036`). Neither is answerable through [`FileSystem`] by a crate that does
+/// not know where the repository is or what it calls its files, so a composition root reads
+/// both however its own tree is reached and hands them over as one value, the same division
+/// `nomos-ledger::FileLedger::Add`'s own documentation already draws around this exact
+/// question. One value rather than one closure each, because both arrive from the same place
+/// and an `add` needs both.
 ///
 /// The body is one `match` on `command`. `List`, `Show`, `Validate` and `Audit` need
 /// nothing but `ledger`, so each wraps its helper's result in the [`WorkOutcome`] variant of
-/// the same name right there. The other seven need `launcher`, `published`, or more than one
+/// the same name right there. The other seven need `launcher`, `declared`, or more than one
 /// field off `command`, so each hands off to a per-command function below that owns both the
 /// single ledger call and the [`WorkOutcome`] wrap -- naming what that arm already was,
 /// rather than leaving `Run` itself carry every arm's own ledger call inline.
@@ -38,7 +41,7 @@ pub fn Run<Filesystem, ClockSource, Lock, Launcher>(
     command: &WorkCommand,
     ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     launcher: &Launcher,
-    published: impl FnOnce() -> Territory,
+    declared: impl FnOnce() -> RepositoryDeclarations,
 ) -> WorkOutcome
 where
     Filesystem: FileSystem,
@@ -50,14 +53,14 @@ where
     {
         WorkCommand::List { .. } => WorkOutcome::List(Board_View(ledger)),
         WorkCommand::Show { .. } => WorkOutcome::Show(Show_View(ledger)),
-        WorkCommand::Add { item, amending } => Add_Outcome(ledger, item, amending, published),
+        WorkCommand::Add { item, amending } => Add_Outcome(ledger, item, amending, declared),
         WorkCommand::Finish { item, holder } => Finish_Outcome(ledger, launcher, item, holder),
         WorkCommand::Claim(request) => Claim_Outcome(ledger, request),
         WorkCommand::Renew(request) => Renew_Outcome(ledger, request),
         WorkCommand::TakeOver(request) => TakeOver_Outcome(ledger, request),
         WorkCommand::Abandon(request) => Abandon_Outcome(ledger, request),
         WorkCommand::Decline(request) => Decline_Outcome(ledger, request),
-        WorkCommand::Widen { item, holder, adding } => Widen_Outcome(ledger, item, holder, adding),
+        WorkCommand::Widen { item, holder, adding } => Widen_Outcome(ledger, &Enlargement { item, holder, adding }, declared),
         WorkCommand::Validate => WorkOutcome::Validate(Validated_Board(ledger)),
         WorkCommand::Audit => WorkOutcome::Audit(Board_View(ledger)),
     };
@@ -125,10 +128,10 @@ fn Add_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>
     ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
     item: &LedgerItem,
     amending: &Territory,
-    published: impl FnOnce() -> Territory,
+    declared: impl FnOnce() -> RepositoryDeclarations,
 ) -> WorkOutcome
 {
-    let added = ledger.Add(item, "nomos work add", &published(), amending);
+    let added = ledger.Add(item, "nomos work add", &declared(), amending);
 
     return WorkOutcome::Add(added);
 }
@@ -215,16 +218,32 @@ fn Decline_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemL
 }
 
 /// `widen`: enlarge a held territory, and say what the enlargement added.
+///
+/// Hands the ledger only the coverage half of the repository's declarations. The published
+/// records beside it are what `add` judges a record reservation against, and a widening has
+/// never been judged against them; `OD-GATE-036` asks `widen` to refuse on coverage alone.
 fn Widen_Outcome<Filesystem: FileSystem, ClockSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Filesystem, ClockSource, Lock>,
-    item: &ItemId,
-    holder: &str,
-    adding: &[String],
+    enlargement: &Enlargement<'_>,
+    declared: impl FnOnce() -> RepositoryDeclarations,
 ) -> WorkOutcome
 {
-    let widened = ledger.Widen(item, holder.into(), adding);
+    let Enlargement { item, holder, adding } = enlargement;
+    let widened = ledger.Widen(item, holder.as_str().into(), adding, &declared().coverage);
 
     return WorkOutcome::Widen(widened);
+}
+
+/// A `widen` as [`Run`] received it, grouped so [`Widen_Outcome`] stays under this
+/// workspace's parameter-count ceiling once it also takes the repository's declarations.
+struct Enlargement<'a>
+{
+    /// Which item.
+    item: &'a ItemId,
+    /// Who is widening it.
+    holder: &'a String,
+    /// The paths to add.
+    adding: &'a [String],
 }
 
 /// The board, once it is known to satisfy its own invariants.
@@ -280,7 +299,7 @@ mod tests
     use super::Run;
     use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
     use crate::{ListingFilters, ListingScope, WorkCommand};
-    use nomos_ledger::{FileLedger, Territory};
+    use nomos_ledger::{FileLedger, RepositoryDeclarations};
     use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
 
     /// No process is ever actually launched by `list`, so any launcher would do; one that
@@ -310,7 +329,7 @@ mod tests
     {
         let mut ledger = Scratch_Ledger();
 
-        let outcome = Run(&WorkCommand::List { state: None, scope: ListingScope::Live, filters: ListingFilters::default() }, &mut ledger, &Unreached, Territory::Empty);
+        let outcome = Run(&WorkCommand::List { state: None, scope: ListingScope::Live, filters: ListingFilters::default() }, &mut ledger, &Unreached, RepositoryDeclarations::Undeclared);
 
         let super::WorkOutcome::List(Ok(view)) = outcome
         else

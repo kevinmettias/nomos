@@ -5,6 +5,7 @@ pub const fn nomos_ledger::ClaimRefusal::Layer(&self) -> Layer
 pub const fn nomos_ledger::FinishRefusal::Has_Judged_The_Work(&self) -> bool
 pub const fn nomos_ledger::ItemState::Is_Claimable(&self) -> bool
 pub const fn nomos_ledger::ItemState::Is_Finished(&self) -> bool
+pub const fn nomos_ledger::PredicateCoverage::Undeclared() -> Self
 pub const nomos_ledger::DOCUMENT_FILENAME: &str
 pub const nomos_ledger::GATE_WORKFLOW: &str
 pub const nomos_ledger::LINT_STEP: &str
@@ -12,11 +13,13 @@ pub const nomos_ledger::LOCK_FILENAME: &str
 pub const nomos_ledger::LOCK_STALE_AFTER: Duration
 pub const nomos_ledger::LOCK_WAIT_LIMIT: Duration
 pub const nomos_ledger::MAXIMUM_LEASE: Duration
+pub const nomos_ledger::PREDICATE_COVERAGE: &str
 pub const nomos_ledger::RULES_STEP: &str
 pub const nomos_ledger::SCHEMA_VERSION: u32
 pub enum nomos_ledger::AddRefusal
 pub enum nomos_ledger::Blocker
 pub enum nomos_ledger::ClaimRefusal
+pub enum nomos_ledger::CoverageRefusal
 pub enum nomos_ledger::FinishRefusal
 pub enum nomos_ledger::GateUnknown
 pub enum nomos_ledger::ItemKind
@@ -24,6 +27,7 @@ pub enum nomos_ledger::ItemOrigin
 pub enum nomos_ledger::ItemState
 pub enum nomos_ledger::LedgerError
 pub enum nomos_ledger::OptionalStepOutcome
+pub enum nomos_ledger::PredicateCoverage
 pub enum nomos_ledger::RefusalLayer
 pub enum nomos_ledger::ReleaseOutcome
 pub enum nomos_ledger::StepExecution
@@ -31,6 +35,7 @@ pub enum nomos_ledger::StepGuard
 pub enum variant nomos_ledger::AddRefusal::AlreadyPresent { item: ItemId, }
 pub enum variant nomos_ledger::AddRefusal::AmendmentMisspelled { identifier: String, declared: String, file: String, }
 pub enum variant nomos_ledger::AddRefusal::AmendmentNotPublished { identifier: String, }
+pub enum variant nomos_ledger::AddRefusal::Coverage { refusal: CoverageRefusal, }
 pub enum variant nomos_ledger::AddRefusal::LedgerUnusable { cause: String, }
 pub enum variant nomos_ledger::AddRefusal::RecordPublished { identifier: String, file: String, }
 pub enum variant nomos_ledger::AddRefusal::RecordReserved { identifier: String, item: ItemId, }
@@ -41,6 +46,7 @@ pub enum variant nomos_ledger::Blocker::ExternalResource { resource: String, }
 pub enum variant nomos_ledger::Blocker::NeedsSplit
 pub enum variant nomos_ledger::Blocker::Other { detail: String, }
 pub enum variant nomos_ledger::Blocker::TerritoryMismatch { detail: String, }
+pub enum variant nomos_ledger::ClaimRefusal::Coverage { item: ItemId, refusal: CoverageRefusal, }
 pub enum variant nomos_ledger::ClaimRefusal::DependencyDeclined { item: ItemId, dependency: ItemId, state: String, }
 pub enum variant nomos_ledger::ClaimRefusal::DependencyUnmet { item: ItemId, dependency: ItemId, state: String, }
 pub enum variant nomos_ledger::ClaimRefusal::HeldBy { holder: String, until: Timestamp, item: ItemId, }
@@ -51,6 +57,8 @@ pub enum variant nomos_ledger::ClaimRefusal::NoSuchItem { item: ItemId, }
 pub enum variant nomos_ledger::ClaimRefusal::NotClaimable { item: ItemId, state: String, }
 pub enum variant nomos_ledger::ClaimRefusal::StillHeld { item: ItemId, holder: String, until: Timestamp, }
 pub enum variant nomos_ledger::ClaimRefusal::UnknownIndependence { against: ItemId, reason: UnknownReason, }
+pub enum variant nomos_ledger::CoverageRefusal::Uncovered { record: String, reaching: Vec<String>, missing: Vec<String>, sufficient: Vec<String>, }
+pub enum variant nomos_ledger::CoverageRefusal::Unreadable { cause: String, }
 pub enum variant nomos_ledger::FinishRefusal::CouldNotRun { item: ItemId, cause: String, }
 pub enum variant nomos_ledger::FinishRefusal::GateFailed { item: ItemId, argv: Vec<String>, exit_code: i32, output_tail: String, }
 pub enum variant nomos_ledger::FinishRefusal::GateUndetermined { item: ItemId, cause: GateUnknown, }
@@ -83,6 +91,8 @@ pub enum variant nomos_ledger::LedgerError::Unreadable { cause: String, }
 pub enum variant nomos_ledger::LedgerError::Unrecognized { understood: u32, found: u32, cause: String, }
 pub enum variant nomos_ledger::OptionalStepOutcome::NotDeclared
 pub enum variant nomos_ledger::OptionalStepOutcome::Ran(GateOutcome)
+pub enum variant nomos_ledger::PredicateCoverage::Declared(Vec<CoverageRule>)
+pub enum variant nomos_ledger::PredicateCoverage::Unreadable { cause: String, }
 pub enum variant nomos_ledger::RefusalLayer::Dispatch
 pub enum variant nomos_ledger::RefusalLayer::Readiness
 pub enum variant nomos_ledger::ReleaseOutcome::Abandoned { reason: String, }
@@ -99,6 +109,7 @@ pub fn nomos_ledger::Board_In(directory: &Path) -> BoardFiles
 pub fn nomos_ledger::Claim::Has_Lapsed(&self, now: Timestamp) -> bool
 pub fn nomos_ledger::ClaimRefusal::Describe(&self) -> String
 pub fn nomos_ledger::Claim_Refusal( document: &LedgerDocument, item: &ItemId, now: Timestamp, ) -> Option<ClaimRefusal>
+pub fn nomos_ledger::CoverageRefusal::Describe(&self) -> String
 pub fn nomos_ledger::DeclineReason::As_Text(&self) -> &'a str
 pub fn nomos_ledger::DeclineReason::from(value: &'a Text) -> Self
 pub fn nomos_ledger::Derive_Step<'a>(workflow: impl Into<WorkflowText<'a>>, step: impl Into<StepName<'a>>) -> Result<Vec<String>, GateUnknown>
@@ -107,7 +118,7 @@ pub fn nomos_ledger::Eligible_Items(document: &LedgerDocument, now: Timestamp) -
 pub fn nomos_ledger::ExclusionLedger::Claim( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
 pub fn nomos_ledger::ExclusionLedger::Release( &mut self, item: &ItemId, holder: &str, outcome: ReleaseOutcome, ) -> Result<(), ClaimRefusal>
 pub fn nomos_ledger::ExclusionLedger::Renew(&mut self, item: &ItemId, holder: &str, lease: Duration) -> Result<Reservation, ClaimRefusal>
-pub fn nomos_ledger::FileLedger::Add( &mut self, item: &LedgerItem, holder: &str, published: &Territory, amending: &Territory, ) -> Result<(), AddRefusal>
+pub fn nomos_ledger::FileLedger::Add( &mut self, item: &LedgerItem, holder: &str, declared: &RepositoryDeclarations, amending: &Territory, ) -> Result<(), AddRefusal>
 pub fn nomos_ledger::FileLedger::At(path: impl Into<PathBuf>, filesystem: Files, clock: TimeSource, lock: Lock) -> Self
 pub fn nomos_ledger::FileLedger::Claim( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
 pub fn nomos_ledger::FileLedger::Decline<'a>( &mut self, item: &ItemId, holder: impl Into<Holder<'a>>, reason: impl Into<DeclineReason<'a>>, ) -> Result<(), ClaimRefusal>
@@ -120,7 +131,7 @@ pub fn nomos_ledger::FileLedger::Renew( &mut self, item: &ItemId, holder: &str, 
 pub fn nomos_ledger::FileLedger::Save(&self, document: &LedgerDocument) -> Result<(), LedgerError>
 pub fn nomos_ledger::FileLedger::Take_Over( &mut self, item: &ItemId, holder: &str, lease: Duration, ) -> Result<Reservation, ClaimRefusal>
 pub fn nomos_ledger::FileLedger::Validate_Current(&self) -> Result<(), LedgerError>
-pub fn nomos_ledger::FileLedger::Widen( &mut self, item: &ItemId, holder: Holder<'_>, adding: &[String], ) -> Result<Vec<String>, ClaimRefusal>
+pub fn nomos_ledger::FileLedger::Widen( &mut self, item: &ItemId, holder: Holder<'_>, adding: &[String], coverage: &PredicateCoverage, ) -> Result<Vec<String>, ClaimRefusal>
 pub fn nomos_ledger::FileLedger::With_Lock<Outcome>( &self, holder: &str, modify: impl FnOnce(&mut LedgerDocument) -> Result<Outcome, LedgerError>, ) -> Result<(Outcome, Option<StaleTakeover>), LedgerError>
 pub fn nomos_ledger::FinishRefusal::Describe(&self) -> String
 pub fn nomos_ledger::Finish_Item<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>( ledger: &mut FileLedger<Files, TimeSource, Lock>, launcher: &impl ProgramLauncher, finishing: &Finishing<'_>, working_directory: Option<&Path>, ) -> Result<VerificationRecord, FinishRefusal>
@@ -139,7 +150,11 @@ pub fn nomos_ledger::LedgerItem::Try_Replace_Lapsed_Claim(&mut self, replacement
 pub fn nomos_ledger::LedgerItem::Widen<'a>(&mut self, paths: &[String], holder: impl Into<Holder<'a>>, at: Timestamp) -> Vec<String>
 pub fn nomos_ledger::LocalGateRun::Steps(&self) -> &[(String, StepExecution)]
 pub fn nomos_ledger::LocalGateRun::Unexecuted(&self) -> Vec<&str>
+pub fn nomos_ledger::PredicateCoverage::From_Json(text: &str) -> Result<Self, String>
+pub fn nomos_ledger::PredicateCoverage::In_Repository(root: &Path, filesystem: &impl FileSystem) -> Self
+pub fn nomos_ledger::PredicateCoverage::Shortfall(&self, paths: &[String], predicate: Option<&VerificationPredicate>) -> Option<CoverageRefusal>
 pub fn nomos_ledger::ReleaseOutcome::Record_On(&self, item: &mut LedgerItem, holder: &str, at: Timestamp)
+pub fn nomos_ledger::RepositoryDeclarations::Undeclared() -> Self
 pub fn nomos_ledger::Run_Gate_Locally( steps: &[DerivedStep], host: &str, launcher: &impl ProgramLauncher, working_directory: Option<&Path>, ) -> LocalGateRun
 pub fn nomos_ledger::StepGuard::Admits(&self, host: &str) -> bool
 pub fn nomos_ledger::StepName::As_Text(&self) -> &'a str
@@ -165,6 +180,10 @@ pub struct field nomos_ledger::BoardFiles::lock: PathBuf
 pub struct field nomos_ledger::Claim::acquired_at: Timestamp
 pub struct field nomos_ledger::Claim::holder: String
 pub struct field nomos_ledger::Claim::lease_expires_at: Timestamp
+pub struct field nomos_ledger::CoverageRule::paths: Vec<String>
+pub struct field nomos_ledger::CoverageRule::record: String
+pub struct field nomos_ledger::CoverageRule::requires: Vec<String>
+pub struct field nomos_ledger::CoverageRule::satisfied_by: Vec<String>
 pub struct field nomos_ledger::Declination::declined_at: Timestamp
 pub struct field nomos_ledger::Declination::holder: String
 pub struct field nomos_ledger::DerivedStep::argv: Result<Vec<String>, GateUnknown>
@@ -193,6 +212,8 @@ pub struct field nomos_ledger::LedgerItem::verification: Option<VerificationPred
 pub struct field nomos_ledger::LedgerItem::verified: Option<VerificationRecord>
 pub struct field nomos_ledger::LedgerItem::why: String
 pub struct field nomos_ledger::LedgerItem::widened: Vec<Widening>
+pub struct field nomos_ledger::RepositoryDeclarations::coverage: PredicateCoverage
+pub struct field nomos_ledger::RepositoryDeclarations::published: Territory
 pub struct field nomos_ledger::Reservation::expires_at: Timestamp
 pub struct field nomos_ledger::Reservation::holder: String
 pub struct field nomos_ledger::Reservation::item: ItemId
@@ -209,6 +230,7 @@ pub struct field nomos_ledger::Widening::widened_at: Timestamp
 pub struct nomos_ledger::Abandonment
 pub struct nomos_ledger::BoardFiles
 pub struct nomos_ledger::Claim
+pub struct nomos_ledger::CoverageRule
 pub struct nomos_ledger::Declination
 pub struct nomos_ledger::DeclineReason<'a>(&'a str)
 pub struct nomos_ledger::DerivedStep
@@ -220,6 +242,7 @@ pub struct nomos_ledger::ItemId(String)
 pub struct nomos_ledger::LedgerDocument
 pub struct nomos_ledger::LedgerItem
 pub struct nomos_ledger::LocalGateRun
+pub struct nomos_ledger::RepositoryDeclarations
 pub struct nomos_ledger::Reservation
 pub struct nomos_ledger::StepName<'a>(&'a str)
 pub struct nomos_ledger::VerificationRecord

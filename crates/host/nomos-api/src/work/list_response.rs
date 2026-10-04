@@ -10,12 +10,12 @@ use std::path::Path;
 /// hands back a JSON-serializable response.
 ///
 /// `directory` is expected to hold `ledger.json` and `ledger.lock`, the same layout
-/// `crates/host/nomos-cli/src/work.rs`'s own composition root reads. The `published`
+/// `crates/host/nomos-cli/src/work.rs`'s own composition root reads. The `declared`
 /// closure `nomos_work_orchestration::Run` takes is asked for lazily and reached only by
-/// `WorkCommand::Add` (that crate's own doc), so `List` never reaches it: this handler runs
-/// through [`super::Run_Empty_Territory_Command`], which hands the empty, real `Territory`
-/// every non-`Add` verb wants rather than a closure that would panic if this crate's own
-/// scope ever widened past `List` without updating this comment.
+/// `WorkCommand::Add` and `WorkCommand::Widen` (that crate's own doc), so `List` never reaches
+/// it: this handler runs through [`super::Run_Empty_Territory_Command`], which hands the
+/// undeclared repository every other verb wants rather than a closure that would panic if this
+/// crate's own scope ever widened past `List` without updating this comment.
 #[must_use]
 pub fn Handle_Work_List(directory: &Path) -> ListResponse
 {

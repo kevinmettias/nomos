@@ -14,6 +14,7 @@ use crate::ItemId;
 use crate::ItemState;
 use crate::LedgerDocument;
 use crate::LedgerError;
+use crate::PredicateCoverage;
 
 /// What would refuse a claim on `item` as of `now`, if anything.
 ///
@@ -214,6 +215,9 @@ pub(super) struct Enlargement<'a>
     pub(super) holder: &'a str,
     /// The paths to add. Never a replacement territory.
     pub(super) adding: &'a [String],
+    /// What the repository declares a predicate must carry, which the paths actually added
+    /// are judged against. `OD-GATE-036`.
+    pub(super) coverage: &'a PredicateCoverage,
 }
 
 /// What a claim held by somebody else, or no live claim at all, does to a widening.
@@ -247,12 +251,18 @@ fn Held_Or_Unclaimed(target: &LedgerItem, holder: &str) -> Option<ClaimRefusal>
     return None;
 }
 
-/// The item as the widening would leave it, judged against the ground everybody else holds.
+/// The item as the widening would leave it, judged against what the repository declares and
+/// then against the ground everybody else holds.
 ///
 /// [`LedgerItem::Widen`] and not two statements at the call site, for the reason the verb
 /// itself calls it: a call site that grew the territory itself would be free to grow it and
-/// not record what it grew by. What `Widen` reports is discarded deliberately -- it answers
-/// what changed, and the question here is what the item would *hold*.
+/// not record what it grew by. What `Widen` reports is what the coverage judgment reads, since
+/// only the paths actually added are new to the item; the ground is judged on what the item
+/// would *hold*.
+///
+/// Coverage first. It is a fact about the item's own predicate that no lease lapsing changes,
+/// and an author told first that a peer holds the ground would wait for a release that still
+/// leaves the widening refused.
 fn Refused_By_The_Enlargement(
     document: &LedgerDocument,
     target: &LedgerItem,
@@ -262,7 +272,11 @@ fn Refused_By_The_Enlargement(
 {
     let mut enlarged = target.clone();
     let added = enlarged.Widen(requested.adding, requested.holder, now);
-    drop(added);
+
+    if let Some(refusal) = requested.coverage.Shortfall(&added, enlarged.verification.as_ref())
+    {
+        return Some(ClaimRefusal::Coverage { item: target.id.clone(), refusal });
+    }
 
     return ground::Held_Ground(document, &enlarged, now);
 }

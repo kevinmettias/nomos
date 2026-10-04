@@ -18,12 +18,26 @@ use crate::LedgerDocument;
 use crate::LedgerItem;
 use crate::ItemId;
 use crate::LedgerError;
+use crate::PredicateCoverage;
 use crate::Reservation;
 
 use super::file::Decide_Under_Lock;
 use super::refusal::{Decline_Refusal, Enlargement, Takeover_Refusal, Widen_Refusal};
 use super::reservation::{RecordDeclaration, Refuse_A_Spent_Record};
 use super::FileLedger;
+
+/// What [`Add_Item`] judges an item against besides the board, as one value.
+///
+/// Grouped for the reason [`RecordDeclaration`] is: the verb only forwards these, and loose
+/// they would push the body past this crate's own parameter-count ceiling.
+pub(super) struct AddDeclarations<'a>
+{
+    /// What the item declares about record identifiers, against what the repository has
+    /// published.
+    pub(super) records: RecordDeclaration<'a>,
+    /// What the repository declares a predicate must carry when an item reaches certain paths.
+    pub(super) coverage: &'a PredicateCoverage,
+}
 
 /// The body of [`FileLedger::Validate_Current`], which keeps the documentation and the signature.
 pub(super) fn Validate_Current<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
@@ -45,11 +59,16 @@ pub(super) fn Validate_Current<Files: FileSystem, TimeSource: Clock, Lock: Files
 }
 
 /// The body of [`FileLedger::Add`], which keeps the documentation and the signature.
+///
+/// The coverage judgment comes after the record checks and beside them: both are about what
+/// the item declares, and both are decided inside the lock with the write they guard, so the
+/// whole of what refuses an add is one place. It reads nothing on the board, so its position
+/// only orders which refusal an item failing several is told first.
 pub(super) fn Add_Item<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Files, TimeSource, Lock>,
     item: &LedgerItem,
     holder: &str,
-    declared: &RecordDeclaration,
+    declared: &AddDeclarations,
 ) -> Result<(), AddRefusal>
 {
     return Decide_Under_Lock(ledger, holder, |document, _now| {
@@ -63,7 +82,12 @@ pub(super) fn Add_Item<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLoc
             });
         }
 
-        Refuse_A_Spent_Record(item, document, declared)?;
+        Refuse_A_Spent_Record(item, document, &declared.records)?;
+
+        if let Some(refusal) = declared.coverage.Shortfall(&item.territory.paths, item.verification.as_ref())
+        {
+            return Err(AddRefusal::Coverage { refusal });
+        }
 
         document.items.push(item.clone());
 
@@ -85,15 +109,11 @@ pub(super) fn Add_Item<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLoc
 /// what was asked for. They differ whenever a path was already reserved.
 pub(super) fn Widen_Territory<Files: FileSystem, TimeSource: Clock, Lock: FilesystemLock>(
     ledger: &mut FileLedger<Files, TimeSource, Lock>,
-    item: &ItemId,
-    holder: Holder<'_>,
-    adding: &[String],
+    requested: &Enlargement<'_>,
 ) -> Result<Vec<String>, ClaimRefusal>
 {
-    let requested = Enlargement { item, holder: holder.As_Text(), adding };
-
-    return Decide_Under_Lock(ledger, holder.As_Text(), |document, now| {
-        if let Some(refusal) = Widen_Refusal(document, &requested, now)
+    return Decide_Under_Lock(ledger, requested.holder, |document, now| {
+        if let Some(refusal) = Widen_Refusal(document, requested, now)
         {
             return Err(refusal);
         }
@@ -101,13 +121,13 @@ pub(super) fn Widen_Territory<Files: FileSystem, TimeSource: Clock, Lock: Filesy
         let mut added = Vec::new();
         for candidate in &mut document.items
         {
-            if &candidate.id == item
+            if &candidate.id == requested.item
             {
                 // `LedgerItem::Widen` and not two statements here, for the reason
                 // `Decline` is one call: a call site that extended the territory itself
                 // would be free to extend it and not record what it extended it by, and
                 // the record is the half `OD-LEDGER-039` exists to keep.
-                added = candidate.Widen(adding, holder, now);
+                added = candidate.Widen(requested.adding, Holder::from(requested.holder), now);
             }
         }
 
@@ -268,7 +288,8 @@ mod tests
         ledger
             .Save(&LedgerDocument { schema_version: crate::SCHEMA_VERSION, items: vec![item.clone()] })
             .expect("a fresh item is a valid document");
-        let declared = RecordDeclaration { published: &Territory::Empty(), amending: &Territory::Empty() };
+        let records = RecordDeclaration { published: &Territory::Empty(), amending: &Territory::Empty() };
+        let declared = AddDeclarations { records, coverage: &PredicateCoverage::Undeclared() };
 
         let refusal = Add_Item(&mut ledger, &item, "agent-a", &declared)
             .expect_err("the identifier is already on the board");

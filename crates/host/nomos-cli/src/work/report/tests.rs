@@ -97,6 +97,52 @@ fn Test_Code_For_Refusal_Should_Map_Each_Refusal_To_Its_Own_Exit_Code()
     );
 }
 
+/// A predicate short of a coverage rule, as both `add` and `widen` carry it.
+fn Uncovered() -> CoverageRefusal
+{
+    return CoverageRefusal::Uncovered {
+        record: "OD-EXAMPLE-001".to_owned(),
+        reaching: vec!["crates/rules".to_owned()],
+        missing: vec!["nomos-cli".to_owned()],
+        sufficient: vec!["--workspace".to_owned()],
+    };
+}
+
+/// A coverage declaration the repository has and nobody could parse.
+fn Unreadable() -> CoverageRefusal
+{
+    return CoverageRefusal::Unreadable { cause: "nomos-predicate-coverage.json: expected `,`".to_owned() };
+}
+
+#[test]
+fn Test_Code_For_Coverage_Should_Make_A_Short_Predicate_The_Authors_And_A_Broken_Declaration_A_Persons()
+{
+    assert_eq!(Code_For_Coverage(&Uncovered()), ExitCode::ValidationError);
+    assert_eq!(Code_For_Coverage(&Unreadable()), ExitCode::Conflict);
+}
+
+/// `add` and `widen` give one coverage refusal one code, which is what "the same way" means to
+/// an agent branching on the number.
+#[test]
+fn Test_Add_And_Widen_Should_Report_A_Coverage_Refusal_With_One_Code()
+{
+    for refusal in [Uncovered(), Unreadable()]
+    {
+        let mut said = Vec::new();
+        let added = Code_For_Refusal(&AddRefusal::Coverage { refusal: refusal.clone() });
+        let widened = Report_Widen(
+            &ItemId::New("T-1"),
+            Err(ClaimRefusal::Coverage { item: ItemId::New("T-1"), refusal: refusal.clone() }),
+            &mut said,
+        );
+        let said = String::from_utf8(said).expect("Report_Widen writes only str into the buffer");
+
+        assert_eq!(added, widened, "{refusal:?}");
+        assert_eq!(added, Code_For_Coverage(&refusal), "{refusal:?}");
+        assert!(said.contains(&refusal.Describe()), "the widen refusal must carry the declaration's sentence: {said}");
+    }
+}
+
 /// An ending with no board behind it, for the cases that assert the line the verb
 /// always prints rather than the fanout that depends on one.
 fn Ended_Without_A_Board(item: &ItemId) -> Ended<'_>

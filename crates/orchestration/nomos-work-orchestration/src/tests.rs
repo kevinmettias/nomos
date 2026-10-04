@@ -15,7 +15,7 @@ use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceE
 use std::time::Duration;
 
 use nomos_ledger::{
-    ClaimRefusal, FileLedger, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, Territory,
+    ClaimRefusal, FileLedger, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, RepositoryDeclarations, Territory,
 };
 use nomos_platform_std::{FileLock, StdFileSystem, SystemClock};
 
@@ -114,7 +114,7 @@ fn Added_Item(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, ite
         },
         ledger,
         &Unreached,
-        Territory::Empty,
+        RepositoryDeclarations::Undeclared,
     );
 
     assert!(
@@ -134,14 +134,14 @@ fn Claimed_Outcome(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>
         lease: Duration::from_secs(LEASE_SECONDS),
     };
 
-    return Run(&WorkCommand::Claim(request), ledger, &Unreached, Territory::Empty);
+    return Run(&WorkCommand::Claim(request), ledger, &Unreached, RepositoryDeclarations::Undeclared);
 }
 
 /// `item`, read back off `ledger` through [`Run`]'s own `audit` verb -- the same read
 /// `nomos work audit` would perform.
 fn On_Board(ledger: &mut FileLedger<StdFileSystem, SystemClock, FileLock>, item: &ItemId) -> LedgerItem
 {
-    let audited = Run(&WorkCommand::Audit, ledger, &Unreached, Territory::Empty);
+    let audited = Run(&WorkCommand::Audit, ledger, &Unreached, RepositoryDeclarations::Undeclared);
     let WorkOutcome::Audit(Ok(view)) = audited
     else
     {
@@ -165,7 +165,7 @@ fn Test_List_Should_Read_An_Empty_Board()
         &WorkCommand::List { state: None, scope: ListingScope::Live, filters: ListingFilters::default() },
         &mut ledger,
         &Unreached,
-        Territory::Empty,
+        RepositoryDeclarations::Undeclared,
     );
 
     let WorkOutcome::List(Ok(view)) = outcome
@@ -189,11 +189,11 @@ fn Test_Add_Then_Show_Should_Find_What_Add_Wrote()
         },
         &mut ledger,
         &Unreached,
-        Territory::Empty,
+        RepositoryDeclarations::Undeclared,
     );
     assert!(matches!(added, WorkOutcome::Add(Ok(()))));
 
-    let shown = Run(&WorkCommand::Show { item: item.id.clone() }, &mut ledger, &Unreached, Territory::Empty);
+    let shown = Run(&WorkCommand::Show { item: item.id.clone() }, &mut ledger, &Unreached, RepositoryDeclarations::Undeclared);
     let WorkOutcome::Show(Ok(view)) = shown
     else
     {
@@ -229,7 +229,7 @@ fn Test_Validate_Should_Accept_A_Board_This_Run_Wrote()
     let mut ledger = Scratch_Ledger("validate");
     Added_Item(&mut ledger, Unclaimed_Item("T-THREE"));
 
-    let validated = Run(&WorkCommand::Validate, &mut ledger, &Unreached, Territory::Empty);
+    let validated = Run(&WorkCommand::Validate, &mut ledger, &Unreached, RepositoryDeclarations::Undeclared);
     assert!(matches!(validated, WorkOutcome::Validate(Ok(_))));
 }
 
@@ -247,11 +247,63 @@ fn Test_Decline_Should_End_An_Unclaimed_Item()
         }),
         &mut ledger,
         &Unreached,
-        Territory::Empty,
+        RepositoryDeclarations::Undeclared,
     );
     assert!(matches!(declined, WorkOutcome::Decline { declined: Ok(()), board: Some(_) }),
         "a decline that ended an item carries the board its fanout is read from");
 
     let found = On_Board(&mut ledger, &item.id);
     assert!(found.declined.is_some());
+}
+
+/// A repository declaring that anything under `scratch/declared` must be verified with a
+/// predicate carrying `nomos-cli`.
+fn Declaring_Coverage() -> RepositoryDeclarations
+{
+    let coverage = nomos_ledger::PredicateCoverage::From_Json(
+        r#"{ "rules": [ { "record": "OD-EXAMPLE-001", "paths": ["scratch/declared"], "requires": ["nomos-cli"] } ] }"#,
+    )
+    .expect("the fixture is the declaration's own shape");
+
+    return RepositoryDeclarations { published: Territory::Empty(), coverage };
+}
+
+/// `Run` hands what the repository declares to both verbs that judge an item against it, so the
+/// coverage rule `OD-GATE-036` decided reaches the ledger from `add` and from `widen` alike.
+#[test]
+fn Test_Run_Should_Hand_The_Declared_Coverage_To_Add_And_To_Widen()
+{
+    let mut ledger = Scratch_Ledger("coverage");
+    let mut reaching = Unclaimed_Item("T-REACHING");
+    reaching.territory = Territory::Of_Files(["scratch/declared/a.rs"]);
+    let elsewhere = Unclaimed_Item("T-ELSEWHERE");
+
+    let refused = Run(
+        &WorkCommand::Add { item: Box::new(reaching), amending: Territory::Empty() },
+        &mut ledger,
+        &Unreached,
+        Declaring_Coverage,
+    );
+    let added = Run(
+        &WorkCommand::Add { item: Box::new(elsewhere.clone()), amending: Territory::Empty() },
+        &mut ledger,
+        &Unreached,
+        Declaring_Coverage,
+    );
+    let claimed = Claimed_Outcome(&mut ledger, &elsewhere.id, "agent-a");
+    let widened = Run(
+        &WorkCommand::Widen {
+            item: elsewhere.id.clone(),
+            holder: "agent-a".to_owned(),
+            adding: vec!["scratch/declared/b.rs".to_owned()],
+        },
+        &mut ledger,
+        &Unreached,
+        Declaring_Coverage,
+    );
+
+    assert!(matches!(refused, WorkOutcome::Add(Err(nomos_ledger::AddRefusal::Coverage { .. }))), "an add reaching the declared path was not refused");
+    assert!(matches!(added, WorkOutcome::Add(Ok(()))), "an add reaching nothing declared was refused");
+    assert!(matches!(claimed, WorkOutcome::Claim(Ok(_))), "the item added above could not be claimed");
+    assert!(matches!(widened, WorkOutcome::Widen(Err(ClaimRefusal::Coverage { .. }))), "a widening into the declared path was not refused");
 }

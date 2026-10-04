@@ -1,0 +1,24 @@
+{
+  "rules": [
+    {
+      "record": "OD-GATE-036",
+      "paths": [
+        "crates/rules",
+        "crates/capabilities",
+        "crates/languages",
+        "crates/packages",
+        "crates/repository",
+        "crates/composer",
+        "crates/orchestration/nomos-check-orchestration",
+        "crates/orchestration/nomos-workspace-discovery"
+      ],
+      "requires": [
+        "nomos-cli",
+        "nomos-integration-tests"
+      ],
+      "satisfied_by": [
+        "--workspace"
+      ]
+    }
+  ]
+}

@@ -10,6 +10,7 @@ use crate::board::{
     FileLock, FixedClock, Item_Reserving_Files, ItemId, ItemState, ItemTerritory, Ledger_At, LedgerItem, NOW,
     StdFileSystem, Temporary_Directory, VerificationRecord,
 };
+use nomos_ledger::{PredicateCoverage, RepositoryDeclarations};
 
 /// An item the board cannot hold is the caller's to correct, not a broken store.
 ///
@@ -28,7 +29,7 @@ fn Test_An_Item_That_Would_Not_Validate_Should_Refuse_As_The_Authors_Mistake()
 
     let item = Item_Reserving_Files("T-1", &[]);
     let refused =
-        ledger.Add(&item, "agent-a", &ItemTerritory::Empty(), &ItemTerritory::Empty());
+        ledger.Add(&item, "agent-a", &RepositoryDeclarations::Undeclared(), &ItemTerritory::Empty());
 
     assert!(
         matches!(refused, Err(AddRefusal::WouldBeInvalid { .. })),
@@ -64,10 +65,14 @@ fn Reserving_Record(id: &ItemId, identifier: &str) -> LedgerItem
     return Item_Reserving_Files(id.As_Text(), &["crates/a/src/lib.rs", identifier]);
 }
 
-/// A published record, spelled as the file it actually is rather than as its identifier.
-fn Territory_Of_Published_Records(files: &[&str]) -> ItemTerritory
+/// A repository that has published these records, each spelled as the file it actually is
+/// rather than as its identifier, and that declares no coverage rule.
+fn Repository_Publishing(files: &[&str]) -> RepositoryDeclarations
 {
-    return ItemTerritory::Of_Files(files.iter().map(|file| return (*file).to_owned()));
+    return RepositoryDeclarations {
+        published: ItemTerritory::Of_Files(files.iter().map(|file| return (*file).to_owned())),
+        coverage: PredicateCoverage::Undeclared(),
+    };
 }
 
 /// A published identifier reserved without declaring an amendment is refused, by its file.
@@ -90,7 +95,7 @@ fn Test_A_Record_Identifier_Already_Published_Should_Be_Refused_By_Its_File()
     let refused = ledger.Add(
         &item,
         "agent-a",
-        &Territory_Of_Published_Records(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &Repository_Publishing(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
         &ItemTerritory::Empty(),
     );
 
@@ -120,7 +125,7 @@ fn Test_An_Unspent_Record_Identifier_Should_Still_Be_Accepted()
     let added = ledger.Add(
         &item,
         "agent-a",
-        &Territory_Of_Published_Records(&[
+        &Repository_Publishing(&[
             "docs/records/OD-LEDGER-006-a-reason-does-not-survive.md",
             // The ordinal is compared as a whole component, so this must not make `007`
             // look taken. `0071` is not `007`, and a prefix rule would say it is.
@@ -178,7 +183,7 @@ fn Test_A_Published_Record_Declared_As_An_Amendment_Should_Be_Accepted()
             ledger.Add(
                 &item,
                 "agent-a",
-                &Territory_Of_Published_Records(&[PUBLISHED_RECORD_FILE]),
+                &Repository_Publishing(&[PUBLISHED_RECORD_FILE]),
                 &Territory_Of_Amended_Records(&[spelled])
             ),
             Ok(()),
@@ -206,7 +211,7 @@ fn Test_An_Amendment_Should_Not_Exempt_A_Record_Another_Open_Item_Reserves()
     let refused = ledger.Add(
         &item,
         "agent-b",
-        &Territory_Of_Published_Records(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &Repository_Publishing(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
         &Territory_Of_Amended_Records(&["docs/records/OD-LEDGER-006"]),
     );
 
@@ -234,7 +239,7 @@ fn Test_A_Declared_Amendment_Of_An_Unpublished_Record_Should_Be_Refused()
     let refused = ledger.Add(
         &item,
         "agent-a",
-        &Territory_Of_Published_Records(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &Repository_Publishing(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
         &Territory_Of_Amended_Records(&["docs/records/OD-LEDGER-099"]),
     );
 
@@ -287,7 +292,7 @@ fn Amend_With_A_Slug_Nobody_Published(
         .Add(
             &item,
             "agent-a",
-            &Territory_Of_Published_Records(&[published]),
+            &Repository_Publishing(&[published]),
             &Territory_Of_Amended_Records(&["docs/records/OD-LEDGER-006-a-slug-nobody-published.md"]),
         )
         .expect_err("the misspelled amendment must not be accepted as an allocation");
@@ -330,7 +335,7 @@ fn Test_A_Declared_Amendment_Spelled_As_A_Bare_Identifier_Should_Still_Be_Accept
     let added = ledger.Add(
         &item,
         "agent-a",
-        &Territory_Of_Published_Records(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &Repository_Publishing(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
         &Territory_Of_Amended_Records(&["docs/records/OD-LEDGER-006"]),
     );
 
@@ -355,7 +360,7 @@ fn Test_A_Record_Identifier_Another_Open_Item_Reserves_Should_Be_Refused_By_Its_
     // who reserved the file they were about to write has taken the identifier.
     let item = Reserving_Record(&ItemId::New("T-2"), "docs/records/OD-LEDGER-020-the-same-number.md");
     let refused =
-        ledger.Add(&item, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty());
+        ledger.Add(&item, "agent-b", &RepositoryDeclarations::Undeclared(), &ItemTerritory::Empty());
 
     let Err(AddRefusal::RecordReserved { identifier, item }) = refused
     else
@@ -381,11 +386,11 @@ fn Test_A_Published_Identifier_And_A_Reserved_One_Should_Be_Different_Refusals()
     let holding = Reserving_Record(&ItemId::New("T-2"), "docs/records/OD-LEDGER-020");
     let publishing = Reserving_Record(&ItemId::New("T-3"), "docs/records/OD-LEDGER-006");
     let reserved =
-        ledger.Add(&holding, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty());
+        ledger.Add(&holding, "agent-b", &RepositoryDeclarations::Undeclared(), &ItemTerritory::Empty());
     let published = ledger.Add(
         &publishing,
         "agent-b",
-        &Territory_Of_Published_Records(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
+        &Repository_Publishing(&["docs/records/OD-LEDGER-006-a-reason-does-not-survive.md"]),
         &ItemTerritory::Empty(),
     );
 
@@ -435,7 +440,7 @@ fn Test_A_Closed_Items_Record_Reservation_Should_Not_Reserve_Anything()
 
         let item = Reserving_Record(&ItemId::New("T-2"), RESERVED_RECORD);
         assert_eq!(
-            ledger.Add(&item, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty()),
+            ledger.Add(&item, "agent-b", &RepositoryDeclarations::Undeclared(), &ItemTerritory::Empty()),
             Ok(()),
             "a {described} item's reservation outlived it, so the number is claimed forever"
         );
@@ -488,7 +493,7 @@ fn Test_Ordinary_Shared_Territory_Should_Still_Be_Accepted()
 
     let item = Item_Reserving_Files("T-2", &["crates/a/src/lib.rs"]);
     let added =
-        ledger.Add(&item, "agent-b", &ItemTerritory::Empty(), &ItemTerritory::Empty());
+        ledger.Add(&item, "agent-b", &RepositoryDeclarations::Undeclared(), &ItemTerritory::Empty());
 
     assert_eq!(
         added,

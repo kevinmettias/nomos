@@ -10,7 +10,10 @@
 //! these four concrete types, so a second adapter can call it with its own choices without
 //! also taking on how this module renders an answer. `OD-HOST-001`.
 
-use nomos_ledger::{AddRefusal, Board_In, FileLedger, ItemId, LedgerDocument, LedgerError, LedgerItem, Territory};
+use nomos_ledger::{
+    AddRefusal, Board_In, FileLedger, ItemId, LedgerDocument, LedgerError, LedgerItem, PredicateCoverage,
+    RepositoryDeclarations, Territory,
+};
 use nomos_platform::{Clock, FileSystem};
 use nomos_composer_std::{CLOCK, FILE_SYSTEM, LAUNCHER, Lock_At};
 use nomos_work_orchestration::{BoardView, ShowView, WorkOutcome};
@@ -56,10 +59,27 @@ pub fn Run(
         command,
         &mut ledger,
         &LAUNCHER,
-        || Published_Records(directory, &FILE_SYSTEM),
+        || Repository_Declarations(directory, &FILE_SYSTEM),
     );
 
     return Render_Outcome(command, outcome, directory, output);
+}
+
+/// What this repository declares, for the two verbs that judge an item against it: the
+/// records it has published, and the coverage rules in its root's
+/// [`nomos_ledger::PREDICATE_COVERAGE`].
+///
+/// Both are read here, beside each other, because `OD-GATE-036` puts the coverage
+/// declaration where `add` already learns which records are published. The ledger lives in
+/// `work/`, so the repository is its parent, and a `work/` at the root of nothing declares
+/// neither.
+fn Repository_Declarations(directory: &Path, filesystem: &impl FileSystem) -> RepositoryDeclarations
+{
+    let coverage = directory.parent().map_or_else(PredicateCoverage::Undeclared, |root| {
+        return PredicateCoverage::In_Repository(root, filesystem);
+    });
+
+    return RepositoryDeclarations { published: Published_Records(directory, filesystem), coverage };
 }
 
 /// Every record this repository has already published, as repository-relative paths.
@@ -75,8 +95,9 @@ pub fn Run(
 /// [`FileSystem::Read_Directory`], so a generic dispatch function could now reach this
 /// through the port; this stays a composition-root function regardless, for the reason the
 /// paragraph above already gives — the input this hands across `nomos_work_orchestration::
-/// Run`'s `published` parameter is a repository's own convention about where records live,
-/// not a ledger-agnostic filesystem concern the orchestration crate should own.
+/// Run`'s `declared` parameter, as its `published` half, is a repository's own convention
+/// about where records live, not a ledger-agnostic filesystem concern the orchestration crate
+/// should own.
 ///
 /// An unreadable or absent directory yields nothing rather than refusing. That is the one
 /// judgement here worth stating, because this repository's usual rule is the opposite: a
@@ -134,7 +155,7 @@ const RECORD_DIRECTORY: &str = "docs/records";
 #[cfg(test)]
 mod published_records_tests
 {
-    use super::{Published_Records, RECORD_DIRECTORY};
+    use super::{Published_Records, RECORD_DIRECTORY, Repository_Declarations};
     use nomos_ledger::Territory;
     use nomos_composer_std::FILE_SYSTEM;
     use std::path::PathBuf;
@@ -159,6 +180,25 @@ mod published_records_tests
                 format!("{RECORD_DIRECTORY}/OD-EXAMPLE-001.md"),
                 format!("{RECORD_DIRECTORY}/OD-EXAMPLE-002.md"),
             ])
+        );
+    }
+
+    #[test]
+    fn Test_Repository_Declarations_Should_Read_The_Coverage_Declaration_At_The_Boards_Parent()
+    {
+        let root = Fresh_Root("nomos-cli-work-repository-declarations");
+        std::fs::write(root.join(nomos_ledger::PREDICATE_COVERAGE), "{ \"rules\": [] }")
+            .expect("the test root is a scratch path outside the repository, so the declaration is writable");
+        let declared = Repository_Declarations(&root.join("work"), &FILE_SYSTEM);
+        std::fs::write(root.join(nomos_ledger::PREDICATE_COVERAGE), "{ \"rules\": [")
+            .expect("the test root is a scratch path outside the repository, so the declaration is writable");
+        let broken = Repository_Declarations(&root.join("work"), &FILE_SYSTEM);
+
+        let _ignored = std::fs::remove_dir_all(&root);
+        assert_eq!(declared.coverage, nomos_ledger::PredicateCoverage::Undeclared());
+        assert!(
+            matches!(broken.coverage, nomos_ledger::PredicateCoverage::Unreadable { .. }),
+            "a declaration that does not parse must not read as declaring nothing: {broken:?}"
         );
     }
 

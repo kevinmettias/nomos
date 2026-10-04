@@ -213,6 +213,23 @@ value is refused the same way an unrecognized JSON key already is, rather than s
 ignored. `OD-LEDGER-024` records why these five and not a free-form tag list, and how every
 item already on the board was given both when the fields were added.
 
+**A change to the composed set names the packages that enumerate it.** A repository may declare
+rules in `nomos-predicate-coverage.json` at its root, each naming the territory paths that trigger
+it, the arguments a predicate must then carry, and any argument that satisfies it on its own.
+`add` refuses an item whose territory reaches a declared path and whose predicate carries neither
+every required argument nor a satisfying one, naming the missing arguments and the record behind
+the rule; `widen` refuses a widening into such a path the same way, because a predicate cannot be
+changed once its item exists. Both exit 1, since the predicate is the author's to correct, and a
+declaration that does not parse refuses every `add`, and every `widen` that adds a path, with 4
+until a person repairs it.
+The ledger compares argument tokens and interprets no build tool, and a repository with no such
+file is unaffected. This repository declares one rule: an item reaching the crates where the
+composed rules, providers, policies and walk are defined names `nomos-cli` and
+`nomos-integration-tests`, or `--workspace`. The file is the authority on which paths, and
+`tests/contract/tests/predicate_coverage.rs` holds that each still exists and that each package is
+a workspace member. `OD-GATE-036` records why these two packages, and why at authoring rather than
+at `finish`.
+
 **A claim is a lease, and a lease lapses.** An agent that dies holding one stops excluding
 everybody else the moment the lease runs out, which is what stops one crashed session holding
 territory until somebody notices. `list` calls that item `lapsed` rather than `claimed`, because

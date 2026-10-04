@@ -12,6 +12,7 @@ pub use layer::Layer;
 
 use std::time::Duration;
 use nomos_model::UnknownReason;
+use crate::CoverageRefusal;
 use crate::ItemId;
 use nomos_platform::Timestamp;
 /// Why a claim was refused.
@@ -138,6 +139,20 @@ pub enum Refusal
         /// The declined dependency's state, bounded — see [`crate::ItemState::Describe`].
         state: String,
     },
+    /// A widening would reach a path the repository declares, and the item's predicate does
+    /// not carry what that declaration requires — or the declaration could not be read.
+    ///
+    /// The refusal `work add` gives the same item, carried here so `widen` refuses "the same
+    /// way", as `OD-GATE-036` puts it, with one rendering for both. Not retryable: a predicate
+    /// cannot be edited once its item exists, so neither waiting nor asking again changes the
+    /// answer, and the sentence names the item-shaped remedy.
+    Coverage
+    {
+        /// The item whose widening was refused.
+        item: ItemId,
+        /// What the declaration found short, or why it could not be read.
+        refusal: CoverageRefusal,
+    },
     /// No such item.
     NoSuchItem
     {
@@ -214,6 +229,7 @@ impl Refusal
                 dependency,
                 state,
             } => message::Dependency_Declined(item, dependency, state),
+            Self::Coverage { item, refusal } => message::Coverage(item, refusal),
             Self::NoSuchItem { item } => message::No_Such_Item(item),
             Self::LedgerUnusable { cause } => message::Ledger_Unusable(cause),
         };
@@ -256,9 +272,15 @@ impl Refusal
             // dependency, is not the kind of thing that can be claimed right now, or is not on
             // the board at all, and every one of those stays true regardless of who is looking
             // or when they look.
+            //
+            // A widening its item's predicate does not cover belongs here too: what the item
+            // was authored with, against what the repository declares, true for whoever asks
+            // and whenever. So does a declaration nobody could read, which stays unreadable
+            // until the repository's own file changes and never because a lease lapsed.
             Self::NotClaimable { .. }
             | Self::DependencyUnmet { .. }
             | Self::DependencyDeclined { .. }
+            | Self::Coverage { .. }
             | Self::NoSuchItem { .. } => Layer::Readiness,
             // Coordination's own answer. Each of these is a fact about *this* attempt: a
             // holder whose lease has not run out yet, a lease request coordination's own
@@ -364,6 +386,28 @@ mod self_tests
 
         assert_eq!(held_by.Layer(), Layer::Dispatch);
         assert_eq!(not_claimable.Layer(), Layer::Readiness);
+    }
+
+    #[test]
+    fn Test_Layer_Should_Put_Both_Coverage_Refusals_In_Readiness_And_Neither_Retryable()
+    {
+        let uncovered = Refusal::Coverage {
+            item: ItemId::New("T-1"),
+            refusal: CoverageRefusal::Uncovered {
+                record: "OD-EXAMPLE-001".to_owned(),
+                reaching: vec!["crates/rules".to_owned()],
+                missing: vec!["nomos-cli".to_owned()],
+                sufficient: Vec::new(),
+            },
+        };
+        let unreadable = Refusal::Coverage {
+            item: ItemId::New("T-1"),
+            refusal: CoverageRefusal::Unreadable { cause: "expected `,`".to_owned() },
+        };
+
+        assert_eq!(uncovered.Layer(), Layer::Readiness);
+        assert_eq!(unreadable.Layer(), Layer::Readiness);
+        assert!(!uncovered.Is_Retryable() && !unreadable.Is_Retryable());
     }
 
     #[test]

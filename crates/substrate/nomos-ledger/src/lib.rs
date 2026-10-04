@@ -54,6 +54,7 @@
 #![forbid(unsafe_code)]
 
 mod claim;
+mod coverage;
 #[path = "exclusion_ledger.rs"]
 mod exclusion;
 mod finish;
@@ -67,6 +68,7 @@ mod store;
 mod verification;
 
 pub use claim::{Claim, ClaimRefusal, RefusalLayer};
+pub use coverage::{CoverageRefusal, CoverageRule, PREDICATE_COVERAGE, PredicateCoverage};
 pub use exclusion::{Blocker, ExclusionLedger, Reservation};
 pub use finish::{Abandonment, Declination, Finish_Item, FinishRefusal, Finishing, Is_Labelled_Blocking};
 pub use finish::release_outcome::ReleaseOutcome;
@@ -74,6 +76,6 @@ pub use gate::{Derive_Step, Derive_Steps, DerivedStep, GATE_WORKFLOW, GateOutcom
 pub use item::{DEFAULT_LEASE, DeclineReason, Holder, ItemId, ItemKind, ItemOrigin, ItemState, LedgerItem, MAXIMUM_LEASE, Widening};
 pub use ledger_error::LedgerError;
 pub use nomos_scope_verification::{Normalize_Path, Territory};
-pub use store::{AddRefusal, Claim_Refusal, Eligible_Items, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, SCHEMA_VERSION, Validate_Document};
+pub use store::{AddRefusal, Claim_Refusal, Eligible_Items, FileLedger, LOCK_STALE_AFTER, LOCK_WAIT_LIMIT, LedgerDocument, RepositoryDeclarations, SCHEMA_VERSION, Validate_Document};
 pub use store::{BoardFiles, Board_In, DOCUMENT_FILENAME, LOCK_FILENAME};
 pub use verification::{VerificationPredicate, VerificationRecord};

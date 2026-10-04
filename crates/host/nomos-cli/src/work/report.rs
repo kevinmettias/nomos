@@ -8,7 +8,7 @@
 // check-test-coverage's stem-based companion attribution, not a design choice.
 
 use nomos_ledger::{
-    AddRefusal, Claim_Refusal, ClaimRefusal, FinishRefusal, ItemId, ItemState, LedgerDocument,
+    AddRefusal, Claim_Refusal, ClaimRefusal, CoverageRefusal, FinishRefusal, ItemId, ItemState, LedgerDocument,
     LedgerError, LedgerItem, RefusalLayer, SCHEMA_VERSION, Territory,
 };
 use nomos_platform::Timestamp;
@@ -75,7 +75,34 @@ pub(super) const fn Code_For_Refusal(refusal: &AddRefusal) -> ExitCode
         // agent looking for a holder that does not exist. The declaration is the caller's own
         // to correct, and the refusal already carries the spelling to correct it with.
         AddRefusal::AmendmentMisspelled { .. } => ExitCode::ValidationError,
+        AddRefusal::Coverage { refusal } => Code_For_Coverage(refusal),
         AddRefusal::LedgerUnusable { .. } => ExitCode::StoreError,
+    };
+}
+
+/// The exit code a refusal under the repository's coverage declaration reports, at `add` and
+/// at `widen` alike.
+///
+/// One function for both verbs, because `OD-GATE-036` has `widen` refuse "the same way" `add`
+/// does, and an agent told 1 by one verb and 4 by the other about the same predicate would
+/// conclude two different things happened.
+///
+/// A predicate short of what the declaration requires joins the item's other mistakes of its
+/// own declaration, at [`ExitCode::ValidationError`]: nothing is contended, so
+/// [`ExitCode::Conflict`] would send an agent looking for a holder that does not exist, and
+/// nothing is retryable, so [`ExitCode::ClaimUnavailable`] would send it to wait for one. The
+/// refusal names the arguments to add, which is the whole of the remedy.
+///
+/// A declaration that could not be read is [`ExitCode::Conflict`]. It is not the caller's item
+/// to correct, so not 1; the ledger itself is usable, and `list`, `claim` and `finish` still
+/// work, so not [`ExitCode::StoreError`], whose meaning is that nobody can use the board. A
+/// person has to repair the repository's file, which is what 4 says.
+pub(super) const fn Code_For_Coverage(refusal: &CoverageRefusal) -> ExitCode
+{
+    return match refusal
+    {
+        CoverageRefusal::Uncovered { .. } => ExitCode::ValidationError,
+        CoverageRefusal::Unreadable { .. } => ExitCode::Conflict,
     };
 }
 
@@ -424,6 +451,9 @@ const fn Code_For(refusal: &ClaimRefusal) -> ExitCode
     return match refusal
     {
         ClaimRefusal::LedgerUnusable { .. } => ExitCode::StoreError,
+        // A widening its item's predicate does not cover answers what an `add` of the same item
+        // would, so the code is the add's and not the claim family's.
+        ClaimRefusal::Coverage { refusal, .. } => Code_For_Coverage(refusal),
         other =>
         {
             if other.Is_Retryable()

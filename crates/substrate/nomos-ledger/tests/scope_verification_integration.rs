@@ -19,7 +19,8 @@
 use nomos_platform::{DeterminismStrength, ReproducibilityScope, Strategy, TraceEquivalence};
 use nomos_ledger::{
     ExclusionLedger, FileLedger, Finish_Item, Finishing, FinishRefusal, ItemId, ItemKind,
-    ItemOrigin, ItemState, LedgerDocument, LedgerItem, ClaimRefusal, AddRefusal, SCHEMA_VERSION,
+    ItemOrigin, ItemState, LedgerDocument, LedgerItem, ClaimRefusal, AddRefusal, RepositoryDeclarations,
+    SCHEMA_VERSION,
 };
 use nomos_platform::{Clock, Command, ExitOutcome, ProgramLauncher, ProgramOutput, Timestamp};
 use nomos_platform_std::{FileLock, StdFileSystem};
@@ -169,7 +170,7 @@ fn Board_Over<'clock>(
     let mut ledger = Ledger_At(&directory, clock);
     let item = Item_Reserving("SEAM-1", territory, Some(predicate.clone()));
     ledger
-        .Add(&item, "agent-a", &Territory::Empty(), &Territory::Empty())
+        .Add(&item, "agent-a", &RepositoryDeclarations::Undeclared(), &Territory::Empty())
         .expect("a fresh item over a real territory must be accepted");
 
     return SeamBoard { directory, ledger, predicate };
@@ -324,13 +325,13 @@ fn Test_An_Unknown_Intersection_Refuses_A_Claim_Rather_Than_Granting_It()
     // fail-closed guard that still has to hold if a hand-edited document ever carries one.
     let contesting = Item_Reserving("SEAM-3B", Territory::Empty().With_Pattern("src/**"), None);
     ledger
-        .Add(&holder, "agent-a", &Territory::Empty(), &Territory::Empty())
+        .Add(&holder, "agent-a", &RepositoryDeclarations::Undeclared(), &Territory::Empty())
         .expect("the first item is a fresh, valid identifier");
     ledger
         .Claim(&ItemId::New("SEAM-3A"), "agent-a", LEASE)
         .expect("the first item's own territory is uncontended");
     let refusal = ledger
-        .Add(&contesting, "agent-b", &Territory::Empty(), &Territory::Empty())
+        .Add(&contesting, "agent-b", &RepositoryDeclarations::Undeclared(), &Territory::Empty())
         .expect_err("an item carrying an unexpanded pattern violates Validate_Document's own guard");
     assert!(matches!(refusal, AddRefusal::WouldBeInvalid { .. }), "got {refusal:?}");
 

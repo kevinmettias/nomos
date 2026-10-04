@@ -195,7 +195,7 @@ fn Test_Add_Should_Put_A_New_Item_On_The_Board()
     let item = Workable_Item("ADD-1");
 
     ledger
-        .Add(&item, "agent-a", &Territory::Empty(), &Territory::Empty())
+        .Add(&item, "agent-a", &RepositoryDeclarations::Undeclared(), &Territory::Empty())
         .expect("a fresh identifier over an empty board must be accepted");
 
     let reloaded = ledger.Load().expect("the add must have been written");

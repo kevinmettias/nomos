@@ -7,6 +7,7 @@
 
 use std::time::Duration;
 use nomos_model::UnknownReason;
+use crate::CoverageRefusal;
 use crate::ItemId;
 use nomos_platform::Timestamp;
 
@@ -45,6 +46,22 @@ pub(super) fn Not_Claimable(item: &ItemId, state: &str) -> String
 pub(super) fn Dependency_Unmet(item: &ItemId, dependency: &ItemId, state: &str) -> String
 {
     return format!("{item} depends on {dependency}, which is {state}");
+}
+
+/// A widening its item's predicate does not cover, and the remedy that is not "widen again".
+///
+/// The declaration's own sentence, which `work add` prints too, then what is particular to a
+/// widening: the predicate it would have to change is fixed once its item exists.
+pub(super) fn Coverage(item: &ItemId, refusal: &CoverageRefusal) -> String
+{
+    return match refusal
+    {
+        CoverageRefusal::Uncovered { .. } => format!(
+            "{}. A predicate cannot be changed once its item exists, so {item} cannot widen there;              the work needs an item authored with a predicate that carries them",
+            refusal.Describe()
+        ),
+        CoverageRefusal::Unreadable { .. } => refusal.Describe(),
+    };
 }
 
 /// An identifier that matched nothing on the board.
@@ -157,6 +174,24 @@ mod tests
         assert!(said.contains("T-1"), "{said}");
         assert!(said.contains("T-2"), "{said}");
         assert!(said.contains("Ready"), "{said}");
+    }
+
+    #[test]
+    fn Test_Coverage_Should_Carry_The_Declarations_Sentence_And_Name_The_Item_That_Cannot_Widen()
+    {
+        let uncovered = CoverageRefusal::Uncovered {
+            record: "OD-EXAMPLE-001".to_owned(),
+            reaching: vec!["crates/rules/a.rs".to_owned()],
+            missing: vec!["nomos-cli".to_owned()],
+            sufficient: vec!["--workspace".to_owned()],
+        };
+        let unreadable = CoverageRefusal::Unreadable { cause: "expected `,`".to_owned() };
+
+        let said = Coverage(&ItemId::New("T-1"), &uncovered);
+
+        assert!(said.starts_with(&uncovered.Describe()), "{said}");
+        assert!(said.contains("T-1 cannot widen there"), "{said}");
+        assert_eq!(Coverage(&ItemId::New("T-1"), &unreadable), unreadable.Describe());
     }
 
     #[test]

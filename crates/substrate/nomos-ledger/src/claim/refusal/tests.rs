@@ -8,13 +8,14 @@ use std::time::Duration;
 const NOW_SECONDS: i64 = 2_000;
 
 /// How many variants `Refusal` declares — what `All()` must produce, one of each.
-const DECLARED_REFUSAL_COUNT: usize = 10;
+const DECLARED_REFUSAL_COUNT: usize = 11;
 
 /// The name of every variant `Refusal` declares, sorted.
 ///
 /// Sorted because the assertion that reads it sorts what it saw: the two are compared name
 /// for name rather than in whatever order `All()` happens to build them in.
 const DECLARED_VARIANTS: [&str; DECLARED_REFUSAL_COUNT] = [
+    "Coverage",
     "DependencyDeclined",
     "DependencyUnmet",
     "HeldBy",
@@ -31,7 +32,7 @@ const DECLARED_VARIANTS: [&str; DECLARED_REFUSAL_COUNT] = [
 const DISPATCH_REFUSAL_COUNT: usize = 6;
 
 /// How many refusals the plan answers, and so the size of `Readiness_Universe`.
-const READINESS_REFUSAL_COUNT: usize = 4;
+const READINESS_REFUSAL_COUNT: usize = 5;
 
 /// A lease request far past any real ceiling, for the refusal case.
 const ABSURDLY_LONG_LEASE_SECONDS: u64 = 9_999_999;
@@ -57,7 +58,7 @@ fn All() -> [Refusal; DECLARED_REFUSAL_COUNT]
     all.extend(Readiness_Universe());
 
     return all.try_into().unwrap_or_else(|found: Vec<Refusal>| {
-        panic!("All() must produce exactly 10 refusals, found {}", found.len());
+        panic!("All() must produce exactly 11 refusals, found {}", found.len());
     });
 }
 
@@ -95,11 +96,16 @@ fn Dispatch_Universe() -> [Refusal; DISPATCH_REFUSAL_COUNT]
     ];
 }
 
-/// The four refusals the plan answers: whether a dependency is unfinished or declined,
-/// whether the item is claimable, whether it exists at all.
+/// The five refusals the plan answers: whether a dependency is unfinished or declined,
+/// whether the item is claimable, whether it exists at all, and whether its predicate covers
+/// what a widening would reach.
 fn Readiness_Universe() -> [Refusal; READINESS_REFUSAL_COUNT]
 {
     return [
+        Refusal::Coverage {
+            item: ItemId::New("T-11"),
+            refusal: crate::CoverageRefusal::Unreadable { cause: "expected `,`".to_owned() },
+        },
         Refusal::NotClaimable {
             item: ItemId::New("T-5"),
             state: "Done".to_owned(),
@@ -163,14 +169,14 @@ fn Test_No_Refusal_Should_Answer_Both_Layers()
     }
 }
 
-/// `ALL` is a hand-written universe. The match below has no wildcard, so an eleventh
+/// `ALL` is a hand-written universe. The match below has no wildcard, so a twelfth
 /// variant arriving stops the build here, beside the list it has to be added to —
 /// `OD-COMPLETENESS-001`'s reasoning applied to this enum's own coverage of itself.
 ///
 /// The exhaustive match alone only proves that every refusal `All()` happens to produce is
 /// *some* declared variant — it says nothing about which ones. `Dispatch_Universe` or
 /// `Readiness_Universe` could be edited into two entries of one variant and none of another,
-/// and ten refusals would still satisfy every arm here. So each arm answers with its own
+/// and eleven refusals would still satisfy every arm here. So each arm answers with its own
 /// variant's name, and the assertion below is the other half: the names `All()` produced are
 /// exactly the declared ones, so every variant is present and none has crowded another out.
 #[test]
@@ -195,7 +201,7 @@ fn Names_Seen_In_All() -> Vec<&'static str>
 
 /// The name of the variant `refusal` is.
 ///
-/// The match has no wildcard, so an eleventh variant arriving stops the build here, beside
+/// The match has no wildcard, so a twelfth variant arriving stops the build here, beside
 /// the list it has to be added to. An arm can only be wrong by naming a variant the declared
 /// list does not carry, which the assertion above rejects — there is no separate flag for it
 /// to have been recorded in the wrong one of.
@@ -212,6 +218,7 @@ fn Name_Of(refusal: &Refusal) -> &'static str
         Refusal::DependencyUnmet { .. } => "DependencyUnmet",
         Refusal::DependencyDeclined { .. } => "DependencyDeclined",
         Refusal::NoSuchItem { .. } => "NoSuchItem",
+        Refusal::Coverage { .. } => "Coverage",
         Refusal::LedgerUnusable { .. } => "LedgerUnusable",
     };
 }

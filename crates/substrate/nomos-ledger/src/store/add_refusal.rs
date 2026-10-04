@@ -1,5 +1,6 @@
 //! Every way adding an item is refused before it reaches the board.
 
+use crate::CoverageRefusal;
 use crate::LedgerError;
 use crate::ItemId;
 /// Why an item could not be put on the board.
@@ -124,6 +125,22 @@ pub enum AddRefusal
         /// The file this repository actually published that identifier as.
         file: String,
     },
+    /// The item's territory reaches a path the repository declares, and its predicate does not
+    /// carry what that declaration requires — or the declaration could not be read.
+    ///
+    /// Decided here, at authoring, rather than when the item is finished, which is
+    /// `OD-GATE-036`'s reason for the rule's place: the author sees what the declared arguments
+    /// cost while choosing the item's timeout, and a step added to `finish` would run under a
+    /// bound chosen without it in view. The refusal is the declaration's own, carried rather
+    /// than restated, so `widen` refuses the same item in the same words.
+    ///
+    /// Nothing is contended and nothing is wrong with the board. What is wrong is the item's
+    /// own predicate, which the author corrects by adding the arguments it names.
+    Coverage
+    {
+        /// What the declaration found short, or why it could not be read.
+        refusal: CoverageRefusal,
+    },
     /// The item would leave the board violating its own invariants.
     ///
     /// The commonest of these is an item that reserves nothing, which `AGENTS.md` states as a
@@ -193,6 +210,7 @@ impl AddRefusal
                 ),
                 declared = declared, identifier = identifier, file = file,
             ),
+            Self::Coverage { refusal } => refusal.Describe(),
             Self::WouldBeInvalid { violations } => format!("ledger is invalid:\n  {}", violations.join("\n  ")),
             Self::LedgerUnusable { cause } => cause.clone(),
         };
@@ -239,5 +257,20 @@ mod tests
 
         assert!(sentence.contains("od-ledger-999"));
         assert!(sentence.contains("--amends"), "the amendment remedy must be spelled out: {sentence}");
+    }
+
+    #[test]
+    fn Test_Describe_Should_Say_What_The_Coverage_Declaration_Says()
+    {
+        let refusal = CoverageRefusal::Uncovered {
+            record: "OD-EXAMPLE-001".to_owned(),
+            reaching: vec!["crates/rules".to_owned()],
+            missing: vec!["nomos-cli".to_owned()],
+            sufficient: Vec::new(),
+        };
+
+        let sentence = AddRefusal::Coverage { refusal: refusal.clone() }.Describe();
+
+        assert_eq!(sentence, refusal.Describe());
     }
 }
