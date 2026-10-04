@@ -96,12 +96,12 @@
 //! `Check_Naming_Convention`'s `Resolve_Case(facts, None, "function", ...)` call reads the
 //! repository-wide row rather than a language-scoped one), the same 13 real names resolve
 //! clean: **0** findings. The hypothesis holds, exactly as predicted, with no residual
-//! findings and nothing further to fix in this rule for this fixture. The README-citation
-//! wording this rule's `Finding::summary` still hardcodes is real (seen verbatim in the
-//! `standards.json`-deleted run above) but is provably inert once a repository declares its
-//! own convention -- it did not fire once in the fixture's own committed, correctly-configured
-//! state, so this file makes no claim needing it fixed; flagged in this session's own report
-//! as a latent wording defect for whichever future finding does reach it.
+//! findings and nothing further to fix in this rule for this fixture. The README citation those
+//! 13 findings carried is no longer in the rule's finding:
+//! `P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM` made it
+//! state the case it judged against and nothing about where that case came from, so with
+//! `standards.json` deleted the finding about `from_hex` would read "function `from_hex` is not
+//! upper-snake case" and cite no file.
 
 use nomos_analysis::MemoryFactStore;
 use nomos_check_orchestration::{CheckOutcome, Populations, Run, RunContext};

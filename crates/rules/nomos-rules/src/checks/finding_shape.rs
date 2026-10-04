@@ -71,8 +71,8 @@ pub(in crate::checks) fn Member_Finding(shape: Finding_Shape<'_>, item: &nomos_c
 /// A blocking verdict about `item` itself, called by its own declared name.
 ///
 /// [`nomos_cap_syntax::PayloadItem::Own_Name`] rather than `qualified_name`, because a
-/// summary that says "`Helper` is not UpperCamelCase" is naming the declaration, not the
-/// path it happens to sit at.
+/// summary that says "Go type `OrderBook` is not lower-snake case" is naming the declaration,
+/// not the path it happens to sit at.
 pub(in crate::checks) fn Own_Name_Finding(shape: Finding_Shape<'_>, item: &nomos_cap_syntax::PayloadItem) -> Finding
 {
     let qualified = format!("{}::{}", shape.path, item.qualified_name);

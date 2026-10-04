@@ -103953,7 +103953,7 @@
         ],
         "patterns": []
       },
-      "state": "Ready",
+      "state": "Done",
       "depends_on": [
         "P192-A-FINDING-STATES-THE-VALUE-IT-WAS-JUDGED-AGAINST-AND-NOT-WHERE-IT-CAME-FROM"
       ],
@@ -103971,7 +103971,49 @@
         ],
         "timeout_seconds": 7200
       },
-      "verified": null,
+      "verified": {
+        "argv": [
+          "cargo",
+          "test",
+          "--no-fail-fast",
+          "-p",
+          "nomos-rules",
+          "-p",
+          "nomos-integration-tests"
+        ],
+        "exit_code": 0,
+        "output_tail": "27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\n   Compiling nomos-spec-project v0.1.0 (F:\\repos\\nomos-p204\\crates\\spec\\nomos-spec-project)\n   Compiling nomos-spec-bundle v0.1.0 (F:\\repos\\nomos-p204\\crates\\spec\\nomos-spec-bundle)\n   Compiling nomos-check-orchestration v0.1.0 (F:\\repos\\nomos-p204\\crates\\orchestration\\nomos-check-orchestration)\n   Compiling ra_ap_load-cargo v0.0.293\n   Compiling nomos-lang-rust-compiler v0.1.0 (F:\\repos\\nomos-p204\\crates\\languages\\nomos-lang-rust-compiler)\n   Compiling nomos-composer-providers v0.1.0 (F:\\repos\\nomos-p204\\crates\\composer\\nomos-composer-providers)\nwarning: `nomos-rules` (lib) generated 1 warning\nwarning: `nomos-rules` (lib test) generated 1 warning (1 duplicate)\n    Finished `test` profile [unoptimized + debuginfo] target(s) in 43.83s\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_integration_tests-4dac341bcfaef9be.exe)\n     Running tests\\analysis_slice\\main.rs (target\\debug\\deps\\analysis_slice-1348fb0a806da8e5.exe)\n     Running tests\\calibration.rs (target\\debug\\deps\\calibration-169aaecd51981dba.exe)\n     Running tests\\determinism\\main.rs (target\\debug\\deps\\determinism-145258cb13b78ecb.exe)\n     Running unittests src\\lib.rs (target\\debug\\deps\\nomos_rules-8f9f4cdb33820fc9.exe)\n     Running tests\\integration_seams.rs (target\\debug\\deps\\integration_seams-d9394d4149bb615a.exe)\n   Doc-tests nomos_integration_tests\n   Doc-tests nomos_rules\nwarning: type `Finding_Shape` should have an upper camel case name\n  --> crates\\rules\\nomos-rules\\src\\checks\\finding_shape.rs:27:30\n   |\n27 | pub(in crate::checks) struct Finding_Shape<'a>\n   |                              ^^^^^^^^^^^^^ help: convert the identifier to upper camel case: `FindingShape`\n   |\n   = note: `#[warn(non_camel_case_types)]` on by default\n\nwarning: 1 warning emitted\n\n",
+        "verified_at": 1791075006,
+        "gate": {
+          "argv": [
+            "cargo",
+            "clippy",
+            "--workspace",
+            "--all-targets"
+          ],
+          "exit_code": 0
+        },
+        "rules": {
+          "Ran": {
+            "argv": [
+              "cargo",
+              "run",
+              "--quiet",
+              "-p",
+              "nomos-cli",
+              "--bin",
+              "nomos",
+              "--",
+              "gate",
+              "run",
+              "--root",
+              "."
+            ],
+            "exit_code": 0
+          }
+        },
+        "revision": "ac3a1ef39cfe58ad7c89d54c42ce7698e74300db"
+      },
       "abandoned": [],
       "displaced": [],
       "declined": null,
@@ -104273,8 +104315,8 @@
       "blocked": null,
       "claim": {
         "holder": "opus-b7-p208",
-        "acquired_at": 1791054141,
-        "lease_expires_at": 1791068541
+        "acquired_at": 1791074219,
+        "lease_expires_at": 1791088619
       },
       "verification": {
         "argv": [
@@ -104316,7 +104358,13 @@
       },
       "verified": null,
       "abandoned": [],
-      "displaced": [],
+      "displaced": [
+        {
+          "holder": "opus-b7-p208",
+          "acquired_at": 1791054141,
+          "lease_expires_at": 1791068541
+        }
+      ],
       "declined": null,
       "widened": []
     },
